@@ -445,7 +445,7 @@
     const yMax = yTicks.at(-1) ?? Math.max(...values, 1);
     const targetWidth = Number(target.clientWidth || width);
     const maxTicks = targetWidth < 520 ? 5 : targetWidth < 820 ? 8 : 12;
-    const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), maxTicks);
+    const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), maxTicks, innerWidth);
     const xTickYears = new Set(xTicks.map((date) => date.slice(0, 4)));
     const showYearOnTicks = xTickYears.size > 1;
     const colorByKey = buildSeriesColorMap(series);
@@ -461,12 +461,15 @@
       const widthByRank = item.rank && item.rank <= 3 ? 3.7 : 2.5;
       const dash = item.isSparse ? ' stroke-dasharray="7 5"' : '';
       const segments = splitPointSegments(item.points);
-      const segmentPaths = segments.map((segment) => {
-        const path = segment.map((point, pointIndex) => `${pointIndex ? 'L' : 'M'} ${x(point.date).toFixed(1)} ${y(point.value).toFixed(1)}`).join(' ');
-        return `<path d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`;
-      }).join('');
-      const circles = item.validPoints.map((point) => `<circle cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? '#fff' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
-      return `${segmentPaths}${circles}`;
+      const segmentPathData = segments.map((segment) => segment
+        .map((point, pointIndex) => `${pointIndex ? 'L' : 'M'} ${x(point.date).toFixed(1)} ${y(point.value).toFixed(1)}`)
+        .join(' '));
+      const hitPaths = segmentPathData.map((path) => `<path class="series-hit" d="${path}" fill="none" stroke="transparent" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
+      const segmentPaths = segmentPathData.map((path) => `<path class="series-line" d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`).join('');
+      const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? '#fff' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
+      const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
+      const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}`;
+      return `<g class="chart-series" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const legend = renderChartLegend(series, colorByKey);
@@ -842,36 +845,68 @@
     return Number(value.toFixed(8));
   }
 
-  function buildDateTicks(dates, maxTicks = 14) {
+  function buildDateTicks(dates, maxTicks = 14, plotWidth = 820) {
     const unique = Array.from(new Set(asArray(dates).filter((date) => Number.isFinite(Date.parse(date))))).sort();
-    if (unique.length <= maxTicks) return unique;
+    if (unique.length <= 2) return unique;
     const first = unique[0];
     const last = unique.at(-1);
-    const weeklyMondays = unique.filter(isUtcMonday);
-    const ruleTicks = uniqueDateTicks([first, ...weeklyMondays, last]);
-    if (weeklyMondays.length && ruleTicks.length <= maxTicks) return ruleTicks;
-    if (weeklyMondays.length) return downsampleDateTicks(ruleTicks, maxTicks);
-    return downsampleDateTicks(unique, maxTicks);
+    const firstTime = Date.parse(first);
+    const lastTime = Date.parse(last);
+    const rangeMs = Math.max(lastTime - firstTime, 1);
+    const safeMaxTicks = Math.max(2, Math.min(Math.floor(maxTicks), unique.length));
+    const oneYearMs = 366 * 24 * 60 * 60 * 1000;
+    const labelWidth = rangeMs > oneYearMs ? 88 : 58;
+    const minGapMs = rangeMs * (labelWidth / Math.max(plotWidth, labelWidth));
+    if (unique.length <= safeMaxTicks) return enforceDateTickSpacing(unique, minGapMs, first, last);
+    const selected = new Set([first, last]);
+    for (let index = 1; index < safeMaxTicks - 1; index += 1) {
+      const targetTime = firstTime + (rangeMs * index) / (safeMaxTicks - 1);
+      const nearest = nearestDateTick(unique, targetTime, selected);
+      if (nearest) selected.add(nearest);
+    }
+    return enforceDateTickSpacing(Array.from(selected), minGapMs, first, last);
   }
 
-  function downsampleDateTicks(dates, maxTicks) {
-    const unique = uniqueDateTicks(dates);
+  function nearestDateTick(dates, targetTime, excluded = new Set()) {
+    let best = '';
+    let bestDistance = Infinity;
+    asArray(dates).forEach((date) => {
+      if (excluded.has(date)) return;
+      const distance = Math.abs(Date.parse(date) - targetTime);
+      if (distance < bestDistance) {
+        best = date;
+        bestDistance = distance;
+      }
+    });
+    return best;
+  }
+
+  function enforceDateTickSpacing(dates, minGapMs, first, last) {
     const ticks = [];
-    for (let index = 0; index < maxTicks; index += 1) {
-      const date = unique[Math.round(index * (unique.length - 1) / (maxTicks - 1))];
-      if (date && ticks.at(-1) !== date) ticks.push(date);
+    uniqueDateTicks(dates).forEach((date) => {
+      if (!ticks.length) {
+        ticks.push(date);
+        return;
+      }
+      const previous = ticks.at(-1);
+      const gap = Date.parse(date) - Date.parse(previous);
+      if (date === last && previous !== first && gap < minGapMs) {
+        ticks[ticks.length - 1] = date;
+        return;
+      }
+      if (gap >= minGapMs || date === first || date === last) ticks.push(date);
+    });
+    if (ticks[0] !== first) ticks.unshift(first);
+    if (ticks.at(-1) !== last) {
+      const gap = Date.parse(last) - Date.parse(ticks.at(-1));
+      if (ticks.length > 1 && gap < minGapMs) ticks[ticks.length - 1] = last;
+      else ticks.push(last);
     }
-    if (ticks.at(-1) !== unique.at(-1)) ticks.push(unique.at(-1));
-    return ticks;
+    return uniqueDateTicks(ticks);
   }
 
   function uniqueDateTicks(dates) {
     return Array.from(new Set(asArray(dates).filter(Boolean))).sort();
-  }
-
-  function isUtcMonday(date) {
-    const time = Date.parse(date);
-    return Number.isFinite(time) && new Date(time).getUTCDay() === 1;
   }
 
   function formatAxisWeight(value) {

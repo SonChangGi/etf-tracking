@@ -37,8 +37,14 @@ const weightTicks = api.buildNiceTicks(0, 2.82, 6);
 if (!weightTicks.includes(3) || weightTicks.includes(2.82)) throw new Error('weight axis ticks should use nice readable bounds');
 const dateTicks = api.buildDateTicks(selected.history.map((row) => row.date), 14);
 if (selected.history.length > 2 && dateTicks.length < 3) throw new Error('date axis should include intermediate ticks');
-if (selected.history.length > 20 && !dateTicks.some((date) => new Date(Date.parse(date)).getUTCDay() === 1)) throw new Error('date axis should include rule-based Monday ticks');
 if (dateTicks[0] !== selected.history[0]?.date || dateTicks.at(-1) !== selected.history.at(-1)?.date) throw new Error('date axis should keep first and last dates');
+if (dateTicks.includes('2026-06-15') && dateTicks.includes('2026-06-17')) throw new Error('date axis should not crowd near-end labels');
+const holidayAdjustedTicks = api.buildDateTicks([
+  '2026-06-01', '2026-06-02', '2026-06-03', '2026-06-04', '2026-06-05',
+  '2026-06-09', '2026-06-10', '2026-06-11', '2026-06-12',
+  '2026-06-16', '2026-06-17',
+], 5);
+if (!holidayAdjustedTicks.includes('2026-06-09')) throw new Error('date axis should snap cadence to available trading dates');
 if (api.formatAxisDate('2026-06-17') !== '06.17') throw new Error('axis date label format changed');
 const decompositionKeys = new Set((selected.latest?.decomposition || []).map((row) => api.holdingKey(row)));
 for (const holding of selected.latest?.top10 || []) {
@@ -96,6 +102,7 @@ try {
   if (!app.includes('buildSeriesColorMap')) throw new Error('chart color collision guard missing');
   if (!app.includes('buildNiceTicks')) throw new Error('nice axis tick builder missing');
   if (!app.includes('axis-range')) throw new Error('chart axis range label missing');
+  if (!app.includes('chart-series') || !app.includes('series-hit')) throw new Error('chart hover emphasis missing');
   if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
   if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');

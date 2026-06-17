@@ -311,6 +311,41 @@ input[type="date"] {
   font-size: 12px;
   font-weight: 800;
 }
+.chart-card .chart-series {
+  opacity: 1;
+  outline: none;
+  transition: opacity 160ms ease, filter 160ms ease;
+}
+.chart-card .chart-series .series-hit {
+  cursor: crosshair;
+  pointer-events: stroke;
+}
+.chart-card .chart-series .series-line {
+  transition: stroke-width 160ms ease, filter 160ms ease;
+}
+.chart-card .chart-series .series-point {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 160ms ease, filter 160ms ease;
+}
+.chart-card svg:has(.chart-series:hover) .chart-series:not(:hover),
+.chart-card svg:has(.chart-series:focus-visible) .chart-series:not(:focus-visible) {
+  opacity: 0.2;
+}
+.chart-card .chart-series:hover,
+.chart-card .chart-series:focus-visible {
+  opacity: 1;
+  filter: drop-shadow(0 8px 14px rgba(15, 23, 42, 0.18));
+}
+.chart-card .chart-series:hover .series-line,
+.chart-card .chart-series:focus-visible .series-line {
+  stroke-width: calc(var(--series-stroke, 3px) + 2px);
+}
+.chart-card .chart-series:hover .series-point,
+.chart-card .chart-series:focus-visible .series-point {
+  transform: scale(1.35);
+  filter: drop-shadow(0 5px 8px rgba(15, 23, 42, 0.2));
+}
 .chart-card .line-end-label text {
   font-size: 12px;
   font-weight: 900;
@@ -340,6 +375,15 @@ input[type="date"] {
 .chart-summary-item strong { font-size: 0.9rem; color: var(--ink); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .chart-summary-item em { font-style: normal; font-weight: 900; color: var(--ink); }
 .chart-summary-item small { grid-column: 2 / 4; color: var(--muted); font-size: 0.78rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-card .chart-series,
+  .chart-card .chart-series .series-line,
+  .chart-card .chart-series .series-point {
+    transition: none;
+  }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
