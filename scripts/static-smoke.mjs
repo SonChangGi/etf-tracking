@@ -17,6 +17,10 @@ const parsed = api.parseDashboard(JSON.parse(readFileSync('data/dashboard.json',
 if (parsed.etfs.length !== 3) throw new Error('dashboard must expose three ETFs');
 if (!parsed.etfs.some((etf) => etf.id === 'koact-nasdaq-growth-active')) throw new Error('KoAct ETF missing');
 if (!parsed.historyPolicy?.scheduledLookbackDays) throw new Error('dashboard history policy missing');
+if (parsed.historyPolicy?.missingOnlyDefault !== true) throw new Error('missing-only history policy missing');
+if (parsed.manualUpdatePolicy?.workflowUrl !== 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml') {
+  throw new Error('manual update workflow policy missing');
+}
 const selected = parsed.etfs[0];
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
@@ -28,6 +32,8 @@ const sortedRows = api.sortAttributionRows(selected.latest?.decomposition || [])
 if (sortedRows.length && sortedRows[0].displayScope !== 'current_top10') throw new Error('decomposition rows should show current TOP10 first');
 if (api.QUANT_DASHBOARD_URL !== 'https://sonchanggi.github.io/quant-dashboard/') throw new Error('return dashboard URL changed');
 if (api.AUTOMATION_STATUS_URL !== 'data/automation-status.json') throw new Error('automation status URL changed');
+if (api.WORKFLOW_URL !== 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml') throw new Error('workflow URL changed');
+if (!api.MANUAL_UPDATE_COMMAND?.includes('refresh_existing=false')) throw new Error('manual update command changed');
 if (api.formatPriceSource('provider_valuation_krw') !== 'ETF KRW 평가단가') throw new Error('KRW valuation source label changed');
 const automation = api.normalizeAutomationStatus(JSON.parse(readFileSync('data/automation-status.json', 'utf8')));
 if (!automation?.runStatus) throw new Error('automation status missing runStatus');
@@ -65,9 +71,13 @@ try {
   ]);
   if (!html.includes('ETF TOP10 투자 비중 추적')) throw new Error('index hero missing');
   if (!html.includes('히스토리 범위')) throw new Error('history range explanation missing');
+  if (!html.includes('없는 날짜만 채우는 수동 업데이트')) throw new Error('manual update section missing');
+  if (!html.includes('GitHub Actions에서 수동 업데이트 열기')) throw new Error('manual update CTA missing');
   if (!html.includes('https://sonchanggi.github.io/quant-dashboard/')) throw new Error('quant dashboard return link missing');
   if (!app.includes('buildWeightSeries')) throw new Error('chart series builder missing');
+  if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
+  if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');
   console.log('PASS static server smoke served ETF tracker shell and data');
 } finally {
   await new Promise((resolve) => server.close(resolve));

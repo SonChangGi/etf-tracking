@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1.1",
-  "generatedAt": "2026-06-17T12:04:48+00:00",
+  "generatedAt": "2026-06-17T12:33:11+00:00",
   "targetDate": "2026-06-17",
   "overallStatus": "ok",
   "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
@@ -12,10 +12,10 @@
       "name": "TIME 미국나스닥100액티브",
       "targetDate": "2026-06-17",
       "latestDate": "2026-06-17",
-      "targetFetchStatus": "live",
-      "targetFetchWarning": "",
+      "targetFetchStatus": "cached_live",
+      "targetFetchWarning": "Existing usable snapshot reused; pass --refresh-existing to refetch this date.",
       "targetFetchHasTop10": true,
-      "reusedExistingTargetSnapshot": false,
+      "reusedExistingTargetSnapshot": true,
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
@@ -23,6 +23,12 @@
       "priceBasis": {
         "previous": "2026-06-15",
         "current": "2026-06-16"
+      },
+      "fetchStats": {
+        "requestedDates": 8,
+        "skippedExisting": 8,
+        "fetchedLive": 0,
+        "errors": 0
       }
     },
     {
@@ -30,10 +36,10 @@
       "name": "TIME 글로벌AI인공지능액티브",
       "targetDate": "2026-06-17",
       "latestDate": "2026-06-17",
-      "targetFetchStatus": "live",
-      "targetFetchWarning": "",
+      "targetFetchStatus": "cached_live",
+      "targetFetchWarning": "Existing usable snapshot reused; pass --refresh-existing to refetch this date.",
       "targetFetchHasTop10": true,
-      "reusedExistingTargetSnapshot": false,
+      "reusedExistingTargetSnapshot": true,
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
@@ -41,6 +47,12 @@
       "priceBasis": {
         "previous": "2026-06-15",
         "current": "2026-06-16"
+      },
+      "fetchStats": {
+        "requestedDates": 8,
+        "skippedExisting": 8,
+        "fetchedLive": 0,
+        "errors": 0
       }
     },
     {
@@ -49,7 +61,7 @@
       "targetDate": "2026-06-17",
       "latestDate": "2026-06-17",
       "targetFetchStatus": "cached_live",
-      "targetFetchWarning": "Target fetch error: HTTP Error 429: Too Many Requests; reused existing live target-date snapshot.",
+      "targetFetchWarning": "Existing usable snapshot reused; pass --refresh-existing to refetch this date.",
       "targetFetchHasTop10": true,
       "reusedExistingTargetSnapshot": true,
       "sourceStatus": "live",
@@ -59,6 +71,12 @@
       "priceBasis": {
         "previous": "2026-06-15",
         "current": "2026-06-16"
+      },
+      "fetchStats": {
+        "requestedDates": 8,
+        "skippedExisting": 8,
+        "fetchedLive": 0,
+        "errors": 0
       }
     }
   ]

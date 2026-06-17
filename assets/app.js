@@ -5,6 +5,8 @@
   const STATUS_URL = 'data/status.json';
   const AUTOMATION_STATUS_URL = 'data/automation-status.json';
   const QUANT_DASHBOARD_URL = 'https://sonchanggi.github.io/quant-dashboard/';
+  const WORKFLOW_URL = 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml';
+  const MANUAL_UPDATE_COMMAND = 'gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false';
   const COLORS = ['#2457d6', '#0f766e', '#e11d48', '#f97316', '#7c3aed', '#0891b2', '#059669', '#db2777', '#2563eb', '#9333ea'];
   const $ = (selector) => (typeof document === 'undefined' ? null : document.querySelector(selector));
 
@@ -22,6 +24,11 @@
     historyPolicy: {
       scheduledLookbackDays: 10,
       startDateExplanation: '공개 JSON을 불러오지 못해 fallback 화면을 표시 중입니다.',
+    },
+    manualUpdatePolicy: {
+      workflowUrl: WORKFLOW_URL,
+      cliCommand: MANUAL_UPDATE_COMMAND,
+      defaultMode: 'missing_only',
     },
     etfs: [
       {
@@ -142,6 +149,7 @@
       sourcePolicy: isRecord(payload?.sourcePolicy) ? payload.sourcePolicy : {},
       updatePolicy: isRecord(payload?.updatePolicy) ? payload.updatePolicy : {},
       historyPolicy: isRecord(payload?.historyPolicy) ? payload.historyPolicy : {},
+      manualUpdatePolicy: isRecord(payload?.manualUpdatePolicy) ? payload.manualUpdatePolicy : {},
       etfs,
       signals: asRecords(payload?.signals).map(normalizeSignal),
     };
@@ -271,6 +279,9 @@
       syncDateInputsForSelected(true);
       renderSelectedEtf();
     });
+    $('#copy-update-command')?.addEventListener('click', () => {
+      copyManualUpdateCommand();
+    });
   }
 
   function initializeSelection(dashboard) {
@@ -316,6 +327,7 @@
 
   function renderAll() {
     renderOverview();
+    renderManualUpdate();
     renderSelectedEtf();
     renderSignals();
   }
@@ -338,6 +350,35 @@
     if (status) {
       const mode = dashboard.loadMode === 'fallback' ? 'fallback 표시 중' : '공개 JSON 로드 완료';
       status.textContent = `${mode} · 생성 ${formatFreshness(dashboard.generatedAt)} · 자동화 ${formatAutomationStatus(dashboard.automationStatusPayload)} · ${dashboard.disclaimer || '투자 조언이 아닙니다.'}`;
+    }
+  }
+
+  function renderManualUpdate() {
+    const policy = state.dashboard?.manualUpdatePolicy || {};
+    const workflowUrl = stringOr(policy.workflowUrl, WORKFLOW_URL);
+    const command = stringOr(policy.cliCommand, MANUAL_UPDATE_COMMAND);
+    const manualLink = $('#manual-update-link');
+    const workflowLink = $('#workflow-status-link');
+    const commandTarget = $('#manual-update-command');
+    const status = $('#manual-update-status');
+    if (manualLink) manualLink.href = workflowUrl;
+    if (workflowLink) workflowLink.href = workflowUrl;
+    if (commandTarget) commandTarget.textContent = command;
+    if (status) {
+      const mode = policy.defaultMode === 'missing_only' ? 'missing-only' : stringOr(policy.defaultMode, 'missing-only');
+      status.textContent = `기본값은 ${mode}입니다. 이미 저장된 날짜는 건너뛰고, 필요할 때만 refresh_existing=true로 재수집하세요.`;
+    }
+  }
+
+  async function copyManualUpdateCommand() {
+    const command = $('#manual-update-command')?.textContent || MANUAL_UPDATE_COMMAND;
+    const status = $('#manual-update-status');
+    try {
+      if (typeof navigator === 'undefined' || !navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
+      await navigator.clipboard.writeText(command);
+      if (status) status.textContent = 'CLI 실행 명령을 복사했습니다. 터미널에서 실행하면 같은 수동 워크플로를 시작합니다.';
+    } catch {
+      if (status) status.textContent = '브라우저가 자동 복사를 허용하지 않습니다. 아래 CLI 명령을 직접 선택해 복사하세요.';
     }
   }
 
@@ -747,6 +788,8 @@
       FALLBACK_DASHBOARD,
       AUTOMATION_STATUS_URL,
       QUANT_DASHBOARD_URL,
+      WORKFLOW_URL,
+      MANUAL_UPDATE_COMMAND,
     };
   }
 })();

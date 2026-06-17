@@ -301,6 +301,7 @@ class UpdateDataTests(unittest.TestCase):
             backfill_all = False
             backfill_days = 1
             backfill_start_date = None
+            refresh_existing = False
             include_empty = False
             provider_delay = 0
         snapshots, diagnostics = update_data.collect_snapshots(Args)
@@ -308,6 +309,55 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(set(diagnostics), {cfg.id for cfg in update_data.ETFS})
         self.assertTrue(all(items and items[0]["top10"] for items in snapshots.values()))
         self.assertTrue(all(items and items[0]["hasTop10"] for items in diagnostics.values()))
+
+    def test_collect_skips_existing_usable_snapshots_by_default(self):
+        class Args:
+            fixture_dir = ROOT / "tests" / "fixtures"
+            target_date = "2026-06-17"
+            backfill_all = False
+            backfill_days = 1
+            backfill_start_date = None
+            refresh_existing = False
+            include_empty = False
+            provider_delay = 0
+
+        existing = {cfg.id: [] for cfg in update_data.ETFS}
+        existing[update_data.ETFS[0].id] = [{
+            "date": "2026-06-17",
+            "sourceStatus": "live",
+            "sourceConfidence": "high",
+            "top10": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 1.0}],
+            "holdings": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 1.0}],
+        }]
+        snapshots, diagnostics = update_data.collect_snapshots(Args, existing)
+        first_id = update_data.ETFS[0].id
+        self.assertEqual(snapshots[first_id], [])
+        self.assertEqual(diagnostics[first_id][0]["sourceStatus"], "cached_live")
+        self.assertTrue(diagnostics[first_id][0]["skippedFetch"])
+        self.assertEqual(diagnostics[first_id][0]["top10Count"], 1)
+
+    def test_refresh_existing_refetches_usable_snapshots(self):
+        class Args:
+            fixture_dir = ROOT / "tests" / "fixtures"
+            target_date = "2026-06-17"
+            backfill_all = False
+            backfill_days = 1
+            backfill_start_date = None
+            refresh_existing = True
+            include_empty = False
+            provider_delay = 0
+
+        existing = {cfg.id: [] for cfg in update_data.ETFS}
+        existing[update_data.ETFS[0].id] = [{
+            "date": "2026-06-17",
+            "sourceStatus": "live",
+            "top10": [{"rank": 1, "ticker": "OLD", "name": "Old", "weightPercent": 1.0}],
+        }]
+        snapshots, diagnostics = update_data.collect_snapshots(Args, existing)
+        first_id = update_data.ETFS[0].id
+        self.assertTrue(snapshots[first_id])
+        self.assertEqual(diagnostics[first_id][0]["sourceStatus"], "live")
+        self.assertFalse(diagnostics[first_id][0].get("skippedFetch", False))
 
     def test_automation_status_records_waiting_without_failure_email_policy(self):
         status = update_data.build_failure_status("2026-06-17T00:00:00+00:00", "2026-06-17", "provider timeout")
@@ -430,6 +480,8 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("strict_validation", workflow)
         self.assertIn("backfill_start_date", workflow)
         self.assertIn("--backfill-start-date", workflow)
+        self.assertIn("refresh_existing", workflow)
+        self.assertIn("--refresh-existing", workflow)
         self.assertIn("continue-on-error", workflow)
         self.assertIn("safe_to_commit", workflow)
         self.assertFalse((ROOT / ".github" / "workflows" / "deploy-pages.yml").exists())

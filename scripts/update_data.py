@@ -511,6 +511,31 @@ def prioritized_fetch_dates(dates: list[str], target_date: str) -> list[str]:
     return ([target] if target in dates else []) + [date for date in dates if date != target]
 
 
+def snapshot_has_usable_data(snapshot: dict[str, Any] | None) -> bool:
+    if not snapshot:
+        return False
+    if not snapshot.get("top10"):
+        return False
+    return snapshot.get("sourceStatus") not in {"missing", "empty", "error", "stale"}
+
+
+def cached_snapshot_diagnostic(snapshot: dict[str, Any], target: str, run_target_date: str) -> dict[str, Any]:
+    is_target = target == run_target_date
+    return {
+        "date": snapshot.get("date") or target,
+        "targetDate": target,
+        "queryDate": snapshot.get("queryDate") or target,
+        "sourceStatus": "cached_live" if is_target else "cached_history",
+        "sourceConfidence": snapshot.get("sourceConfidence") or "high",
+        "sourceWarning": "Existing usable snapshot reused; pass --refresh-existing to refetch this date.",
+        "hasTop10": bool(snapshot.get("top10")),
+        "top10Count": len(snapshot.get("top10", [])),
+        "holdingCount": len(all_holdings(snapshot)),
+        "fetchedAt": snapshot.get("fetchedAt"),
+        "skippedFetch": True,
+    }
+
+
 class PriceProvider:
     def __init__(self, fixture_dir: Path | None = None, no_live: bool = False) -> None:
         self.fixture_dir = fixture_dir
@@ -1166,11 +1191,20 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "availableStartDate": min(all_dates) if all_dates else None,
             "availableEndDate": max(all_dates) if all_dates else None,
             "scheduledLookbackDays": DEFAULT_SCHEDULED_BACKFILL_DAYS,
-            "startDateExplanation": "기존 2026-06-08 시작일은 예약 자동화의 최근 10일 백필 창 때문입니다. 수동/로컬 백필을 커밋하면 더 넓은 히스토리를 보존합니다.",
+            "missingOnlyDefault": True,
+            "startDateExplanation": "히스토리 시작일은 현재 커밋된 백필 범위의 가장 이른 usable 스냅샷입니다. ETF별 시작일은 상장일, 공급자 과거 조회 가능성, 수동 backfill_start_date/backfill_all 실행 여부에 따라 달라집니다.",
             "manualBackfillStartDate": "--backfill-start-date YYYY-MM-DD",
             "manualBackfillAll": "--backfill-all",
-            "fetchOrder": "공급자 throttling이 최신 스냅샷을 가리지 않도록 목표일을 먼저 가져온 뒤 과거 날짜를 채웁니다.",
+            "manualRefreshExisting": "--refresh-existing",
+            "fetchOrder": "공급자 throttling이 최신 스냅샷을 가리지 않도록 목표일을 먼저 확인하고, 이미 저장된 usable 스냅샷은 재요청하지 않은 뒤 없는 날짜만 채웁니다.",
             "payloadTradeoff": "상장일 이후 전체 백필 명령은 지원하지만, 예약 자동화는 정적 JSON 용량과 공급자 요청 제한을 피하기 위해 작은 rolling window만 갱신합니다.",
+        },
+        "manualUpdatePolicy": {
+            "workflowUrl": "https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml",
+            "workflowFile": "update-data.yml",
+            "cliCommand": "gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false",
+            "security": "Public static pages do not store GitHub tokens; the button opens GitHub's authenticated workflow_dispatch screen.",
+            "defaultMode": "missing_only",
         },
         "etfs": etf_payloads,
         "signals": sorted(all_signals, key=lambda item: (item.get("date") or "", item.get("severity") or ""), reverse=True)[:50],
@@ -1213,6 +1247,9 @@ def build_status(
         target_status = target_diag.get("sourceStatus") if target_diag else "not_attempted"
         target_has_top10 = bool(target_diag.get("hasTop10")) if target_diag else False
         target_warning = target_diag.get("sourceWarning") if target_diag else "No target-date fetch diagnostic available"
+        skipped_fetch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("skippedFetch"))
+        fetched_count = sum(1 for item in diagnostics.get(config.id, []) if not item.get("skippedFetch") and item.get("sourceStatus") == "live")
+        error_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "error")
         reused_existing_target = (
             latest_date == target_date
             and source_status == "live"
@@ -1222,7 +1259,10 @@ def build_status(
         if reused_existing_target:
             target_status = "cached_live"
             target_has_top10 = True
-            target_warning = f"Target fetch {target_diag.get('sourceStatus') if target_diag else 'not_attempted'}: {target_warning}; reused existing live target-date snapshot."
+            if target_diag and target_diag.get("skippedFetch"):
+                target_warning = target_warning or "Existing live target-date snapshot reused."
+            else:
+                target_warning = f"Target fetch {target_diag.get('sourceStatus') if target_diag else 'not_attempted'}: {target_warning}; reused existing live target-date snapshot."
         is_waiting = (
             source_status in {"missing", "empty", "error", "stale"}
             or analysis.get("returnCoverageStatus") == "low"
@@ -1246,6 +1286,12 @@ def build_status(
             "returnCoverageStatus": analysis.get("returnCoverageStatus"),
             "returnCoverage": analysis.get("returnCoverage"),
             "priceBasis": analysis.get("priceBasis"),
+            "fetchStats": {
+                "requestedDates": len(diagnostics.get(config.id, [])),
+                "skippedExisting": skipped_fetch_count,
+                "fetchedLive": fetched_count,
+                "errors": error_count,
+            },
         })
     return {
         "schemaVersion": SCHEMA_VERSION,
@@ -1376,10 +1422,19 @@ def write_csv_summary(path: Path, dashboard: dict[str, Any]) -> None:
                 ])
 
 
-def collect_snapshots(args: argparse.Namespace) -> tuple[dict[str, list[dict[str, Any]]], dict[str, list[dict[str, Any]]]]:
+def collect_snapshots(
+    args: argparse.Namespace,
+    existing: dict[str, list[dict[str, Any]]] | None = None,
+) -> tuple[dict[str, list[dict[str, Any]]], dict[str, list[dict[str, Any]]]]:
     snapshots: dict[str, list[dict[str, Any]]] = {config.id: [] for config in ETFS}
     diagnostics: dict[str, list[dict[str, Any]]] = {config.id: [] for config in ETFS}
+    existing = existing or {config.id: [] for config in ETFS}
     for config in ETFS:
+        existing_by_date = {
+            str(snapshot.get("date") or snapshot.get("asOfDate")): snapshot
+            for snapshot in existing.get(config.id, [])
+            if snapshot.get("date") or snapshot.get("asOfDate")
+        }
         fetch_dates = dates_to_fetch(
             config,
             args.target_date,
@@ -1388,6 +1443,10 @@ def collect_snapshots(args: argparse.Namespace) -> tuple[dict[str, list[dict[str
             backfill_start_date=args.backfill_start_date,
         )
         for target in prioritized_fetch_dates(fetch_dates, args.target_date):
+            cached_snapshot = existing_by_date.get(target)
+            if not args.refresh_existing and snapshot_has_usable_data(cached_snapshot):
+                diagnostics[config.id].append(cached_snapshot_diagnostic(cached_snapshot, target, args.target_date))
+                continue
             try:
                 raw = load_fixture_snapshot(config, args.fixture_dir, target) if args.fixture_dir else fetch_snapshot(config, target)
             except Exception as exc:
@@ -1433,6 +1492,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--backfill-days", type=int, default=1, help="Weekday lookback window including target date.")
     parser.add_argument("--backfill-start-date", help="Fetch weekdays from this YYYY-MM-DD date through target date, bounded by each ETF listing date.")
     parser.add_argument("--backfill-all", action="store_true", help="Fetch all weekdays from each listing date to target date.")
+    parser.add_argument("--refresh-existing", action="store_true", help="Refetch dates even when a usable snapshot already exists.")
     parser.add_argument("--include-empty", action="store_true", help="Persist empty/error snapshots for diagnostics.")
     parser.add_argument("--no-live-prices", action="store_true", help="Skip live Yahoo price calls.")
     parser.add_argument("--provider-delay", type=float, default=0.12, help="Delay between provider requests outside fixture mode.")
@@ -1447,7 +1507,7 @@ def run_update(args: argparse.Namespace) -> dict[str, Any]:
 
     generated_at = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
     existing = load_history(output_dir)
-    new_snapshots, diagnostics = collect_snapshots(args)
+    new_snapshots, diagnostics = collect_snapshots(args, existing)
     merged = merge_history(existing, new_snapshots)
     price_provider = PriceProvider(args.fixture_dir, no_live=args.no_live_prices)
     enriched, summaries = enrich_history(merged, price_provider)

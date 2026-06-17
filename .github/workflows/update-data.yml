@@ -21,6 +21,12 @@ on:
         required: false
         default: ''
         type: string
+      refresh_existing:
+        description: 'Refetch already stored usable snapshots instead of filling missing dates only'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
       strict_validation:
         description: 'Fail this manual run on updater/test/commit errors'
         required: false
@@ -72,6 +78,9 @@ jobs:
             update_args+=(--backfill-start-date "${{ inputs.backfill_start_date }}")
           else
             update_args+=(--backfill-days 10)
+          fi
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.refresh_existing }}" = "true" ]; then
+            update_args+=(--refresh-existing)
           fi
           python3 scripts/update_data.py "${update_args[@]}"
       - name: Verify static site and data
