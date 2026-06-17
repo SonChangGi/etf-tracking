@@ -24,6 +24,11 @@ if (parsed.manualUpdatePolicy?.workflowUrl !== 'https://github.com/SonChangGi/et
 const selected = parsed.etfs[0];
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
+const weightTicks = api.buildNiceTicks(0, 2.82, 6);
+if (!weightTicks.includes(3) || weightTicks.includes(2.82)) throw new Error('weight axis ticks should use nice readable bounds');
+const dateTicks = api.buildDateTicks(selected.history.map((row) => row.date), 8);
+if (selected.history.length > 2 && dateTicks.length < 3) throw new Error('date axis should include intermediate ticks');
+if (api.formatAxisDate('2026-06-17') !== '06.17') throw new Error('axis date label format changed');
 const decompositionKeys = new Set((selected.latest?.decomposition || []).map((row) => api.holdingKey(row)));
 for (const holding of selected.latest?.top10 || []) {
   if (!decompositionKeys.has(api.holdingKey(holding))) throw new Error(`top10 holding missing decomposition row: ${api.holdingKey(holding)}`);
@@ -75,6 +80,8 @@ try {
   if (!html.includes('GitHub Actions에서 수동 업데이트 열기')) throw new Error('manual update CTA missing');
   if (!html.includes('https://sonchanggi.github.io/quant-dashboard/')) throw new Error('quant dashboard return link missing');
   if (!app.includes('buildWeightSeries')) throw new Error('chart series builder missing');
+  if (!app.includes('buildNiceTicks')) throw new Error('nice axis tick builder missing');
+  if (!app.includes('axis-range')) throw new Error('chart axis range label missing');
   if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
   if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');

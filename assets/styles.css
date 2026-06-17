@@ -288,6 +288,24 @@ input[type="date"] {
   padding: 10px;
 }
 .chart-card svg { width: 100%; height: auto; display: block; }
+.chart-card .axis-row text,
+.chart-card .axis-column text {
+  fill: #475467;
+  font-size: 13px;
+  font-weight: 750;
+}
+.chart-card .axis-row line { stroke-dasharray: 3 5; }
+.chart-card .axis-column line { stroke-dasharray: 2 8; }
+.chart-card .axis-title {
+  fill: #25364d;
+  font-size: 14px;
+  font-weight: 900;
+}
+.chart-card .axis-range {
+  fill: #667085;
+  font-size: 12px;
+  font-weight: 750;
+}
 .chart-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; padding: 10px 6px 0; color: var(--muted); font-size: 0.9rem; }
 .legend-key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
 

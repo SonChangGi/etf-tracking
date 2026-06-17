@@ -415,17 +415,25 @@
     const dates = points.map((point) => Date.parse(point.date)).filter(Number.isFinite);
     const values = points.map((point) => point.value).filter(Number.isFinite);
     const width = 960;
-    const height = 390;
-    const margin = { top: 26, right: 28, bottom: 54, left: 68 };
+    const height = 420;
+    const margin = { top: 30, right: 32, bottom: 82, left: 76 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const minDate = Math.min(...dates);
     const maxDate = Math.max(...dates);
-    const maxValue = Math.max(...values, 1);
+    const yTicks = buildNiceTicks(0, Math.max(...values, 1) * 1.08, 6);
+    const yMin = yTicks[0] ?? 0;
+    const yMax = yTicks.at(-1) ?? Math.max(...values, 1);
+    const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), 8);
+    const xTickYears = new Set(xTicks.map((date) => date.slice(0, 4)));
+    const showYearOnTicks = xTickYears.size > 1;
     const x = (date) => margin.left + ((Date.parse(date) - minDate) / Math.max(maxDate - minDate, 1)) * innerWidth;
-    const y = (value) => margin.top + (1 - value / Math.max(maxValue * 1.12, 1)) * innerHeight;
-    const ticks = buildTicks(0, Math.max(maxValue * 1.12, 1), 5);
-    const grid = ticks.map((tick) => `<g><line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick)}" y2="${y(tick)}" stroke="#d9e2f1"/><text x="${margin.left - 10}" y="${y(tick) + 4}" text-anchor="end" fill="#667085" font-size="12">${formatWeight(tick)}</text></g>`).join('');
+    const y = (value) => margin.top + (1 - (value - yMin) / Math.max(yMax - yMin, 1)) * innerHeight;
+    const yGrid = yTicks.map((tick) => `<g class="axis-row"><line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick).toFixed(1)}" y2="${y(tick).toFixed(1)}" stroke="#d9e2f1"/><text x="${margin.left - 14}" y="${(y(tick) + 4).toFixed(1)}" text-anchor="end">${formatAxisWeight(tick)}</text></g>`).join('');
+    const xGrid = xTicks.map((tick) => {
+      const xPos = x(tick);
+      return `<g class="axis-column"><line x1="${xPos.toFixed(1)}" x2="${xPos.toFixed(1)}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="#e7edf7"/><text x="${xPos.toFixed(1)}" y="${height - margin.bottom + 24}" text-anchor="middle">${escapeHtml(formatAxisDate(tick, showYearOnTicks))}</text></g>`;
+    }).join('');
     const paths = series.map((item, index) => {
       const color = COLORS[index % COLORS.length];
       const valid = item.points.filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
@@ -439,12 +447,12 @@
     target.innerHTML = `
       <svg viewBox="0 0 ${width} ${height}" aria-hidden="true">
         <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
-        ${grid}
+        ${yGrid}
+        ${xGrid}
         <line x1="${margin.left}" x2="${width - margin.right}" y1="${height - margin.bottom}" y2="${height - margin.bottom}" stroke="#aab7cf"/>
         <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="#aab7cf"/>
-        <text x="${margin.left}" y="${height - 18}" fill="#667085" font-size="12">${escapeHtml(firstDate)}</text>
-        <text x="${width - margin.right}" y="${height - 18}" text-anchor="end" fill="#667085" font-size="12">${escapeHtml(lastDate)}</text>
-        <text x="${margin.left}" y="18" fill="#344054" font-size="13" font-weight="800">TOP10 비중(%)</text>
+        <text class="axis-title" x="${margin.left}" y="20">TOP10 비중(%)</text>
+        <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)}</text>
         ${paths}
       </svg>
       <div class="chart-legend">${legend}</div>
@@ -671,10 +679,61 @@
     return labels[value] || value;
   }
 
-  function buildTicks(min, max, count) {
-    if (!Number.isFinite(min) || !Number.isFinite(max) || count < 2) return [];
-    const step = (max - min) / (count - 1 || 1);
-    return Array.from({ length: count }, (_, index) => min + step * index);
+  function buildNiceTicks(min, max, preferredCount = 6) {
+    if (!Number.isFinite(min) || !Number.isFinite(max) || preferredCount < 2) return [];
+    const safeMin = Math.min(min, max);
+    let safeMax = Math.max(min, max);
+    if (safeMin === safeMax) safeMax = safeMin + 1;
+    const range = safeMax - safeMin;
+    const step = niceNumber(range / Math.max(preferredCount - 1, 1), true);
+    const start = Math.floor(safeMin / step) * step;
+    const end = Math.ceil(safeMax / step) * step;
+    const ticks = [];
+    for (let value = start; value <= end + step / 2; value += step) {
+      ticks.push(roundAxisValue(value));
+    }
+    return ticks;
+  }
+
+  function niceNumber(range, round) {
+    if (!Number.isFinite(range) || range <= 0) return 1;
+    const exponent = Math.floor(Math.log10(range));
+    const fraction = range / (10 ** exponent);
+    const niceFraction = round
+      ? (fraction < 1.5 ? 1 : fraction < 3 ? 2 : fraction < 7 ? 5 : 10)
+      : (fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10);
+    return niceFraction * (10 ** exponent);
+  }
+
+  function roundAxisValue(value) {
+    return Number(value.toFixed(8));
+  }
+
+  function buildDateTicks(dates, maxTicks = 8) {
+    const unique = Array.from(new Set(asArray(dates).filter((date) => Number.isFinite(Date.parse(date))))).sort();
+    if (unique.length <= maxTicks) return unique;
+    const ticks = [];
+    for (let index = 0; index < maxTicks; index += 1) {
+      const date = unique[Math.round(index * (unique.length - 1) / (maxTicks - 1))];
+      if (date && ticks.at(-1) !== date) ticks.push(date);
+    }
+    if (ticks.at(-1) !== unique.at(-1)) ticks.push(unique.at(-1));
+    return ticks;
+  }
+
+  function formatAxisWeight(value) {
+    const num = finiteOrNull(value);
+    if (num === null) return '-';
+    const isInteger = Math.abs(num - Math.round(num)) < 0.000001;
+    return `${num.toLocaleString('ko-KR', { maximumFractionDigits: isInteger ? 0 : 1, minimumFractionDigits: 0 })}%`;
+  }
+
+  function formatAxisDate(value, showYear = false) {
+    const text = formatMaybeDate(value);
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+    if (!match) return text;
+    const [, year, month, day] = match;
+    return showYear ? `${year.slice(2)}.${month}.${day}` : `${month}.${day}`;
   }
 
   function formatWeight(value) {
@@ -776,6 +835,10 @@
       normalizeAutomationStatus,
       filterHistory,
       buildWeightSeries,
+      buildNiceTicks,
+      buildDateTicks,
+      formatAxisWeight,
+      formatAxisDate,
       sortAttributionRows,
       priceIdentifierCell,
       holdingKey,
