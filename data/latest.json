@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.1.0",
-  "generatedAt": "2026-06-17T11:06:36+00:00",
+  "schemaVersion": "1.1.1",
+  "generatedAt": "2026-06-17T11:42:06+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -24,6 +24,9 @@
             "marketValueKrw": 80585678.0,
             "weightPercent": 6.73,
             "weight": 0.0673,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -35,6 +38,9 @@
             "marketValueKrw": 79656029.0,
             "weightPercent": 6.66,
             "weight": 0.0666,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -46,6 +52,9 @@
             "marketValueKrw": 66292699.0,
             "weightPercent": 5.54,
             "weight": 0.0554,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -57,6 +66,9 @@
             "marketValueKrw": 63608279.0,
             "weightPercent": 5.32,
             "weight": 0.053200000000000004,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -68,6 +80,9 @@
             "marketValueKrw": 55878259.0,
             "weightPercent": 4.67,
             "weight": 0.0467,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -79,6 +94,9 @@
             "marketValueKrw": 48091009.0,
             "weightPercent": 4.02,
             "weight": 0.04019999999999999,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -90,6 +108,9 @@
             "marketValueKrw": 41361910.0,
             "weightPercent": 3.46,
             "weight": 0.0346,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -101,6 +122,9 @@
             "marketValueKrw": 37719362.0,
             "weightPercent": 3.15,
             "weight": 0.0315,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -112,6 +136,9 @@
             "marketValueKrw": 36075422.0,
             "weightPercent": 3.02,
             "weight": 0.0302,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -123,7 +150,10 @@
             "marketValueKrw": 36081892.0,
             "weightPercent": 3.02,
             "weight": 0.0302,
-            "isPriceTracked": false
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true
           },
           {
             "rank": 11,
@@ -134,6 +164,9 @@
             "marketValueKrw": 34575658.0,
             "weightPercent": 2.89,
             "weight": 0.028900000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -145,6 +178,9 @@
             "marketValueKrw": 34097705.0,
             "weightPercent": 2.85,
             "weight": 0.0285,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -156,6 +192,9 @@
             "marketValueKrw": 33880397.0,
             "weightPercent": 2.83,
             "weight": 0.028300000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -167,6 +206,9 @@
             "marketValueKrw": 32940258.0,
             "weightPercent": 2.75,
             "weight": 0.0275,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -178,6 +220,9 @@
             "marketValueKrw": 30991276.0,
             "weightPercent": 2.59,
             "weight": 0.0259,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -189,6 +234,9 @@
             "marketValueKrw": 29124450.0,
             "weightPercent": 2.43,
             "weight": 0.024300000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -200,6 +248,9 @@
             "marketValueKrw": 27992640.0,
             "weightPercent": 2.34,
             "weight": 0.023399999999999997,
+            "hasExternalTicker": false,
+            "hasProviderValuation": false,
+            "priceTrackingMethod": null,
             "isPriceTracked": false
           },
           {
@@ -211,6 +262,9 @@
             "marketValueKrw": 27217416.0,
             "weightPercent": 2.27,
             "weight": 0.0227,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -222,6 +276,9 @@
             "marketValueKrw": 26796586.0,
             "weightPercent": 2.24,
             "weight": 0.022400000000000003,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -233,6 +290,9 @@
             "marketValueKrw": 26339161.0,
             "weightPercent": 2.2,
             "weight": 0.022000000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -244,6 +304,9 @@
             "marketValueKrw": 25379643.0,
             "weightPercent": 2.12,
             "weight": 0.0212,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -255,6 +318,9 @@
             "marketValueKrw": 22819385.0,
             "weightPercent": 1.91,
             "weight": 0.0191,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -266,7 +332,10 @@
             "marketValueKrw": 22609742.0,
             "weightPercent": 1.89,
             "weight": 0.0189,
-            "isPriceTracked": false
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true
           },
           {
             "rank": 24,
@@ -277,6 +346,9 @@
             "marketValueKrw": 22313029.0,
             "weightPercent": 1.87,
             "weight": 0.0187,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -288,6 +360,9 @@
             "marketValueKrw": 20319592.0,
             "weightPercent": 1.7,
             "weight": 0.017,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -299,6 +374,9 @@
             "marketValueKrw": 20026613.0,
             "weightPercent": 1.67,
             "weight": 0.0167,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -310,6 +388,9 @@
             "marketValueKrw": 16760938.0,
             "weightPercent": 1.4,
             "weight": 0.013999999999999999,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -321,6 +402,9 @@
             "marketValueKrw": 16187966.0,
             "weightPercent": 1.35,
             "weight": 0.013500000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -332,6 +416,9 @@
             "marketValueKrw": 13369799.0,
             "weightPercent": 1.12,
             "weight": 0.011200000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -343,6 +430,9 @@
             "marketValueKrw": 13351055.0,
             "weightPercent": 1.12,
             "weight": 0.011200000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -354,6 +444,9 @@
             "marketValueKrw": 13319659.0,
             "weightPercent": 1.11,
             "weight": 0.0111,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -365,6 +458,9 @@
             "marketValueKrw": 12686798.0,
             "weightPercent": 1.06,
             "weight": 0.0106,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -376,6 +472,9 @@
             "marketValueKrw": 12597311.0,
             "weightPercent": 1.05,
             "weight": 0.0105,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -387,6 +486,9 @@
             "marketValueKrw": 12559461.0,
             "weightPercent": 1.05,
             "weight": 0.0105,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -398,6 +500,9 @@
             "marketValueKrw": 12033091.0,
             "weightPercent": 1.01,
             "weight": 0.0101,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -409,6 +514,9 @@
             "marketValueKrw": 11575711.0,
             "weightPercent": 0.97,
             "weight": 0.0097,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -420,6 +528,9 @@
             "marketValueKrw": 11342744.0,
             "weightPercent": 0.95,
             "weight": 0.0095,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -431,6 +542,9 @@
             "marketValueKrw": 11316321.0,
             "weightPercent": 0.95,
             "weight": 0.0095,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -442,6 +556,9 @@
             "marketValueKrw": 10899391.0,
             "weightPercent": 0.91,
             "weight": 0.0091,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -453,6 +570,9 @@
             "marketValueKrw": 9943909.0,
             "weightPercent": 0.83,
             "weight": 0.0083,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -464,6 +584,9 @@
             "marketValueKrw": 9516867.0,
             "weightPercent": 0.8,
             "weight": 0.008,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -475,6 +598,9 @@
             "marketValueKrw": 9150833.0,
             "weightPercent": 0.77,
             "weight": 0.0077,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -486,6 +612,9 @@
             "marketValueKrw": 8824720.0,
             "weightPercent": 0.74,
             "weight": 0.0074,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -497,6 +626,9 @@
             "marketValueKrw": 8444644.0,
             "weightPercent": 0.71,
             "weight": 0.0070999999999999995,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           }
         ],
@@ -510,6 +642,9 @@
             "marketValueKrw": 80585678.0,
             "weightPercent": 6.73,
             "weight": 0.0673,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -521,6 +656,9 @@
             "marketValueKrw": 79656029.0,
             "weightPercent": 6.66,
             "weight": 0.0666,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -532,6 +670,9 @@
             "marketValueKrw": 66292699.0,
             "weightPercent": 5.54,
             "weight": 0.0554,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -543,6 +684,9 @@
             "marketValueKrw": 63608279.0,
             "weightPercent": 5.32,
             "weight": 0.053200000000000004,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -554,6 +698,9 @@
             "marketValueKrw": 55878259.0,
             "weightPercent": 4.67,
             "weight": 0.0467,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -565,6 +712,9 @@
             "marketValueKrw": 48091009.0,
             "weightPercent": 4.02,
             "weight": 0.04019999999999999,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -576,6 +726,9 @@
             "marketValueKrw": 41361910.0,
             "weightPercent": 3.46,
             "weight": 0.0346,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -587,6 +740,9 @@
             "marketValueKrw": 37719362.0,
             "weightPercent": 3.15,
             "weight": 0.0315,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -598,6 +754,9 @@
             "marketValueKrw": 36075422.0,
             "weightPercent": 3.02,
             "weight": 0.0302,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -609,16 +768,22 @@
             "marketValueKrw": 36081892.0,
             "weightPercent": 3.02,
             "weight": 0.0302,
-            "isPriceTracked": false
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true
           }
         ],
         "totalHoldings": 44,
-        "fetchedAt": "2026-06-17T11:06:39.721768+00:00",
+        "fetchedAt": "2026-06-17T11:42:09.561768+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Micron Technology Inc",
+            "codeRaw": "MU US EQUITY",
             "ticker": "MU",
             "rank": 1,
             "previousRank": 2,
@@ -626,43 +791,51 @@
             "previousWeightPercent": 6.58,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.06179282996369051,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 6.249874664500626,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 1,
+            "securityReturn": 0.10873972396412412,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 6.868692065700833,
             "deltaActualPercentPoint": 0.15000000000000036,
-            "deltaPricePercentPoint": -0.33012533549937384,
-            "deltaResidualPercentPoint": 0.4801253354993742,
+            "deltaPricePercentPoint": 0.2886920657008325,
+            "deltaResidualPercentPoint": -0.13869206570083215,
             "tolerancePercentPoint": 0.658,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 1087.989990234375,
-                "source": "yahoo_chart_query1"
+                "close": 1483310.86,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1020.760009765625,
-                "source": "yahoo_chart_query1"
+                "close": 1644605.6734693877,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Sandisk Corp",
+            "codeRaw": "SNDK US EQUITY",
             "ticker": "SNDK",
             "rank": 2,
             "previousRank": 1,
@@ -670,43 +843,51 @@
             "previousWeightPercent": 6.9,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 6.600019183964617,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 2,
+            "securityReturn": 0.06487423439517404,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 6.917767395549548,
             "deltaActualPercentPoint": -0.2400000000000002,
-            "deltaPricePercentPoint": -0.29998081603538296,
-            "deltaResidualPercentPoint": 0.059980816035382745,
+            "deltaPricePercentPoint": 0.01776739554954787,
+            "deltaResidualPercentPoint": -0.2577673955495481,
             "tolerancePercentPoint": 0.6900000000000001,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 2107.860107421875,
-                "source": "yahoo_chart_query1"
+                "close": 2992129.076923077,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1991.550048828125,
-                "source": "yahoo_chart_query1"
+                "close": 3186241.16,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Intel Corp",
+            "codeRaw": "INTC US EQUITY",
             "ticker": "INTC",
             "rank": 3,
             "previousRank": 3,
@@ -714,43 +895,51 @@
             "previousWeightPercent": 5.74,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 5.319799770616578,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 3,
+            "securityReturn": 0.02675047276665632,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 5.548752443225685,
             "deltaActualPercentPoint": -0.20000000000000018,
-            "deltaPricePercentPoint": -0.42020022938342194,
-            "deltaResidualPercentPoint": 0.22020022938342176,
+            "deltaPricePercentPoint": -0.19124755677431526,
+            "deltaResidualPercentPoint": -0.008752443225684914,
             "tolerancePercentPoint": 0.5740000000000001,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 127.86000061035156,
-                "source": "yahoo_chart_query1"
+                "close": 188237.72674418605,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 117.05000305175781,
-                "source": "yahoo_chart_query1"
+                "close": 193273.1749271137,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "ARM Holdings PLC",
+            "codeRaw": "ARM US EQUITY",
             "ticker": "ARM",
             "rank": 4,
             "previousRank": 4,
@@ -758,43 +947,51 @@
             "previousWeightPercent": 5.25,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 5.106193784735659,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 4,
+            "securityReturn": 0.08370711375395046,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 5.356606857772717,
             "deltaActualPercentPoint": 0.07000000000000028,
-            "deltaPricePercentPoint": -0.14380621526434112,
-            "deltaResidualPercentPoint": 0.2138062152643414,
+            "deltaPricePercentPoint": 0.10660685777271706,
+            "deltaResidualPercentPoint": -0.03660685777271677,
             "tolerancePercentPoint": 0.525,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 412.54998779296875,
-                "source": "yahoo_chart_query1"
+                "close": 575441.9902912622,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 396.3399963378906,
-                "source": "yahoo_chart_query1"
+                "close": 623610.5784313725,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "NVIDIA Corp",
+            "codeRaw": "NVDA US EQUITY",
             "ticker": "NVDA",
             "rank": 5,
             "previousRank": 5,
@@ -802,43 +999,51 @@
             "previousWeightPercent": 4.78,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 4.724409492101011,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 5,
+            "securityReturn": 0.03572445038120131,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 4.661124151525212,
             "deltaActualPercentPoint": -0.11000000000000032,
-            "deltaPricePercentPoint": -0.05559050789898912,
-            "deltaResidualPercentPoint": -0.0544094921010112,
+            "deltaPricePercentPoint": -0.11887584847478827,
+            "deltaResidualPercentPoint": 0.00887584847478795,
             "tolerancePercentPoint": 0.47800000000000004,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 212.4499969482422,
-                "source": "yahoo_chart_query1"
+                "close": 310062.6034482759,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 207.41000366210938,
-                "source": "yahoo_chart_query1"
+                "close": 321139.4195402299,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Marvell Technology Inc",
+            "codeRaw": "MRVL US EQUITY",
             "ticker": "MRVL",
             "rank": 6,
             "previousRank": 6,
@@ -846,43 +1051,51 @@
             "previousWeightPercent": 3.86,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.0978049435946482,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 3.525611178758366,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 6,
+            "securityReturn": 0.10469144965853938,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 4.014642174364376,
             "deltaActualPercentPoint": 0.1599999999999997,
-            "deltaPricePercentPoint": -0.33438882124163394,
-            "deltaResidualPercentPoint": 0.49438882124163364,
+            "deltaPricePercentPoint": 0.15464217436437577,
+            "deltaResidualPercentPoint": 0.005357825635623925,
             "tolerancePercentPoint": 0.386,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 308.8800048828125,
-                "source": "yahoo_chart_query1"
+                "close": 422654.66990291263,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 278.6700134277344,
-                "source": "yahoo_chart_query1"
+                "close": 466903.0,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
-            "classification": "likely_buy",
-            "confidence": "medium",
-            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
+            "classification": "price_explained",
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Advanced Micro Devices Inc",
+            "codeRaw": "AMD US EQUITY",
             "ticker": "AMD",
             "rank": 7,
             "previousRank": 7,
@@ -890,43 +1103,51 @@
             "previousWeightPercent": 3.43,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 3.218869587856459,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 7,
+            "securityReturn": 0.07011958163464649,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 3.455771164571953,
             "deltaActualPercentPoint": 0.029999999999999805,
-            "deltaPricePercentPoint": -0.21113041214354134,
-            "deltaResidualPercentPoint": 0.24113041214354114,
+            "deltaPricePercentPoint": 0.02577116457195272,
+            "deltaResidualPercentPoint": 0.004228835428047084,
             "tolerancePercentPoint": 0.343,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 547.260009765625,
-                "source": "yahoo_chart_query1"
+                "close": 773033.42,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 507.2900085449219,
-                "source": "yahoo_chart_query1"
+                "close": 827238.2,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Dell Technologies Inc",
+            "codeRaw": "DELL US EQUITY",
             "ticker": "DELL",
             "rank": 8,
             "previousRank": 8,
@@ -934,51 +1155,51 @@
             "previousWeightPercent": 3.23,
             "membershipChange": null,
             "positionStatus": "held",
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 8,
             "securityReturn": 0.03447013156943868,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 3.382728519061843,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 3.1458573349682397,
             "deltaActualPercentPoint": -0.08000000000000007,
-            "deltaPricePercentPoint": 0.15272851906184304,
-            "deltaResidualPercentPoint": -0.2327285190618431,
+            "deltaPricePercentPoint": -0.08414266503176027,
+            "deltaResidualPercentPoint": 0.004142665031760195,
             "tolerancePercentPoint": 0.323,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_fallback",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
+                "date": "2026-06-15",
                 "close": 597745.8196721311,
                 "source": "provider_valuation_krw"
               },
               "end": {
+                "date": "2026-06-16",
                 "close": 618350.1967213114,
                 "source": "provider_valuation_krw"
               },
-              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
-              "externalPriceMeta": {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
             "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
-            "confidence": "medium",
-            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Credo Technology Group Holding Ltd",
+            "codeRaw": "CRDO US EQUITY",
             "ticker": "CRDO",
             "rank": 9,
             "previousRank": 9,
@@ -986,51 +1207,51 @@
             "previousWeightPercent": 3.09,
             "membershipChange": null,
             "positionStatus": "held",
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 9,
             "securityReturn": 0.03463112942225077,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 3.2366123529058957,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 3.009972764134691,
             "deltaActualPercentPoint": -0.06999999999999984,
-            "deltaPricePercentPoint": 0.1466123529058958,
-            "deltaResidualPercentPoint": -0.21661235290589564,
+            "deltaPricePercentPoint": -0.08002723586530891,
+            "deltaResidualPercentPoint": 0.01002723586530907,
             "tolerancePercentPoint": 0.309,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_fallback",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
+                "date": "2026-06-15",
                 "close": 378998.98913043475,
                 "source": "provider_valuation_krw"
               },
               "end": {
+                "date": "2026-06-16",
                 "close": 392124.152173913,
                 "source": "provider_valuation_krw"
               },
-              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
-              "externalPriceMeta": {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
             "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
-            "confidence": "medium",
-            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Space Exploration Technologies Corp",
+            "codeRaw": "SPCX US EQUITY",
             "ticker": null,
             "rank": 10,
             "previousRank": 12,
@@ -1038,39 +1259,51 @@
             "previousWeightPercent": 2.72,
             "membershipChange": "top10_entry",
             "positionStatus": "held",
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": false,
+            "displayScope": "current_top10",
+            "displayOrder": 10,
             "securityReturn": 0.19641938199073805,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 3.294572058595971,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 3.0638739164885576,
             "deltaActualPercentPoint": 0.2999999999999998,
-            "deltaPricePercentPoint": 0.5745720585959706,
-            "deltaResidualPercentPoint": -0.2745720585959708,
+            "deltaPricePercentPoint": 0.34387391648855736,
+            "deltaResidualPercentPoint": -0.04387391648855754,
             "tolerancePercentPoint": 0.272,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_fallback",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
+                "date": "2026-06-15",
                 "close": 243211.53968253967,
                 "source": "provider_valuation_krw"
               },
               "end": {
+                "date": "2026-06-16",
                 "close": 290983.0,
                 "source": "provider_valuation_krw"
               },
-              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
-              "externalPriceMeta": {
-                "reason": "not_price_tracked"
-              }
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
             "priceSource": "provider_valuation_krw",
-            "classification": "likely_sell",
-            "confidence": "medium",
-            "message": "TOP10 편입 · 가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
+            "classification": "price_explained",
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "TOP10 편입 · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Lam Research Corp",
+            "codeRaw": "LRCX US EQUITY",
             "ticker": "LRCX",
             "rank": 12,
             "previousRank": 10,
@@ -1078,79 +1311,59 @@
             "previousWeightPercent": 2.85,
             "membershipChange": "top10_exit",
             "positionStatus": "held",
-            "securityReturn": -0.05034458606867742,
-            "benchmarkReturn": -0.012235683076345412,
-            "predictedWeightPercent": 2.7400442426727785,
+            "holdingLifecycle": "held",
+            "currentIsTop10": false,
+            "previousWasTop10": true,
+            "displayScope": "previous_top10_exit",
+            "displayOrder": 11,
+            "securityReturn": 0.06062726421057785,
+            "benchmarkReturn": 0.06213924192561032,
+            "predictedWeightPercent": 2.845942964615421,
             "deltaActualPercentPoint": 0.0,
-            "deltaPricePercentPoint": -0.10995575732722163,
-            "deltaResidualPercentPoint": 0.10995575732722163,
+            "deltaPricePercentPoint": -0.004057035384579244,
+            "deltaResidualPercentPoint": 0.004057035384579244,
             "tolerancePercentPoint": 0.28500000000000003,
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 388.9200134277344,
-                "source": "yahoo_chart_query1"
+                "close": 554286.5862068966,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 369.3399963378906,
-                "source": "yahoo_chart_query1"
+                "close": 587891.4655172414,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "TOP10 밖으로 이동(현재 12위) · 가격 수익률로 대부분 설명됩니다."
+            "message": "TOP10 밖으로 이동(현재 12위) · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           }
         ],
         "signals": [
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
-            "type": "likely_buy",
-            "severity": "medium",
-            "name": "Marvell Technology Inc",
-            "ticker": "MRVL",
-            "rank": 6,
-            "previousRank": 6,
-            "weightPercent": 4.02,
-            "previousWeightPercent": 3.86,
-            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
-          },
-          {
-            "date": "2026-06-17",
-            "previousDate": "2026-06-16",
             "type": "top10_entry",
             "severity": "high",
             "name": "Space Exploration Technologies Corp",
+            "codeRaw": "SPCX US EQUITY",
             "ticker": null,
             "rank": 10,
             "previousRank": 12,
             "weightPercent": 3.02,
             "previousWeightPercent": 2.72,
-            "message": "TOP10 편입 · 가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
-          },
-          {
-            "date": "2026-06-17",
-            "previousDate": "2026-06-16",
-            "type": "likely_sell",
-            "severity": "medium",
-            "name": "Space Exploration Technologies Corp",
-            "ticker": null,
-            "rank": 10,
-            "previousRank": 12,
-            "weightPercent": 3.02,
-            "previousWeightPercent": 2.72,
-            "message": "TOP10 편입 · 가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
+            "message": "TOP10 편입 · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
@@ -1158,12 +1371,13 @@
             "type": "top10_exit",
             "severity": "high",
             "name": "Lam Research Corp",
+            "codeRaw": "LRCX US EQUITY",
             "ticker": "LRCX",
             "rank": 12,
             "previousRank": 10,
             "weightPercent": 2.85,
             "previousWeightPercent": 2.85,
-            "message": "TOP10 밖으로 이동(현재 12위) · 가격 수익률로 대부분 설명됩니다."
+            "message": "TOP10 밖으로 이동(현재 12위) · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           }
         ],
         "analysisSummary": {
@@ -1172,203 +1386,25 @@
           "returnCoverageUniverse": "full_holdings",
           "validReturnWeightPercent": 97.64,
           "totalReturnWeightPercent": 100.02,
-          "benchmarkReturn": -0.012235683076345412,
+          "benchmarkReturn": 0.06213924192561032,
           "fullHoldingCount": 44,
           "previousFullHoldingCount": 44,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
           },
+          "dateBasis": {
+            "currentSnapshotDate": "2026-06-17",
+            "previousSnapshotDate": "2026-06-16",
+            "currentPriceBasisDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "weightDateTimezone": "Asia/Seoul",
+            "priceDateTimezone": "security valuation / market close date",
+            "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate."
+          },
+          "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn); residual = actualWeightChange - priceEffect",
           "priceErrors": {},
-          "priceDiagnostics": {
-            "DELL": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "CRDO": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "AAOI": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "COIN": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "HOOD": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "APP": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "META": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "BE": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "LITE": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "VRT": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "RKLB": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ]
-          }
+          "priceDiagnostics": {}
         }
       }
     },
@@ -1394,6 +1430,9 @@
             "marketValueKrw": 122657526.0,
             "weightPercent": 8.52,
             "weight": 0.0852,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1405,6 +1444,9 @@
             "marketValueKrw": 103980968.0,
             "weightPercent": 7.22,
             "weight": 0.0722,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1416,6 +1458,9 @@
             "marketValueKrw": 97614109.0,
             "weightPercent": 6.78,
             "weight": 0.0678,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1427,6 +1472,9 @@
             "marketValueKrw": 89321048.0,
             "weightPercent": 6.21,
             "weight": 0.0621,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1438,6 +1486,9 @@
             "marketValueKrw": 75078572.0,
             "weightPercent": 5.22,
             "weight": 0.052199999999999996,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1449,6 +1500,9 @@
             "marketValueKrw": 59243005.0,
             "weightPercent": 4.12,
             "weight": 0.0412,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1460,6 +1514,9 @@
             "marketValueKrw": 55985280.0,
             "weightPercent": 3.89,
             "weight": 0.038900000000000004,
+            "hasExternalTicker": false,
+            "hasProviderValuation": false,
+            "priceTrackingMethod": null,
             "isPriceTracked": false
           },
           {
@@ -1471,6 +1528,9 @@
             "marketValueKrw": 54166099.0,
             "weightPercent": 3.76,
             "weight": 0.037599999999999995,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1482,6 +1542,9 @@
             "marketValueKrw": 53502568.0,
             "weightPercent": 3.72,
             "weight": 0.037200000000000004,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1493,6 +1556,9 @@
             "marketValueKrw": 47849773.0,
             "weightPercent": 3.32,
             "weight": 0.0332,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1504,6 +1570,9 @@
             "marketValueKrw": 44726037.0,
             "weightPercent": 3.11,
             "weight": 0.0311,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1515,6 +1584,9 @@
             "marketValueKrw": 40053227.0,
             "weightPercent": 2.78,
             "weight": 0.0278,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1526,6 +1598,9 @@
             "marketValueKrw": 38892530.0,
             "weightPercent": 2.7,
             "weight": 0.027000000000000003,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1537,6 +1612,9 @@
             "marketValueKrw": 34931655.0,
             "weightPercent": 2.43,
             "weight": 0.024300000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1548,7 +1626,10 @@
             "marketValueKrw": 34917960.0,
             "weightPercent": 2.43,
             "weight": 0.024300000000000002,
-            "isPriceTracked": false
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true
           },
           {
             "rank": 16,
@@ -1559,6 +1640,9 @@
             "marketValueKrw": 33469544.0,
             "weightPercent": 2.33,
             "weight": 0.0233,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1570,6 +1654,9 @@
             "marketValueKrw": 30086948.0,
             "weightPercent": 2.09,
             "weight": 0.0209,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1581,6 +1668,9 @@
             "marketValueKrw": 28023250.0,
             "weightPercent": 1.95,
             "weight": 0.0195,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1592,6 +1682,9 @@
             "marketValueKrw": 27550799.0,
             "weightPercent": 1.91,
             "weight": 0.0191,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1603,7 +1696,10 @@
             "marketValueKrw": 26990210.0,
             "weightPercent": 1.88,
             "weight": 0.018799999999999997,
-            "isPriceTracked": false
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true
           },
           {
             "rank": 21,
@@ -1614,6 +1710,9 @@
             "marketValueKrw": 24886377.0,
             "weightPercent": 1.73,
             "weight": 0.0173,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1625,6 +1724,9 @@
             "marketValueKrw": 24743035.0,
             "weightPercent": 1.72,
             "weight": 0.0172,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1636,6 +1738,9 @@
             "marketValueKrw": 24416632.0,
             "weightPercent": 1.7,
             "weight": 0.017,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1647,6 +1752,9 @@
             "marketValueKrw": 24121508.0,
             "weightPercent": 1.68,
             "weight": 0.0168,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1658,6 +1766,9 @@
             "marketValueKrw": 23629709.0,
             "weightPercent": 1.64,
             "weight": 0.016399999999999998,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1669,6 +1780,9 @@
             "marketValueKrw": 23324713.0,
             "weightPercent": 1.62,
             "weight": 0.016200000000000003,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1680,6 +1794,9 @@
             "marketValueKrw": 22996152.0,
             "weightPercent": 1.6,
             "weight": 0.016,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1691,6 +1808,9 @@
             "marketValueKrw": 22201897.0,
             "weightPercent": 1.54,
             "weight": 0.0154,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1702,6 +1822,9 @@
             "marketValueKrw": 21217422.0,
             "weightPercent": 1.47,
             "weight": 0.0147,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1713,6 +1836,9 @@
             "marketValueKrw": 20786846.0,
             "weightPercent": 1.44,
             "weight": 0.0144,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1724,6 +1850,9 @@
             "marketValueKrw": 20405556.0,
             "weightPercent": 1.42,
             "weight": 0.014199999999999999,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1735,6 +1864,9 @@
             "marketValueKrw": 17823940.0,
             "weightPercent": 1.24,
             "weight": 0.0124,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1746,6 +1878,9 @@
             "marketValueKrw": 16394481.0,
             "weightPercent": 1.14,
             "weight": 0.011399999999999999,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1757,7 +1892,10 @@
             "marketValueKrw": 16179874.0,
             "weightPercent": 1.12,
             "weight": 0.011200000000000002,
-            "isPriceTracked": false
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true
           },
           {
             "rank": 35,
@@ -1768,6 +1906,9 @@
             "marketValueKrw": 13845469.0,
             "weightPercent": 0.96,
             "weight": 0.0096,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1779,6 +1920,9 @@
             "marketValueKrw": 13232319.0,
             "weightPercent": 0.92,
             "weight": 0.0092,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1790,6 +1934,9 @@
             "marketValueKrw": 10200293.0,
             "weightPercent": 0.71,
             "weight": 0.0070999999999999995,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           }
         ],
@@ -1803,6 +1950,9 @@
             "marketValueKrw": 122657526.0,
             "weightPercent": 8.52,
             "weight": 0.0852,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1814,6 +1964,9 @@
             "marketValueKrw": 103980968.0,
             "weightPercent": 7.22,
             "weight": 0.0722,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1825,6 +1978,9 @@
             "marketValueKrw": 97614109.0,
             "weightPercent": 6.78,
             "weight": 0.0678,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1836,6 +1992,9 @@
             "marketValueKrw": 89321048.0,
             "weightPercent": 6.21,
             "weight": 0.0621,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1847,6 +2006,9 @@
             "marketValueKrw": 75078572.0,
             "weightPercent": 5.22,
             "weight": 0.052199999999999996,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1858,6 +2020,9 @@
             "marketValueKrw": 59243005.0,
             "weightPercent": 4.12,
             "weight": 0.0412,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1869,6 +2034,9 @@
             "marketValueKrw": 55985280.0,
             "weightPercent": 3.89,
             "weight": 0.038900000000000004,
+            "hasExternalTicker": false,
+            "hasProviderValuation": false,
+            "priceTrackingMethod": null,
             "isPriceTracked": false
           },
           {
@@ -1880,6 +2048,9 @@
             "marketValueKrw": 54166099.0,
             "weightPercent": 3.76,
             "weight": 0.037599999999999995,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1891,6 +2062,9 @@
             "marketValueKrw": 53502568.0,
             "weightPercent": 3.72,
             "weight": 0.037200000000000004,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           },
           {
@@ -1902,16 +2076,22 @@
             "marketValueKrw": 47849773.0,
             "weightPercent": 3.32,
             "weight": 0.0332,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true
           }
         ],
         "totalHoldings": 37,
-        "fetchedAt": "2026-06-17T11:06:42.830375+00:00",
+        "fetchedAt": "2026-06-17T11:42:12.689115+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Kioxia Holdings Corp",
+            "codeRaw": "285A JP EQUITY",
             "ticker": "285A.T",
             "rank": 1,
             "previousRank": 1,
@@ -1919,43 +2099,51 @@
             "previousWeightPercent": 8.06,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": 0.041909580904190946,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 8.387382466337314,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 1,
+            "securityReturn": 0.11928470260463708,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 8.506122231016144,
             "deltaActualPercentPoint": 0.4599999999999991,
-            "deltaPricePercentPoint": 0.3273824663373137,
-            "deltaResidualPercentPoint": 0.13261753366268536,
+            "deltaPricePercentPoint": 0.4461222310161439,
+            "deltaResidualPercentPoint": 0.013877768983855177,
             "tolerancePercentPoint": 0.806,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 90910.0,
-                "source": "yahoo_chart_query1"
+                "close": 766333.1188811188,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 94720.0,
-                "source": "yahoo_chart_query1"
+                "close": 857744.9370629371,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 14
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Intel Corp",
+            "codeRaw": "INTC US EQUITY",
             "ticker": "INTC",
             "rank": 2,
             "previousRank": 2,
@@ -1963,43 +2151,51 @@
             "previousWeightPercent": 7.49,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 6.848254930519546,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 2,
+            "securityReturn": 0.026750473372626704,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 7.251080699224211,
             "deltaActualPercentPoint": -0.27000000000000046,
-            "deltaPricePercentPoint": -0.6417450694804545,
-            "deltaResidualPercentPoint": 0.37174506948045405,
+            "deltaPricePercentPoint": -0.23891930077578927,
+            "deltaResidualPercentPoint": -0.031080699224211195,
             "tolerancePercentPoint": 0.7490000000000001,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 127.86000061035156,
-                "source": "yahoo_chart_query1"
+                "close": 188237.72643253233,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 117.05000305175781,
-                "source": "yahoo_chart_query1"
+                "close": 193273.1747211896,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Advanced Micro Devices Inc",
+            "codeRaw": "AMD US EQUITY",
             "ticker": "AMD",
             "rank": 3,
             "previousRank": 3,
@@ -2007,43 +2203,51 @@
             "previousWeightPercent": 6.77,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 6.2677640262157945,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 3,
+            "securityReturn": 0.07011959674984669,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 6.8308853314392595,
             "deltaActualPercentPoint": 0.010000000000000675,
-            "deltaPricePercentPoint": -0.502235973784205,
-            "deltaResidualPercentPoint": 0.5122359737842057,
+            "deltaPricePercentPoint": 0.06088533143925989,
+            "deltaResidualPercentPoint": -0.05088533143925922,
             "tolerancePercentPoint": 0.677,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 547.260009765625,
-                "source": "yahoo_chart_query1"
+                "close": 773033.4201680672,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 507.2900085449219,
-                "source": "yahoo_chart_query1"
+                "close": 827238.2118644068,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Seagate Technology Holdings PLC",
+            "codeRaw": "STX US EQUITY",
             "ticker": "STX",
             "rank": 4,
             "previousRank": 4,
@@ -2051,43 +2255,51 @@
             "previousWeightPercent": 6.0,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": 0.01230857693128673,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 6.066323144360449,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 4,
+            "securityReturn": 0.09462225576965588,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 6.192578682376003,
             "deltaActualPercentPoint": 0.20999999999999996,
-            "deltaPricePercentPoint": 0.06632314436044862,
-            "deltaResidualPercentPoint": 0.14367685563955135,
+            "deltaPricePercentPoint": 0.19257868237600295,
+            "deltaResidualPercentPoint": 0.017421317623997012,
             "tolerancePercentPoint": 0.6000000000000001,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 1018.7999877929688,
-                "source": "yahoo_chart_query1"
+                "close": 1406894.5344827587,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1031.3399658203125,
-                "source": "yahoo_chart_query1"
+                "close": 1540018.0689655172,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Western Digital Corp",
+            "codeRaw": "WDC US EQUITY",
             "ticker": "WDC",
             "rank": 5,
             "previousRank": 5,
@@ -2095,43 +2307,51 @@
             "previousWeightPercent": 4.76,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": 0.042155657059262275,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 4.954512369416874,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 5,
+            "securityReturn": 0.16133809668379206,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 5.212206754827488,
             "deltaActualPercentPoint": 0.45999999999999996,
-            "deltaPricePercentPoint": 0.19451236941687444,
-            "deltaResidualPercentPoint": 0.2654876305831255,
+            "deltaPricePercentPoint": 0.45220675482748796,
+            "deltaResidualPercentPoint": 0.007793245172512009,
             "tolerancePercentPoint": 0.476,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 653.530029296875,
-                "source": "yahoo_chart_query1"
+                "close": 850635.9605263158,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 681.0800170898438,
-                "source": "yahoo_chart_query1"
+                "close": 987875.947368421,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "ARM Holdings PLC",
+            "codeRaw": "ARM US EQUITY",
             "ticker": "ARM",
             "rank": 6,
             "previousRank": 6,
@@ -2139,43 +2359,51 @@
             "previousWeightPercent": 4.02,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 3.857258542089715,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 6,
+            "securityReturn": 0.08370711619035753,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 4.107655256132572,
             "deltaActualPercentPoint": 0.10000000000000053,
-            "deltaPricePercentPoint": -0.16274145791028438,
-            "deltaResidualPercentPoint": 0.2627414579102849,
+            "deltaPricePercentPoint": 0.08765525613257275,
+            "deltaResidualPercentPoint": 0.012344743867427788,
             "tolerancePercentPoint": 0.40199999999999997,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 412.54998779296875,
-                "source": "yahoo_chart_query1"
+                "close": 575441.9894736842,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 396.3399963378906,
-                "source": "yahoo_chart_query1"
+                "close": 623610.5789473684,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
+            "codeRaw": "NQU6 INDEX",
             "ticker": null,
             "rank": 7,
             "previousRank": null,
@@ -2183,14 +2411,23 @@
             "previousWeightPercent": null,
             "membershipChange": "top10_entry",
             "positionStatus": "new_holding",
+            "holdingLifecycle": "new_holding",
+            "currentIsTop10": true,
+            "previousWasTop10": false,
+            "displayScope": "current_top10",
+            "displayOrder": 7,
             "classification": "new_entry",
+            "economicSignal": "new_entry",
             "confidence": "high",
             "message": "ETF 보유목록 신규 편입"
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Sandisk Corp",
+            "codeRaw": "SNDK US EQUITY",
             "ticker": "SNDK",
             "rank": 8,
             "previousRank": 9,
@@ -2198,43 +2435,51 @@
             "previousWeightPercent": 3.74,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 3.5292499440251146,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 8,
+            "securityReturn": 0.06487422668187048,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 3.75513821914454,
             "deltaActualPercentPoint": 0.019999999999999574,
-            "deltaPricePercentPoint": -0.2107500559748856,
-            "deltaResidualPercentPoint": 0.23075005597488518,
+            "deltaPricePercentPoint": 0.015138219144539722,
+            "deltaResidualPercentPoint": 0.004861780855459852,
             "tolerancePercentPoint": 0.37400000000000005,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 2107.860107421875,
-                "source": "yahoo_chart_query1"
+                "close": 2992129.0588235296,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1991.550048828125,
-                "source": "yahoo_chart_query1"
+                "close": 3186241.117647059,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Snowflake Inc",
+            "codeRaw": "SNOW US EQUITY",
             "ticker": "SNOW",
             "rank": 9,
             "previousRank": 8,
@@ -2242,51 +2487,51 @@
             "previousWeightPercent": 3.8,
             "membershipChange": null,
             "positionStatus": "held",
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 9,
             "securityReturn": 0.03470947149054848,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 3.9270225500731786,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 3.70730255284559,
             "deltaActualPercentPoint": -0.07999999999999963,
-            "deltaPricePercentPoint": 0.12702255007317875,
-            "deltaResidualPercentPoint": -0.20702255007317838,
+            "deltaPricePercentPoint": -0.09269744715440975,
+            "deltaResidualPercentPoint": 0.012697447154410124,
             "tolerancePercentPoint": 0.38,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_fallback",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
+                "date": "2026-06-15",
                 "close": 351753.85714285716,
                 "source": "provider_valuation_krw"
               },
               "end": {
+                "date": "2026-06-16",
                 "close": 363963.04761904763,
                 "source": "provider_valuation_krw"
               },
-              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
-              "externalPriceMeta": {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
             "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
-            "confidence": "medium",
-            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "NVIDIA Corp",
+            "codeRaw": "NVDA US EQUITY",
             "ticker": "NVDA",
             "rank": 10,
             "previousRank": 10,
@@ -2294,43 +2539,51 @@
             "previousWeightPercent": 3.42,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": 0.0012410016822580086,
-            "predictedWeightPercent": 3.334728260369662,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 10,
+            "securityReturn": 0.03572442855911362,
+            "benchmarkReturn": 0.060581362221463216,
+            "predictedWeightPercent": 3.3398451753412157,
             "deltaActualPercentPoint": -0.10000000000000009,
-            "deltaPricePercentPoint": -0.08527173963033796,
-            "deltaResidualPercentPoint": -0.014728260369662127,
+            "deltaPricePercentPoint": -0.08015482465878421,
+            "deltaResidualPercentPoint": -0.01984517534121588,
             "tolerancePercentPoint": 0.342,
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 212.4499969482422,
-                "source": "yahoo_chart_query1"
+                "close": 310062.6066666667,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 207.41000366210938,
-                "source": "yahoo_chart_query1"
+                "close": 321139.41610738257,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "NASDAQ 100 E-MINI INDEX JUN 2026",
+            "codeRaw": "NQM6 INDEX",
             "ticker": null,
             "rank": null,
             "previousRank": 7,
@@ -2338,7 +2591,13 @@
             "previousWeightPercent": 3.96,
             "membershipChange": "top10_exit",
             "positionStatus": "fund_exit",
+            "holdingLifecycle": "fund_exit",
+            "currentIsTop10": false,
+            "previousWasTop10": true,
+            "displayScope": "previous_top10_exit",
+            "displayOrder": 11,
             "classification": "fund_exit",
+            "economicSignal": "fund_exit",
             "confidence": "high",
             "message": "ETF 보유목록에서 제외되었습니다."
           }
@@ -2350,6 +2609,7 @@
             "type": "top10_entry",
             "severity": "high",
             "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
+            "codeRaw": "NQU6 INDEX",
             "ticker": null,
             "rank": 7,
             "previousRank": null,
@@ -2363,6 +2623,7 @@
             "type": "top10_exit",
             "severity": "high",
             "name": "NASDAQ 100 E-MINI INDEX JUN 2026",
+            "codeRaw": "NQM6 INDEX",
             "ticker": null,
             "rank": null,
             "previousRank": 7,
@@ -2377,333 +2638,25 @@
           "returnCoverageUniverse": "full_holdings",
           "validReturnWeightPercent": 96.05,
           "totalReturnWeightPercent": 100.01,
-          "benchmarkReturn": 0.0012410016822580086,
+          "benchmarkReturn": 0.060581362221463216,
           "fullHoldingCount": 37,
           "previousFullHoldingCount": 37,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
           },
+          "dateBasis": {
+            "currentSnapshotDate": "2026-06-17",
+            "previousSnapshotDate": "2026-06-16",
+            "currentPriceBasisDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "weightDateTimezone": "Asia/Seoul",
+            "priceDateTimezone": "security valuation / market close date",
+            "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate."
+          },
+          "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn); residual = actualWeightChange - priceEffect",
           "priceErrors": {},
-          "priceDiagnostics": {
-            "DELL": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "CRDO": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "AAOI": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "COIN": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "HOOD": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "APP": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "META": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "BE": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "LITE": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "VRT": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "RKLB": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "SNOW": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "NOW": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "GOOG": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "2513.HK": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 13
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "PDD": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ]
-          }
+          "priceDiagnostics": {}
         }
       }
     },
@@ -2729,7 +2682,10 @@
             "marketValueKrw": 115767586.0,
             "weightPercent": 9.63,
             "weight": 0.09630000000000001,
-            "isPriceTracked": false,
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
               "risep": "",
@@ -2745,6 +2701,9 @@
             "marketValueKrw": 89598171.0,
             "weightPercent": 7.45,
             "weight": 0.0745,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2761,6 +2720,9 @@
             "marketValueKrw": 88272077.0,
             "weightPercent": 7.34,
             "weight": 0.07339999999999999,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2777,6 +2739,9 @@
             "marketValueKrw": 71435527.0,
             "weightPercent": 5.94,
             "weight": 0.0594,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2793,6 +2758,9 @@
             "marketValueKrw": 66996213.0,
             "weightPercent": 5.57,
             "weight": 0.0557,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2809,6 +2777,9 @@
             "marketValueKrw": 59080019.0,
             "weightPercent": 4.91,
             "weight": 0.049100000000000005,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2825,6 +2796,9 @@
             "marketValueKrw": 56567914.0,
             "weightPercent": 4.7,
             "weight": 0.047,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2841,6 +2815,9 @@
             "marketValueKrw": 50480894.0,
             "weightPercent": 4.2,
             "weight": 0.042,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2857,6 +2834,9 @@
             "marketValueKrw": 48647436.0,
             "weightPercent": 4.05,
             "weight": 0.0405,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2873,6 +2853,9 @@
             "marketValueKrw": 44577714.0,
             "weightPercent": 3.71,
             "weight": 0.0371,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2889,6 +2872,9 @@
             "marketValueKrw": 44069819.0,
             "weightPercent": 3.66,
             "weight": 0.0366,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2905,6 +2891,9 @@
             "marketValueKrw": 36824640.0,
             "weightPercent": 3.06,
             "weight": 0.030600000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2921,6 +2910,9 @@
             "marketValueKrw": 35593170.0,
             "weightPercent": 2.96,
             "weight": 0.0296,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2937,6 +2929,9 @@
             "marketValueKrw": 34214508.0,
             "weightPercent": 2.84,
             "weight": 0.028399999999999998,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2953,6 +2948,9 @@
             "marketValueKrw": 33895797.0,
             "weightPercent": 2.82,
             "weight": 0.0282,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2969,6 +2967,9 @@
             "marketValueKrw": 27657768.0,
             "weightPercent": 2.3,
             "weight": 0.023,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -2985,6 +2986,9 @@
             "marketValueKrw": 27563273.0,
             "weightPercent": 2.29,
             "weight": 0.0229,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3001,6 +3005,9 @@
             "marketValueKrw": 22449240.0,
             "weightPercent": 1.87,
             "weight": 0.0187,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3017,6 +3024,9 @@
             "marketValueKrw": 21198022.0,
             "weightPercent": 1.76,
             "weight": 0.0176,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3033,6 +3043,9 @@
             "marketValueKrw": 17733385.0,
             "weightPercent": 1.47,
             "weight": 0.0147,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3049,6 +3062,9 @@
             "marketValueKrw": 14942560.0,
             "weightPercent": 1.24,
             "weight": 0.0124,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3065,6 +3081,9 @@
             "marketValueKrw": 13268710.0,
             "weightPercent": 1.1,
             "weight": 0.011000000000000001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3081,6 +3100,9 @@
             "marketValueKrw": 13175719.0,
             "weightPercent": 1.1,
             "weight": 0.011000000000000001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3097,6 +3119,9 @@
             "marketValueKrw": 12036060.0,
             "weightPercent": 1.0,
             "weight": 0.01,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3113,6 +3138,9 @@
             "marketValueKrw": 11640503.0,
             "weightPercent": 0.97,
             "weight": 0.0097,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3129,6 +3157,9 @@
             "marketValueKrw": 11558309.0,
             "weightPercent": 0.96,
             "weight": 0.0096,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3145,6 +3176,9 @@
             "marketValueKrw": 11237389.0,
             "weightPercent": 0.93,
             "weight": 0.009300000000000001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3161,6 +3195,9 @@
             "marketValueKrw": 10914845.0,
             "weightPercent": 0.91,
             "weight": 0.0091,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3177,6 +3214,9 @@
             "marketValueKrw": 8200084.0,
             "weightPercent": 0.68,
             "weight": 0.0068000000000000005,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3193,6 +3233,9 @@
             "marketValueKrw": 8113534.0,
             "weightPercent": 0.67,
             "weight": 0.0067,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3209,6 +3252,9 @@
             "marketValueKrw": 7779221.0,
             "weightPercent": 0.65,
             "weight": 0.006500000000000001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3225,6 +3271,9 @@
             "marketValueKrw": 7409685.0,
             "weightPercent": 0.62,
             "weight": 0.0062,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3241,6 +3290,9 @@
             "marketValueKrw": 7393836.0,
             "weightPercent": 0.61,
             "weight": 0.0060999999999999995,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3257,6 +3309,9 @@
             "marketValueKrw": 6791447.0,
             "weightPercent": 0.56,
             "weight": 0.005600000000000001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3273,6 +3328,9 @@
             "marketValueKrw": 6715581.0,
             "weightPercent": 0.56,
             "weight": 0.005600000000000001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3289,6 +3347,9 @@
             "marketValueKrw": 6388257.0,
             "weightPercent": 0.53,
             "weight": 0.0053,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3305,6 +3366,9 @@
             "marketValueKrw": 6105335.0,
             "weightPercent": 0.51,
             "weight": 0.0051,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3321,6 +3385,9 @@
             "marketValueKrw": 6091952.0,
             "weightPercent": 0.51,
             "weight": 0.0051,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3337,6 +3404,9 @@
             "marketValueKrw": 5913918.0,
             "weightPercent": 0.49,
             "weight": 0.0049,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3353,6 +3423,9 @@
             "marketValueKrw": 5488390.0,
             "weightPercent": 0.46,
             "weight": 0.0046,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3369,6 +3442,9 @@
             "marketValueKrw": 3726609.0,
             "weightPercent": 0.31,
             "weight": 0.0031,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3385,6 +3461,9 @@
             "marketValueKrw": 3660699.0,
             "weightPercent": 0.3,
             "weight": 0.003,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3401,6 +3480,9 @@
             "marketValueKrw": 3526730.0,
             "weightPercent": 0.29,
             "weight": 0.0029,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3417,6 +3499,9 @@
             "marketValueKrw": 2860944.0,
             "weightPercent": 0.24,
             "weight": 0.0024,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3433,6 +3518,9 @@
             "marketValueKrw": 2821278.0,
             "weightPercent": 0.23,
             "weight": 0.0023,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3449,6 +3537,9 @@
             "marketValueKrw": 2547553.0,
             "weightPercent": 0.21,
             "weight": 0.0021,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3465,6 +3556,9 @@
             "marketValueKrw": 1943360.0,
             "weightPercent": 0.16,
             "weight": 0.0016,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3481,6 +3575,9 @@
             "marketValueKrw": 1684894.0,
             "weightPercent": 0.14,
             "weight": 0.0014000000000000002,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3497,6 +3594,9 @@
             "marketValueKrw": 1387539.0,
             "weightPercent": 0.12,
             "weight": 0.0012,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3513,6 +3613,9 @@
             "marketValueKrw": 1375921.0,
             "weightPercent": 0.11,
             "weight": 0.0011,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3529,6 +3632,9 @@
             "marketValueKrw": 1326870.0,
             "weightPercent": 0.11,
             "weight": 0.0011,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3545,6 +3651,9 @@
             "marketValueKrw": 1146863.0,
             "weightPercent": 0.1,
             "weight": 0.001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3561,6 +3670,9 @@
             "marketValueKrw": 855816.0,
             "weightPercent": 0.07,
             "weight": 0.0007000000000000001,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3579,7 +3691,10 @@
             "marketValueKrw": 115767586.0,
             "weightPercent": 9.63,
             "weight": 0.09630000000000001,
-            "isPriceTracked": false,
+            "hasExternalTicker": false,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "provider_valuation_krw",
+            "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
               "risep": "",
@@ -3595,6 +3710,9 @@
             "marketValueKrw": 89598171.0,
             "weightPercent": 7.45,
             "weight": 0.0745,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3611,6 +3729,9 @@
             "marketValueKrw": 88272077.0,
             "weightPercent": 7.34,
             "weight": 0.07339999999999999,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3627,6 +3748,9 @@
             "marketValueKrw": 71435527.0,
             "weightPercent": 5.94,
             "weight": 0.0594,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3643,6 +3767,9 @@
             "marketValueKrw": 66996213.0,
             "weightPercent": 5.57,
             "weight": 0.0557,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3659,6 +3786,9 @@
             "marketValueKrw": 59080019.0,
             "weightPercent": 4.91,
             "weight": 0.049100000000000005,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3675,6 +3805,9 @@
             "marketValueKrw": 56567914.0,
             "weightPercent": 4.7,
             "weight": 0.047,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3691,6 +3824,9 @@
             "marketValueKrw": 50480894.0,
             "weightPercent": 4.2,
             "weight": 0.042,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3707,6 +3843,9 @@
             "marketValueKrw": 48647436.0,
             "weightPercent": 4.05,
             "weight": 0.0405,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3723,6 +3862,9 @@
             "marketValueKrw": 44577714.0,
             "weightPercent": 3.71,
             "weight": 0.0371,
+            "hasExternalTicker": true,
+            "hasProviderValuation": true,
+            "priceTrackingMethod": "external_ticker",
             "isPriceTracked": true,
             "sourceFields": {
               "secId": null,
@@ -3732,12 +3874,15 @@
           }
         ],
         "totalHoldings": 55,
-        "fetchedAt": "2026-06-17T11:06:44.922401+00:00",
+        "fetchedAt": "2026-06-17T11:42:14.744141+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Space Exploration Technologies Corp",
+            "codeRaw": "SPCX US Equity",
             "ticker": null,
             "rank": 1,
             "previousRank": 1,
@@ -3745,39 +3890,51 @@
             "previousWeightPercent": 8.58,
             "membershipChange": null,
             "positionStatus": "held",
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 1,
             "securityReturn": 0.1964193562044625,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 10.282153129539177,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 9.625497061417226,
             "deltaActualPercentPoint": 1.0500000000000007,
-            "deltaPricePercentPoint": 1.7021531295391767,
-            "deltaResidualPercentPoint": -0.652153129539176,
+            "deltaPricePercentPoint": 1.045497061417226,
+            "deltaResidualPercentPoint": 0.004502938582774618,
             "tolerancePercentPoint": 0.8580000000000001,
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_fallback",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
+                "date": "2026-06-15",
                 "close": 243211.54376897408,
                 "source": "provider_valuation_krw"
               },
               "end": {
+                "date": "2026-06-16",
                 "close": 290982.9986175694,
                 "source": "provider_valuation_krw"
               },
-              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
-              "externalPriceMeta": {
-                "reason": "not_price_tracked"
-              }
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
             "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
-            "confidence": "medium",
-            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "ADVANCED MICRO DEVICES",
+            "codeRaw": "AMD US Equity",
             "ticker": "AMD",
             "rank": 2,
             "previousRank": 2,
@@ -3785,43 +3942,51 @@
             "previousWeightPercent": 7.42,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 6.889375384738963,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 2,
+            "securityReturn": 0.07011959264179057,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 7.445410854961403,
             "deltaActualPercentPoint": 0.03000000000000025,
-            "deltaPricePercentPoint": -0.5306246152610372,
-            "deltaResidualPercentPoint": 0.5606246152610375,
+            "deltaPricePercentPoint": 0.02541085496140294,
+            "deltaResidualPercentPoint": 0.004589145038597309,
             "tolerancePercentPoint": 0.742,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 547.260009765625,
-                "source": "yahoo_chart_query1"
+                "close": 773033.4254907381,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 507.2900085449219,
-                "source": "yahoo_chart_query1"
+                "close": 827238.2143846367,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "ARM Holdings PLC",
+            "codeRaw": "ARM US Equity",
             "ticker": "ARM",
             "rank": 3,
             "previousRank": 3,
@@ -3829,43 +3994,51 @@
             "previousWeightPercent": 7.22,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 6.947712982029004,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 3,
+            "securityReturn": 0.08370711766789674,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 7.336713677445131,
             "deltaActualPercentPoint": 0.1200000000000001,
-            "deltaPricePercentPoint": -0.27228701797099575,
-            "deltaResidualPercentPoint": 0.39228701797099585,
+            "deltaPricePercentPoint": 0.11671367744513095,
+            "deltaResidualPercentPoint": 0.003286322554869159,
             "tolerancePercentPoint": 0.722,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 412.54998779296875,
-                "source": "yahoo_chart_query1"
+                "close": 575441.9857555885,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 396.3399963378906,
-                "source": "yahoo_chart_query1"
+                "close": 623610.5757682797,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Sandisk Corp/DE",
+            "codeRaw": "SNDK US Equity",
             "ticker": "SNDK",
             "rank": 4,
             "previousRank": 4,
@@ -3873,43 +4046,51 @@
             "previousWeightPercent": 5.95,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 5.630925157198518,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 4,
+            "securityReturn": 0.0648742383418266,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 5.941111917876516,
             "deltaActualPercentPoint": -0.009999999999999787,
-            "deltaPricePercentPoint": -0.31907484280148246,
-            "deltaResidualPercentPoint": 0.3090748428014827,
+            "deltaPricePercentPoint": -0.008888082123483798,
+            "deltaResidualPercentPoint": -0.0011119178765159887,
             "tolerancePercentPoint": 0.5950000000000001,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 2107.860107421875,
-                "source": "yahoo_chart_query1"
+                "close": 2992129.073909172,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1991.550048828125,
-                "source": "yahoo_chart_query1"
+                "close": 3186241.1685994645,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "INTEL Corp",
+            "codeRaw": "INTC US Equity",
             "ticker": "INTC",
             "rank": 5,
             "previousRank": 5,
@@ -3917,43 +4098,51 @@
             "previousWeightPercent": 5.79,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 5.309194549351683,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 5,
+            "securityReturn": 0.02675047305537359,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 5.574371680280703,
             "deltaActualPercentPoint": -0.21999999999999975,
-            "deltaPricePercentPoint": -0.48080545064831703,
-            "deltaResidualPercentPoint": 0.2608054506483173,
+            "deltaPricePercentPoint": -0.21562831971929697,
+            "deltaResidualPercentPoint": -0.004371680280702783,
             "tolerancePercentPoint": 0.5790000000000001,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 127.86000061035156,
-                "source": "yahoo_chart_query1"
+                "close": 188237.7256889452,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 117.05000305175781,
-                "source": "yahoo_chart_query1"
+                "close": 193273.17389799215,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "NVIDIA Corp",
+            "codeRaw": "NVDA US Equity",
             "ticker": "NVDA",
             "rank": 6,
             "previousRank": 6,
@@ -3961,43 +4150,51 @@
             "previousWeightPercent": 5.06,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 4.948081402767948,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 6,
+            "securityReturn": 0.035724440035396654,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 4.914136192766314,
             "deltaActualPercentPoint": -0.14999999999999947,
-            "deltaPricePercentPoint": -0.11191859723205155,
-            "deltaResidualPercentPoint": -0.038081402767947914,
+            "deltaPricePercentPoint": -0.14586380723368553,
+            "deltaResidualPercentPoint": -0.00413619276631394,
             "tolerancePercentPoint": 0.506,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 212.4499969482422,
-                "source": "yahoo_chart_query1"
+                "close": 310062.60647821607,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 207.41000366210938,
-                "source": "yahoo_chart_query1"
+                "close": 321139.41947056586,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "ALPHABET INC-CL A",
+            "codeRaw": "GOOGL US Equity",
             "ticker": "GOOGL",
             "rank": 7,
             "previousRank": 7,
@@ -4005,43 +4202,51 @@
             "previousWeightPercent": 4.88,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": 0.010559073594251789,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 4.939635200546951,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 7,
+            "securityReturn": 0.02722478946484186,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 4.700431853927452,
             "deltaActualPercentPoint": -0.17999999999999972,
-            "deltaPricePercentPoint": 0.059635200546950706,
-            "deltaResidualPercentPoint": -0.23963520054695042,
+            "deltaPricePercentPoint": -0.17956814607254756,
+            "deltaResidualPercentPoint": -0.0004318539274521527,
             "tolerancePercentPoint": 0.488,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 369.3500061035156,
-                "source": "yahoo_chart_query1"
+                "close": 543512.4433497537,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 373.25,
-                "source": "yahoo_chart_query1"
+                "close": 558309.4551914725,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "BLOOM ENERGY CORPORATION",
+            "codeRaw": "BE US Equity",
             "ticker": "BE",
             "rank": 8,
             "previousRank": 8,
@@ -4049,51 +4254,51 @@
             "previousWeightPercent": 4.24,
             "membershipChange": null,
             "positionStatus": "held",
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 8,
             "securityReturn": 0.05522568904824521,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 4.48151197185985,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 4.19530615547022,
             "deltaActualPercentPoint": -0.040000000000000036,
-            "deltaPricePercentPoint": 0.24151197185984952,
-            "deltaResidualPercentPoint": -0.28151197185984955,
+            "deltaPricePercentPoint": -0.04469384452977998,
+            "deltaResidualPercentPoint": 0.004693844529779945,
             "tolerancePercentPoint": 0.42400000000000004,
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_fallback",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
+                "date": "2026-06-15",
                 "close": 393218.43465419643,
                 "source": "provider_valuation_krw"
               },
               "end": {
+                "date": "2026-06-16",
                 "close": 414934.1936544468,
                 "source": "provider_valuation_krw"
               },
-              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
-              "externalPriceMeta": {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
             "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
-            "confidence": "medium",
-            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "MICRON TECH",
+            "codeRaw": "MU US Equity",
             "ticker": "MU",
             "rank": 9,
             "previousRank": 9,
@@ -4101,43 +4306,51 @@
             "previousWeightPercent": 3.89,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -0.06179282996369051,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 3.6556254981741154,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 9,
+            "securityReturn": 0.10873972253412223,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 4.044190975898052,
             "deltaActualPercentPoint": 0.1599999999999997,
-            "deltaPricePercentPoint": -0.2343745018258847,
-            "deltaResidualPercentPoint": 0.3943745018258844,
+            "deltaPricePercentPoint": 0.15419097589805153,
+            "deltaResidualPercentPoint": 0.005809024101948168,
             "tolerancePercentPoint": 0.389,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 1087.989990234375,
-                "source": "yahoo_chart_query1"
+                "close": 1483310.867364158,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1020.760009765625,
-                "source": "yahoo_chart_query1"
+                "close": 1644605.6795131846,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
-            "classification": "likely_buy",
-            "confidence": "medium",
-            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
+            "classification": "price_explained",
+            "economicSignal": "price_explained",
+            "confidence": "high",
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "currentPriceBasisDate": "2026-06-16",
             "name": "Amazon.com Inc",
+            "codeRaw": "AMZN US Equity",
             "ticker": "AMZN",
             "rank": 10,
             "previousRank": 10,
@@ -4145,576 +4358,71 @@
             "previousWeightPercent": 3.83,
             "membershipChange": null,
             "positionStatus": "held",
-            "securityReturn": -8.13115686266741e-05,
-            "benchmarkReturn": -0.0016411984039033278,
-            "predictedWeightPercent": 3.835984187818606,
+            "holdingLifecycle": "held",
+            "currentIsTop10": true,
+            "previousWasTop10": true,
+            "displayScope": "current_top10",
+            "displayOrder": 10,
+            "securityReturn": 0.03165541812300021,
+            "benchmarkReturn": 0.06646732223123886,
+            "predictedWeightPercent": 3.7049801424242377,
             "deltaActualPercentPoint": -0.1200000000000001,
-            "deltaPricePercentPoint": 0.005984187818605768,
-            "deltaResidualPercentPoint": -0.12598418781860588,
+            "deltaPricePercentPoint": -0.1250198575757624,
+            "deltaResidualPercentPoint": 0.005019857575762288,
             "tolerancePercentPoint": 0.383,
             "returnCoverage": 1.0,
             "priceMeta": {
-              "source": "yahoo_chart_query1",
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_krw",
               "start": {
                 "date": "2026-06-15",
-                "close": 246.02000427246094,
-                "source": "yahoo_chart_query1"
+                "close": 360472.90365559165,
+                "source": "provider_valuation_krw"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 246.0,
-                "source": "yahoo_chart_query1"
+                "close": 371883.82414282137,
+                "source": "provider_valuation_krw"
               },
-              "attempts": [
-                {
-                  "source": "yahoo_chart_query1",
-                  "status": "ok",
-                  "points": 13
-                }
-              ]
+              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
             },
-            "priceSource": "yahoo_chart_query1",
+            "priceReturnStartDate": "2026-06-15",
+            "priceReturnEndDate": "2026-06-16",
+            "priceSource": "provider_valuation_krw",
+            "priceSourceType": "etf_provider_unit_value_krw",
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": "price_explained",
+            "economicSignal": "price_explained",
             "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
           }
         ],
-        "signals": [
-          {
-            "date": "2026-06-17",
-            "previousDate": "2026-06-16",
-            "type": "likely_buy",
-            "severity": "medium",
-            "name": "MICRON TECH",
-            "ticker": "MU",
-            "rank": 9,
-            "previousRank": 9,
-            "weightPercent": 4.05,
-            "previousWeightPercent": 3.89,
-            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
-          }
-        ],
+        "signals": [],
         "analysisSummary": {
           "returnCoverage": 1.0,
           "returnCoverageStatus": "ok",
           "returnCoverageUniverse": "full_holdings",
           "validReturnWeightPercent": 100.0,
           "totalReturnWeightPercent": 100.0,
-          "benchmarkReturn": -0.0016411984039033278,
+          "benchmarkReturn": 0.06646732223123886,
           "fullHoldingCount": 53,
           "previousFullHoldingCount": 53,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
           },
+          "dateBasis": {
+            "currentSnapshotDate": "2026-06-17",
+            "previousSnapshotDate": "2026-06-16",
+            "currentPriceBasisDate": "2026-06-16",
+            "previousPriceBasisDate": "2026-06-15",
+            "weightDateTimezone": "Asia/Seoul",
+            "priceDateTimezone": "security valuation / market close date",
+            "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate."
+          },
+          "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn); residual = actualWeightChange - priceEffect",
           "priceErrors": {},
-          "priceDiagnostics": {
-            "DELL": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "CRDO": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "AAOI": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "COIN": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "HOOD": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "APP": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "META": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "BE": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "LITE": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "VRT": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "RKLB": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "SNOW": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              },
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "NOW": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "GOOG": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "2513.HK": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 13
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "PDD": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "PLTR": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "DDOG": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "PANW": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ],
-            "CRWD": [
-              {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15",
-                "attempts": [
-                  {
-                    "source": "yahoo_chart_query1",
-                    "status": "ok",
-                    "points": 12
-                  }
-                ],
-                "providerErrors": []
-              }
-            ]
-          }
+          "priceDiagnostics": {}
         }
       }
     }

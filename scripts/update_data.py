@@ -28,7 +28,7 @@ from typing import Any, Iterable
 
 KST = dt.timezone(dt.timedelta(hours=9), name="KST")
 USER_AGENT = "Mozilla/5.0 (compatible; ETFTrackingBot/0.1; +https://sonchanggi.github.io/etf-tracking/)"
-SCHEMA_VERSION = "1.1.0"
+SCHEMA_VERSION = "1.1.1"
 PRICE_EXPLAINED_TOLERANCE_PP = 0.20
 PRICE_EXPLAINED_TOLERANCE_RATIO = 0.10
 RETURN_COVERAGE_MIN = 0.60
@@ -259,16 +259,22 @@ def ranked_map(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
 def make_holding(rank: int, code_raw: str, name: str, shares: Any, market_value: Any, weight_percent: Any, *, source_fields: dict[str, Any] | None = None) -> dict[str, Any]:
     weight = parse_number(weight_percent)
     ticker = normalize_ticker(code_raw, name)
+    parsed_shares = parse_intish(shares)
+    parsed_market_value = parse_intish(market_value)
+    has_provider_valuation = bool(parsed_shares and parsed_market_value and parsed_shares > 0 and parsed_market_value > 0)
     holding = {
         "rank": rank,
         "codeRaw": clean_text(code_raw),
         "ticker": ticker,
         "name": clean_text(name),
-        "shares": parse_intish(shares),
-        "marketValueKrw": parse_intish(market_value),
+        "shares": parsed_shares,
+        "marketValueKrw": parsed_market_value,
         "weightPercent": weight,
         "weight": None if weight is None else weight / 100,
-        "isPriceTracked": bool(ticker),
+        "hasExternalTicker": bool(ticker),
+        "hasProviderValuation": has_provider_valuation,
+        "priceTrackingMethod": "external_ticker" if ticker else ("provider_valuation_krw" if has_provider_valuation else None),
+        "isPriceTracked": bool(ticker) or has_provider_valuation,
     }
     if source_fields:
         holding["sourceFields"] = source_fields
@@ -303,13 +309,17 @@ def parse_time_page(html_text: str, config: EtfConfig, *, requested_date: str | 
                 continue
             holdings.append(make_holding(len(holdings) + 1, cells[0], cells[1], cells[2], cells[3], cells[4]))
 
+    nav_as_of_date = max(standard_dates) if standard_dates else None
+    if nav_as_of_date and nav_as_of_date > query_date:
+        nav_as_of_date = None
+
     source_status = "live" if holdings else "empty"
     warning = "" if holdings else "TIME provider returned no constituent rows for the requested date."
     return {
         "etfId": config.id,
         "asOfDate": query_date,
         "queryDate": requested_date or query_date,
-        "navAsOfDate": max(standard_dates) if standard_dates else None,
+        "navAsOfDate": nav_as_of_date,
         "priceBasisDate": previous_weekday(query_date),
         "listingDate": listing_date,
         "sourceStatus": source_status,
@@ -747,32 +757,48 @@ def provider_unit_value_krw(row: dict[str, Any] | None) -> float | None:
     return market_value / shares
 
 
-def provider_valuation_return(prev_row: dict[str, Any] | None, curr_row: dict[str, Any] | None) -> tuple[float | None, dict[str, Any]] | None:
+def provider_valuation_return(
+    prev_row: dict[str, Any] | None,
+    curr_row: dict[str, Any] | None,
+    *,
+    start_date: str | None = None,
+    end_date: str | None = None,
+) -> tuple[float | None, dict[str, Any]] | None:
     previous_value = provider_unit_value_krw(prev_row)
     current_value = provider_unit_value_krw(curr_row)
     if previous_value is None or current_value is None or previous_value == 0:
         return None
     return (current_value / previous_value) - 1, {
         "source": "provider_valuation_krw",
-        "sourceType": "etf_provider_unit_value_fallback",
-        "start": {"close": previous_value, "source": "provider_valuation_krw"},
-        "end": {"close": current_value, "source": "provider_valuation_krw"},
-        "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+        "sourceType": "etf_provider_unit_value_krw",
+        "start": {"date": start_date, "close": previous_value, "source": "provider_valuation_krw"},
+        "end": {"date": end_date, "close": current_value, "source": "provider_valuation_krw"},
+        "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다.",
     }
 
 
 def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, Any], price_provider: PriceProvider) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     current_top = current.get("top10", [])
     if not prev:
+        curr_date = str(current.get("date"))
+        curr_price_basis = str(current.get("priceBasisDate") or previous_weekday(curr_date))
         rows = []
-        for holding in current_top:
+        for order, holding in enumerate(current_top, start=1):
             rows.append({
                 "date": current["date"],
+                "currentPriceBasisDate": curr_price_basis,
                 "name": holding.get("name"),
+                "codeRaw": holding.get("codeRaw"),
                 "ticker": holding.get("ticker"),
                 "rank": holding.get("rank"),
                 "actualWeightPercent": holding.get("weightPercent"),
+                "currentIsTop10": True,
+                "previousWasTop10": False,
+                "displayScope": "current_top10",
+                "displayOrder": order,
                 "classification": "insufficient_data",
+                "economicSignal": "insufficient_data",
+                "holdingLifecycle": "new_holding",
                 "confidence": "low",
                 "message": "첫 추적 스냅샷이라 전일 비교가 없습니다.",
             })
@@ -781,6 +807,16 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "returnCoverageStatus": "insufficient",
             "returnCoverageUniverse": "full_holdings",
             "benchmarkReturn": None,
+            "priceBasis": {"previous": None, "current": curr_price_basis},
+            "dateBasis": {
+                "currentSnapshotDate": curr_date,
+                "previousSnapshotDate": None,
+                "currentPriceBasisDate": curr_price_basis,
+                "previousPriceBasisDate": None,
+                "weightDateTimezone": "Asia/Seoul",
+                "priceDateTimezone": "security valuation / market close date",
+                "rule": "ETF disclosed weight date D is compared with the nearest available security valuation on or before priceBasisDate.",
+            },
         }
 
     prev_top = prev.get("top10", [])
@@ -796,6 +832,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
     prev_price_basis = str(prev.get("priceBasisDate") or previous_weekday(prev_date))
     curr_price_basis = str(current.get("priceBasisDate") or previous_weekday(curr_date))
     display_keys = list(dict.fromkeys([*(holding_key(row) for row in curr_top), *(holding_key(row) for row in prev_top)]))
+    display_order = {key: index for index, key in enumerate(display_keys, start=1) if key}
 
     def resolve_return(key: str) -> tuple[float | None, dict[str, Any]]:
         prev_row = prev_all_map.get(key)
@@ -803,22 +840,26 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         reference = curr_row or prev_row or {}
         ticker = reference.get("ticker")
 
-        def valuation_fallback(external_meta: dict[str, Any] | None = None) -> tuple[float | None, dict[str, Any]] | None:
-            fallback = provider_valuation_return(prev_row, curr_row)
-            if fallback:
-                fallback_return, fallback_meta = fallback
-                if external_meta:
-                    fallback_meta["externalPriceMeta"] = external_meta
-                if ticker:
-                    price_provider.errors.pop(str(ticker), None)
-                return fallback_return, fallback_meta
-            return None
+        def valuation_return(external_meta: dict[str, Any] | None = None) -> tuple[float | None, dict[str, Any]] | None:
+            valuation = provider_valuation_return(prev_row, curr_row, start_date=prev_price_basis, end_date=curr_price_basis)
+            if valuation is None:
+                return None
+            valuation_return_value, valuation_meta = valuation
+            if external_meta:
+                valuation_meta["externalPriceMeta"] = external_meta
+            if ticker:
+                price_provider.errors.pop(str(ticker), None)
+            return valuation_return_value, valuation_meta
+
+        provider_return = valuation_return()
+        if provider_return:
+            return provider_return
 
         security_return, price_meta = price_provider.return_between(ticker, prev_price_basis, curr_price_basis)
         if security_return is None and prev_row and curr_row:
-            fallback = valuation_fallback(price_meta)
-            if fallback:
-                return fallback
+            valuation_after_external_attempt = valuation_return(price_meta)
+            if valuation_after_external_attempt:
+                return valuation_after_external_attempt
         return security_return, price_meta
 
     return_keys = list(dict.fromkeys([*prev_all_map.keys(), *curr_all_map.keys()]))
@@ -862,7 +903,10 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         base = {
             "date": curr_date,
             "previousDate": prev_date,
+            "previousPriceBasisDate": prev_price_basis,
+            "currentPriceBasisDate": curr_price_basis,
             "name": reference.get("name"),
+            "codeRaw": reference.get("codeRaw"),
             "ticker": reference.get("ticker"),
             "rank": curr_row.get("rank") if curr_row else None,
             "previousRank": prev_row.get("rank") if prev_row else None,
@@ -870,12 +914,18 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "previousWeightPercent": prev_weight,
             "membershipChange": membership_change,
             "positionStatus": "held" if curr_row and prev_row else ("new_holding" if curr_row else "fund_exit"),
+            "holdingLifecycle": "held" if curr_row and prev_row else ("new_holding" if curr_row else "fund_exit"),
+            "currentIsTop10": current_is_top10,
+            "previousWasTop10": previous_was_top10,
+            "displayScope": "current_top10" if current_is_top10 else ("previous_top10_exit" if previous_was_top10 else "tracked_holding"),
+            "displayOrder": display_order.get(key, 999),
         }
 
         if not prev_row:
             row = {
                 **base,
                 "classification": "new_entry",
+                "economicSignal": "new_entry",
                 "confidence": "high",
                 "message": "ETF 보유목록 신규 편입" if current_is_top10 else "신규 보유",
             }
@@ -888,6 +938,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             row = {
                 **base,
                 "classification": "fund_exit",
+                "economicSignal": "fund_exit",
                 "confidence": "high",
                 "message": "ETF 보유목록에서 제외되었습니다.",
             }
@@ -906,6 +957,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
                 "benchmarkReturn": benchmark_return,
                 "returnCoverage": coverage,
                 "classification": "insufficient_data",
+                "economicSignal": "insufficient_data",
                 "confidence": "low",
                 "message": "종가·보조평가액 또는 비중 데이터가 부족해 분해하지 못했습니다.",
             }
@@ -924,8 +976,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         confidence = "high"
         price_source = price_meta.get("source") if isinstance(price_meta, dict) else None
         if price_source == "provider_valuation_krw":
-            confidence = "medium"
-            message = "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
+            message = "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
         if coverage < RETURN_COVERAGE_MIN:
             classification = "mixed"
             message = "종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다."
@@ -953,8 +1004,13 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "tolerancePercentPoint": tolerance,
             "returnCoverage": coverage,
             "priceMeta": price_meta,
+            "priceReturnStartDate": price_meta.get("start", {}).get("date") if isinstance(price_meta.get("start"), dict) else prev_price_basis,
+            "priceReturnEndDate": price_meta.get("end", {}).get("date") if isinstance(price_meta.get("end"), dict) else curr_price_basis,
             "priceSource": price_source,
+            "priceSourceType": price_meta.get("sourceType") if isinstance(price_meta, dict) else None,
+            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
             "classification": classification,
+            "economicSignal": classification,
             "confidence": confidence,
             "message": message,
         }
@@ -974,6 +1030,16 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         "fullHoldingCount": len(curr_all),
         "previousFullHoldingCount": len(prev_all),
         "priceBasis": {"previous": prev_price_basis, "current": curr_price_basis},
+        "dateBasis": {
+            "currentSnapshotDate": curr_date,
+            "previousSnapshotDate": prev_date,
+            "currentPriceBasisDate": curr_price_basis,
+            "previousPriceBasisDate": prev_price_basis,
+            "weightDateTimezone": "Asia/Seoul",
+            "priceDateTimezone": "security valuation / market close date",
+            "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate.",
+        },
+        "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn); residual = actualWeightChange - priceEffect",
         "priceErrors": copy.deepcopy(price_provider.errors),
         "priceDiagnostics": copy.deepcopy(price_provider.diagnostics),
     }
@@ -986,6 +1052,7 @@ def signal_from_row(row: dict[str, Any], signal_type: str, severity: str) -> dic
         "type": signal_type,
         "severity": severity,
         "name": row.get("name"),
+        "codeRaw": row.get("codeRaw"),
         "ticker": row.get("ticker"),
         "rank": row.get("rank"),
         "previousRank": row.get("previousRank"),
@@ -1053,10 +1120,11 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         "sourcePolicy": {
             "holdings": "ETF provider public pages/APIs",
             "holdingsHistory": "Full provider holdings are persisted; TOP10 is a derived dashboard view.",
-            "prices": "Ordered best-effort chain: local fixtures, Yahoo Chart query1/query2 adjusted closes, Stooq CSV, optional FinanceDataReader, then ETF provider valuation-per-share KRW fallback for still-held names.",
+            "prices": "For attribution, ETF provider valuation-per-share KRW is preferred when available because ETF weights are KRW NAV weights; otherwise the updater falls back to local fixtures, Yahoo Chart query1/query2 adjusted closes, Stooq CSV, and optional FinanceDataReader.",
             "googleFinance": "Google Finance has no stable public historical HTTP API in this updater; use it only as manual cross-check outside scheduled automation.",
-            "attribution": "No-trade predicted weight = previous full-holding weight × (1 + security return) / (1 + full-holdings benchmark return).",
-            "confidenceRule": "returnCoverage below 60% is marked mixed/low confidence; provider valuation fallback lowers price-source confidence.",
+            "dateBasis": "ETF disclosed weight date is Korean-calendar based; return intervals use previous/current priceBasisDate valuation dates recorded on each decomposition row.",
+            "attribution": "No-trade predicted weight = previous full-holding weight × (1 + security return) / (1 + full-holdings benchmark return). Residual is actual weight change minus this price effect.",
+            "confidenceRule": "returnCoverage below 60% is marked mixed/low confidence; external closes are fallback data when KRW valuation-per-share is unavailable.",
         },
         "updatePolicy": {
             "timezone": "Asia/Seoul",

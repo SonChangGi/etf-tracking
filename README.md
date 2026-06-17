@@ -47,8 +47,8 @@ npm test
 - ETF 공급자 페이지와 공개 API에서 읽은 공개 정보만 사용합니다.
 - 이력에는 공급자가 제공한 전체 보유종목을 보존하고, TOP10은 화면용 파생 뷰로 사용합니다. TOP10 밖(11위 이하)으로 내려간 종목도 전체 보유목록에 남아 있으면 실제 비중/순위로 표시합니다.
 - 가격 수익률 분해는 전체 보유종목의 no-trade 예상비중 공식(`전일 비중 × (1+종목수익률)/(1+전체 보유종목 벤치마크 수익률)`)을 사용합니다.
-- 가격 소스는 로컬 fixture → Yahoo Chart(query1/query2) → Stooq CSV → 선택적 FinanceDataReader → ETF PDF 평가금액/수량 단가(KRW) fallback 순서입니다. Google Finance는 안정적인 공개 historical HTTP API가 없어 자동화 소스로 사용하지 않고 수동 교차확인 대상으로만 봅니다.
-- 환율, 장중 체결, 현금/선물/비상장 종목, AP 설정·환매 효과를 완전히 복원하지는 못합니다.
+- ETF 비중은 KRW NAV 비중이므로 가격 효과는 우선 ETF PDF의 `평가금액/수량` KRW 평가단가 수익률을 사용합니다. 해당 값이 없을 때만 로컬 fixture → Yahoo Chart(query1/query2) → Stooq CSV → 선택적 FinanceDataReader 공개 종가 체인을 사용합니다. Google Finance는 안정적인 공개 historical HTTP API가 없어 자동화 소스로 사용하지 않고 수동 교차확인 대상으로만 봅니다.
+- 환율은 KRW 평가단가에 반영되는 범위에서 포함되지만, 장중 체결, 현금/선물/비상장 종목, AP 설정·환매 효과를 완전히 복원하지는 못합니다.
 - `likely_buy`/`likely_sell`은 실제 운용사 주문 확정이 아니라 가격 변화로 설명되지 않는 비중 잔차 신호입니다.
 - 본 페이지는 개인 리서치 도구이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.
 

@@ -112,14 +112,16 @@
               <tr>
                 <th scope="col">순위</th>
                 <th scope="col">종목</th>
-                <th scope="col">티커</th>
-                <th scope="col">비중</th>
-                <th scope="col">전일 대비 분해</th>
-                <th scope="col">신뢰도</th>
+                <th scope="col">티커/가격소스</th>
+                <th scope="col">현재 비중</th>
+                <th scope="col">전일 비중</th>
+                <th scope="col">가격 기여</th>
+                <th scope="col">잔차</th>
+                <th scope="col">분류</th>
               </tr>
             </thead>
             <tbody id="top10-rows">
-              <tr><td colspan="6">데이터를 불러오는 중...</td></tr>
+              <tr><td colspan="8">데이터를 불러오는 중...</td></tr>
             </tbody>
           </table>
         </div>
@@ -137,16 +139,18 @@
             <caption>전일 대비 비중 변화 분해</caption>
             <thead>
               <tr>
+                <th scope="col">구분</th>
                 <th scope="col">종목</th>
-                <th scope="col">전일 비중</th>
-                <th scope="col">현재 비중</th>
+                <th scope="col">전일→현재 비중</th>
+                <th scope="col">종목 수익률</th>
                 <th scope="col">가격 기여</th>
                 <th scope="col">잔차</th>
+                <th scope="col">종가 기준/소스</th>
                 <th scope="col">분류</th>
               </tr>
             </thead>
             <tbody id="decomposition-rows">
-              <tr><td colspan="6">데이터를 불러오는 중...</td></tr>
+              <tr><td colspan="8">데이터를 불러오는 중...</td></tr>
             </tbody>
           </table>
         </div>
@@ -170,15 +174,15 @@
       <div class="feature-grid">
         <article>
           <h3>가격 효과</h3>
-          <p>전일 TOP10 비중에 개별 종목 수익률을 적용하고, TOP10 내 가중 평균 수익률로 정규화한 예측 비중을 계산합니다.</p>
+          <p>전일 전체 보유종목 비중에 개별 종목의 KRW 평가단가 수익률을 적용하고, 전체 보유종목 가중 평균 수익률로 정규화한 no-trade 예측 비중을 계산합니다.</p>
         </article>
         <article>
           <h3>잔차 신호</h3>
-          <p>실제 비중 변화가 예측 비중 변화보다 허용오차 이상 크면 <code>likely_buy</code>, 작으면 <code>likely_sell</code>로 표시합니다.</p>
+          <p>실제 비중 변화가 예측 비중 변화보다 허용오차 이상 크면 <code>likely_buy</code>, 작으면 <code>likely_sell</code>로 표시하되, 실제 주문 확정이 아닌 no-trade 기준 대비 잔차입니다.</p>
         </article>
         <article>
           <h3>커버리지</h3>
-          <p>종가가 확보된 전일 TOP10 비중 합계가 60% 미만이면 가격/매매 요인을 단정하지 않고 <code>mixed</code> 또는 낮은 신뢰도로 표시합니다.</p>
+          <p>수익률이 확보된 전일 전체 보유종목 비중 합계가 60% 미만이면 가격/매매 요인을 단정하지 않고 <code>mixed</code> 또는 낮은 신뢰도로 표시합니다.</p>
         </article>
       </div>
     </section>

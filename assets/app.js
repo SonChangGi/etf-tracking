@@ -148,6 +148,7 @@
       date: stringOr(snapshot.date, snapshot.asOfDate, ''),
       queryDate: stringOr(snapshot.queryDate, ''),
       navAsOfDate: stringOr(snapshot.navAsOfDate, ''),
+      priceBasisDate: stringOr(snapshot.priceBasisDate, ''),
       sourceStatus: stringOr(snapshot.sourceStatus, ''),
       sourceConfidence: stringOr(snapshot.sourceConfidence, ''),
       sourceWarning: stringOr(snapshot.sourceWarning, ''),
@@ -171,6 +172,9 @@
       marketValueKrw: finiteOrNull(row.marketValueKrw),
       weightPercent: finiteOrNull(row.weightPercent),
       weight: finiteOrNull(row.weight),
+      hasExternalTicker: Boolean(row.hasExternalTicker || row.ticker),
+      hasProviderValuation: Boolean(row.hasProviderValuation),
+      priceTrackingMethod: stringOr(row.priceTrackingMethod, ''),
       isPriceTracked: Boolean(row.isPriceTracked),
     };
   }
@@ -179,7 +183,12 @@
     return {
       date: stringOr(row.date, ''),
       previousDate: stringOr(row.previousDate, ''),
+      previousPriceBasisDate: stringOr(row.previousPriceBasisDate, ''),
+      currentPriceBasisDate: stringOr(row.currentPriceBasisDate, ''),
+      priceReturnStartDate: stringOr(row.priceReturnStartDate, ''),
+      priceReturnEndDate: stringOr(row.priceReturnEndDate, ''),
       name: stringOr(row.name, ''),
+      codeRaw: stringOr(row.codeRaw, ''),
       ticker: stringOr(row.ticker, ''),
       rank: finiteOrNull(row.rank),
       previousRank: finiteOrNull(row.previousRank),
@@ -193,8 +202,16 @@
       deltaResidualPercentPoint: finiteOrNull(row.deltaResidualPercentPoint),
       membershipChange: stringOr(row.membershipChange, ''),
       positionStatus: stringOr(row.positionStatus, ''),
+      holdingLifecycle: stringOr(row.holdingLifecycle, row.positionStatus, ''),
+      currentIsTop10: Boolean(row.currentIsTop10),
+      previousWasTop10: Boolean(row.previousWasTop10),
+      displayScope: stringOr(row.displayScope, ''),
+      displayOrder: numberOr(row.displayOrder, 999),
       priceSource: stringOr(row.priceSource, ''),
+      priceSourceType: stringOr(row.priceSourceType, ''),
+      attributionFormula: stringOr(row.attributionFormula, ''),
       classification: stringOr(row.classification, 'insufficient_data'),
+      economicSignal: stringOr(row.economicSignal, row.classification, 'insufficient_data'),
       confidence: stringOr(row.confidence, ''),
       message: stringOr(row.message, ''),
     };
@@ -209,6 +226,7 @@
       type: stringOr(signal.type, ''),
       severity: stringOr(signal.severity, ''),
       name: stringOr(signal.name, ''),
+      codeRaw: stringOr(signal.codeRaw, ''),
       ticker: stringOr(signal.ticker, ''),
       rank: finiteOrNull(signal.rank),
       previousRank: finiteOrNull(signal.previousRank),
@@ -391,9 +409,10 @@
       const latest = latestTop10.find((row) => holdingKey(row) === key) || {};
       const label = latest.ticker || latest.name || key;
       const points = history.map((snapshot) => {
-        const universe = snapshot.holdings?.length ? snapshot.holdings : snapshot.top10;
+        const hasFullHoldings = Boolean(snapshot.holdings?.length);
+        const universe = hasFullHoldings ? snapshot.holdings : snapshot.top10;
         const holding = universe.find((row) => holdingKey(row) === key);
-        return { date: snapshot.date, value: holding?.weightPercent ?? 0 };
+        return { date: snapshot.date, value: holding?.weightPercent ?? null };
       });
       return { key, label, points };
     }).filter((item) => item.points.some((point) => point.value > 0));
@@ -411,44 +430,48 @@
       return [
         holding.rank,
         nameCell(holding.name, holding.codeRaw),
-        holding.ticker ? badge(holding.ticker) : '가격 제외',
+        priceIdentifierCell(holding, decomp),
         formatWeight(holding.weightPercent),
-        classificationBadge(decomp.classification || 'insufficient_data'),
-        decomp.confidence || latest?.sourceConfidence || '-',
+        formatWeight(decomp.previousWeightPercent),
+        formatPercentPoint(decomp.deltaPricePercentPoint),
+        formatPercentPoint(decomp.deltaResidualPercentPoint),
+        attributionBadges(decomp),
       ];
-    }, 6);
+    }, 8);
   }
 
   function renderDecomposition(latest) {
-    const rows = (latest?.decomposition || []).slice().sort((a, b) => {
-      const severity = { new_entry: 0, fund_exit: 0, top10_entry: 0, top10_exit: 0, likely_buy: 1, likely_sell: 1, mixed: 2, price_explained: 3, insufficient_data: 4 };
-      return (severity[a.classification] ?? 9) - (severity[b.classification] ?? 9);
-    });
+    const rows = sortAttributionRows(latest?.decomposition || []);
     renderRows('#decomposition-rows', rows, (row) => [
+      scopeLabel(row),
       nameCell(row.name, row.ticker),
-      formatWeight(row.previousWeightPercent),
-      formatWeight(row.actualWeightPercent),
+      `${formatWeight(row.previousWeightPercent)} → ${formatWeight(row.actualWeightPercent)}`,
+      formatReturn(row.securityReturn),
       formatPercentPoint(row.deltaPricePercentPoint),
       formatPercentPoint(row.deltaResidualPercentPoint),
-      classificationBadge(row.classification),
-    ], 6);
+      basisCell(row),
+      attributionBadges(row),
+    ], 8);
   }
 
   function renderSource(etf, latest, filteredHistory) {
     const target = $('#source-list');
     if (!target) return;
     const summary = latest?.analysisSummary || {};
+    const priceBasis = summary.priceBasis || {};
+    const dateBasis = summary.dateBasis || {};
     target.innerHTML = `
       <div class="source-item"><strong>${escapeHtml(etf.name)}</strong><span>${escapeHtml(etf.provider)} · ${escapeHtml(etf.code)}</span></div>
       <div class="source-item"><strong>기준일</strong><span>${escapeHtml(formatMaybeDate(latest?.date))} · 선택 범위 ${filteredHistory.length.toLocaleString('ko-KR')}개 스냅샷</span></div>
+      <div class="source-item"><strong>전일대비 분해 기준</strong><span>ETF 비중 ${escapeHtml(formatMaybeDate(dateBasis.previousSnapshotDate))} → ${escapeHtml(formatMaybeDate(dateBasis.currentSnapshotDate || latest?.date))} · 가격 기준 ${escapeHtml(formatMaybeDate(priceBasis.previous))} → ${escapeHtml(formatMaybeDate(priceBasis.current || latest?.priceBasisDate))}</span></div>
       <div class="source-item"><strong>소스 상태</strong><span class="${latest?.sourceStatus === 'live' ? '' : 'warning'}">${escapeHtml(latest?.sourceStatus || 'unknown')} · ${escapeHtml(latest?.sourceWarning || '정상')}</span></div>
-      <div class="source-item"><strong>종가 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')}</span></div>
+      <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')}</span></div>
     `;
     const pill = $('#coverage-pill');
     if (pill) {
       const warning = summary.returnCoverageStatus && summary.returnCoverageStatus !== 'ok';
       pill.classList.toggle('warning', Boolean(warning));
-      pill.textContent = `종가 커버리지 ${formatCoverage(summary.returnCoverage)}`;
+      pill.textContent = `수익률 커버리지 ${formatCoverage(summary.returnCoverage)}`;
     }
   }
 
@@ -519,6 +542,14 @@
     return span;
   }
 
+
+  function priceIdentifierCell(holding, decomp) {
+    if (holding?.ticker) return badge(holding.ticker);
+    if (decomp?.priceSource === 'provider_valuation_krw' || holding?.priceTrackingMethod === 'provider_valuation_krw') return badge('KRW 평가단가');
+    if (holding?.isPriceTracked) return badge('가격 추적');
+    return '티커 없음';
+  }
+
   function classificationBadge(value) {
     const span = document.createElement('span');
     const key = stringOr(value, 'insufficient_data');
@@ -527,13 +558,57 @@
     return span;
   }
 
+  function attributionBadges(row) {
+    const div = document.createElement('div');
+    div.className = 'badge-stack';
+    const membership = stringOr(row?.membershipChange, '');
+    const classification = stringOr(row?.classification, 'insufficient_data');
+    if (membership) div.appendChild(classificationBadge(membership));
+    if (!membership || membership !== classification) div.appendChild(classificationBadge(classification));
+    if (row?.confidence) {
+      const confidence = document.createElement('span');
+      confidence.className = 'confidence-text';
+      confidence.textContent = row.confidence;
+      div.appendChild(confidence);
+    }
+    return div;
+  }
+
+  function sortAttributionRows(rows) {
+    const scopeRank = { current_top10: 0, previous_top10_exit: 1, tracked_holding: 2 };
+    return asRecords(rows).slice().sort((a, b) => (
+      (scopeRank[a.displayScope] ?? 9) - (scopeRank[b.displayScope] ?? 9)
+      || numberOr(a.displayOrder, 999) - numberOr(b.displayOrder, 999)
+      || numberOr(a.rank, 999) - numberOr(b.rank, 999)
+      || stringOr(a.name).localeCompare(stringOr(b.name), 'ko')
+    ));
+  }
+
+  function scopeLabel(row) {
+    if (row?.currentIsTop10) return '현재 TOP10';
+    if (row?.previousWasTop10) return '전일 TOP10';
+    return '추적';
+  }
+
+  function basisCell(row) {
+    const div = document.createElement('div');
+    div.className = 'basis-cell';
+    const closeStart = row.priceReturnStartDate || row.previousPriceBasisDate;
+    const closeEnd = row.priceReturnEndDate || row.currentPriceBasisDate;
+    div.innerHTML = `
+      <strong>${escapeHtml(formatMaybeDate(closeStart))} → ${escapeHtml(formatMaybeDate(closeEnd))}</strong>
+      <span>${escapeHtml(formatPriceSource(row.priceSource || row.priceSourceType))}</span>
+    `;
+    return div;
+  }
+
   function classLabel(value) {
     const labels = {
       price_explained: '가격 설명',
-      likely_buy: '매수 가능성',
-      likely_sell: '매도 가능성',
+      likely_buy: '잔차+ 매수 가능성',
+      likely_sell: '잔차- 매도 가능성',
       mixed: '혼합/저신뢰',
-      new_entry: 'TOP10 편입',
+      new_entry: '신규 보유',
       top10_entry: 'TOP10 편입',
       exit: 'TOP10 편출',
       top10_exit: 'TOP10 편출',
@@ -561,6 +636,26 @@
     if (num === null) return '-';
     const sign = num > 0 ? '+' : '';
     return `${sign}${num.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}pp`;
+  }
+
+  function formatReturn(value) {
+    const num = finiteOrNull(value);
+    if (num === null) return '-';
+    const sign = num > 0 ? '+' : '';
+    return `${sign}${(num * 100).toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}%`;
+  }
+
+  function formatPriceSource(value) {
+    const labels = {
+      provider_valuation_krw: 'ETF KRW 평가단가',
+      etf_provider_unit_value_krw: 'ETF KRW 평가단가',
+      yahoo_chart_query1: 'Yahoo Chart',
+      yahoo_chart_query2: 'Yahoo Chart 보조',
+      stooq_csv: 'Stooq CSV',
+      finance_datareader: 'FinanceDataReader',
+    };
+    const key = stringOr(value, '');
+    return labels[key] || key || '가격 소스 없음';
   }
 
   function formatCoverage(value) {
@@ -629,9 +724,13 @@
       normalizeAutomationStatus,
       filterHistory,
       buildWeightSeries,
+      sortAttributionRows,
+      priceIdentifierCell,
       holdingKey,
       classLabel,
       formatWeight,
+      formatReturn,
+      formatPriceSource,
       formatCoverage,
       formatAutomationStatus,
       FALLBACK_DASHBOARD,

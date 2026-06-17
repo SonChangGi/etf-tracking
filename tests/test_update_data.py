@@ -30,6 +30,14 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(parsed["top10"][0]["ticker"], "MU")
         self.assertAlmostEqual(parsed["top10"][0]["weightPercent"], 6.73)
 
+    def test_time_nav_date_is_not_future_for_historical_request(self):
+        html = (ROOT / "tests" / "fixtures" / "time-2.html").read_text(encoding="utf-8")
+        historical_html = html.replace('value="2026-06-17"', 'value="2026-06-10"', 1)
+        parsed = update_data.parse_time_page(historical_html, update_data.ETFS[0], requested_date="2026-06-10")
+        self.assertEqual(parsed["asOfDate"], "2026-06-10")
+        self.assertIsNone(parsed["navAsOfDate"])
+        self.assertEqual(parsed["priceBasisDate"], "2026-06-09")
+
     def test_parse_samsung_payload_extracts_pdf_rows_without_cash(self):
         payload = json.loads((ROOT / "tests" / "fixtures" / "samsung-2ETFQ1.json").read_text(encoding="utf-8"))
         parsed = update_data.parse_samsung_payload(payload, update_data.ETFS[2], requested_date="2026-06-17")
@@ -37,6 +45,8 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(parsed["listingDate"], "2025-02-25")
         self.assertEqual(parsed["sourceStatus"], "live")
         self.assertEqual(parsed["top10"][0]["ticker"], None)
+        self.assertEqual(parsed["top10"][0]["priceTrackingMethod"], "provider_valuation_krw")
+        self.assertTrue(parsed["top10"][0]["isPriceTracked"])
         self.assertEqual(parsed["top10"][1]["ticker"], "AMD")
 
     def test_snapshot_history_preserves_full_holdings_not_only_top10(self):
@@ -147,7 +157,7 @@ class UpdateDataTests(unittest.TestCase):
         self.assertAlmostEqual(summary["benchmarkReturn"], 0.55)
         self.assertEqual(summary["returnCoverageUniverse"], "full_holdings")
 
-    def test_provider_valuation_fallback_prevents_false_missing_close(self):
+    def test_provider_valuation_return_prevents_false_missing_close(self):
         provider = update_data.PriceProvider(no_live=True)
         previous = {
             "date": "2026-06-16",
@@ -166,6 +176,62 @@ class UpdateDataTests(unittest.TestCase):
         self.assertAlmostEqual(rows[0]["securityReturn"], 0.1)
         self.assertEqual(rows[0]["priceSource"], "provider_valuation_krw")
         self.assertNotEqual(rows[0]["classification"], "insufficient_data")
+
+    def test_provider_valuation_krw_is_preferred_for_weight_attribution(self):
+        fixture_dir = ROOT / "tests" / "fixtures"
+        provider = update_data.PriceProvider(fixture_dir=fixture_dir)
+        previous = {
+            "date": "2026-06-16",
+            "priceBasisDate": "2026-06-16",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0},
+            ],
+        }
+        current = {
+            "date": "2026-06-17",
+            "priceBasisDate": "2026-06-17",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "shares": 10, "marketValueKrw": 1100, "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "shares": 10, "marketValueKrw": 1100, "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0},
+            ],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        by_ticker = {row.get("ticker"): row for row in rows}
+        self.assertAlmostEqual(by_ticker["AAA"]["securityReturn"], 0.1)
+        self.assertEqual(by_ticker["AAA"]["priceSource"], "provider_valuation_krw")
+        self.assertEqual(by_ticker["AAA"]["priceSourceType"], "etf_provider_unit_value_krw")
+        self.assertAlmostEqual(summary["benchmarkReturn"], 0.05)
+
+    def test_decomposition_exports_code_raw_and_resolved_date_basis_for_ui_join(self):
+        provider = update_data.PriceProvider(no_live=True)
+        previous = {
+            "date": "2026-06-16",
+            "priceBasisDate": "2026-06-15",
+            "holdings": [{"rank": 11, "codeRaw": "SPCX US EQUITY", "ticker": None, "name": "Space Exploration Technologies Corp", "shares": 2, "marketValueKrw": 1000, "weightPercent": 2.0}],
+            "top10": [],
+        }
+        current = {
+            "date": "2026-06-17",
+            "priceBasisDate": "2026-06-16",
+            "holdings": [{"rank": 10, "codeRaw": "SPCX US EQUITY", "ticker": None, "name": "Space Exploration Technologies Corp", "shares": 2, "marketValueKrw": 1200, "weightPercent": 3.0}],
+            "top10": [{"rank": 10, "codeRaw": "SPCX US EQUITY", "ticker": None, "name": "Space Exploration Technologies Corp", "shares": 2, "marketValueKrw": 1200, "weightPercent": 3.0}],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        self.assertEqual(rows[0]["codeRaw"], "SPCX US EQUITY")
+        self.assertEqual(rows[0]["membershipChange"], "top10_entry")
+        self.assertEqual(rows[0]["priceReturnStartDate"], "2026-06-15")
+        self.assertEqual(rows[0]["priceReturnEndDate"], "2026-06-16")
+        self.assertEqual(summary["dateBasis"]["previousPriceBasisDate"], "2026-06-15")
+        self.assertEqual(summary["dateBasis"]["currentPriceBasisDate"], "2026-06-16")
 
     def test_stooq_csv_parser_and_symbol_candidates(self):
         csv_text = "Date,Open,High,Low,Close,Volume\n2026-06-16,1,2,1,10.5,100\n2026-06-17,1,2,1,11.0,110\n"

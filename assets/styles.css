@@ -186,9 +186,12 @@ input[type="date"] {
 .classification.mixed,
 .classification.insufficient_data { background: #fff7ed; color: var(--warning); }
 .classification.likely_buy,
-.classification.new_entry { background: #ecfdf3; color: var(--success); }
+.classification.new_entry,
+.classification.top10_entry { background: #ecfdf3; color: var(--success); }
 .classification.likely_sell,
-.classification.exit { background: #fef2f2; color: var(--danger); }
+.classification.exit,
+.classification.top10_exit,
+.classification.fund_exit { background: #fef2f2; color: var(--danger); }
 
 .chart-card {
   min-height: 380px;
@@ -210,6 +213,10 @@ th { color: #344054; font-size: 0.84rem; text-transform: uppercase; letter-spaci
 td { color: #1f2937; }
 .name-cell strong { display: block; }
 .name-cell span { color: var(--muted); font-size: 0.86rem; }
+.basis-cell strong { display: block; white-space: nowrap; }
+.basis-cell span,
+.confidence-text { color: var(--muted); font-size: 0.82rem; }
+.badge-stack { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 150px; }
 
 .source-list { display: grid; gap: 14px; }
 .source-item { border: 1px solid var(--line); border-radius: var(--radius-md); padding: 14px; background: #fbfdff; }
