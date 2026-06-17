@@ -54,14 +54,17 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add data
-            git commit -m "Keep ETF tracking data fresh
-
-Constraint: Scheduled runs start after 08:00 KST with retry slots for delayed prior closes.
-Confidence: high
-Scope-risk: narrow
-Directive: Do not commit provider credentials; updater uses public pages/APIs only.
-Tested: npm test
-Not-tested: Manual investment interpretation."
+            cat > /tmp/etf-tracking-data-commit-message <<'MSG'
+          Keep ETF tracking data fresh
+          
+          Constraint: Scheduled runs start after 08:00 KST with retry slots for delayed prior closes.
+          Confidence: high
+          Scope-risk: narrow
+          Directive: Do not commit provider credentials; updater uses public pages/APIs only.
+          Tested: npm test
+          Not-tested: Manual investment interpretation.
+          MSG
+            git commit -F /tmp/etf-tracking-data-commit-message
             git push
           fi
       - name: Build Pages artifact
