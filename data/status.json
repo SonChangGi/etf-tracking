@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "generatedAt": "2026-06-17T13:31:19+00:00",
+  "generatedAt": "2026-06-17T14:48:55+00:00",
   "targetDate": "2026-06-17",
   "overallStatus": "ok",
   "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
@@ -25,8 +25,8 @@
         "current": "2026-06-16"
       },
       "fetchStats": {
-        "requestedDates": 8,
-        "skippedExisting": 8,
+        "requestedDates": 1,
+        "skippedExisting": 1,
         "fetchedLive": 0,
         "errors": 0,
         "stale": 0,
@@ -51,8 +51,8 @@
         "current": "2026-06-16"
       },
       "fetchStats": {
-        "requestedDates": 8,
-        "skippedExisting": 8,
+        "requestedDates": 1,
+        "skippedExisting": 1,
         "fetchedLive": 0,
         "errors": 0,
         "stale": 0,
@@ -77,8 +77,8 @@
         "current": "2026-06-16"
       },
       "fetchStats": {
-        "requestedDates": 8,
-        "skippedExisting": 8,
+        "requestedDates": 1,
+        "skippedExisting": 1,
         "fetchedLive": 0,
         "errors": 0,
         "stale": 0,

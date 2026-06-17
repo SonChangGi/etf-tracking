@@ -661,7 +661,8 @@
       <div class="source-item"><strong>전일대비 분해 기준</strong><span>ETF 비중 ${escapeHtml(formatMaybeDate(dateBasis.previousSnapshotDate))} → ${escapeHtml(formatMaybeDate(dateBasis.currentSnapshotDate || latest?.date))} · 가격 기준 ${escapeHtml(formatMaybeDate(priceBasis.previous))} → ${escapeHtml(formatMaybeDate(priceBasis.current || latest?.priceBasisDate))}</span></div>
       <div class="source-item"><strong>소스 상태</strong><span class="${latest?.sourceStatus === 'live' ? '' : 'warning'}">${escapeHtml(latest?.sourceStatus || 'unknown')} · ${escapeHtml(latest?.sourceWarning || '정상')}</span></div>
       <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')} · ${escapeHtml(formatCoverageUniverse(summary.returnCoverageUniverse))}</span><small>가격 반영 비중 ${escapeHtml(formatWeight(summary.validReturnWeightPercent))} / 전체 ${escapeHtml(formatWeight(summary.totalReturnWeightPercent))} · 미가격 ${escapeHtml(formatWeight(summary.unpricedReturnWeightPercent))}</small></div>
-      <div class="source-item"><strong>벤치마크·환율</strong><span>벤치마크 ${escapeHtml(formatReturn(summary.benchmarkReturn))} · ${escapeHtml(formatFxCoverage(latest?.decomposition || []))}</span><small>외부 USD/JPY/HKD 종가는 가능한 경우 환율 수익률을 곱해 KRW 기준으로 환산합니다.</small></div>
+      <div class="source-item"><strong>벤치마크·환율</strong><span>벤치마크 ${escapeHtml(formatReturn(summary.benchmarkReturn))} · ${escapeHtml(formatFxCoverage(latest?.decomposition || []))}</span><small>벤치마크는 가격 확보 종목의 전일비중 가중 수익률이며 실제 ETF NAV 수익률이 아닙니다. 외부 USD/JPY/HKD 종가는 가능한 경우 환율 수익률을 곱해 KRW 기준으로 환산합니다.</small></div>
+      <div class="source-item"><strong>잔차 판정</strong><span>가격 우세는 no-trade 가격 효과가 우세하다는 뜻이며 완전 설명/무거래 확정이 아닙니다.</span><small>중간 잔차는 ‘잔차 관찰’, 임계치 이상 방향성 잔차만 ‘매수·매도 가능성’으로 표시합니다.</small></div>
     `;
     const pill = $('#coverage-pill');
     if (pill) {
@@ -800,7 +801,9 @@
 
   function classLabel(value) {
     const labels = {
-      price_explained: '가격 설명',
+      price_explained: '가격 우세',
+      price_aligned: '가격 우세',
+      residual_watch: '잔차 관찰',
       likely_buy: '잔차+ 매수 가능성',
       likely_sell: '잔차- 매도 가능성',
       mixed: '혼합/저신뢰',

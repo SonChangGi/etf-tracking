@@ -31,8 +31,10 @@ KST = dt.timezone(dt.timedelta(hours=9), name="KST")
 USER_AGENT = "Mozilla/5.0 (compatible; ETFTrackingBot/0.1; +https://sonchanggi.github.io/etf-tracking/)"
 SCHEMA_VERSION = "1.2.0"
 DEFAULT_SCHEDULED_BACKFILL_DAYS = 10
-PRICE_EXPLAINED_TOLERANCE_PP = 0.20
-PRICE_EXPLAINED_TOLERANCE_RATIO = 0.10
+PRICE_ALIGNED_TOLERANCE_PP = 0.10
+PRICE_ALIGNED_TOLERANCE_RATIO = 0.03
+RESIDUAL_ACTION_TOLERANCE_PP = 0.35
+RESIDUAL_ACTION_TOLERANCE_RATIO = 0.10
 RETURN_COVERAGE_MIN = 0.60
 HTTP_MAX_BYTES = 5_000_000
 PRICE_CACHE_FORWARD_DAYS = 21
@@ -1059,6 +1061,101 @@ def provider_valuation_return(
     }
 
 
+def attribution_thresholds(previous_weight_percent: float | None) -> dict[str, float]:
+    """Return conservative residual thresholds in percentage points.
+
+    The lower threshold marks a no-trade/price-aligned residual band.  The
+    higher threshold is the first point at which the residual is large enough to
+    display a directional buy/sell possibility.  Values between the two are
+    deliberately classified as "watch" rather than "price explained" because ETF
+    weights also embed cash, creations/redemptions, rounding, disclosure timing,
+    and incomplete pricing universe effects.
+    """
+    base = abs(float(previous_weight_percent or 0))
+    aligned = max(PRICE_ALIGNED_TOLERANCE_PP, base * PRICE_ALIGNED_TOLERANCE_RATIO)
+    action = max(RESIDUAL_ACTION_TOLERANCE_PP, base * RESIDUAL_ACTION_TOLERANCE_RATIO)
+    return {
+        "priceAlignedTolerancePercentPoint": aligned,
+        "residualActionTolerancePercentPoint": max(action, aligned),
+    }
+
+
+def classify_residual_signal(
+    residual_percent_point: float,
+    previous_weight_percent: float | None,
+    *,
+    coverage: float,
+    return_coverage_universe: str,
+    prev_full_holdings_available: bool,
+    curr_full_holdings_available: bool,
+    price_meta: dict[str, Any],
+) -> dict[str, Any]:
+    thresholds = attribution_thresholds(previous_weight_percent)
+    aligned_tolerance = thresholds["priceAlignedTolerancePercentPoint"]
+    action_tolerance = thresholds["residualActionTolerancePercentPoint"]
+    abs_residual = abs(residual_percent_point)
+    price_source = price_meta.get("source") if isinstance(price_meta, dict) else None
+    price_source_type = price_meta.get("sourceType") if isinstance(price_meta, dict) else None
+    confidence = "medium"
+    if price_source == "provider_valuation_krw":
+        message = "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
+    elif price_source_type == "external_close_fx_adjusted_krw":
+        message = "외부 종가와 환율을 반영한 KRW 기준 가격 효과가 우세합니다."
+    else:
+        message = "가격 효과가 우세하지만 외부 가격·환율·반올림 오차를 함께 봐야 합니다."
+    if isinstance(price_meta, dict) and price_meta.get("fxRequired") and not price_meta.get("fxApplied"):
+        message = "외부 종가 환율 보정이 부족해 잔차 신뢰도를 낮춰 해석해야 합니다."
+        confidence = "low"
+    if not prev_full_holdings_available or not curr_full_holdings_available:
+        confidence = "low"
+        message = f"전체 보유종목 대신 {return_coverage_universe} 기준의 부분 추정입니다. {message}"
+    if coverage < RETURN_COVERAGE_MIN:
+        return {
+            **thresholds,
+            "classification": "mixed",
+            "economicSignal": "mixed",
+            "confidence": "low",
+            "residualBand": "low_coverage",
+            "message": "종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다.",
+        }
+    if abs_residual <= aligned_tolerance:
+        return {
+            **thresholds,
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": confidence,
+            "residualBand": "price_aligned",
+            "message": message,
+        }
+    if residual_percent_point >= action_tolerance:
+        return {
+            **thresholds,
+            "classification": "likely_buy",
+            "economicSignal": "likely_buy",
+            "confidence": "medium",
+            "residualBand": "directional_action",
+            "message": "가격 효과 대비 비중 증가 잔차가 매수 가능성 임계치 이상입니다.",
+        }
+    if residual_percent_point <= -action_tolerance:
+        return {
+            **thresholds,
+            "classification": "likely_sell",
+            "economicSignal": "likely_sell",
+            "confidence": "medium",
+            "residualBand": "directional_action",
+            "message": "가격 효과 대비 비중 감소 잔차가 매도/축소 가능성 임계치 이상입니다.",
+        }
+    direction = "감소" if residual_percent_point < 0 else "증가"
+    return {
+        **thresholds,
+        "classification": "residual_watch",
+        "economicSignal": "residual_watch",
+        "confidence": "medium" if confidence != "low" else "low",
+        "residualBand": "watch",
+        "message": f"비중 {direction} 잔차가 남아 있지만 매수·매도 추정 임계치에는 미달합니다.",
+    }
+
+
 def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, Any], price_provider: PriceProvider) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     current_top = current.get("top10", [])
     if not prev:
@@ -1270,34 +1367,19 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         delta_actual = actual - prev_weight
         delta_price = predicted - prev_weight
         residual = delta_actual - delta_price
-        tolerance = max(PRICE_EXPLAINED_TOLERANCE_PP, abs(prev_weight) * PRICE_EXPLAINED_TOLERANCE_RATIO)
-        classification = "price_explained"
-        message = "가격 수익률로 대부분 설명됩니다."
-        confidence = "high"
         price_source = price_meta.get("source") if isinstance(price_meta, dict) else None
         price_source_type = price_meta.get("sourceType") if isinstance(price_meta, dict) else None
-        if price_source == "provider_valuation_krw":
-            message = "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
-        elif price_source_type == "external_close_fx_adjusted_krw":
-            message = "외부 종가에 환율 수익률을 반영해 KRW 기준 가격 효과를 계산했습니다."
-        elif isinstance(price_meta, dict) and price_meta.get("fxRequired") and not price_meta.get("fxApplied"):
-            message = "외부 종가 환율 보정이 부족해 잔차 신뢰도를 낮춰 해석해야 합니다."
-            confidence = "medium"
-        if not prev_full_holdings_available or not curr_full_holdings_available:
-            confidence = "low" if coverage < 1 else "medium"
-            message = f"전체 보유종목 대신 {return_coverage_universe} 기준으로 추정했습니다. {message}"
-        if coverage < RETURN_COVERAGE_MIN:
-            classification = "mixed"
-            message = "종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다."
-            confidence = "low"
-        elif residual > tolerance:
-            classification = "likely_buy"
-            message = "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
-            confidence = "medium"
-        elif residual < -tolerance:
-            classification = "likely_sell"
-            message = "가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
-            confidence = "medium"
+        signal = classify_residual_signal(
+            residual,
+            prev_weight,
+            coverage=coverage,
+            return_coverage_universe=return_coverage_universe,
+            prev_full_holdings_available=prev_full_holdings_available,
+            curr_full_holdings_available=curr_full_holdings_available,
+            price_meta=price_meta,
+        )
+        classification = signal["classification"]
+        message = signal["message"]
         if membership_change == "top10_entry":
             message = f"TOP10 편입 · {message}"
         elif membership_change == "top10_exit":
@@ -1310,7 +1392,10 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "deltaActualPercentPoint": delta_actual,
             "deltaPricePercentPoint": delta_price,
             "deltaResidualPercentPoint": residual,
-            "tolerancePercentPoint": tolerance,
+            "priceAlignedTolerancePercentPoint": signal["priceAlignedTolerancePercentPoint"],
+            "residualActionTolerancePercentPoint": signal["residualActionTolerancePercentPoint"],
+            "tolerancePercentPoint": signal["residualActionTolerancePercentPoint"],
+            "residualBand": signal["residualBand"],
             "returnCoverage": coverage,
             "priceMeta": price_meta,
             "priceReturnStartDate": price_meta.get("start", {}).get("date") if isinstance(price_meta.get("start"), dict) else prev_price_basis,
@@ -1324,8 +1409,8 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "localCurrencyReturn": price_meta.get("localCurrencyReturn") if isinstance(price_meta, dict) else None,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
             "classification": classification,
-            "economicSignal": classification,
-            "confidence": confidence,
+            "economicSignal": signal["economicSignal"],
+            "confidence": signal["confidence"],
             "message": message,
         }
         decompositions.append(row)
@@ -1360,6 +1445,16 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate.",
         },
         "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn); residual = actualWeightChange - priceEffect",
+        "decompositionFormulaCaveat": "pricedBenchmarkReturn is a previous-weighted return of holdings with valid prices, not a directly observed ETF NAV return; residuals may include trading, cash, creations/redemptions, disclosure timing, rounding, and unpriced holdings.",
+        "residualClassificationPolicy": {
+            "priceAlignedTolerance": f"max({PRICE_ALIGNED_TOLERANCE_PP}pp, previousWeightPercent × {PRICE_ALIGNED_TOLERANCE_RATIO})",
+            "directionalActionTolerance": f"max({RESIDUAL_ACTION_TOLERANCE_PP}pp, previousWeightPercent × {RESIDUAL_ACTION_TOLERANCE_RATIO})",
+            "labels": {
+                "price_aligned": "small residual; price effect is dominant, not proof of no trade",
+                "residual_watch": "residual exists but is below the directional buy/sell threshold",
+                "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading",
+            },
+        },
         "priceErrors": copy.deepcopy(price_provider.errors),
         "priceDiagnostics": copy.deepcopy(price_provider.diagnostics),
     }
@@ -1452,8 +1547,8 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "fx": "External USD/JPY/HKD closes are converted to KRW returns with direct FX series where available: Yahoo Chart FX first, then Stooq FX CSV. Google Finance is not used in automation because it lacks a stable historical HTTP API.",
             "googleFinance": "Google Finance has no stable public historical HTTP API in this updater; use it only as manual cross-check outside scheduled automation.",
             "dateBasis": "ETF disclosed weight date is Korean-calendar based; return intervals use previous/current priceBasisDate valuation dates recorded on each decomposition row.",
-            "attribution": "No-trade predicted weight = previous weight × (1 + KRW-adjusted security return) / (1 + priced benchmark return). Residual is actual weight change minus this price effect.",
-            "confidenceRule": "returnCoverage below 60%, missing FX, or TOP10 fallback is marked with lower confidence; external closes are fallback data when KRW valuation-per-share is unavailable.",
+            "attribution": "No-trade predicted weight = previous weight × (1 + KRW-adjusted security return) / (1 + priced benchmark return). The benchmark is the previous-weighted priced holdings universe, not an observed ETF NAV return; residual is actual weight change minus this model price effect.",
+            "confidenceRule": "Price-aligned means the residual is small, not fully proven no-trade. Residuals between the aligned threshold and directional threshold are marked residual_watch; only residuals at or beyond the directional threshold become likely_buy/likely_sell possibility signals.",
         },
         "updatePolicy": {
             "timezone": "Asia/Seoul",

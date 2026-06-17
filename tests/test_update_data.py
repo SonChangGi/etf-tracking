@@ -221,6 +221,85 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(by_ticker["AAA"]["priceSourceType"], "etf_provider_unit_value_krw")
         self.assertAlmostEqual(summary["benchmarkReturn"], 0.05)
 
+    def test_no_trade_weight_formula_is_exact_against_priced_benchmark(self):
+        fixture_dir = ROOT / "tests" / "fixtures"
+        provider = update_data.PriceProvider(fixture_dir=fixture_dir)
+        previous = {
+            "date": "2026-06-16",
+            "priceBasisDate": "2026-06-16",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 90.0},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 90.0},
+            ],
+        }
+        benchmark_return = 0.01
+        predicted_alpha = 10.0 * (1 + 0.10) / (1 + benchmark_return)
+        current = {
+            "date": "2026-06-17",
+            "priceBasisDate": "2026-06-17",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": predicted_alpha},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 100.0 - predicted_alpha},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": predicted_alpha},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 100.0 - predicted_alpha},
+            ],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        alpha = next(row for row in rows if row.get("ticker") == "AAA")
+        self.assertAlmostEqual(summary["benchmarkReturn"], benchmark_return)
+        self.assertAlmostEqual(alpha["predictedWeightPercent"], predicted_alpha)
+        self.assertAlmostEqual(alpha["deltaResidualPercentPoint"], 0.0)
+        self.assertEqual(alpha["classification"], "price_aligned")
+        self.assertEqual(alpha["residualBand"], "price_aligned")
+        self.assertFalse(any(signal["type"] in {"likely_buy", "likely_sell"} for signal in signals))
+
+    def test_mid_sized_residual_is_watch_not_fully_price_explained_or_sell(self):
+        fixture_dir = ROOT / "tests" / "fixtures"
+        provider = update_data.PriceProvider(fixture_dir=fixture_dir)
+        previous = {
+            "date": "2026-06-16",
+            "priceBasisDate": "2026-06-16",
+            "holdings": [
+                {"rank": 1, "ticker": "SNDK", "name": "Sandisk", "weightPercent": 3.75},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 96.25},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "SNDK", "name": "Sandisk", "weightPercent": 3.75},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 96.25},
+            ],
+        }
+        sndk_return = (91 / 90) - 1
+        benchmark_return = 3.75 * sndk_return / 100
+        predicted_sndk = 3.75 * (1 + sndk_return) / (1 + benchmark_return)
+        current_sndk = predicted_sndk - 0.26
+        current = {
+            "date": "2026-06-17",
+            "priceBasisDate": "2026-06-17",
+            "holdings": [
+                {"rank": 1, "ticker": "SNDK", "name": "Sandisk", "weightPercent": current_sndk},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 100.0 - current_sndk},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "SNDK", "name": "Sandisk", "weightPercent": current_sndk},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 100.0 - current_sndk},
+            ],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        sndk = next(row for row in rows if row.get("ticker") == "SNDK")
+        self.assertAlmostEqual(summary["benchmarkReturn"], benchmark_return)
+        self.assertAlmostEqual(sndk["deltaResidualPercentPoint"], -0.26)
+        self.assertGreater(abs(sndk["deltaResidualPercentPoint"]), sndk["priceAlignedTolerancePercentPoint"])
+        self.assertLess(abs(sndk["deltaResidualPercentPoint"]), sndk["residualActionTolerancePercentPoint"])
+        self.assertEqual(sndk["classification"], "residual_watch")
+        self.assertNotEqual(sndk["classification"], "likely_sell")
+        self.assertFalse(any(signal["type"] == "likely_sell" and signal["ticker"] == "SNDK" for signal in signals))
+
     def test_usd_external_close_is_fx_adjusted_to_krw_return(self):
         with tempfile.TemporaryDirectory() as temp:
             fixture_dir = Path(temp)
@@ -529,6 +608,44 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("MISSING", summary["priceDiagnostics"])
         self.assertNotIn("LATER", summary["priceDiagnostics"])
         self.assertNotIn("LATER", summary["priceErrors"])
+
+    def test_committed_dashboard_latest_decomposition_matches_formula_and_policy(self):
+        dashboard = json.loads((ROOT / "data" / "dashboard.json").read_text(encoding="utf-8"))
+        seen_formula_row = False
+        for etf in dashboard["etfs"]:
+            for row in etf["latest"]["decomposition"]:
+                required = [
+                    row.get("previousWeightPercent"),
+                    row.get("securityReturn"),
+                    row.get("benchmarkReturn"),
+                    row.get("predictedWeightPercent"),
+                    row.get("deltaPricePercentPoint"),
+                    row.get("deltaResidualPercentPoint"),
+                ]
+                if any(value is None for value in required):
+                    continue
+                seen_formula_row = True
+                predicted = row["previousWeightPercent"] * (1 + row["securityReturn"]) / (1 + row["benchmarkReturn"])
+                self.assertAlmostEqual(row["predictedWeightPercent"], predicted)
+                self.assertAlmostEqual(row["deltaPricePercentPoint"], predicted - row["previousWeightPercent"])
+                self.assertAlmostEqual(
+                    row["deltaResidualPercentPoint"],
+                    row["actualWeightPercent"] - row["previousWeightPercent"] - row["deltaPricePercentPoint"],
+                )
+                residual_abs = abs(row["deltaResidualPercentPoint"])
+                aligned = row["priceAlignedTolerancePercentPoint"]
+                action = row["residualActionTolerancePercentPoint"]
+                if row["classification"] == "price_aligned":
+                    self.assertLessEqual(residual_abs, aligned + 1e-9)
+                    self.assertNotEqual(row.get("confidence"), "high")
+                elif row["classification"] == "residual_watch":
+                    self.assertGreater(residual_abs, aligned - 1e-9)
+                    self.assertLess(residual_abs, action + 1e-9)
+                elif row["classification"] == "likely_buy":
+                    self.assertGreaterEqual(row["deltaResidualPercentPoint"], action - 1e-9)
+                elif row["classification"] == "likely_sell":
+                    self.assertLessEqual(row["deltaResidualPercentPoint"], -action + 1e-9)
+        self.assertTrue(seen_formula_row)
 
     def test_status_waits_when_target_fetch_failed_despite_old_live_snapshot(self):
         history = {cfg.id: [] for cfg in update_data.ETFS}

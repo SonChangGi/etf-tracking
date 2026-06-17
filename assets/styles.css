@@ -270,6 +270,7 @@ input[type="date"] {
 }
 .status-pill.warning,
 .classification.mixed,
+.classification.residual_watch,
 .classification.insufficient_data { background: #fff7ed; color: var(--warning); }
 .classification.likely_buy,
 .classification.new_entry,

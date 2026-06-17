@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "generatedAt": "2026-06-17T13:31:19+00:00",
+  "generatedAt": "2026-06-17T14:48:55+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -802,7 +802,10 @@
             "deltaActualPercentPoint": 0.15000000000000036,
             "deltaPricePercentPoint": 0.2886920657008325,
             "deltaResidualPercentPoint": -0.13869206570083215,
+            "priceAlignedTolerancePercentPoint": 0.1974,
+            "residualActionTolerancePercentPoint": 0.658,
             "tolerancePercentPoint": 0.658,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -829,10 +832,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -859,7 +862,10 @@
             "deltaActualPercentPoint": -0.2400000000000002,
             "deltaPricePercentPoint": 0.01776739554954787,
             "deltaResidualPercentPoint": -0.2577673955495481,
+            "priceAlignedTolerancePercentPoint": 0.207,
+            "residualActionTolerancePercentPoint": 0.6900000000000001,
             "tolerancePercentPoint": 0.6900000000000001,
+            "residualBand": "watch",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -886,10 +892,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "residual_watch",
+            "economicSignal": "residual_watch",
+            "confidence": "medium",
+            "message": "비중 감소 잔차가 남아 있지만 매수·매도 추정 임계치에는 미달합니다."
           },
           {
             "date": "2026-06-17",
@@ -916,7 +922,10 @@
             "deltaActualPercentPoint": -0.20000000000000018,
             "deltaPricePercentPoint": -0.19124755677431526,
             "deltaResidualPercentPoint": -0.008752443225684914,
+            "priceAlignedTolerancePercentPoint": 0.1722,
+            "residualActionTolerancePercentPoint": 0.5740000000000001,
             "tolerancePercentPoint": 0.5740000000000001,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -943,10 +952,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -973,7 +982,10 @@
             "deltaActualPercentPoint": 0.07000000000000028,
             "deltaPricePercentPoint": 0.10660685777271706,
             "deltaResidualPercentPoint": -0.03660685777271677,
+            "priceAlignedTolerancePercentPoint": 0.1575,
+            "residualActionTolerancePercentPoint": 0.525,
             "tolerancePercentPoint": 0.525,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1000,10 +1012,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1030,7 +1042,10 @@
             "deltaActualPercentPoint": -0.11000000000000032,
             "deltaPricePercentPoint": -0.11887584847478827,
             "deltaResidualPercentPoint": 0.00887584847478795,
+            "priceAlignedTolerancePercentPoint": 0.1434,
+            "residualActionTolerancePercentPoint": 0.47800000000000004,
             "tolerancePercentPoint": 0.47800000000000004,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1057,10 +1072,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1087,7 +1102,10 @@
             "deltaActualPercentPoint": 0.1599999999999997,
             "deltaPricePercentPoint": 0.15464217436437577,
             "deltaResidualPercentPoint": 0.005357825635623925,
+            "priceAlignedTolerancePercentPoint": 0.11579999999999999,
+            "residualActionTolerancePercentPoint": 0.386,
             "tolerancePercentPoint": 0.386,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1114,10 +1132,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1144,7 +1162,10 @@
             "deltaActualPercentPoint": 0.029999999999999805,
             "deltaPricePercentPoint": 0.02577116457195272,
             "deltaResidualPercentPoint": 0.004228835428047084,
-            "tolerancePercentPoint": 0.343,
+            "priceAlignedTolerancePercentPoint": 0.1029,
+            "residualActionTolerancePercentPoint": 0.35,
+            "tolerancePercentPoint": 0.35,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1171,10 +1192,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1201,7 +1222,10 @@
             "deltaActualPercentPoint": -0.08000000000000007,
             "deltaPricePercentPoint": -0.08414266503176027,
             "deltaResidualPercentPoint": 0.004142665031760195,
-            "tolerancePercentPoint": 0.323,
+            "priceAlignedTolerancePercentPoint": 0.1,
+            "residualActionTolerancePercentPoint": 0.35,
+            "tolerancePercentPoint": 0.35,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1228,10 +1252,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1258,7 +1282,10 @@
             "deltaActualPercentPoint": -0.06999999999999984,
             "deltaPricePercentPoint": -0.08002723586530891,
             "deltaResidualPercentPoint": 0.01002723586530907,
-            "tolerancePercentPoint": 0.309,
+            "priceAlignedTolerancePercentPoint": 0.1,
+            "residualActionTolerancePercentPoint": 0.35,
+            "tolerancePercentPoint": 0.35,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1285,10 +1312,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1315,7 +1342,10 @@
             "deltaActualPercentPoint": 0.2999999999999998,
             "deltaPricePercentPoint": 0.34387391648855736,
             "deltaResidualPercentPoint": -0.04387391648855754,
-            "tolerancePercentPoint": 0.272,
+            "priceAlignedTolerancePercentPoint": 0.1,
+            "residualActionTolerancePercentPoint": 0.35,
+            "tolerancePercentPoint": 0.35,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1342,10 +1372,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "TOP10 편입 · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "TOP10 편입 · ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1372,7 +1402,10 @@
             "deltaActualPercentPoint": 0.0,
             "deltaPricePercentPoint": -0.004057035384579244,
             "deltaResidualPercentPoint": 0.004057035384579244,
-            "tolerancePercentPoint": 0.28500000000000003,
+            "priceAlignedTolerancePercentPoint": 0.1,
+            "residualActionTolerancePercentPoint": 0.35,
+            "tolerancePercentPoint": 0.35,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1399,10 +1432,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "TOP10 밖으로 이동(현재 12위) · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "TOP10 밖으로 이동(현재 12위) · ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           }
         ],
         "signals": [
@@ -1418,7 +1451,7 @@
             "previousRank": 12,
             "weightPercent": 3.02,
             "previousWeightPercent": 2.72,
-            "message": "TOP10 편입 · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "message": "TOP10 편입 · ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -1432,7 +1465,7 @@
             "previousRank": 10,
             "weightPercent": 2.85,
             "previousWeightPercent": 2.85,
-            "message": "TOP10 밖으로 이동(현재 12위) · ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "message": "TOP10 밖으로 이동(현재 12위) · ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           }
         ],
         "analysisSummary": {
@@ -1464,6 +1497,16 @@
             "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate."
           },
           "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn); residual = actualWeightChange - priceEffect",
+          "decompositionFormulaCaveat": "pricedBenchmarkReturn is a previous-weighted return of holdings with valid prices, not a directly observed ETF NAV return; residuals may include trading, cash, creations/redemptions, disclosure timing, rounding, and unpriced holdings.",
+          "residualClassificationPolicy": {
+            "priceAlignedTolerance": "max(0.1pp, previousWeightPercent × 0.03)",
+            "directionalActionTolerance": "max(0.35pp, previousWeightPercent × 0.1)",
+            "labels": {
+              "price_aligned": "small residual; price effect is dominant, not proof of no trade",
+              "residual_watch": "residual exists but is below the directional buy/sell threshold",
+              "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
+            }
+          },
           "priceErrors": {},
           "priceDiagnostics": {}
         }
@@ -2171,7 +2214,10 @@
             "deltaActualPercentPoint": 0.4599999999999991,
             "deltaPricePercentPoint": 0.4461222310161439,
             "deltaResidualPercentPoint": 0.013877768983855177,
+            "priceAlignedTolerancePercentPoint": 0.24180000000000001,
+            "residualActionTolerancePercentPoint": 0.806,
             "tolerancePercentPoint": 0.806,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2198,10 +2244,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2228,7 +2274,10 @@
             "deltaActualPercentPoint": -0.27000000000000046,
             "deltaPricePercentPoint": -0.23891930077578927,
             "deltaResidualPercentPoint": -0.031080699224211195,
+            "priceAlignedTolerancePercentPoint": 0.2247,
+            "residualActionTolerancePercentPoint": 0.7490000000000001,
             "tolerancePercentPoint": 0.7490000000000001,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2255,10 +2304,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2285,7 +2334,10 @@
             "deltaActualPercentPoint": 0.010000000000000675,
             "deltaPricePercentPoint": 0.06088533143925989,
             "deltaResidualPercentPoint": -0.05088533143925922,
+            "priceAlignedTolerancePercentPoint": 0.20309999999999997,
+            "residualActionTolerancePercentPoint": 0.677,
             "tolerancePercentPoint": 0.677,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2312,10 +2364,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2342,7 +2394,10 @@
             "deltaActualPercentPoint": 0.20999999999999996,
             "deltaPricePercentPoint": 0.19257868237600295,
             "deltaResidualPercentPoint": 0.017421317623997012,
+            "priceAlignedTolerancePercentPoint": 0.18,
+            "residualActionTolerancePercentPoint": 0.6000000000000001,
             "tolerancePercentPoint": 0.6000000000000001,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2369,10 +2424,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2399,7 +2454,10 @@
             "deltaActualPercentPoint": 0.45999999999999996,
             "deltaPricePercentPoint": 0.45220675482748796,
             "deltaResidualPercentPoint": 0.007793245172512009,
+            "priceAlignedTolerancePercentPoint": 0.14279999999999998,
+            "residualActionTolerancePercentPoint": 0.476,
             "tolerancePercentPoint": 0.476,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2426,10 +2484,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2456,7 +2514,10 @@
             "deltaActualPercentPoint": 0.10000000000000053,
             "deltaPricePercentPoint": 0.08765525613257275,
             "deltaResidualPercentPoint": 0.012344743867427788,
+            "priceAlignedTolerancePercentPoint": 0.12059999999999998,
+            "residualActionTolerancePercentPoint": 0.40199999999999997,
             "tolerancePercentPoint": 0.40199999999999997,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2483,10 +2544,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2537,7 +2598,10 @@
             "deltaActualPercentPoint": 0.019999999999999574,
             "deltaPricePercentPoint": 0.015138219144539722,
             "deltaResidualPercentPoint": 0.004861780855459852,
+            "priceAlignedTolerancePercentPoint": 0.11220000000000001,
+            "residualActionTolerancePercentPoint": 0.37400000000000005,
             "tolerancePercentPoint": 0.37400000000000005,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2564,10 +2628,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2594,7 +2658,10 @@
             "deltaActualPercentPoint": -0.07999999999999963,
             "deltaPricePercentPoint": -0.09269744715440975,
             "deltaResidualPercentPoint": 0.012697447154410124,
+            "priceAlignedTolerancePercentPoint": 0.11399999999999999,
+            "residualActionTolerancePercentPoint": 0.38,
             "tolerancePercentPoint": 0.38,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2621,10 +2688,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2651,7 +2718,10 @@
             "deltaActualPercentPoint": -0.10000000000000009,
             "deltaPricePercentPoint": -0.08015482465878421,
             "deltaResidualPercentPoint": -0.01984517534121588,
-            "tolerancePercentPoint": 0.342,
+            "priceAlignedTolerancePercentPoint": 0.1026,
+            "residualActionTolerancePercentPoint": 0.35,
+            "tolerancePercentPoint": 0.35,
+            "residualBand": "price_aligned",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2678,10 +2748,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -2767,6 +2837,16 @@
             "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate."
           },
           "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn); residual = actualWeightChange - priceEffect",
+          "decompositionFormulaCaveat": "pricedBenchmarkReturn is a previous-weighted return of holdings with valid prices, not a directly observed ETF NAV return; residuals may include trading, cash, creations/redemptions, disclosure timing, rounding, and unpriced holdings.",
+          "residualClassificationPolicy": {
+            "priceAlignedTolerance": "max(0.1pp, previousWeightPercent × 0.03)",
+            "directionalActionTolerance": "max(0.35pp, previousWeightPercent × 0.1)",
+            "labels": {
+              "price_aligned": "small residual; price effect is dominant, not proof of no trade",
+              "residual_watch": "residual exists but is below the directional buy/sell threshold",
+              "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
+            }
+          },
           "priceErrors": {},
           "priceDiagnostics": {}
         }
@@ -4013,7 +4093,10 @@
             "deltaActualPercentPoint": 1.0500000000000007,
             "deltaPricePercentPoint": 1.045497061417226,
             "deltaResidualPercentPoint": 0.004502938582774618,
+            "priceAlignedTolerancePercentPoint": 0.2574,
+            "residualActionTolerancePercentPoint": 0.8580000000000001,
             "tolerancePercentPoint": 0.8580000000000001,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4040,10 +4123,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4070,7 +4153,10 @@
             "deltaActualPercentPoint": 0.03000000000000025,
             "deltaPricePercentPoint": 0.02541085496140294,
             "deltaResidualPercentPoint": 0.004589145038597309,
+            "priceAlignedTolerancePercentPoint": 0.2226,
+            "residualActionTolerancePercentPoint": 0.742,
             "tolerancePercentPoint": 0.742,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4097,10 +4183,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4127,7 +4213,10 @@
             "deltaActualPercentPoint": 0.1200000000000001,
             "deltaPricePercentPoint": 0.11671367744513095,
             "deltaResidualPercentPoint": 0.003286322554869159,
+            "priceAlignedTolerancePercentPoint": 0.2166,
+            "residualActionTolerancePercentPoint": 0.722,
             "tolerancePercentPoint": 0.722,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4154,10 +4243,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4184,7 +4273,10 @@
             "deltaActualPercentPoint": -0.009999999999999787,
             "deltaPricePercentPoint": -0.008888082123483798,
             "deltaResidualPercentPoint": -0.0011119178765159887,
+            "priceAlignedTolerancePercentPoint": 0.1785,
+            "residualActionTolerancePercentPoint": 0.5950000000000001,
             "tolerancePercentPoint": 0.5950000000000001,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4211,10 +4303,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4241,7 +4333,10 @@
             "deltaActualPercentPoint": -0.21999999999999975,
             "deltaPricePercentPoint": -0.21562831971929697,
             "deltaResidualPercentPoint": -0.004371680280702783,
+            "priceAlignedTolerancePercentPoint": 0.1737,
+            "residualActionTolerancePercentPoint": 0.5790000000000001,
             "tolerancePercentPoint": 0.5790000000000001,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4268,10 +4363,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4298,7 +4393,10 @@
             "deltaActualPercentPoint": -0.14999999999999947,
             "deltaPricePercentPoint": -0.14586380723368553,
             "deltaResidualPercentPoint": -0.00413619276631394,
+            "priceAlignedTolerancePercentPoint": 0.1518,
+            "residualActionTolerancePercentPoint": 0.506,
             "tolerancePercentPoint": 0.506,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4325,10 +4423,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4355,7 +4453,10 @@
             "deltaActualPercentPoint": -0.17999999999999972,
             "deltaPricePercentPoint": -0.17956814607254756,
             "deltaResidualPercentPoint": -0.0004318539274521527,
+            "priceAlignedTolerancePercentPoint": 0.1464,
+            "residualActionTolerancePercentPoint": 0.488,
             "tolerancePercentPoint": 0.488,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4382,10 +4483,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4412,7 +4513,10 @@
             "deltaActualPercentPoint": -0.040000000000000036,
             "deltaPricePercentPoint": -0.04469384452977998,
             "deltaResidualPercentPoint": 0.004693844529779945,
+            "priceAlignedTolerancePercentPoint": 0.1272,
+            "residualActionTolerancePercentPoint": 0.42400000000000004,
             "tolerancePercentPoint": 0.42400000000000004,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4439,10 +4543,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4469,7 +4573,10 @@
             "deltaActualPercentPoint": 0.1599999999999997,
             "deltaPricePercentPoint": 0.15419097589805153,
             "deltaResidualPercentPoint": 0.005809024101948168,
+            "priceAlignedTolerancePercentPoint": 0.1167,
+            "residualActionTolerancePercentPoint": 0.389,
             "tolerancePercentPoint": 0.389,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4496,10 +4603,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
             "date": "2026-06-17",
@@ -4526,7 +4633,10 @@
             "deltaActualPercentPoint": -0.1200000000000001,
             "deltaPricePercentPoint": -0.1250198575757624,
             "deltaResidualPercentPoint": 0.005019857575762288,
+            "priceAlignedTolerancePercentPoint": 0.1149,
+            "residualActionTolerancePercentPoint": 0.383,
             "tolerancePercentPoint": 0.383,
+            "residualBand": "price_aligned",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4553,10 +4663,10 @@
             "fxReturn": null,
             "localCurrencyReturn": null,
             "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
-            "classification": "price_explained",
-            "economicSignal": "price_explained",
-            "confidence": "high",
-            "message": "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+            "classification": "price_aligned",
+            "economicSignal": "price_aligned",
+            "confidence": "medium",
+            "message": "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           }
         ],
         "signals": [],
@@ -4589,6 +4699,16 @@
             "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate."
           },
           "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn); residual = actualWeightChange - priceEffect",
+          "decompositionFormulaCaveat": "pricedBenchmarkReturn is a previous-weighted return of holdings with valid prices, not a directly observed ETF NAV return; residuals may include trading, cash, creations/redemptions, disclosure timing, rounding, and unpriced holdings.",
+          "residualClassificationPolicy": {
+            "priceAlignedTolerance": "max(0.1pp, previousWeightPercent × 0.03)",
+            "directionalActionTolerance": "max(0.35pp, previousWeightPercent × 0.1)",
+            "labels": {
+              "price_aligned": "small residual; price effect is dominant, not proof of no trade",
+              "residual_watch": "residual exists but is below the directional buy/sell threshold",
+              "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
+            }
+          },
           "priceErrors": {},
           "priceDiagnostics": {}
         }

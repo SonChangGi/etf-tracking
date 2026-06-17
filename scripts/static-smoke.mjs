@@ -59,6 +59,8 @@ if (!api.MANUAL_UPDATE_COMMAND?.includes('refresh_existing=false')) throw new Er
 if (api.formatPriceSource('provider_valuation_krw') !== 'ETF KRW 평가단가') throw new Error('KRW valuation source label changed');
 if (api.formatPriceSource('fx_adjusted_external_close') !== '외부 종가+환율') throw new Error('FX-adjusted source label changed');
 if (api.formatCoverageUniverse('priced_subset_of_full_holdings') !== '전체 보유종목 중 가격확보분') throw new Error('coverage universe label changed');
+if (api.classLabel('price_aligned') !== '가격 우세') throw new Error('price-aligned label should avoid overclaiming full explanation');
+if (api.classLabel('residual_watch') !== '잔차 관찰') throw new Error('residual watch label missing');
 const automation = api.normalizeAutomationStatus(JSON.parse(readFileSync('data/automation-status.json', 'utf8')));
 if (!automation?.runStatus) throw new Error('automation status missing runStatus');
 
