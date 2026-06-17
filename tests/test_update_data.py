@@ -268,12 +268,39 @@ class UpdateDataTests(unittest.TestCase):
         twice = update_data.merge_history(once, {update_data.ETFS[0].id: [snap]})
         self.assertEqual(len(twice[update_data.ETFS[0].id]), 1)
 
+    def test_bounded_backfill_start_date_and_target_priority(self):
+        config = update_data.ETFS[0]
+        dates = update_data.dates_to_fetch(
+            config,
+            "2026-06-17",
+            backfill_all=False,
+            backfill_days=1,
+            backfill_start_date="2026-06-01",
+        )
+        self.assertEqual(dates[0], "2026-06-01")
+        self.assertEqual(dates[-1], "2026-06-17")
+        prioritized = update_data.prioritized_fetch_dates(dates, "2026-06-17")
+        self.assertEqual(prioritized[0], "2026-06-17")
+        self.assertEqual(prioritized[1], "2026-06-01")
+
+    def test_bounded_backfill_respects_listing_date(self):
+        config = update_data.ETFS[2]
+        dates = update_data.dates_to_fetch(
+            config,
+            "2025-03-03",
+            backfill_all=False,
+            backfill_days=1,
+            backfill_start_date="2025-01-01",
+        )
+        self.assertEqual(dates[0], "2025-02-25")
+
     def test_collect_fixture_snapshots_for_all_etfs(self):
         class Args:
             fixture_dir = ROOT / "tests" / "fixtures"
             target_date = "2026-06-17"
             backfill_all = False
             backfill_days = 1
+            backfill_start_date = None
             include_empty = False
             provider_delay = 0
         snapshots, diagnostics = update_data.collect_snapshots(Args)
@@ -360,12 +387,49 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(first["targetFetchStatus"], "error")
         self.assertEqual(first["latestDate"], "2026-06-16")
 
+    def test_status_reuses_existing_live_target_snapshot_when_refetch_is_throttled(self):
+        target = "2026-06-17"
+        history = {
+            cfg.id: [{
+                "date": target,
+                "sourceStatus": "live",
+                "sourceWarning": "",
+                "analysisSummary": {"returnCoverageStatus": "ok", "returnCoverage": 1.0},
+                "top10": [{"ticker": "AAA", "weightPercent": 1}],
+            }]
+            for cfg in update_data.ETFS
+        }
+        diagnostics = {
+            cfg.id: [{
+                "targetDate": target,
+                "date": target,
+                "sourceStatus": "live",
+                "sourceWarning": "",
+                "hasTop10": True,
+            }]
+            for cfg in update_data.ETFS
+        }
+        diagnostics[update_data.ETFS[0].id] = [{
+            "targetDate": target,
+            "date": target,
+            "sourceStatus": "error",
+            "sourceWarning": "HTTP Error 429: Too Many Requests",
+            "hasTop10": False,
+        }]
+        status = update_data.build_status(history, "2026-06-17T00:00:00+00:00", update_data.PriceProvider(no_live=True), target, diagnostics)
+        self.assertEqual(status["overallStatus"], "ok")
+        self.assertEqual(status["etfs"][0]["targetFetchStatus"], "cached_live")
+        self.assertTrue(status["etfs"][0]["reusedExistingTargetSnapshot"])
+        self.assertEqual(update_data.automation_warnings(status), [])
+
     def test_workflow_contains_exact_retry_crons(self):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
         for cron in ["5 23 * * 0-5", "30 0 * * 1-6", "0 2 * * 1-6", "0 4 * * 1-6"]:
             self.assertIn(cron, workflow)
         self.assertIn("--soft-fail", workflow)
         self.assertIn("strict_validation", workflow)
+        self.assertIn("backfill_start_date", workflow)
+        self.assertIn("--backfill-start-date", workflow)
         self.assertIn("continue-on-error", workflow)
         self.assertIn("safe_to_commit", workflow)
         self.assertFalse((ROOT / ".github" / "workflows" / "deploy-pages.yml").exists())

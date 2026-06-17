@@ -19,6 +19,10 @@
     schemaVersion: 'fallback',
     generatedAt: '',
     disclaimer: 'Fallback snapshot; public JSON could not be loaded.',
+    historyPolicy: {
+      scheduledLookbackDays: 10,
+      startDateExplanation: '공개 JSON을 불러오지 못해 fallback 화면을 표시 중입니다.',
+    },
     etfs: [
       {
         id: 'time-nasdaq100-active',
@@ -137,6 +141,7 @@
       disclaimer: stringOr(payload?.disclaimer, ''),
       sourcePolicy: isRecord(payload?.sourcePolicy) ? payload.sourcePolicy : {},
       updatePolicy: isRecord(payload?.updatePolicy) ? payload.updatePolicy : {},
+      historyPolicy: isRecord(payload?.historyPolicy) ? payload.historyPolicy : {},
       etfs,
       signals: asRecords(payload?.signals).map(normalizeSignal),
     };
@@ -319,10 +324,12 @@
     const dashboard = state.dashboard;
     if (!dashboard) return;
     const latestDates = dashboard.etfs.map((etf) => etf.latest?.date).filter(Boolean).sort();
+    const historyStarts = dashboard.etfs.map((etf) => etf.availableStartDate).filter(Boolean).sort();
     const sourceWarnings = dashboard.etfs.filter((etf) => etf.latest?.sourceStatus && etf.latest.sourceStatus !== 'live').length;
     const totalSignals = dashboard.etfs.reduce((sum, etf) => sum + asArray(etf.latest?.signals).length, 0);
     renderMetricCards('#overview-metrics', [
       ['추적 ETF', `${dashboard.etfs.length}개`],
+      ['히스토리 시작', formatMaybeDate(historyStarts[0] || dashboard.historyPolicy?.availableStartDate)],
       ['최근 기준일', formatMaybeDate(latestDates.at(-1))],
       ['최근 특별 신호', `${totalSignals.toLocaleString('ko-KR')}건`],
       ['소스 경고', sourceWarnings ? `${sourceWarnings}개 ETF 확인 필요` : '정상'],
@@ -460,9 +467,13 @@
     const summary = latest?.analysisSummary || {};
     const priceBasis = summary.priceBasis || {};
     const dateBasis = summary.dateBasis || {};
+    const historyPolicy = state.dashboard?.historyPolicy || {};
+    const selectedStart = filteredHistory[0]?.date || etf.availableStartDate;
+    const selectedEnd = filteredHistory.at(-1)?.date || etf.availableEndDate;
     target.innerHTML = `
       <div class="source-item"><strong>${escapeHtml(etf.name)}</strong><span>${escapeHtml(etf.provider)} · ${escapeHtml(etf.code)}</span></div>
       <div class="source-item"><strong>기준일</strong><span>${escapeHtml(formatMaybeDate(latest?.date))} · 선택 범위 ${filteredHistory.length.toLocaleString('ko-KR')}개 스냅샷</span></div>
+      <div class="source-item"><strong>히스토리 범위</strong><span>선택 ${escapeHtml(formatMaybeDate(selectedStart))} → ${escapeHtml(formatMaybeDate(selectedEnd))} · 저장 전체 ${escapeHtml(formatMaybeDate(etf.availableStartDate))} → ${escapeHtml(formatMaybeDate(etf.availableEndDate))}</span><small>${escapeHtml(historyPolicy.startDateExplanation || '예약 업데이트는 최근 구간을 갱신하고, 수동 백필로 더 과거 구간을 확장할 수 있습니다.')}</small></div>
       <div class="source-item"><strong>전일대비 분해 기준</strong><span>ETF 비중 ${escapeHtml(formatMaybeDate(dateBasis.previousSnapshotDate))} → ${escapeHtml(formatMaybeDate(dateBasis.currentSnapshotDate || latest?.date))} · 가격 기준 ${escapeHtml(formatMaybeDate(priceBasis.previous))} → ${escapeHtml(formatMaybeDate(priceBasis.current || latest?.priceBasisDate))}</span></div>
       <div class="source-item"><strong>소스 상태</strong><span class="${latest?.sourceStatus === 'live' ? '' : 'warning'}">${escapeHtml(latest?.sourceStatus || 'unknown')} · ${escapeHtml(latest?.sourceWarning || '정상')}</span></div>
       <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')}</span></div>

@@ -29,6 +29,7 @@ from typing import Any, Iterable
 KST = dt.timezone(dt.timedelta(hours=9), name="KST")
 USER_AGENT = "Mozilla/5.0 (compatible; ETFTrackingBot/0.1; +https://sonchanggi.github.io/etf-tracking/)"
 SCHEMA_VERSION = "1.1.1"
+DEFAULT_SCHEDULED_BACKFILL_DAYS = 10
 PRICE_EXPLAINED_TOLERANCE_PP = 0.20
 PRICE_EXPLAINED_TOLERANCE_RATIO = 0.10
 RETURN_COVERAGE_MIN = 0.60
@@ -477,10 +478,37 @@ def merge_history(existing: dict[str, list[dict[str, Any]]], snapshots: dict[str
     return merged
 
 
-def dates_to_fetch(config: EtfConfig, end_date: str, *, backfill_all: bool, backfill_days: int) -> list[str]:
-    start = config.listing_date if backfill_all else (dt.date.fromisoformat(end_date) - dt.timedelta(days=max(backfill_days - 1, 0))).isoformat()
+def dates_to_fetch(
+    config: EtfConfig,
+    end_date: str,
+    *,
+    backfill_all: bool,
+    backfill_days: int,
+    backfill_start_date: str | None = None,
+) -> list[str]:
+    end_date = iso_date(end_date)
+    if backfill_start_date:
+        start = iso_date(backfill_start_date)
+    elif backfill_all:
+        start = config.listing_date
+    else:
+        start = (dt.date.fromisoformat(end_date) - dt.timedelta(days=max(backfill_days - 1, 0))).isoformat()
     start = max(start, config.listing_date)
+    if start > end_date:
+        return []
     return [date for date in date_range_days(start, end_date) if is_weekday(date)]
+
+
+def prioritized_fetch_dates(dates: list[str], target_date: str) -> list[str]:
+    """Fetch the current target first, then historical dates.
+
+    Scheduled runs should not lose the latest snapshot merely because a provider
+    throttles while a wider historical backfill is in progress.  History is still
+    merged and sorted chronologically after collection.
+    """
+
+    target = iso_date(target_date)
+    return ([target] if target in dates else []) + [date for date in dates if date != target]
 
 
 class PriceProvider:
@@ -1083,12 +1111,14 @@ def enrich_history(history: dict[str, list[dict[str, Any]]], price_provider: Pri
 def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[str, dict[str, Any]], generated_at: str) -> dict[str, Any]:
     etf_payloads = []
     all_signals: list[dict[str, Any]] = []
+    all_dates: list[str] = []
     for config in ETFS:
         rows = history.get(config.id, [])
         latest = rows[-1] if rows else None
         signals = latest.get("signals", []) if latest else []
         all_signals.extend({**signal, "etfId": config.id, "etfName": config.name} for signal in signals)
         dates = [row.get("date") for row in rows if row.get("date")]
+        all_dates.extend(str(date) for date in dates if date)
         entry_exit_count = sum(1 for signal in signals if signal.get("type") in {"top10_entry", "top10_exit"})
         etf_payloads.append({
             "id": config.id,
@@ -1132,6 +1162,16 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "retries": ["09:30 KST", "11:00 KST", "13:00 KST"],
             "cronUtc": ["5 23 * * 0-5", "30 0 * * 1-6", "0 2 * * 1-6", "0 4 * * 1-6"],
         },
+        "historyPolicy": {
+            "availableStartDate": min(all_dates) if all_dates else None,
+            "availableEndDate": max(all_dates) if all_dates else None,
+            "scheduledLookbackDays": DEFAULT_SCHEDULED_BACKFILL_DAYS,
+            "startDateExplanation": "기존 2026-06-08 시작일은 예약 자동화의 최근 10일 백필 창 때문입니다. 수동/로컬 백필을 커밋하면 더 넓은 히스토리를 보존합니다.",
+            "manualBackfillStartDate": "--backfill-start-date YYYY-MM-DD",
+            "manualBackfillAll": "--backfill-all",
+            "fetchOrder": "공급자 throttling이 최신 스냅샷을 가리지 않도록 목표일을 먼저 가져온 뒤 과거 날짜를 채웁니다.",
+            "payloadTradeoff": "상장일 이후 전체 백필 명령은 지원하지만, 예약 자동화는 정적 JSON 용량과 공급자 요청 제한을 피하기 위해 작은 rolling window만 갱신합니다.",
+        },
         "etfs": etf_payloads,
         "signals": sorted(all_signals, key=lambda item: (item.get("date") or "", item.get("severity") or ""), reverse=True)[:50],
     }
@@ -1173,11 +1213,21 @@ def build_status(
         target_status = target_diag.get("sourceStatus") if target_diag else "not_attempted"
         target_has_top10 = bool(target_diag.get("hasTop10")) if target_diag else False
         target_warning = target_diag.get("sourceWarning") if target_diag else "No target-date fetch diagnostic available"
+        reused_existing_target = (
+            latest_date == target_date
+            and source_status == "live"
+            and bool(latest.get("top10") if latest else False)
+            and target_status != "live"
+        )
+        if reused_existing_target:
+            target_status = "cached_live"
+            target_has_top10 = True
+            target_warning = f"Target fetch {target_diag.get('sourceStatus') if target_diag else 'not_attempted'}: {target_warning}; reused existing live target-date snapshot."
         is_waiting = (
             source_status in {"missing", "empty", "error", "stale"}
             or analysis.get("returnCoverageStatus") == "low"
             or latest_date != target_date
-            or target_status in {"missing", "empty", "error", "stale"}
+            or target_status in {"missing", "empty", "error", "stale", "not_attempted"}
             or not target_has_top10
         )
         if is_waiting:
@@ -1190,6 +1240,7 @@ def build_status(
             "targetFetchStatus": target_status,
             "targetFetchWarning": target_warning,
             "targetFetchHasTop10": target_has_top10,
+            "reusedExistingTargetSnapshot": reused_existing_target,
             "sourceStatus": source_status,
             "sourceWarning": latest.get("sourceWarning") if latest else "No snapshot available",
             "returnCoverageStatus": analysis.get("returnCoverageStatus"),
@@ -1218,7 +1269,7 @@ def automation_warnings(status: dict[str, Any]) -> list[str]:
         name = item.get("name") or item.get("id") or "ETF"
         if item.get("latestDate") != item.get("targetDate"):
             warnings.append(f"{name}: latest snapshot {item.get('latestDate') or 'missing'} != target {item.get('targetDate')}")
-        if item.get("targetFetchStatus") not in {"live"}:
+        if item.get("targetFetchStatus") not in {"live", "cached_live"}:
             warnings.append(f"{name}: target fetch status {item.get('targetFetchStatus') or 'unknown'}")
         if item.get("targetFetchHasTop10") is False:
             warnings.append(f"{name}: target TOP10 rows missing")
@@ -1329,7 +1380,14 @@ def collect_snapshots(args: argparse.Namespace) -> tuple[dict[str, list[dict[str
     snapshots: dict[str, list[dict[str, Any]]] = {config.id: [] for config in ETFS}
     diagnostics: dict[str, list[dict[str, Any]]] = {config.id: [] for config in ETFS}
     for config in ETFS:
-        for target in dates_to_fetch(config, args.target_date, backfill_all=args.backfill_all, backfill_days=args.backfill_days):
+        fetch_dates = dates_to_fetch(
+            config,
+            args.target_date,
+            backfill_all=args.backfill_all,
+            backfill_days=args.backfill_days,
+            backfill_start_date=args.backfill_start_date,
+        )
+        for target in prioritized_fetch_dates(fetch_dates, args.target_date):
             try:
                 raw = load_fixture_snapshot(config, args.fixture_dir, target) if args.fixture_dir else fetch_snapshot(config, target)
             except Exception as exc:
@@ -1373,6 +1431,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--fixture-dir", type=Path)
     parser.add_argument("--target-date", default=today_kst())
     parser.add_argument("--backfill-days", type=int, default=1, help="Weekday lookback window including target date.")
+    parser.add_argument("--backfill-start-date", help="Fetch weekdays from this YYYY-MM-DD date through target date, bounded by each ETF listing date.")
     parser.add_argument("--backfill-all", action="store_true", help="Fetch all weekdays from each listing date to target date.")
     parser.add_argument("--include-empty", action="store_true", help="Persist empty/error snapshots for diagnostics.")
     parser.add_argument("--no-live-prices", action="store_true", help="Skip live Yahoo price calls.")

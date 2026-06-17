@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.1.1",
-  "generatedAt": "2026-06-17T11:42:06+00:00",
+  "generatedAt": "2026-06-17T12:04:48+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -775,7 +775,7 @@
           }
         ],
         "totalHoldings": 44,
-        "fetchedAt": "2026-06-17T11:42:09.561768+00:00",
+        "fetchedAt": "2026-06-17T12:04:49.093044+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
@@ -2083,7 +2083,7 @@
           }
         ],
         "totalHoldings": 37,
-        "fetchedAt": "2026-06-17T11:42:12.689115+00:00",
+        "fetchedAt": "2026-06-17T12:04:49.646080+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",

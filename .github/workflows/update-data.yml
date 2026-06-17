@@ -16,6 +16,11 @@ on:
         default: 'false'
         type: choice
         options: ['false', 'true']
+      backfill_start_date:
+        description: 'Optional bounded historical start date (YYYY-MM-DD); ignored when backfill_all=true'
+        required: false
+        default: ''
+        type: string
       strict_validation:
         description: 'Fail this manual run on updater/test/commit errors'
         required: false
@@ -63,6 +68,8 @@ jobs:
           update_args=(--output-dir data --soft-fail)
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.backfill_all }}" = "true" ]; then
             update_args+=(--backfill-all)
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ inputs.backfill_start_date }}" ]; then
+            update_args+=(--backfill-start-date "${{ inputs.backfill_start_date }}")
           else
             update_args+=(--backfill-days 10)
           fi

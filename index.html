@@ -32,8 +32,8 @@
       <aside class="hero-note" aria-label="데이터 정책">
         <strong>데이터/해석 경계</strong>
         <p>
-          공급자 공개 데이터와 공개 종가를 이용한 추정 도구입니다. 실제 운용사 주문 확정이 아니며,
-          투자·세무·법률 또는 매매 조언이 아닙니다.
+          공급자 공개 데이터와 공개 종가를 이용한 추정 도구입니다. 시작일은 커밋된 백필 범위에 따라
+          확장되며, 실제 운용사 주문 확정이나 투자·세무·법률 또는 매매 조언이 아닙니다.
         </p>
       </aside>
     </div>
@@ -106,7 +106,7 @@
           <a class="panel-link" id="provider-link" href="#" target="_blank" rel="noreferrer">공급자 페이지</a>
         </div>
         <div class="table-wrap">
-          <table>
+          <table class="data-table top10-table">
             <caption>최근 ETF TOP10 편입 종목과 비중</caption>
             <thead>
               <tr>
@@ -135,7 +135,7 @@
           </div>
         </div>
         <div class="table-wrap">
-          <table>
+          <table class="data-table decomposition-table">
             <caption>전일 대비 비중 변화 분해</caption>
             <thead>
               <tr>
@@ -183,6 +183,10 @@
         <article>
           <h3>커버리지</h3>
           <p>수익률이 확보된 전일 전체 보유종목 비중 합계가 60% 미만이면 가격/매매 요인을 단정하지 않고 <code>mixed</code> 또는 낮은 신뢰도로 표시합니다.</p>
+        </article>
+        <article>
+          <h3>히스토리 범위</h3>
+          <p>예약 자동화는 최신 데이터를 먼저 가져온 뒤 최근 구간을 갱신합니다. 더 과거 분석은 수동 백필로 확장할 수 있으며, 정적 JSON 용량과 공급자 throttling을 함께 고려합니다.</p>
         </article>
       </div>
     </section>

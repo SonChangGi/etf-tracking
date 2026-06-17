@@ -13,6 +13,7 @@
 ## 기능
 
 - ETF별 TOP10 종목과 투자 비중 히스토리 표/그래프
+- 커밋된 히스토리 시작일과 백필 정책을 화면에 표시
 - 편입·편출, 비중 급변, 가격 수익률로 설명되지 않는 잔차 신호 표시
 - 전체 보유종목 기준의 전일 종가/평가단가 기여분과 ETF 매수/매도 가능성 분해
 - 공급자 데이터 지연/누락과 종가 누락을 명시적으로 표시하는 상태 파일
@@ -28,7 +29,13 @@ python3 -m http.server 8080
 # http://localhost:8080
 ```
 
-초기 전체 기간 백필이 필요하면 수동 워크플로 또는 아래 명령을 사용합니다.
+초기/추가 과거 백필이 필요하면 수동 워크플로에서 `backfill_start_date`를 입력하거나 아래 명령을 사용합니다.
+
+```bash
+python3 scripts/update_data.py --output-dir data --backfill-start-date 2026-05-01 --soft-fail
+```
+
+상장일 이후 전체 기간 백필이 필요하면 다음 명령을 사용합니다. 단, 정적 JSON 용량과 공급자 요청 제한이 커질 수 있어 기본 예약 자동화에는 적용하지 않습니다.
 
 ```bash
 python3 scripts/update_data.py --output-dir data --backfill-all
@@ -55,6 +62,7 @@ npm test
 ## 자동화 운영 정책
 
 - 예약 workflow는 GitHub의 `run failed` 메일을 유발하지 않도록 예상 가능한 데이터 지연/공급자 오류를 soft-fail로 기록합니다.
+- 예약 workflow는 최신 기준일을 먼저 가져온 뒤 최근 10일 구간을 보강합니다. 더 오래된 분석은 수동 `backfill_start_date` 또는 `backfill_all`로 확장합니다.
 - 업데이트 결과는 `data/status.json`과 `data/automation-status.json`에 남깁니다.
 - `npm test`까지 통과하고 `automation-status.json`이 `soft_failed`가 아닐 때만 새 데이터를 커밋합니다.
 - 디버깅이 필요할 때는 수동 workflow 실행에서 `strict_validation=true`를 선택하면 일반 CI처럼 실패 종료합니다.

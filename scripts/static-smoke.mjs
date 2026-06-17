@@ -16,6 +16,7 @@ if (!api) throw new Error('ETF tracking test API missing');
 const parsed = api.parseDashboard(JSON.parse(readFileSync('data/dashboard.json', 'utf8')));
 if (parsed.etfs.length !== 3) throw new Error('dashboard must expose three ETFs');
 if (!parsed.etfs.some((etf) => etf.id === 'koact-nasdaq-growth-active')) throw new Error('KoAct ETF missing');
+if (!parsed.historyPolicy?.scheduledLookbackDays) throw new Error('dashboard history policy missing');
 const selected = parsed.etfs[0];
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
@@ -63,6 +64,7 @@ try {
     fetch(`http://127.0.0.1:${port}/data/dashboard.json`).then((response) => response.json()),
   ]);
   if (!html.includes('ETF TOP10 투자 비중 추적')) throw new Error('index hero missing');
+  if (!html.includes('히스토리 범위')) throw new Error('history range explanation missing');
   if (!html.includes('https://sonchanggi.github.io/quant-dashboard/')) throw new Error('quant dashboard return link missing');
   if (!app.includes('buildWeightSeries')) throw new Error('chart series builder missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
