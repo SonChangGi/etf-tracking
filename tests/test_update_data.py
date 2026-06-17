@@ -39,6 +39,23 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(parsed["top10"][0]["ticker"], None)
         self.assertEqual(parsed["top10"][1]["ticker"], "AMD")
 
+    def test_snapshot_history_preserves_full_holdings_not_only_top10(self):
+        raw = {
+            "asOfDate": "2026-06-17",
+            "queryDate": "2026-06-17",
+            "sourceStatus": "live",
+            "sourceConfidence": "high",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0},
+                {"rank": 11, "ticker": "CCC", "name": "Gamma", "weightPercent": 2.0},
+            ],
+            "top10": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0}],
+            "totalHoldings": 2,
+        }
+        snap = update_data.snapshot_for_history(raw)
+        self.assertEqual(len(snap["holdings"]), 2)
+        self.assertEqual(snap["holdings"][1]["rank"], 11)
+
     def test_decomposition_classifies_residual_buy_and_entries(self):
         fixture_dir = ROOT / "tests" / "fixtures"
         provider = update_data.PriceProvider(fixture_dir=fixture_dir)
@@ -63,6 +80,98 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(by_ticker["AAA"]["classification"], "likely_buy")
         self.assertEqual(by_ticker["CCC"]["classification"], "new_entry")
         self.assertTrue(any(signal["type"] == "top10_entry" for signal in signals))
+
+    def test_decomposition_uses_full_holdings_for_top10_entry_and_exit(self):
+        fixture_dir = ROOT / "tests" / "fixtures"
+        provider = update_data.PriceProvider(fixture_dir=fixture_dir)
+        previous = {
+            "date": "2026-06-16",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 10.0},
+                {"rank": 11, "ticker": "CCC", "name": "Gamma", "weightPercent": 2.0},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0},
+                {"rank": 2, "ticker": "BBB", "name": "Beta", "weightPercent": 10.0},
+            ],
+        }
+        current = {
+            "date": "2026-06-17",
+            "holdings": [
+                {"rank": 1, "ticker": "BBB", "name": "Beta", "weightPercent": 9.5},
+                {"rank": 2, "ticker": "CCC", "name": "Gamma", "weightPercent": 3.0},
+                {"rank": 11, "ticker": "AAA", "name": "Alpha", "weightPercent": 8.0},
+            ],
+            "top10": [
+                {"rank": 1, "ticker": "BBB", "name": "Beta", "weightPercent": 9.5},
+                {"rank": 2, "ticker": "CCC", "name": "Gamma", "weightPercent": 3.0},
+            ],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        by_ticker = {row.get("ticker"): row for row in rows}
+        self.assertEqual(summary["returnCoverageUniverse"], "full_holdings")
+        self.assertAlmostEqual(summary["validReturnWeightPercent"], 22.0)
+        self.assertAlmostEqual(summary["totalReturnWeightPercent"], 22.0)
+        self.assertEqual(by_ticker["AAA"]["actualWeightPercent"], 8.0)
+        self.assertEqual(by_ticker["AAA"]["rank"], 11)
+        self.assertEqual(by_ticker["AAA"]["membershipChange"], "top10_exit")
+        self.assertNotEqual(by_ticker["AAA"]["classification"], "fund_exit")
+        self.assertEqual(by_ticker["CCC"]["previousWeightPercent"], 2.0)
+        self.assertEqual(by_ticker["CCC"]["previousRank"], 11)
+        self.assertEqual(by_ticker["CCC"]["membershipChange"], "top10_entry")
+        self.assertNotEqual(by_ticker["CCC"]["classification"], "new_entry")
+        self.assertTrue(any(signal["type"] == "top10_exit" and signal["ticker"] == "AAA" for signal in signals))
+        self.assertTrue(any(signal["type"] == "top10_entry" and signal["ticker"] == "CCC" for signal in signals))
+
+    def test_non_top10_holding_uses_external_price_in_full_benchmark(self):
+        fixture_dir = ROOT / "tests" / "fixtures"
+        provider = update_data.PriceProvider(fixture_dir=fixture_dir)
+        previous = {
+            "date": "2026-06-16",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0},
+                {"rank": 12, "ticker": "DDD", "name": "Delta", "weightPercent": 10.0},
+            ],
+            "top10": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0}],
+        }
+        current = {
+            "date": "2026-06-17",
+            "holdings": [
+                {"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0},
+                {"rank": 12, "ticker": "DDD", "name": "Delta", "weightPercent": 10.0},
+            ],
+            "top10": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 10.0}],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        self.assertAlmostEqual(summary["benchmarkReturn"], 0.55)
+        self.assertEqual(summary["returnCoverageUniverse"], "full_holdings")
+
+    def test_provider_valuation_fallback_prevents_false_missing_close(self):
+        provider = update_data.PriceProvider(no_live=True)
+        previous = {
+            "date": "2026-06-16",
+            "priceBasisDate": "2026-06-16",
+            "holdings": [{"rank": 1, "ticker": "NOQUOTE", "name": "No Quote", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0}],
+            "top10": [{"rank": 1, "ticker": "NOQUOTE", "name": "No Quote", "shares": 10, "marketValueKrw": 1000, "weightPercent": 10.0}],
+        }
+        current = {
+            "date": "2026-06-17",
+            "priceBasisDate": "2026-06-17",
+            "holdings": [{"rank": 1, "ticker": "NOQUOTE", "name": "No Quote", "shares": 10, "marketValueKrw": 1100, "weightPercent": 10.0}],
+            "top10": [{"rank": 1, "ticker": "NOQUOTE", "name": "No Quote", "shares": 10, "marketValueKrw": 1100, "weightPercent": 10.0}],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        self.assertEqual(summary["returnCoverageStatus"], "ok")
+        self.assertAlmostEqual(rows[0]["securityReturn"], 0.1)
+        self.assertEqual(rows[0]["priceSource"], "provider_valuation_krw")
+        self.assertNotEqual(rows[0]["classification"], "insufficient_data")
+
+    def test_stooq_csv_parser_and_symbol_candidates(self):
+        csv_text = "Date,Open,High,Low,Close,Volume\n2026-06-16,1,2,1,10.5,100\n2026-06-17,1,2,1,11.0,110\n"
+        self.assertEqual(update_data.parse_stooq_csv(csv_text), {"2026-06-16": 10.5, "2026-06-17": 11.0})
+        self.assertIn("aapl.us", update_data.stooq_symbol_candidates("AAPL"))
+        self.assertIn("285a.jp", update_data.stooq_symbol_candidates("285A.T"))
 
     def test_low_return_coverage_forces_mixed_signal(self):
         fixture_dir = ROOT / "tests" / "fixtures"
@@ -142,6 +251,25 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(summary["returnCoverage"], 0)
         self.assertEqual(summary["returnCoverageStatus"], "low")
         self.assertEqual(rows[0]["classification"], "insufficient_data")
+
+    def test_price_diagnostics_are_snapshotted_per_summary(self):
+        provider = update_data.PriceProvider(no_live=True)
+        previous = {
+            "date": "2026-06-16",
+            "priceBasisDate": "2026-06-16",
+            "top10": [{"rank": 1, "ticker": "MISSING", "name": "Missing", "weightPercent": 10.0}],
+        }
+        current = {
+            "date": "2026-06-17",
+            "priceBasisDate": "2026-06-17",
+            "top10": [{"rank": 1, "ticker": "MISSING", "name": "Missing", "weightPercent": 10.0}],
+        }
+        rows, signals, summary = update_data.compute_pair_decomposition(previous, current, provider)
+        provider.diagnostics["LATER"] = [{"reason": "later_failure"}]
+        provider.errors["LATER"] = "later_failure"
+        self.assertIn("MISSING", summary["priceDiagnostics"])
+        self.assertNotIn("LATER", summary["priceDiagnostics"])
+        self.assertNotIn("LATER", summary["priceErrors"])
 
     def test_status_waits_when_target_fetch_failed_despite_old_live_snapshot(self):
         history = {cfg.id: [] for cfg in update_data.ETFS}

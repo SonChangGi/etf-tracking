@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-06-17T07:54:12+00:00",
+  "schemaVersion": "1.1.0",
+  "generatedAt": "2026-06-17T11:06:36+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -14,6 +14,492 @@
         "sourceStatus": "live",
         "sourceConfidence": "high",
         "sourceWarning": "",
+        "holdings": [
+          {
+            "rank": 1,
+            "codeRaw": "MU US EQUITY",
+            "ticker": "MU",
+            "name": "Micron Technology Inc",
+            "shares": 49.0,
+            "marketValueKrw": 80585678.0,
+            "weightPercent": 6.73,
+            "weight": 0.0673,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 2,
+            "codeRaw": "SNDK US EQUITY",
+            "ticker": "SNDK",
+            "name": "Sandisk Corp",
+            "shares": 25.0,
+            "marketValueKrw": 79656029.0,
+            "weightPercent": 6.66,
+            "weight": 0.0666,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 3,
+            "codeRaw": "INTC US EQUITY",
+            "ticker": "INTC",
+            "name": "Intel Corp",
+            "shares": 343.0,
+            "marketValueKrw": 66292699.0,
+            "weightPercent": 5.54,
+            "weight": 0.0554,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 4,
+            "codeRaw": "ARM US EQUITY",
+            "ticker": "ARM",
+            "name": "ARM Holdings PLC",
+            "shares": 102.0,
+            "marketValueKrw": 63608279.0,
+            "weightPercent": 5.32,
+            "weight": 0.053200000000000004,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 5,
+            "codeRaw": "NVDA US EQUITY",
+            "ticker": "NVDA",
+            "name": "NVIDIA Corp",
+            "shares": 174.0,
+            "marketValueKrw": 55878259.0,
+            "weightPercent": 4.67,
+            "weight": 0.0467,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 6,
+            "codeRaw": "MRVL US EQUITY",
+            "ticker": "MRVL",
+            "name": "Marvell Technology Inc",
+            "shares": 103.0,
+            "marketValueKrw": 48091009.0,
+            "weightPercent": 4.02,
+            "weight": 0.04019999999999999,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 7,
+            "codeRaw": "AMD US EQUITY",
+            "ticker": "AMD",
+            "name": "Advanced Micro Devices Inc",
+            "shares": 50.0,
+            "marketValueKrw": 41361910.0,
+            "weightPercent": 3.46,
+            "weight": 0.0346,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 8,
+            "codeRaw": "DELL US EQUITY",
+            "ticker": "DELL",
+            "name": "Dell Technologies Inc",
+            "shares": 61.0,
+            "marketValueKrw": 37719362.0,
+            "weightPercent": 3.15,
+            "weight": 0.0315,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 9,
+            "codeRaw": "CRDO US EQUITY",
+            "ticker": "CRDO",
+            "name": "Credo Technology Group Holding Ltd",
+            "shares": 92.0,
+            "marketValueKrw": 36075422.0,
+            "weightPercent": 3.02,
+            "weight": 0.0302,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 10,
+            "codeRaw": "SPCX US EQUITY",
+            "ticker": null,
+            "name": "Space Exploration Technologies Corp",
+            "shares": 124.0,
+            "marketValueKrw": 36081892.0,
+            "weightPercent": 3.02,
+            "weight": 0.0302,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 11,
+            "codeRaw": "WDC US EQUITY",
+            "ticker": "WDC",
+            "name": "Western Digital Corp",
+            "shares": 35.0,
+            "marketValueKrw": 34575658.0,
+            "weightPercent": 2.89,
+            "weight": 0.028900000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 12,
+            "codeRaw": "LRCX US EQUITY",
+            "ticker": "LRCX",
+            "name": "Lam Research Corp",
+            "shares": 58.0,
+            "marketValueKrw": 34097705.0,
+            "weightPercent": 2.85,
+            "weight": 0.0285,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 13,
+            "codeRaw": "STX US EQUITY",
+            "ticker": "STX",
+            "name": "Seagate Technology Holdings PLC",
+            "shares": 22.0,
+            "marketValueKrw": 33880397.0,
+            "weightPercent": 2.83,
+            "weight": 0.028300000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 14,
+            "codeRaw": "GOOGL US EQUITY",
+            "ticker": "GOOGL",
+            "name": "Alphabet Inc",
+            "shares": 59.0,
+            "marketValueKrw": 32940258.0,
+            "weightPercent": 2.75,
+            "weight": 0.0275,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 15,
+            "codeRaw": "AMAT US EQUITY",
+            "ticker": "AMAT",
+            "name": "Applied Materials Inc",
+            "shares": 35.0,
+            "marketValueKrw": 30991276.0,
+            "weightPercent": 2.59,
+            "weight": 0.0259,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 16,
+            "codeRaw": "AAPL US EQUITY",
+            "ticker": "AAPL",
+            "name": "Apple Inc",
+            "shares": 65.0,
+            "marketValueKrw": 29124450.0,
+            "weightPercent": 2.43,
+            "weight": 0.024300000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 17,
+            "codeRaw": "NQU6 INDEX",
+            "ticker": null,
+            "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
+            "shares": 0.0,
+            "marketValueKrw": 27992640.0,
+            "weightPercent": 2.34,
+            "weight": 0.023399999999999997,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 18,
+            "codeRaw": "AAOI US EQUITY",
+            "ticker": "AAOI",
+            "name": "Applied Optoelectronics Inc",
+            "shares": 94.0,
+            "marketValueKrw": 27217416.0,
+            "weightPercent": 2.27,
+            "weight": 0.0227,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 19,
+            "codeRaw": "AVGO US EQUITY",
+            "ticker": "AVGO",
+            "name": "Broadcom Inc",
+            "shares": 45.0,
+            "marketValueKrw": 26796586.0,
+            "weightPercent": 2.24,
+            "weight": 0.022400000000000003,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 20,
+            "codeRaw": "NBIS US EQUITY",
+            "ticker": "NBIS",
+            "name": "Nebius Group NV",
+            "shares": 67.0,
+            "marketValueKrw": 26339161.0,
+            "weightPercent": 2.2,
+            "weight": 0.022000000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 21,
+            "codeRaw": "MSFT US EQUITY",
+            "ticker": "MSFT",
+            "name": "Microsoft Corp",
+            "shares": 42.0,
+            "marketValueKrw": 25379643.0,
+            "weightPercent": 2.12,
+            "weight": 0.0212,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 22,
+            "codeRaw": "COIN US EQUITY",
+            "ticker": "COIN",
+            "name": "Coinbase Global Inc",
+            "shares": 89.0,
+            "marketValueKrw": 22819385.0,
+            "weightPercent": 1.91,
+            "weight": 0.0191,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 23,
+            "codeRaw": "",
+            "ticker": null,
+            "name": "현금",
+            "shares": 22609742.0,
+            "marketValueKrw": 22609742.0,
+            "weightPercent": 1.89,
+            "weight": 0.0189,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 24,
+            "codeRaw": "AMZN US EQUITY",
+            "ticker": "AMZN",
+            "name": "Amazon.com Inc",
+            "shares": 60.0,
+            "marketValueKrw": 22313029.0,
+            "weightPercent": 1.87,
+            "weight": 0.0187,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 25,
+            "codeRaw": "HOOD US EQUITY",
+            "ticker": "HOOD",
+            "name": "Robinhood Markets Inc",
+            "shares": 137.0,
+            "marketValueKrw": 20319592.0,
+            "weightPercent": 1.7,
+            "weight": 0.017,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 26,
+            "codeRaw": "ASML US EQUITY",
+            "ticker": "ASML",
+            "name": "ASML Holding NV",
+            "shares": 7.0,
+            "marketValueKrw": 20026613.0,
+            "weightPercent": 1.67,
+            "weight": 0.0167,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 27,
+            "codeRaw": "CRCL US EQUITY",
+            "ticker": "CRCL",
+            "name": "Circle Internet Group Inc",
+            "shares": 133.0,
+            "marketValueKrw": 16760938.0,
+            "weightPercent": 1.4,
+            "weight": 0.013999999999999999,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 28,
+            "codeRaw": "GLW US EQUITY",
+            "ticker": "GLW",
+            "name": "Corning Inc",
+            "shares": 57.0,
+            "marketValueKrw": 16187966.0,
+            "weightPercent": 1.35,
+            "weight": 0.013500000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 29,
+            "codeRaw": "SIMO US EQUITY",
+            "ticker": "SIMO",
+            "name": "Silicon Motion Technology Corp",
+            "shares": 32.0,
+            "marketValueKrw": 13369799.0,
+            "weightPercent": 1.12,
+            "weight": 0.011200000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 30,
+            "codeRaw": "QCOM US EQUITY",
+            "ticker": "QCOM",
+            "name": "QUALCOMM Inc",
+            "shares": 40.0,
+            "marketValueKrw": 13351055.0,
+            "weightPercent": 1.12,
+            "weight": 0.011200000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 31,
+            "codeRaw": "GEV US EQUITY",
+            "ticker": "GEV",
+            "name": "GE Vernova Inc",
+            "shares": 9.0,
+            "marketValueKrw": 13319659.0,
+            "weightPercent": 1.11,
+            "weight": 0.0111,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 32,
+            "codeRaw": "MSTR US EQUITY",
+            "ticker": "MSTR",
+            "name": "Strategy Inc",
+            "shares": 64.0,
+            "marketValueKrw": 12686798.0,
+            "weightPercent": 1.06,
+            "weight": 0.0106,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 33,
+            "codeRaw": "APP US EQUITY",
+            "ticker": "APP",
+            "name": "AppLovin Corp",
+            "shares": 16.0,
+            "marketValueKrw": 12597311.0,
+            "weightPercent": 1.05,
+            "weight": 0.0105,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 34,
+            "codeRaw": "META US EQUITY",
+            "ticker": "META",
+            "name": "Meta Platforms Inc",
+            "shares": 14.0,
+            "marketValueKrw": 12559461.0,
+            "weightPercent": 1.05,
+            "weight": 0.0105,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 35,
+            "codeRaw": "BE US EQUITY",
+            "ticker": "BE",
+            "name": "Bloom Energy Corp",
+            "shares": 29.0,
+            "marketValueKrw": 12033091.0,
+            "weightPercent": 1.01,
+            "weight": 0.0101,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 36,
+            "codeRaw": "LITE US EQUITY",
+            "ticker": "LITE",
+            "name": "Lumentum Holdings Inc",
+            "shares": 8.0,
+            "marketValueKrw": 11575711.0,
+            "weightPercent": 0.97,
+            "weight": 0.0097,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 37,
+            "codeRaw": "TSM US EQUITY",
+            "ticker": "TSM",
+            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+            "shares": 17.0,
+            "marketValueKrw": 11342744.0,
+            "weightPercent": 0.95,
+            "weight": 0.0095,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 38,
+            "codeRaw": "VRT US EQUITY",
+            "ticker": "VRT",
+            "name": "Vertiv Holdings Co",
+            "shares": 24.0,
+            "marketValueKrw": 11316321.0,
+            "weightPercent": 0.95,
+            "weight": 0.0095,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 39,
+            "codeRaw": "RKLB US EQUITY",
+            "ticker": "RKLB",
+            "name": "Rocket Lab Corp",
+            "shares": 66.0,
+            "marketValueKrw": 10899391.0,
+            "weightPercent": 0.91,
+            "weight": 0.0091,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 40,
+            "codeRaw": "TSLA US EQUITY",
+            "ticker": "TSLA",
+            "name": "Tesla Inc",
+            "shares": 16.0,
+            "marketValueKrw": 9943909.0,
+            "weightPercent": 0.83,
+            "weight": 0.0083,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 41,
+            "codeRaw": "CRWV US EQUITY",
+            "ticker": "CRWV",
+            "name": "CoreWeave Inc",
+            "shares": 59.0,
+            "marketValueKrw": 9516867.0,
+            "weightPercent": 0.8,
+            "weight": 0.008,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 42,
+            "codeRaw": "TER US EQUITY",
+            "ticker": "TER",
+            "name": "Teradyne Inc",
+            "shares": 14.0,
+            "marketValueKrw": 9150833.0,
+            "weightPercent": 0.77,
+            "weight": 0.0077,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 43,
+            "codeRaw": "ALAB US EQUITY",
+            "ticker": "ALAB",
+            "name": "Astera Labs Inc",
+            "shares": 15.0,
+            "marketValueKrw": 8824720.0,
+            "weightPercent": 0.74,
+            "weight": 0.0074,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 44,
+            "codeRaw": "ORCL US EQUITY",
+            "ticker": "ORCL",
+            "name": "Oracle Corp",
+            "shares": 29.0,
+            "marketValueKrw": 8444644.0,
+            "weightPercent": 0.71,
+            "weight": 0.0070999999999999995,
+            "isPriceTracked": true
+          }
+        ],
         "top10": [
           {
             "rank": 1,
@@ -127,7 +613,7 @@
           }
         ],
         "totalHoldings": 44,
-        "fetchedAt": "2026-06-17T07:54:25.342901+00:00",
+        "fetchedAt": "2026-06-17T11:06:39.721768+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
@@ -138,24 +624,37 @@
             "previousRank": 2,
             "actualWeightPercent": 6.73,
             "previousWeightPercent": 6.58,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.06179282996369051,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 6.5423069347145075,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 6.249874664500626,
             "deltaActualPercentPoint": 0.15000000000000036,
-            "deltaPricePercentPoint": -0.037693065285492544,
-            "deltaResidualPercentPoint": 0.1876930652854929,
+            "deltaPricePercentPoint": -0.33012533549937384,
+            "deltaResidualPercentPoint": 0.4801253354993742,
             "tolerancePercentPoint": 0.658,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 1087.989990234375
+                "close": 1087.989990234375,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1020.760009765625
-              }
+                "close": 1020.760009765625,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -169,24 +668,37 @@
             "previousRank": 1,
             "actualWeightPercent": 6.66,
             "previousWeightPercent": 6.9,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 6.908834751800674,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 6.600019183964617,
             "deltaActualPercentPoint": -0.2400000000000002,
-            "deltaPricePercentPoint": 0.008834751800673502,
-            "deltaResidualPercentPoint": -0.24883475180067371,
+            "deltaPricePercentPoint": -0.29998081603538296,
+            "deltaResidualPercentPoint": 0.059980816035382745,
             "tolerancePercentPoint": 0.6900000000000001,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 2107.860107421875
+                "close": 2107.860107421875,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1991.550048828125
-              }
+                "close": 1991.550048828125,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -200,24 +712,37 @@
             "previousRank": 3,
             "actualWeightPercent": 5.54,
             "previousWeightPercent": 5.74,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 5.568713742098436,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 5.319799770616578,
             "deltaActualPercentPoint": -0.20000000000000018,
-            "deltaPricePercentPoint": -0.17128625790156438,
-            "deltaResidualPercentPoint": -0.0287137420984358,
+            "deltaPricePercentPoint": -0.42020022938342194,
+            "deltaResidualPercentPoint": 0.22020022938342176,
             "tolerancePercentPoint": 0.5740000000000001,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 127.86000061035156
+                "close": 127.86000061035156,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 117.05000305175781
-              }
+                "close": 117.05000305175781,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -231,24 +756,37 @@
             "previousRank": 4,
             "actualWeightPercent": 5.32,
             "previousWeightPercent": 5.25,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 5.3451131104469,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 5.106193784735659,
             "deltaActualPercentPoint": 0.07000000000000028,
-            "deltaPricePercentPoint": 0.09511311044690007,
-            "deltaResidualPercentPoint": -0.02511311044689979,
+            "deltaPricePercentPoint": -0.14380621526434112,
+            "deltaResidualPercentPoint": 0.2138062152643414,
             "tolerancePercentPoint": 0.525,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 412.54998779296875
+                "close": 412.54998779296875,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 396.3399963378906
-              }
+                "close": 396.3399963378906,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -262,24 +800,37 @@
             "previousRank": 5,
             "actualWeightPercent": 4.67,
             "previousWeightPercent": 4.78,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 4.945465091990469,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 4.724409492101011,
             "deltaActualPercentPoint": -0.11000000000000032,
-            "deltaPricePercentPoint": 0.16546509199046877,
-            "deltaResidualPercentPoint": -0.2754650919904691,
+            "deltaPricePercentPoint": -0.05559050789898912,
+            "deltaResidualPercentPoint": -0.0544094921010112,
             "tolerancePercentPoint": 0.47800000000000004,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 212.4499969482422
+                "close": 212.4499969482422,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 207.41000366210938
-              }
+                "close": 207.41000366210938,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -293,27 +844,40 @@
             "previousRank": 6,
             "actualWeightPercent": 4.02,
             "previousWeightPercent": 3.86,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.0978049435946482,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 3.6905748838310215,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 3.525611178758366,
             "deltaActualPercentPoint": 0.1599999999999997,
-            "deltaPricePercentPoint": -0.16942511616897837,
-            "deltaResidualPercentPoint": 0.32942511616897807,
+            "deltaPricePercentPoint": -0.33438882124163394,
+            "deltaResidualPercentPoint": 0.49438882124163364,
             "tolerancePercentPoint": 0.386,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 308.8800048828125
+                "close": 308.8800048828125,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 278.6700134277344
-              }
+                "close": 278.6700134277344,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
-            "classification": "price_explained",
-            "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "priceSource": "yahoo_chart_query1",
+            "classification": "likely_buy",
+            "confidence": "medium",
+            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
           },
           {
             "date": "2026-06-17",
@@ -324,24 +888,37 @@
             "previousRank": 7,
             "actualWeightPercent": 3.46,
             "previousWeightPercent": 3.43,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 3.369480822741839,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 3.218869587856459,
             "deltaActualPercentPoint": 0.029999999999999805,
-            "deltaPricePercentPoint": -0.06051917725816125,
-            "deltaResidualPercentPoint": 0.09051917725816105,
+            "deltaPricePercentPoint": -0.21113041214354134,
+            "deltaResidualPercentPoint": 0.24113041214354114,
             "tolerancePercentPoint": 0.343,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 547.260009765625
+                "close": 547.260009765625,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 507.2900085449219
-              }
+                "close": 507.2900085449219,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -355,27 +932,48 @@
             "previousRank": 8,
             "actualWeightPercent": 3.15,
             "previousWeightPercent": 3.23,
-            "securityReturn": -0.012198451762800988,
-            "benchmarkReturn": -0.05638741189566171,
-            "predictedWeightPercent": 3.381259471342871,
+            "membershipChange": null,
+            "positionStatus": "held",
+            "securityReturn": 0.03447013156943868,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 3.382728519061843,
             "deltaActualPercentPoint": -0.08000000000000007,
-            "deltaPricePercentPoint": 0.151259471342871,
-            "deltaResidualPercentPoint": -0.23125947134287106,
+            "deltaPricePercentPoint": 0.15272851906184304,
+            "deltaResidualPercentPoint": -0.2327285190618431,
             "tolerancePercentPoint": 0.323,
-            "returnCoverage": 0.9323999124917962,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_fallback",
               "start": {
-                "date": "2026-06-15",
-                "close": 409.07000732421875
+                "close": 597745.8196721311,
+                "source": "provider_valuation_krw"
               },
               "end": {
-                "date": "2026-06-16",
-                "close": 404.0799865722656
+                "close": 618350.1967213114,
+                "source": "provider_valuation_krw"
+              },
+              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+              "externalPriceMeta": {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
               }
             },
+            "priceSource": "provider_valuation_krw",
             "classification": "price_explained",
-            "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "confidence": "medium",
+            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
           },
           {
             "date": "2026-06-17",
@@ -386,17 +984,48 @@
             "previousRank": 9,
             "actualWeightPercent": 3.02,
             "previousWeightPercent": 3.09,
-            "securityReturn": null,
+            "membershipChange": null,
+            "positionStatus": "held",
+            "securityReturn": 0.03463112942225077,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 3.2366123529058957,
+            "deltaActualPercentPoint": -0.06999999999999984,
+            "deltaPricePercentPoint": 0.1466123529058958,
+            "deltaResidualPercentPoint": -0.21661235290589564,
+            "tolerancePercentPoint": 0.309,
+            "returnCoverage": 0.9762047590481904,
             "priceMeta": {
-              "reason": "stale_close",
-              "startDate": "2026-06-15",
-              "endDate": "2026-06-16",
-              "startCloseDate": "2026-06-15",
-              "endCloseDate": "2026-06-15"
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_fallback",
+              "start": {
+                "close": 378998.98913043475,
+                "source": "provider_valuation_krw"
+              },
+              "end": {
+                "close": 392124.152173913,
+                "source": "provider_valuation_krw"
+              },
+              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+              "externalPriceMeta": {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
             },
-            "classification": "insufficient_data",
-            "confidence": "low",
-            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+            "priceSource": "provider_valuation_krw",
+            "classification": "price_explained",
+            "confidence": "medium",
+            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
           },
           {
             "date": "2026-06-17",
@@ -404,28 +1033,99 @@
             "name": "Space Exploration Technologies Corp",
             "ticker": null,
             "rank": 10,
-            "previousRank": null,
+            "previousRank": 12,
             "actualWeightPercent": 3.02,
-            "previousWeightPercent": null,
-            "classification": "new_entry",
-            "confidence": "high",
-            "message": "TOP10 신규 편입"
+            "previousWeightPercent": 2.72,
+            "membershipChange": "top10_entry",
+            "positionStatus": "held",
+            "securityReturn": 0.19641938199073805,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 3.294572058595971,
+            "deltaActualPercentPoint": 0.2999999999999998,
+            "deltaPricePercentPoint": 0.5745720585959706,
+            "deltaResidualPercentPoint": -0.2745720585959708,
+            "tolerancePercentPoint": 0.272,
+            "returnCoverage": 0.9762047590481904,
+            "priceMeta": {
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_fallback",
+              "start": {
+                "close": 243211.53968253967,
+                "source": "provider_valuation_krw"
+              },
+              "end": {
+                "close": 290983.0,
+                "source": "provider_valuation_krw"
+              },
+              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+              "externalPriceMeta": {
+                "reason": "not_price_tracked"
+              }
+            },
+            "priceSource": "provider_valuation_krw",
+            "classification": "likely_sell",
+            "confidence": "medium",
+            "message": "TOP10 편입 · 가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
           },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
             "name": "Lam Research Corp",
             "ticker": "LRCX",
-            "rank": null,
+            "rank": 12,
             "previousRank": 10,
-            "actualWeightPercent": null,
+            "actualWeightPercent": 2.85,
             "previousWeightPercent": 2.85,
-            "classification": "exit",
+            "membershipChange": "top10_exit",
+            "positionStatus": "held",
+            "securityReturn": -0.05034458606867742,
+            "benchmarkReturn": -0.012235683076345412,
+            "predictedWeightPercent": 2.7400442426727785,
+            "deltaActualPercentPoint": 0.0,
+            "deltaPricePercentPoint": -0.10995575732722163,
+            "deltaResidualPercentPoint": 0.10995575732722163,
+            "tolerancePercentPoint": 0.28500000000000003,
+            "returnCoverage": 0.9762047590481904,
+            "priceMeta": {
+              "source": "yahoo_chart_query1",
+              "start": {
+                "date": "2026-06-15",
+                "close": 388.9200134277344,
+                "source": "yahoo_chart_query1"
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 369.3399963378906,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
+            },
+            "priceSource": "yahoo_chart_query1",
+            "classification": "price_explained",
             "confidence": "high",
-            "message": "TOP10에서 편출되었습니다."
+            "message": "TOP10 밖으로 이동(현재 12위) · 가격 수익률로 대부분 설명됩니다."
           }
         ],
         "signals": [
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "type": "likely_buy",
+            "severity": "medium",
+            "name": "Marvell Technology Inc",
+            "ticker": "MRVL",
+            "rank": 6,
+            "previousRank": 6,
+            "weightPercent": 4.02,
+            "previousWeightPercent": 3.86,
+            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
+          },
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
@@ -434,10 +1134,23 @@
             "name": "Space Exploration Technologies Corp",
             "ticker": null,
             "rank": 10,
-            "previousRank": null,
+            "previousRank": 12,
             "weightPercent": 3.02,
-            "previousWeightPercent": null,
-            "message": "TOP10 신규 편입"
+            "previousWeightPercent": 2.72,
+            "message": "TOP10 편입 · 가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "type": "likely_sell",
+            "severity": "medium",
+            "name": "Space Exploration Technologies Corp",
+            "ticker": null,
+            "rank": 10,
+            "previousRank": 12,
+            "weightPercent": 3.02,
+            "previousWeightPercent": 2.72,
+            "message": "TOP10 편입 · 가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
           },
           {
             "date": "2026-06-17",
@@ -446,22 +1159,216 @@
             "severity": "high",
             "name": "Lam Research Corp",
             "ticker": "LRCX",
-            "rank": null,
+            "rank": 12,
             "previousRank": 10,
-            "weightPercent": null,
+            "weightPercent": 2.85,
             "previousWeightPercent": 2.85,
-            "message": "TOP10에서 편출되었습니다."
+            "message": "TOP10 밖으로 이동(현재 12위) · 가격 수익률로 대부분 설명됩니다."
           }
         ],
         "analysisSummary": {
-          "returnCoverage": 0.9323999124917962,
+          "returnCoverage": 0.9762047590481904,
           "returnCoverageStatus": "ok",
-          "benchmarkReturn": -0.05638741189566171,
+          "returnCoverageUniverse": "full_holdings",
+          "validReturnWeightPercent": 97.64,
+          "totalReturnWeightPercent": 100.02,
+          "benchmarkReturn": -0.012235683076345412,
+          "fullHoldingCount": 44,
+          "previousFullHoldingCount": 44,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
           },
-          "priceErrors": {}
+          "priceErrors": {},
+          "priceDiagnostics": {
+            "DELL": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "CRDO": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "AAOI": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "COIN": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "HOOD": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "APP": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "META": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "BE": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "LITE": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "VRT": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "RKLB": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ]
+          }
         }
       }
     },
@@ -477,6 +1384,415 @@
         "sourceStatus": "live",
         "sourceConfidence": "high",
         "sourceWarning": "",
+        "holdings": [
+          {
+            "rank": 1,
+            "codeRaw": "285A JP EQUITY",
+            "ticker": "285A.T",
+            "name": "Kioxia Holdings Corp",
+            "shares": 143.0,
+            "marketValueKrw": 122657526.0,
+            "weightPercent": 8.52,
+            "weight": 0.0852,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 2,
+            "codeRaw": "INTC US EQUITY",
+            "ticker": "INTC",
+            "name": "Intel Corp",
+            "shares": 538.0,
+            "marketValueKrw": 103980968.0,
+            "weightPercent": 7.22,
+            "weight": 0.0722,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 3,
+            "codeRaw": "AMD US EQUITY",
+            "ticker": "AMD",
+            "name": "Advanced Micro Devices Inc",
+            "shares": 118.0,
+            "marketValueKrw": 97614109.0,
+            "weightPercent": 6.78,
+            "weight": 0.0678,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 4,
+            "codeRaw": "STX US EQUITY",
+            "ticker": "STX",
+            "name": "Seagate Technology Holdings PLC",
+            "shares": 58.0,
+            "marketValueKrw": 89321048.0,
+            "weightPercent": 6.21,
+            "weight": 0.0621,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 5,
+            "codeRaw": "WDC US EQUITY",
+            "ticker": "WDC",
+            "name": "Western Digital Corp",
+            "shares": 76.0,
+            "marketValueKrw": 75078572.0,
+            "weightPercent": 5.22,
+            "weight": 0.052199999999999996,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 6,
+            "codeRaw": "ARM US EQUITY",
+            "ticker": "ARM",
+            "name": "ARM Holdings PLC",
+            "shares": 95.0,
+            "marketValueKrw": 59243005.0,
+            "weightPercent": 4.12,
+            "weight": 0.0412,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 7,
+            "codeRaw": "NQU6 INDEX",
+            "ticker": null,
+            "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
+            "shares": 0.0,
+            "marketValueKrw": 55985280.0,
+            "weightPercent": 3.89,
+            "weight": 0.038900000000000004,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 8,
+            "codeRaw": "SNDK US EQUITY",
+            "ticker": "SNDK",
+            "name": "Sandisk Corp",
+            "shares": 17.0,
+            "marketValueKrw": 54166099.0,
+            "weightPercent": 3.76,
+            "weight": 0.037599999999999995,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 9,
+            "codeRaw": "SNOW US EQUITY",
+            "ticker": "SNOW",
+            "name": "Snowflake Inc",
+            "shares": 147.0,
+            "marketValueKrw": 53502568.0,
+            "weightPercent": 3.72,
+            "weight": 0.037200000000000004,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 10,
+            "codeRaw": "NVDA US EQUITY",
+            "ticker": "NVDA",
+            "name": "NVIDIA Corp",
+            "shares": 149.0,
+            "marketValueKrw": 47849773.0,
+            "weightPercent": 3.32,
+            "weight": 0.0332,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 11,
+            "codeRaw": "QCOM US EQUITY",
+            "ticker": "QCOM",
+            "name": "QUALCOMM Inc",
+            "shares": 134.0,
+            "marketValueKrw": 44726037.0,
+            "weightPercent": 3.11,
+            "weight": 0.0311,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 12,
+            "codeRaw": "ASML US EQUITY",
+            "ticker": "ASML",
+            "name": "ASML Holding NV",
+            "shares": 14.0,
+            "marketValueKrw": 40053227.0,
+            "weightPercent": 2.78,
+            "weight": 0.0278,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 13,
+            "codeRaw": "NTAP US EQUITY",
+            "ticker": "NTAP",
+            "name": "NetApp Inc",
+            "shares": 159.0,
+            "marketValueKrw": 38892530.0,
+            "weightPercent": 2.7,
+            "weight": 0.027000000000000003,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 14,
+            "codeRaw": "IBM US EQUITY",
+            "ticker": "IBM",
+            "name": "International Business Machines Corp",
+            "shares": 86.0,
+            "marketValueKrw": 34931655.0,
+            "weightPercent": 2.43,
+            "weight": 0.024300000000000002,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 15,
+            "codeRaw": "SPCX US EQUITY",
+            "ticker": null,
+            "name": "Space Exploration Technologies Corp",
+            "shares": 120.0,
+            "marketValueKrw": 34917960.0,
+            "weightPercent": 2.43,
+            "weight": 0.024300000000000002,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 16,
+            "codeRaw": "AMZN US EQUITY",
+            "ticker": "AMZN",
+            "name": "Amazon.com Inc",
+            "shares": 90.0,
+            "marketValueKrw": 33469544.0,
+            "weightPercent": 2.33,
+            "weight": 0.0233,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 17,
+            "codeRaw": "2513 HK EQUITY",
+            "ticker": "2513.HK",
+            "name": "Knowledge Atlas Technology JSC Ltd",
+            "shares": 107.0,
+            "marketValueKrw": 30086948.0,
+            "weightPercent": 2.09,
+            "weight": 0.0209,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 18,
+            "codeRaw": "TSM US EQUITY",
+            "ticker": "TSM",
+            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
+            "shares": 42.0,
+            "marketValueKrw": 28023250.0,
+            "weightPercent": 1.95,
+            "weight": 0.0195,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 19,
+            "codeRaw": "NOW US EQUITY",
+            "ticker": "NOW",
+            "name": "ServiceNow Inc",
+            "shares": 175.0,
+            "marketValueKrw": 27550799.0,
+            "weightPercent": 1.91,
+            "weight": 0.0191,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 20,
+            "codeRaw": "0043Y0",
+            "ticker": null,
+            "name": "TIME 차이나AI테크액티브",
+            "shares": 1087.0,
+            "marketValueKrw": 26990210.0,
+            "weightPercent": 1.88,
+            "weight": 0.018799999999999997,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 21,
+            "codeRaw": "MELI US EQUITY",
+            "ticker": "MELI",
+            "name": "MercadoLibre Inc",
+            "shares": 10.0,
+            "marketValueKrw": 24886377.0,
+            "weightPercent": 1.73,
+            "weight": 0.0173,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 22,
+            "codeRaw": "9988 HK EQUITY",
+            "ticker": "9988.HK",
+            "name": "Alibaba Group Holding Ltd",
+            "shares": 1173.0,
+            "marketValueKrw": 24743035.0,
+            "weightPercent": 1.72,
+            "weight": 0.0172,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 23,
+            "codeRaw": "GOOG US EQUITY",
+            "ticker": "GOOG",
+            "name": "Alphabet Inc",
+            "shares": 44.0,
+            "marketValueKrw": 24416632.0,
+            "weightPercent": 1.7,
+            "weight": 0.017,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 24,
+            "codeRaw": "ROP US EQUITY",
+            "ticker": "ROP",
+            "name": "Roper Technologies Inc",
+            "shares": 48.0,
+            "marketValueKrw": 24121508.0,
+            "weightPercent": 1.68,
+            "weight": 0.0168,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 25,
+            "codeRaw": "CRM US EQUITY",
+            "ticker": "CRM",
+            "name": "Salesforce Inc",
+            "shares": 95.0,
+            "marketValueKrw": 23629709.0,
+            "weightPercent": 1.64,
+            "weight": 0.016399999999999998,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 26,
+            "codeRaw": "META US EQUITY",
+            "ticker": "META",
+            "name": "Meta Platforms Inc",
+            "shares": 26.0,
+            "marketValueKrw": 23324713.0,
+            "weightPercent": 1.62,
+            "weight": 0.016200000000000003,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 27,
+            "codeRaw": "ACN US EQUITY",
+            "ticker": "ACN",
+            "name": "Accenture PLC",
+            "shares": 92.0,
+            "marketValueKrw": 22996152.0,
+            "weightPercent": 1.6,
+            "weight": 0.016,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 28,
+            "codeRaw": "MSTR US EQUITY",
+            "ticker": "MSTR",
+            "name": "Strategy Inc",
+            "shares": 112.0,
+            "marketValueKrw": 22201897.0,
+            "weightPercent": 1.54,
+            "weight": 0.0154,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 29,
+            "codeRaw": "PDD US EQUITY",
+            "ticker": "PDD",
+            "name": "PDD Holdings Inc",
+            "shares": 168.0,
+            "marketValueKrw": 21217422.0,
+            "weightPercent": 1.47,
+            "weight": 0.0147,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 30,
+            "codeRaw": "6981 JP EQUITY",
+            "ticker": "6981.T",
+            "name": "Murata Manufacturing Co Ltd",
+            "shares": 219.0,
+            "marketValueKrw": 20786846.0,
+            "weightPercent": 1.44,
+            "weight": 0.0144,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 31,
+            "codeRaw": "DELL US EQUITY",
+            "ticker": "DELL",
+            "name": "Dell Technologies Inc",
+            "shares": 33.0,
+            "marketValueKrw": 20405556.0,
+            "weightPercent": 1.42,
+            "weight": 0.014199999999999999,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 32,
+            "codeRaw": "EBAY US EQUITY",
+            "ticker": "EBAY",
+            "name": "eBay Inc",
+            "shares": 108.0,
+            "marketValueKrw": 17823940.0,
+            "weightPercent": 1.24,
+            "weight": 0.0124,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 33,
+            "codeRaw": "SAP US EQUITY",
+            "ticker": "SAP",
+            "name": "SAP SE",
+            "shares": 66.0,
+            "marketValueKrw": 16394481.0,
+            "weightPercent": 1.14,
+            "weight": 0.011399999999999999,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 34,
+            "codeRaw": "",
+            "ticker": null,
+            "name": "현금",
+            "shares": 16179874.0,
+            "marketValueKrw": 16179874.0,
+            "weightPercent": 1.12,
+            "weight": 0.011200000000000002,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 35,
+            "codeRaw": "COIN US EQUITY",
+            "ticker": "COIN",
+            "name": "Coinbase Global Inc",
+            "shares": 54.0,
+            "marketValueKrw": 13845469.0,
+            "weightPercent": 0.96,
+            "weight": 0.0096,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 36,
+            "codeRaw": "CRCL US EQUITY",
+            "ticker": "CRCL",
+            "name": "Circle Internet Group Inc",
+            "shares": 105.0,
+            "marketValueKrw": 13232319.0,
+            "weightPercent": 0.92,
+            "weight": 0.0092,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 37,
+            "codeRaw": "700 HK EQUITY",
+            "ticker": "0700.HK",
+            "name": "Tencent Holdings Ltd",
+            "shares": 115.0,
+            "marketValueKrw": 10200293.0,
+            "weightPercent": 0.71,
+            "weight": 0.0070999999999999995,
+            "isPriceTracked": true
+          }
+        ],
         "top10": [
           {
             "rank": 1,
@@ -590,7 +1906,7 @@
           }
         ],
         "totalHoldings": 37,
-        "fetchedAt": "2026-06-17T07:54:37.799556+00:00",
+        "fetchedAt": "2026-06-17T11:06:42.830375+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
@@ -601,24 +1917,37 @@
             "previousRank": 1,
             "actualWeightPercent": 8.52,
             "previousWeightPercent": 8.06,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": 0.041909580904190946,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 8.584148035431252,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 8.387382466337314,
             "deltaActualPercentPoint": 0.4599999999999991,
-            "deltaPricePercentPoint": 0.5241480354312511,
-            "deltaResidualPercentPoint": -0.06414803543125203,
+            "deltaPricePercentPoint": 0.3273824663373137,
+            "deltaResidualPercentPoint": 0.13261753366268536,
             "tolerancePercentPoint": 0.806,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 90910.0
+                "close": 90910.0,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 94720.0
-              }
+                "close": 94720.0,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 14
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -632,24 +1961,37 @@
             "previousRank": 2,
             "actualWeightPercent": 7.22,
             "previousWeightPercent": 7.49,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 7.008913012360006,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 6.848254930519546,
             "deltaActualPercentPoint": -0.27000000000000046,
-            "deltaPricePercentPoint": -0.48108698763999413,
-            "deltaResidualPercentPoint": 0.21108698763999367,
+            "deltaPricePercentPoint": -0.6417450694804545,
+            "deltaResidualPercentPoint": 0.37174506948045405,
             "tolerancePercentPoint": 0.7490000000000001,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 127.86000061035156
+                "close": 127.86000061035156,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 117.05000305175781
-              }
+                "close": 117.05000305175781,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -663,24 +2005,37 @@
             "previousRank": 3,
             "actualWeightPercent": 6.78,
             "previousWeightPercent": 6.77,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 6.414803959176361,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 6.2677640262157945,
             "deltaActualPercentPoint": 0.010000000000000675,
-            "deltaPricePercentPoint": -0.355196040823639,
-            "deltaResidualPercentPoint": 0.36519604082363966,
+            "deltaPricePercentPoint": -0.502235973784205,
+            "deltaResidualPercentPoint": 0.5122359737842057,
             "tolerancePercentPoint": 0.677,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 547.260009765625
+                "close": 547.260009765625,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 507.2900085449219
-              }
+                "close": 507.2900085449219,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -694,24 +2049,37 @@
             "previousRank": 4,
             "actualWeightPercent": 6.21,
             "previousWeightPercent": 6.0,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": 0.01230857693128673,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 6.208637332439804,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 6.066323144360449,
             "deltaActualPercentPoint": 0.20999999999999996,
-            "deltaPricePercentPoint": 0.2086373324398041,
-            "deltaResidualPercentPoint": 0.0013626675601958738,
+            "deltaPricePercentPoint": 0.06632314436044862,
+            "deltaResidualPercentPoint": 0.14367685563955135,
             "tolerancePercentPoint": 0.6000000000000001,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 1018.7999877929688
+                "close": 1018.7999877929688,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1031.3399658203125
-              }
+                "close": 1031.3399658203125,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -725,24 +2093,37 @@
             "previousRank": 5,
             "actualWeightPercent": 5.22,
             "previousWeightPercent": 4.76,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": 0.042155657059262275,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 5.070743797978041,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 4.954512369416874,
             "deltaActualPercentPoint": 0.45999999999999996,
-            "deltaPricePercentPoint": 0.3107437979780414,
-            "deltaResidualPercentPoint": 0.14925620202195855,
+            "deltaPricePercentPoint": 0.19451236941687444,
+            "deltaResidualPercentPoint": 0.2654876305831255,
             "tolerancePercentPoint": 0.476,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 653.530029296875
+                "close": 653.530029296875,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 681.0800170898438
-              }
+                "close": 681.0800170898438,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -756,24 +2137,37 @@
             "previousRank": 6,
             "actualWeightPercent": 4.12,
             "previousWeightPercent": 4.02,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 3.947748712917488,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 3.857258542089715,
             "deltaActualPercentPoint": 0.10000000000000053,
-            "deltaPricePercentPoint": -0.0722512870825116,
-            "deltaResidualPercentPoint": 0.17225128708251214,
+            "deltaPricePercentPoint": -0.16274145791028438,
+            "deltaResidualPercentPoint": 0.2627414579102849,
             "tolerancePercentPoint": 0.40199999999999997,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 412.54998779296875
+                "close": 412.54998779296875,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 396.3399963378906
-              }
+                "close": 396.3399963378906,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -787,9 +2181,11 @@
             "previousRank": null,
             "actualWeightPercent": 3.89,
             "previousWeightPercent": null,
+            "membershipChange": "top10_entry",
+            "positionStatus": "new_holding",
             "classification": "new_entry",
             "confidence": "high",
-            "message": "TOP10 신규 편입"
+            "message": "ETF 보유목록 신규 편입"
           },
           {
             "date": "2026-06-17",
@@ -800,24 +2196,37 @@
             "previousRank": 9,
             "actualWeightPercent": 3.76,
             "previousWeightPercent": 3.74,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 3.612045127921635,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 3.5292499440251146,
             "deltaActualPercentPoint": 0.019999999999999574,
-            "deltaPricePercentPoint": -0.12795487207836542,
-            "deltaResidualPercentPoint": 0.147954872078365,
+            "deltaPricePercentPoint": -0.2107500559748856,
+            "deltaResidualPercentPoint": 0.23075005597488518,
             "tolerancePercentPoint": 0.37400000000000005,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 2107.860107421875
+                "close": 2107.860107421875,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1991.550048828125
-              }
+                "close": 1991.550048828125,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -831,17 +2240,48 @@
             "previousRank": 8,
             "actualWeightPercent": 3.72,
             "previousWeightPercent": 3.8,
-            "securityReturn": null,
+            "membershipChange": null,
+            "positionStatus": "held",
+            "securityReturn": 0.03470947149054848,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 3.9270225500731786,
+            "deltaActualPercentPoint": -0.07999999999999963,
+            "deltaPricePercentPoint": 0.12702255007317875,
+            "deltaResidualPercentPoint": -0.20702255007317838,
+            "tolerancePercentPoint": 0.38,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
-              "reason": "stale_close",
-              "startDate": "2026-06-15",
-              "endDate": "2026-06-16",
-              "startCloseDate": "2026-06-15",
-              "endCloseDate": "2026-06-15"
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_fallback",
+              "start": {
+                "close": 351753.85714285716,
+                "source": "provider_valuation_krw"
+              },
+              "end": {
+                "close": 363963.04761904763,
+                "source": "provider_valuation_krw"
+              },
+              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+              "externalPriceMeta": {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
             },
-            "classification": "insufficient_data",
-            "confidence": "low",
-            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+            "priceSource": "provider_valuation_krw",
+            "classification": "price_explained",
+            "confidence": "medium",
+            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
           },
           {
             "date": "2026-06-17",
@@ -852,24 +2292,37 @@
             "previousRank": 10,
             "actualWeightPercent": 3.32,
             "previousWeightPercent": 3.42,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": -0.021709412812346847,
-            "predictedWeightPercent": 3.412960021775413,
+            "benchmarkReturn": 0.0012410016822580086,
+            "predictedWeightPercent": 3.334728260369662,
             "deltaActualPercentPoint": -0.10000000000000009,
-            "deltaPricePercentPoint": -0.007039978224586907,
-            "deltaResidualPercentPoint": -0.09296002177541318,
+            "deltaPricePercentPoint": -0.08527173963033796,
+            "deltaResidualPercentPoint": -0.014728260369662127,
             "tolerancePercentPoint": 0.342,
-            "returnCoverage": 0.8508266051518647,
+            "returnCoverage": 0.9604039596040396,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 212.4499969482422
+                "close": 212.4499969482422,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 207.41000366210938
-              }
+                "close": 207.41000366210938,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -881,11 +2334,13 @@
             "ticker": null,
             "rank": null,
             "previousRank": 7,
-            "actualWeightPercent": null,
+            "actualWeightPercent": 0.0,
             "previousWeightPercent": 3.96,
-            "classification": "exit",
+            "membershipChange": "top10_exit",
+            "positionStatus": "fund_exit",
+            "classification": "fund_exit",
             "confidence": "high",
-            "message": "TOP10에서 편출되었습니다."
+            "message": "ETF 보유목록에서 제외되었습니다."
           }
         ],
         "signals": [
@@ -900,7 +2355,7 @@
             "previousRank": null,
             "weightPercent": 3.89,
             "previousWeightPercent": null,
-            "message": "TOP10 신규 편입"
+            "message": "ETF 보유목록 신규 편입"
           },
           {
             "date": "2026-06-17",
@@ -911,20 +2366,344 @@
             "ticker": null,
             "rank": null,
             "previousRank": 7,
-            "weightPercent": null,
+            "weightPercent": 0.0,
             "previousWeightPercent": 3.96,
-            "message": "TOP10에서 편출되었습니다."
+            "message": "ETF 보유목록에서 제외되었습니다."
           }
         ],
         "analysisSummary": {
-          "returnCoverage": 0.8508266051518647,
+          "returnCoverage": 0.9604039596040396,
           "returnCoverageStatus": "ok",
-          "benchmarkReturn": -0.021709412812346847,
+          "returnCoverageUniverse": "full_holdings",
+          "validReturnWeightPercent": 96.05,
+          "totalReturnWeightPercent": 100.01,
+          "benchmarkReturn": 0.0012410016822580086,
+          "fullHoldingCount": 37,
+          "previousFullHoldingCount": 37,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
           },
-          "priceErrors": {}
+          "priceErrors": {},
+          "priceDiagnostics": {
+            "DELL": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "CRDO": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "AAOI": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "COIN": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "HOOD": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "APP": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "META": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "BE": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "LITE": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "VRT": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "RKLB": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "SNOW": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "NOW": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "GOOG": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "2513.HK": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 13
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "PDD": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ]
+          }
         }
       }
     },
@@ -940,6 +2719,856 @@
         "sourceStatus": "live",
         "sourceConfidence": "high",
         "sourceWarning": "",
+        "holdings": [
+          {
+            "rank": 1,
+            "codeRaw": "SPCX US Equity",
+            "ticker": null,
+            "name": "Space Exploration Technologies Corp",
+            "shares": 397.85,
+            "marketValueKrw": 115767586.0,
+            "weightPercent": 9.63,
+            "weight": 0.09630000000000001,
+            "isPriceTracked": false,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 2,
+            "codeRaw": "AMD US Equity",
+            "ticker": "AMD",
+            "name": "ADVANCED MICRO DEVICES",
+            "shares": 108.31,
+            "marketValueKrw": 89598171.0,
+            "weightPercent": 7.45,
+            "weight": 0.0745,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 3,
+            "codeRaw": "ARM US Equity",
+            "ticker": "ARM",
+            "name": "ARM Holdings PLC",
+            "shares": 141.55,
+            "marketValueKrw": 88272077.0,
+            "weightPercent": 7.34,
+            "weight": 0.07339999999999999,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 4,
+            "codeRaw": "SNDK US Equity",
+            "ticker": "SNDK",
+            "name": "Sandisk Corp/DE",
+            "shares": 22.42,
+            "marketValueKrw": 71435527.0,
+            "weightPercent": 5.94,
+            "weight": 0.0594,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 5,
+            "codeRaw": "INTC US Equity",
+            "ticker": "INTC",
+            "name": "INTEL Corp",
+            "shares": 346.64,
+            "marketValueKrw": 66996213.0,
+            "weightPercent": 5.57,
+            "weight": 0.0557,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 6,
+            "codeRaw": "NVDA US Equity",
+            "ticker": "NVDA",
+            "name": "NVIDIA Corp",
+            "shares": 183.97,
+            "marketValueKrw": 59080019.0,
+            "weightPercent": 4.91,
+            "weight": 0.049100000000000005,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 7,
+            "codeRaw": "GOOGL US Equity",
+            "ticker": "GOOGL",
+            "name": "ALPHABET INC-CL A",
+            "shares": 101.32,
+            "marketValueKrw": 56567914.0,
+            "weightPercent": 4.7,
+            "weight": 0.047,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 8,
+            "codeRaw": "BE US Equity",
+            "ticker": "BE",
+            "name": "BLOOM ENERGY CORPORATION",
+            "shares": 121.66,
+            "marketValueKrw": 50480894.0,
+            "weightPercent": 4.2,
+            "weight": 0.042,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 9,
+            "codeRaw": "MU US Equity",
+            "ticker": "MU",
+            "name": "MICRON TECH",
+            "shares": 29.58,
+            "marketValueKrw": 48647436.0,
+            "weightPercent": 4.05,
+            "weight": 0.0405,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 10,
+            "codeRaw": "AMZN US Equity",
+            "ticker": "AMZN",
+            "name": "Amazon.com Inc",
+            "shares": 119.87,
+            "marketValueKrw": 44577714.0,
+            "weightPercent": 3.71,
+            "weight": 0.0371,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 11,
+            "codeRaw": "DELL US Equity",
+            "ticker": "DELL",
+            "name": "Dell Technologies Inc",
+            "shares": 71.27,
+            "marketValueKrw": 44069819.0,
+            "weightPercent": 3.66,
+            "weight": 0.0366,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 12,
+            "codeRaw": "MRVL US Equity",
+            "ticker": "MRVL",
+            "name": "MARVELL TECHNOLOGY INC",
+            "shares": 78.87,
+            "marketValueKrw": 36824640.0,
+            "weightPercent": 3.06,
+            "weight": 0.030600000000000002,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 13,
+            "codeRaw": "WDC US Equity",
+            "ticker": "WDC",
+            "name": "WESTERN DIGITAL",
+            "shares": 36.03,
+            "marketValueKrw": 35593170.0,
+            "weightPercent": 2.96,
+            "weight": 0.0296,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 14,
+            "codeRaw": "AAPL US Equity",
+            "ticker": "AAPL",
+            "name": "APPLE Inc",
+            "shares": 76.36,
+            "marketValueKrw": 34214508.0,
+            "weightPercent": 2.84,
+            "weight": 0.028399999999999998,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 15,
+            "codeRaw": "STX US Equity",
+            "ticker": "STX",
+            "name": "SEAGATE TECHNOLOGY",
+            "shares": 22.01,
+            "marketValueKrw": 33895797.0,
+            "weightPercent": 2.82,
+            "weight": 0.0282,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 16,
+            "codeRaw": "MSFT US Equity",
+            "ticker": "MSFT",
+            "name": "MICROSOFT",
+            "shares": 45.77,
+            "marketValueKrw": 27657768.0,
+            "weightPercent": 2.3,
+            "weight": 0.023,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 17,
+            "codeRaw": "TSLA US Equity",
+            "ticker": "TSLA",
+            "name": "TESLA MOTORS",
+            "shares": 44.35,
+            "marketValueKrw": 27563273.0,
+            "weightPercent": 2.29,
+            "weight": 0.0229,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 18,
+            "codeRaw": "SNOW US Equity",
+            "ticker": "SNOW",
+            "name": "Snowflake Inc - CL A",
+            "shares": 61.68,
+            "marketValueKrw": 22449240.0,
+            "weightPercent": 1.87,
+            "weight": 0.0187,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 19,
+            "codeRaw": "LITE US Equity",
+            "ticker": "LITE",
+            "name": "Lumentum Holdings Inc",
+            "shares": 14.65,
+            "marketValueKrw": 21198022.0,
+            "weightPercent": 1.76,
+            "weight": 0.0176,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 20,
+            "codeRaw": "AVGO US Equity",
+            "ticker": "AVGO",
+            "name": "BROADCOM LTD",
+            "shares": 29.78,
+            "marketValueKrw": 17733385.0,
+            "weightPercent": 1.47,
+            "weight": 0.0147,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 21,
+            "codeRaw": "NBIS US Equity",
+            "ticker": "NBIS",
+            "name": "YANDEX NV-A",
+            "shares": 38.01,
+            "marketValueKrw": 14942560.0,
+            "weightPercent": 1.24,
+            "weight": 0.0124,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 22,
+            "codeRaw": "LRCX US Equity",
+            "ticker": "LRCX",
+            "name": "LAM RESEARCH",
+            "shares": 22.57,
+            "marketValueKrw": 13268710.0,
+            "weightPercent": 1.1,
+            "weight": 0.011000000000000001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 23,
+            "codeRaw": "AMAT US Equity",
+            "ticker": "AMAT",
+            "name": "APPLIED MATERIALS INC",
+            "shares": 14.88,
+            "marketValueKrw": 13175719.0,
+            "weightPercent": 1.1,
+            "weight": 0.011000000000000001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 24,
+            "codeRaw": "CSCO US Equity",
+            "ticker": "CSCO",
+            "name": "CISCO SYSTEMS INC",
+            "shares": 66.26,
+            "marketValueKrw": 12036060.0,
+            "weightPercent": 1.0,
+            "weight": 0.01,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 25,
+            "codeRaw": "STM US Equity",
+            "ticker": "STM",
+            "name": "STMICROELECTRONICS NV-NY SHS",
+            "shares": 97.54,
+            "marketValueKrw": 11640503.0,
+            "weightPercent": 0.97,
+            "weight": 0.0097,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 26,
+            "codeRaw": "RKLB US Equity",
+            "ticker": "RKLB",
+            "name": "Rocket Lab USA Inc",
+            "shares": 69.99,
+            "marketValueKrw": 11558309.0,
+            "weightPercent": 0.96,
+            "weight": 0.0096,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 27,
+            "codeRaw": "CRCL US Equity",
+            "ticker": "CRCL",
+            "name": "Circle Internet Group Inc",
+            "shares": 89.17,
+            "marketValueKrw": 11237389.0,
+            "weightPercent": 0.93,
+            "weight": 0.009300000000000001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 28,
+            "codeRaw": "COIN US Equity",
+            "ticker": "COIN",
+            "name": "COINBASE GLOBAL INC -CLASS A",
+            "shares": 42.57,
+            "marketValueKrw": 10914845.0,
+            "weightPercent": 0.91,
+            "weight": 0.0091,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 29,
+            "codeRaw": "PLTR US Equity",
+            "ticker": "PLTR",
+            "name": "Palantir Technologies Inc -A",
+            "shares": 40.27,
+            "marketValueKrw": 8200084.0,
+            "weightPercent": 0.68,
+            "weight": 0.0068000000000000005,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 30,
+            "codeRaw": "TXN US Equity",
+            "ticker": "TXN",
+            "name": "TEXAS INSTRUMENTS",
+            "shares": 17.13,
+            "marketValueKrw": 8113534.0,
+            "weightPercent": 0.67,
+            "weight": 0.0067,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 31,
+            "codeRaw": "KLAC US Equity",
+            "ticker": "KLAC",
+            "name": "KLA Corp",
+            "shares": 20.07,
+            "marketValueKrw": 7779221.0,
+            "weightPercent": 0.65,
+            "weight": 0.006500000000000001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 32,
+            "codeRaw": "DDOG US Equity",
+            "ticker": "DDOG",
+            "name": "DATADOG INC - CLASS A",
+            "shares": 21.03,
+            "marketValueKrw": 7409685.0,
+            "weightPercent": 0.62,
+            "weight": 0.0062,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 33,
+            "codeRaw": "SATS US Equity",
+            "ticker": "SATS",
+            "name": "EchoStar Corp",
+            "shares": 41.5,
+            "marketValueKrw": 7393836.0,
+            "weightPercent": 0.61,
+            "weight": 0.0060999999999999995,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 34,
+            "codeRaw": "PANW US Equity",
+            "ticker": "PANW",
+            "name": "PALO ALTO NETWORKS INC",
+            "shares": 15.79,
+            "marketValueKrw": 6791447.0,
+            "weightPercent": 0.56,
+            "weight": 0.005600000000000001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 35,
+            "codeRaw": "QCOM US Equity",
+            "ticker": "QCOM",
+            "name": "QUALCOMM Inc",
+            "shares": 20.12,
+            "marketValueKrw": 6715581.0,
+            "weightPercent": 0.56,
+            "weight": 0.005600000000000001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 36,
+            "codeRaw": "SIMO US Equity",
+            "ticker": "SIMO",
+            "name": "Silicon Motion Technology Corp",
+            "shares": 15.29,
+            "marketValueKrw": 6388257.0,
+            "weightPercent": 0.53,
+            "weight": 0.0053,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 37,
+            "codeRaw": "TSEM US Equity",
+            "ticker": "TSEM",
+            "name": "Tower Semiconductor Ltd",
+            "shares": 14.08,
+            "marketValueKrw": 6105335.0,
+            "weightPercent": 0.51,
+            "weight": 0.0051,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 38,
+            "codeRaw": "VRT US Equity",
+            "ticker": "VRT",
+            "name": "Vertiv Holdings Co",
+            "shares": 12.92,
+            "marketValueKrw": 6091952.0,
+            "weightPercent": 0.51,
+            "weight": 0.0051,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 39,
+            "codeRaw": "ADI US Equity",
+            "ticker": "ADI",
+            "name": "ANALOG DEVICES",
+            "shares": 9.15,
+            "marketValueKrw": 5913918.0,
+            "weightPercent": 0.49,
+            "weight": 0.0049,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 40,
+            "codeRaw": "CRWD US Equity",
+            "ticker": "CRWD",
+            "name": "CROWDSTRIKE HOLDINGS INC - A",
+            "shares": 5.24,
+            "marketValueKrw": 5488390.0,
+            "weightPercent": 0.46,
+            "weight": 0.0046,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 41,
+            "codeRaw": "CIEN US Equity",
+            "ticker": "CIEN",
+            "name": "Ciena Corp",
+            "shares": 5.32,
+            "marketValueKrw": 3726609.0,
+            "weightPercent": 0.31,
+            "weight": 0.0031,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 42,
+            "codeRaw": "FTNT US Equity",
+            "ticker": "FTNT",
+            "name": "FORTINET INC",
+            "shares": 16.2,
+            "marketValueKrw": 3660699.0,
+            "weightPercent": 0.3,
+            "weight": 0.003,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 43,
+            "codeRaw": "GILD US Equity",
+            "ticker": "GILD",
+            "name": "GILEAD SCIENCES INC",
+            "shares": 18.77,
+            "marketValueKrw": 3526730.0,
+            "weightPercent": 0.29,
+            "weight": 0.0029,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 44,
+            "codeRaw": "ASML US Equity",
+            "ticker": "ASML",
+            "name": "ASML HOLDING",
+            "shares": 1.0,
+            "marketValueKrw": 2860944.0,
+            "weightPercent": 0.24,
+            "weight": 0.0024,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 45,
+            "codeRaw": "COHR US Equity",
+            "ticker": "COHR",
+            "name": "COHERENT CORP",
+            "shares": 4.51,
+            "marketValueKrw": 2821278.0,
+            "weightPercent": 0.23,
+            "weight": 0.0023,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 46,
+            "codeRaw": "MPWR US Equity",
+            "ticker": "MPWR",
+            "name": "MONOLITHIC POWER SYSTEMS INC",
+            "shares": 1.02,
+            "marketValueKrw": 2547553.0,
+            "weightPercent": 0.21,
+            "weight": 0.0021,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 47,
+            "codeRaw": "NXPI US Equity",
+            "ticker": "NXPI",
+            "name": "NXP SEMICONDUCTORS NV",
+            "shares": 4.07,
+            "marketValueKrw": 1943360.0,
+            "weightPercent": 0.16,
+            "weight": 0.0016,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 48,
+            "codeRaw": "HOOD US Equity",
+            "ticker": "HOOD",
+            "name": "Robinhood Markets Inc",
+            "shares": 11.36,
+            "marketValueKrw": 1684894.0,
+            "weightPercent": 0.14,
+            "weight": 0.0014000000000000002,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 49,
+            "codeRaw": "MCHP US Equity",
+            "ticker": "MCHP",
+            "name": "MICROCHIP TECHNOLOGY INC",
+            "shares": 9.15,
+            "marketValueKrw": 1387539.0,
+            "weightPercent": 0.12,
+            "weight": 0.0012,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 50,
+            "codeRaw": "FLEX US Equity",
+            "ticker": "FLEX",
+            "name": "Flextronics International Ltd",
+            "shares": 6.1,
+            "marketValueKrw": 1375921.0,
+            "weightPercent": 0.11,
+            "weight": 0.0011,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 51,
+            "codeRaw": "TER US Equity",
+            "ticker": "TER",
+            "name": "TERADYNE INC",
+            "shares": 2.03,
+            "marketValueKrw": 1326870.0,
+            "weightPercent": 0.11,
+            "weight": 0.0011,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 52,
+            "codeRaw": "CRWV US Equity",
+            "ticker": "CRWV",
+            "name": "Coreweave Inc",
+            "shares": 7.11,
+            "marketValueKrw": 1146863.0,
+            "weightPercent": 0.1,
+            "weight": 0.001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 53,
+            "codeRaw": "FSLR US Equity",
+            "ticker": "FSLR",
+            "name": "FIRST SOLAR INC",
+            "shares": 2.07,
+            "marketValueKrw": 855816.0,
+            "weightPercent": 0.07,
+            "weight": 0.0007000000000000001,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          }
+        ],
         "top10": [
           {
             "rank": 1,
@@ -1103,7 +3732,7 @@
           }
         ],
         "totalHoldings": 55,
-        "fetchedAt": "2026-06-17T07:54:49.028406+00:00",
+        "fetchedAt": "2026-06-17T11:06:44.922401+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
@@ -1114,13 +3743,36 @@
             "previousRank": 1,
             "actualWeightPercent": 9.63,
             "previousWeightPercent": 8.58,
-            "securityReturn": null,
+            "membershipChange": null,
+            "positionStatus": "held",
+            "securityReturn": 0.1964193562044625,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 10.282153129539177,
+            "deltaActualPercentPoint": 1.0500000000000007,
+            "deltaPricePercentPoint": 1.7021531295391767,
+            "deltaResidualPercentPoint": -0.652153129539176,
+            "tolerancePercentPoint": 0.8580000000000001,
+            "returnCoverage": 1.0,
             "priceMeta": {
-              "reason": "not_price_tracked"
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_fallback",
+              "start": {
+                "close": 243211.54376897408,
+                "source": "provider_valuation_krw"
+              },
+              "end": {
+                "close": 290982.9986175694,
+                "source": "provider_valuation_krw"
+              },
+              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+              "externalPriceMeta": {
+                "reason": "not_price_tracked"
+              }
             },
-            "classification": "insufficient_data",
-            "confidence": "low",
-            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+            "priceSource": "provider_valuation_krw",
+            "classification": "price_explained",
+            "confidence": "medium",
+            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
           },
           {
             "date": "2026-06-17",
@@ -1131,24 +3783,37 @@
             "previousRank": 2,
             "actualWeightPercent": 7.45,
             "previousWeightPercent": 7.42,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 7.152757188247266,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 6.889375384738963,
             "deltaActualPercentPoint": 0.03000000000000025,
-            "deltaPricePercentPoint": -0.2672428117527339,
-            "deltaResidualPercentPoint": 0.29724281175273415,
+            "deltaPricePercentPoint": -0.5306246152610372,
+            "deltaResidualPercentPoint": 0.5606246152610375,
             "tolerancePercentPoint": 0.742,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 547.260009765625
+                "close": 547.260009765625,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 507.2900085449219
-              }
+                "close": 507.2900085449219,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -1162,24 +3827,37 @@
             "previousRank": 3,
             "actualWeightPercent": 7.34,
             "previousWeightPercent": 7.22,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 7.213325040201705,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 6.947712982029004,
             "deltaActualPercentPoint": 0.1200000000000001,
-            "deltaPricePercentPoint": -0.006674959798294466,
-            "deltaResidualPercentPoint": 0.12667495979829457,
+            "deltaPricePercentPoint": -0.27228701797099575,
+            "deltaResidualPercentPoint": 0.39228701797099585,
             "tolerancePercentPoint": 0.722,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 412.54998779296875
+                "close": 412.54998779296875,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 396.3399963378906
-              }
+                "close": 396.3399963378906,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -1193,24 +3871,37 @@
             "previousRank": 4,
             "actualWeightPercent": 5.94,
             "previousWeightPercent": 5.95,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 5.846196229030151,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 5.630925157198518,
             "deltaActualPercentPoint": -0.009999999999999787,
-            "deltaPricePercentPoint": -0.10380377096984894,
-            "deltaResidualPercentPoint": 0.09380377096984915,
+            "deltaPricePercentPoint": -0.31907484280148246,
+            "deltaResidualPercentPoint": 0.3090748428014827,
             "tolerancePercentPoint": 0.5950000000000001,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 2107.860107421875
+                "close": 2107.860107421875,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1991.550048828125
-              }
+                "close": 1991.550048828125,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -1224,24 +3915,37 @@
             "previousRank": 5,
             "actualWeightPercent": 5.57,
             "previousWeightPercent": 5.79,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 5.51216581416072,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 5.309194549351683,
             "deltaActualPercentPoint": -0.21999999999999975,
-            "deltaPricePercentPoint": -0.2778341858392803,
-            "deltaResidualPercentPoint": 0.05783418583928057,
+            "deltaPricePercentPoint": -0.48080545064831703,
+            "deltaResidualPercentPoint": 0.2608054506483173,
             "tolerancePercentPoint": 0.5790000000000001,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 127.86000061035156
+                "close": 127.86000061035156,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 117.05000305175781
-              }
+                "close": 117.05000305175781,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -1255,24 +3959,37 @@
             "previousRank": 6,
             "actualWeightPercent": 4.91,
             "previousWeightPercent": 5.06,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 5.1372472604818125,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 4.948081402767948,
             "deltaActualPercentPoint": -0.14999999999999947,
-            "deltaPricePercentPoint": 0.07724726048181285,
-            "deltaResidualPercentPoint": -0.22724726048181232,
+            "deltaPricePercentPoint": -0.11191859723205155,
+            "deltaResidualPercentPoint": -0.038081402767947914,
             "tolerancePercentPoint": 0.506,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 212.4499969482422
+                "close": 212.4499969482422,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 207.41000366210938
-              }
+                "close": 207.41000366210938,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -1286,24 +4003,37 @@
             "previousRank": 7,
             "actualWeightPercent": 4.7,
             "previousWeightPercent": 4.88,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": 0.010559073594251789,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 5.128478158745324,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 4.939635200546951,
             "deltaActualPercentPoint": -0.17999999999999972,
-            "deltaPricePercentPoint": 0.24847815874532397,
-            "deltaResidualPercentPoint": -0.4284781587453237,
+            "deltaPricePercentPoint": 0.059635200546950706,
+            "deltaResidualPercentPoint": -0.23963520054695042,
             "tolerancePercentPoint": 0.488,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 369.3500061035156
+                "close": 369.3500061035156,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 373.25
-              }
+                "close": 373.25,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
@@ -1317,27 +4047,48 @@
             "previousRank": 8,
             "actualWeightPercent": 4.2,
             "previousWeightPercent": 4.24,
-            "securityReturn": 0.023242276440118337,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 4.511815316405542,
+            "membershipChange": null,
+            "positionStatus": "held",
+            "securityReturn": 0.05522568904824521,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 4.48151197185985,
             "deltaActualPercentPoint": -0.040000000000000036,
-            "deltaPricePercentPoint": 0.2718153164055419,
-            "deltaResidualPercentPoint": -0.31181531640554194,
+            "deltaPricePercentPoint": 0.24151197185984952,
+            "deltaResidualPercentPoint": -0.28151197185984955,
             "tolerancePercentPoint": 0.42400000000000004,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "provider_valuation_krw",
+              "sourceType": "etf_provider_unit_value_fallback",
               "start": {
-                "date": "2026-06-15",
-                "close": 274.5
+                "close": 393218.43465419643,
+                "source": "provider_valuation_krw"
               },
               "end": {
-                "date": "2026-06-16",
-                "close": 280.8800048828125
+                "close": 414934.1936544468,
+                "source": "provider_valuation_krw"
+              },
+              "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+              "externalPriceMeta": {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
               }
             },
+            "priceSource": "provider_valuation_krw",
             "classification": "price_explained",
-            "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "confidence": "medium",
+            "message": "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
           },
           {
             "date": "2026-06-17",
@@ -1348,27 +4099,40 @@
             "previousRank": 9,
             "actualWeightPercent": 4.05,
             "previousWeightPercent": 3.89,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -0.06179282996369051,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 3.7953805823277325,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 3.6556254981741154,
             "deltaActualPercentPoint": 0.1599999999999997,
-            "deltaPricePercentPoint": -0.09461941767226767,
-            "deltaResidualPercentPoint": 0.25461941767226737,
+            "deltaPricePercentPoint": -0.2343745018258847,
+            "deltaResidualPercentPoint": 0.3943745018258844,
             "tolerancePercentPoint": 0.389,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 1087.989990234375
+                "close": 1087.989990234375,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 1020.760009765625
-              }
+                "close": 1020.760009765625,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
-            "classification": "price_explained",
-            "confidence": "high",
-            "message": "가격 수익률로 대부분 설명됩니다."
+            "priceSource": "yahoo_chart_query1",
+            "classification": "likely_buy",
+            "confidence": "medium",
+            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
           },
           {
             "date": "2026-06-17",
@@ -1379,39 +4143,578 @@
             "previousRank": 10,
             "actualWeightPercent": 3.71,
             "previousWeightPercent": 3.83,
+            "membershipChange": null,
+            "positionStatus": "held",
             "securityReturn": -8.13115686266741e-05,
-            "benchmarkReturn": -0.0384031819009558,
-            "predictedWeightPercent": 3.982634410399747,
+            "benchmarkReturn": -0.0016411984039033278,
+            "predictedWeightPercent": 3.835984187818606,
             "deltaActualPercentPoint": -0.1200000000000001,
-            "deltaPricePercentPoint": 0.152634410399747,
-            "deltaResidualPercentPoint": -0.2726344103997471,
+            "deltaPricePercentPoint": 0.005984187818605768,
+            "deltaResidualPercentPoint": -0.12598418781860588,
             "tolerancePercentPoint": 0.383,
-            "returnCoverage": 0.8491030601477313,
+            "returnCoverage": 1.0,
             "priceMeta": {
+              "source": "yahoo_chart_query1",
               "start": {
                 "date": "2026-06-15",
-                "close": 246.02000427246094
+                "close": 246.02000427246094,
+                "source": "yahoo_chart_query1"
               },
               "end": {
                 "date": "2026-06-16",
-                "close": 246.0
-              }
+                "close": 246.0,
+                "source": "yahoo_chart_query1"
+              },
+              "attempts": [
+                {
+                  "source": "yahoo_chart_query1",
+                  "status": "ok",
+                  "points": 13
+                }
+              ]
             },
+            "priceSource": "yahoo_chart_query1",
             "classification": "price_explained",
             "confidence": "high",
             "message": "가격 수익률로 대부분 설명됩니다."
           }
         ],
-        "signals": [],
+        "signals": [
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "type": "likely_buy",
+            "severity": "medium",
+            "name": "MICRON TECH",
+            "ticker": "MU",
+            "rank": 9,
+            "previousRank": 9,
+            "weightPercent": 4.05,
+            "previousWeightPercent": 3.89,
+            "message": "가격 효과보다 비중 증가가 커 추가 매수 가능성이 있습니다."
+          }
+        ],
         "analysisSummary": {
-          "returnCoverage": 0.8491030601477313,
+          "returnCoverage": 1.0,
           "returnCoverageStatus": "ok",
-          "benchmarkReturn": -0.0384031819009558,
+          "returnCoverageUniverse": "full_holdings",
+          "validReturnWeightPercent": 100.0,
+          "totalReturnWeightPercent": 100.0,
+          "benchmarkReturn": -0.0016411984039033278,
+          "fullHoldingCount": 53,
+          "previousFullHoldingCount": 53,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
           },
-          "priceErrors": {}
+          "priceErrors": {},
+          "priceDiagnostics": {
+            "DELL": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "CRDO": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "AAOI": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "COIN": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "HOOD": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "APP": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "META": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "BE": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "LITE": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "VRT": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "RKLB": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "SNOW": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              },
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "NOW": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "GOOG": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "2513.HK": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 13
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "PDD": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "PLTR": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "DDOG": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "PANW": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ],
+            "CRWD": [
+              {
+                "reason": "stale_close",
+                "startDate": "2026-06-15",
+                "endDate": "2026-06-16",
+                "startCloseDate": "2026-06-15",
+                "endCloseDate": "2026-06-15",
+                "attempts": [
+                  {
+                    "source": "yahoo_chart_query1",
+                    "status": "ok",
+                    "points": 12
+                  }
+                ],
+                "providerErrors": []
+              }
+            ]
+          }
         }
       }
     }

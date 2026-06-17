@@ -9,10 +9,13 @@ from __future__ import annotations
 
 import argparse
 import calendar
+import copy
 import csv
 import dataclasses
 import datetime as dt
 import html
+import importlib
+import io
 import json
 import math
 import os
@@ -25,10 +28,12 @@ from typing import Any, Iterable
 
 KST = dt.timezone(dt.timedelta(hours=9), name="KST")
 USER_AGENT = "Mozilla/5.0 (compatible; ETFTrackingBot/0.1; +https://sonchanggi.github.io/etf-tracking/)"
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
 PRICE_EXPLAINED_TOLERANCE_PP = 0.20
 PRICE_EXPLAINED_TOLERANCE_RATIO = 0.10
 RETURN_COVERAGE_MIN = 0.60
+HTTP_MAX_BYTES = 5_000_000
+PRICE_CACHE_FORWARD_DAYS = 21
 
 
 @dataclasses.dataclass(frozen=True)
@@ -173,7 +178,7 @@ def previous_weekday(date_text: str) -> str:
     return current.isoformat()
 
 
-def http_get(url: str, *, accept: str = "text/html,application/json", timeout: int = 25) -> str:
+def http_get(url: str, *, accept: str = "text/html,application/json", timeout: int = 25, max_bytes: int = HTTP_MAX_BYTES) -> str:
     request = urllib.request.Request(
         url,
         headers={
@@ -183,8 +188,14 @@ def http_get(url: str, *, accept: str = "text/html,application/json", timeout: i
         },
     )
     with urllib.request.urlopen(request, timeout=timeout) as response:
+        content_length = response.headers.get("Content-Length")
+        if content_length and int(content_length) > max_bytes:
+            raise ValueError(f"response_too_large: {content_length} bytes from {url}")
         charset = response.headers.get_content_charset() or "utf-8"
-        return response.read().decode(charset, errors="replace")
+        data = response.read(max_bytes + 1)
+        if len(data) > max_bytes:
+            raise ValueError(f"response_too_large: exceeded {max_bytes} bytes from {url}")
+        return data.decode(charset, errors="replace")
 
 
 def normalize_ticker(code_or_name: str | None, name: str | None = None) -> str | None:
@@ -222,6 +233,27 @@ def normalize_ticker(code_or_name: str | None, name: str | None = None) -> str |
 
 def holding_key(row: dict[str, Any]) -> str:
     return str(row.get("ticker") or row.get("codeRaw") or row.get("name") or "").upper()
+
+
+def all_holdings(snapshot: dict[str, Any] | None) -> list[dict[str, Any]]:
+    if not snapshot:
+        return []
+    holdings = snapshot.get("holdings")
+    if isinstance(holdings, list) and holdings:
+        return [row for row in holdings if isinstance(row, dict)]
+    top10 = snapshot.get("top10")
+    if isinstance(top10, list):
+        return [row for row in top10 if isinstance(row, dict)]
+    return []
+
+
+def ranked_map(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    for row in rows:
+        key = holding_key(row)
+        if key and key not in out:
+            out[key] = row
+    return out
 
 
 def make_holding(rank: int, code_raw: str, name: str, shares: Any, market_value: Any, weight_percent: Any, *, source_fields: dict[str, Any] | None = None) -> dict[str, Any]:
@@ -404,6 +436,7 @@ def snapshot_for_history(snapshot: dict[str, Any]) -> dict[str, Any]:
         "sourceStatus": snapshot.get("sourceStatus"),
         "sourceConfidence": snapshot.get("sourceConfidence"),
         "sourceWarning": snapshot.get("sourceWarning"),
+        "holdings": snapshot.get("holdings", []),
         "top10": snapshot.get("top10", []),
         "totalHoldings": snapshot.get("totalHoldings"),
         "fetchedAt": snapshot.get("fetchedAt"),
@@ -428,7 +461,7 @@ def merge_history(existing: dict[str, list[dict[str, Any]]], snapshots: dict[str
             if date:
                 by_date[str(date)] = snap
         for snap in snapshots.get(config.id, []):
-            if snap.get("top10"):
+            if snap.get("holdings") or snap.get("top10"):
                 by_date[str(snap["date"])] = snap
         merged[config.id] = [by_date[key] for key in sorted(by_date)]
     return merged
@@ -444,9 +477,11 @@ class PriceProvider:
     def __init__(self, fixture_dir: Path | None = None, no_live: bool = False) -> None:
         self.fixture_dir = fixture_dir
         self.no_live = no_live
-        self.cache: dict[tuple[str, str, str], dict[str, float]] = {}
+        self.cache: dict[tuple[str, str, str], dict[str, Any]] = {}
+        self.live_series_cache: dict[str, dict[str, Any]] = {}
         self.fixture_prices = self._load_fixture_prices(fixture_dir) if fixture_dir else {}
         self.errors: dict[str, str] = {}
+        self.diagnostics: dict[str, list[dict[str, Any]]] = {}
 
     @staticmethod
     def _load_fixture_prices(fixture_dir: Path | None) -> dict[str, dict[str, float]]:
@@ -464,23 +499,89 @@ class PriceProvider:
         return result
 
     def close_map(self, ticker: str, start_date: str, end_date: str) -> dict[str, float]:
-        if ticker in self.fixture_prices:
-            return {date: value for date, value in self.fixture_prices[ticker].items() if start_date <= date <= end_date}
-        if self.no_live:
-            return {}
+        return self.close_series(ticker, start_date, end_date).get("closes", {})
+
+    def close_series(self, ticker: str, start_date: str, end_date: str) -> dict[str, Any]:
         key = (ticker, start_date, end_date)
         if key in self.cache:
             return self.cache[key]
-        try:
-            data = self._fetch_yahoo_chart(ticker, start_date, end_date)
-            self.cache[key] = data
-            return data
-        except Exception as exc:  # best effort; status file captures the failure.
-            self.errors[ticker] = str(exc)
-            self.cache[key] = {}
-            return {}
+        series: dict[str, Any] = {"closes": {}, "sources": {}, "attempts": [], "errors": []}
+        if ticker in self.fixture_prices:
+            fixture = {date: value for date, value in self.fixture_prices[ticker].items() if start_date <= date <= end_date}
+            self._merge_closes(series, fixture, "fixture_prices")
+            series["attempts"].append({"source": "fixture_prices", "status": "ok" if fixture else "no_data", "points": len(fixture)})
+            self.cache[key] = series
+            return series
+        if self.no_live:
+            series["attempts"].append({"source": "live_prices", "status": "disabled", "points": 0})
+            self.cache[key] = series
+            return series
+        series = self._cached_live_series(ticker, start_date, end_date)
+        self.cache[key] = series
+        return series
 
-    def _fetch_yahoo_chart(self, ticker: str, start_date: str, end_date: str) -> dict[str, float]:
+    def _cached_live_series(self, ticker: str, start_date: str, end_date: str) -> dict[str, Any]:
+        cached = self.live_series_cache.get(ticker)
+        if cached and cached["startDate"] <= start_date and cached["endDate"] >= end_date:
+            return copy.deepcopy(cached["series"])
+
+        fetch_start = min(start_date, cached["startDate"]) if cached else start_date
+        requested_end = max(end_date, cached["endDate"]) if cached else end_date
+        fetch_end = (dt.date.fromisoformat(requested_end) + dt.timedelta(days=PRICE_CACHE_FORWARD_DAYS)).isoformat()
+        series = self._fetch_live_series(ticker, fetch_start, fetch_end)
+        if cached:
+            preserved = copy.deepcopy(cached["series"])
+            for date, value in preserved.get("closes", {}).items():
+                series["closes"].setdefault(date, value)
+            for date, source in preserved.get("sources", {}).items():
+                series["sources"].setdefault(date, source)
+            series["attempts"] = [*preserved.get("attempts", []), *series.get("attempts", [])]
+            series["errors"] = [*preserved.get("errors", []), *series.get("errors", [])]
+        self.live_series_cache[ticker] = {"startDate": fetch_start, "endDate": fetch_end, "series": copy.deepcopy(series)}
+        return series
+
+    def _fetch_live_series(self, ticker: str, start_date: str, end_date: str) -> dict[str, Any]:
+        series: dict[str, Any] = {"closes": {}, "sources": {}, "attempts": [], "errors": []}
+        providers = (
+            ("yahoo_chart_query1", lambda: self._fetch_yahoo_chart(ticker, start_date, end_date, host="query1.finance.yahoo.com")),
+            ("yahoo_chart_query2", lambda: self._fetch_yahoo_chart(ticker, start_date, end_date, host="query2.finance.yahoo.com")),
+            ("stooq_csv", lambda: self._fetch_stooq_csv(ticker, start_date, end_date)),
+            ("finance_datareader", lambda: self._fetch_finance_datareader(ticker, start_date, end_date)),
+        )
+        for source, fetcher in providers:
+            try:
+                data = fetcher()
+            except ImportError as exc:
+                series["attempts"].append({"source": source, "status": "unavailable", "points": 0, "message": str(exc)})
+                continue
+            except Exception as exc:  # best effort; status file captures the failure.
+                message = f"{type(exc).__name__}: {exc}"
+                series["attempts"].append({"source": source, "status": "error", "points": 0, "message": message})
+                series["errors"].append({"source": source, "message": message})
+                continue
+            self._merge_closes(series, data, source)
+            series["attempts"].append({"source": source, "status": "ok" if data else "no_data", "points": len(data)})
+            if self._has_distinct_required_closes(series["closes"], start_date, end_date):
+                break
+        if not series["closes"] and series["errors"]:
+            self.errors[ticker] = "; ".join(f"{item['source']}: {item['message']}" for item in series["errors"][:3])
+        return series
+
+    @staticmethod
+    def _merge_closes(series: dict[str, Any], closes: dict[str, float], source: str) -> None:
+        for date, value in sorted(closes.items()):
+            if not math.isfinite(value):
+                continue
+            series["closes"].setdefault(date, value)
+            series["sources"].setdefault(date, source)
+
+    @staticmethod
+    def _has_distinct_required_closes(closes: dict[str, float], start_date: str, end_date: str) -> bool:
+        start_close = nearest_close_on_or_before(closes, start_date)
+        end_close = nearest_close_on_or_before(closes, end_date)
+        return bool(start_close and end_close and end_close[0] > start_close[0] and start_close[1] != 0)
+
+    def _fetch_yahoo_chart(self, ticker: str, start_date: str, end_date: str, *, host: str) -> dict[str, float]:
         start_dt = dt.datetime.combine(dt.date.fromisoformat(start_date) - dt.timedelta(days=7), dt.time.min, tzinfo=dt.timezone.utc)
         end_dt = dt.datetime.combine(dt.date.fromisoformat(end_date) + dt.timedelta(days=2), dt.time.min, tzinfo=dt.timezone.utc)
         params = urllib.parse.urlencode({
@@ -491,8 +592,8 @@ class PriceProvider:
             "includeAdjustedClose": "true",
         })
         encoded = urllib.parse.quote(ticker, safe="")
-        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{encoded}?{params}"
-        text = http_get(url, accept="application/json,text/plain,*/*", timeout=20)
+        url = f"https://{host}/v8/finance/chart/{encoded}?{params}"
+        text = http_get(url, accept="application/json,text/plain,*/*", timeout=6)
         payload = json.loads(text)
         result = payload.get("chart", {}).get("result", [])
         if not result:
@@ -511,26 +612,85 @@ class PriceProvider:
         time.sleep(0.05)
         return out
 
+    def _fetch_stooq_csv(self, ticker: str, start_date: str, end_date: str) -> dict[str, float]:
+        start_dt = dt.date.fromisoformat(start_date) - dt.timedelta(days=7)
+        end_dt = dt.date.fromisoformat(end_date) + dt.timedelta(days=2)
+        for symbol in stooq_symbol_candidates(ticker):
+            params = urllib.parse.urlencode({
+                "s": symbol,
+                "d1": start_dt.strftime("%Y%m%d"),
+                "d2": end_dt.strftime("%Y%m%d"),
+                "i": "d",
+            })
+            url = f"https://stooq.com/q/d/l/?{params}"
+            text = http_get(url, accept="text/csv,text/plain,*/*", timeout=2, max_bytes=1_000_000)
+            closes = parse_stooq_csv(text)
+            if closes:
+                time.sleep(0.05)
+                return closes
+        return {}
+
+    def _fetch_finance_datareader(self, ticker: str, start_date: str, end_date: str) -> dict[str, float]:
+        fdr = importlib.import_module("FinanceDataReader")
+        start_dt = (dt.date.fromisoformat(start_date) - dt.timedelta(days=7)).isoformat()
+        end_dt = (dt.date.fromisoformat(end_date) + dt.timedelta(days=2)).isoformat()
+        frame = fdr.DataReader(ticker, start_dt, end_dt)
+        out: dict[str, float] = {}
+        if frame is None:
+            return out
+        for index, row in frame.iterrows():
+            close = row.get("Close") if hasattr(row, "get") else None
+            value = parse_number(close)
+            if value is None:
+                continue
+            date = index.date().isoformat() if hasattr(index, "date") else iso_date(str(index)[:10])
+            out[date] = value
+        return out
+
     def return_between(self, ticker: str | None, start_date: str, end_date: str) -> tuple[float | None, dict[str, Any]]:
         if not ticker:
             return None, {"reason": "not_price_tracked"}
         if end_date <= start_date:
             return None, {"reason": "stale_price_basis", "startDate": start_date, "endDate": end_date}
-        closes = self.close_map(ticker, start_date, end_date)
+        series = self.close_series(ticker, start_date, end_date)
+        closes = series.get("closes", {})
         start_close = nearest_close_on_or_before(closes, start_date)
         end_close = nearest_close_on_or_before(closes, end_date)
         if start_close is None or end_close is None or start_close[1] == 0:
-            return None, {"reason": "missing_close", "startDate": start_date, "endDate": end_date}
+            meta = {
+                "reason": "missing_close",
+                "startDate": start_date,
+                "endDate": end_date,
+                "attempts": series.get("attempts", []),
+                "providerErrors": series.get("errors", []),
+            }
+            self._record_return_diagnostic(ticker, meta)
+            return None, meta
         if end_close[0] <= start_close[0]:
-            return None, {
+            meta = {
                 "reason": "stale_close",
                 "startDate": start_date,
                 "endDate": end_date,
                 "startCloseDate": start_close[0],
                 "endCloseDate": end_close[0],
+                "attempts": series.get("attempts", []),
+                "providerErrors": series.get("errors", []),
             }
+            self._record_return_diagnostic(ticker, meta)
+            return None, meta
         value = (end_close[1] / start_close[1]) - 1
-        return value, {"start": {"date": start_close[0], "close": start_close[1]}, "end": {"date": end_close[0], "close": end_close[1]}}
+        sources = series.get("sources", {})
+        return value, {
+            "source": sources.get(end_close[0]) or sources.get(start_close[0]) or "unknown",
+            "start": {"date": start_close[0], "close": start_close[1], "source": sources.get(start_close[0])},
+            "end": {"date": end_close[0], "close": end_close[1], "source": sources.get(end_close[0])},
+            "attempts": series.get("attempts", []),
+        }
+
+    def _record_return_diagnostic(self, ticker: str, meta: dict[str, Any]) -> None:
+        reason = str(meta.get("reason") or "price_unavailable")
+        self.diagnostics.setdefault(ticker, []).append(meta)
+        self.errors[ticker] = reason
 
 
 def nearest_close_on_or_before(closes: dict[str, float], target_date: str) -> tuple[str, float] | None:
@@ -540,10 +700,72 @@ def nearest_close_on_or_before(closes: dict[str, float], target_date: str) -> tu
     return sorted(candidates, key=lambda item: item[0])[-1]
 
 
+def stooq_symbol_candidates(ticker: str) -> list[str]:
+    raw = clean_text(ticker).lower().replace("-", ".")
+    if not raw:
+        return []
+    candidates: list[str] = []
+    if raw.endswith(".t"):
+        base = raw[:-2]
+        candidates.extend([f"{base}.jp", raw])
+    elif raw.endswith(".hk"):
+        base = raw[:-3].lstrip("0") or raw[:-3]
+        candidates.extend([f"{base}.hk", raw])
+    elif raw.endswith(".ks") or raw.endswith(".kq"):
+        candidates.append(raw)
+    elif "." in raw:
+        candidates.append(raw)
+    else:
+        candidates.extend([f"{raw}.us", raw])
+    return list(dict.fromkeys(candidates))
+
+
+def parse_stooq_csv(text: str) -> dict[str, float]:
+    if not text or "<html" in text[:500].lower() or "Date,Open,High,Low,Close" not in text[:200]:
+        return {}
+    out: dict[str, float] = {}
+    reader = csv.DictReader(io.StringIO(text))
+    for row in reader:
+        date = row.get("Date")
+        close = parse_number(row.get("Close"))
+        if not date or close is None:
+            continue
+        try:
+            out[iso_date(date)] = close
+        except ValueError:
+            continue
+    return out
+
+
+def provider_unit_value_krw(row: dict[str, Any] | None) -> float | None:
+    if not row:
+        return None
+    shares = parse_number(row.get("shares"))
+    market_value = parse_number(row.get("marketValueKrw"))
+    if shares is None or market_value is None or shares <= 0 or market_value <= 0:
+        return None
+    return market_value / shares
+
+
+def provider_valuation_return(prev_row: dict[str, Any] | None, curr_row: dict[str, Any] | None) -> tuple[float | None, dict[str, Any]] | None:
+    previous_value = provider_unit_value_krw(prev_row)
+    current_value = provider_unit_value_krw(curr_row)
+    if previous_value is None or current_value is None or previous_value == 0:
+        return None
+    return (current_value / previous_value) - 1, {
+        "source": "provider_valuation_krw",
+        "sourceType": "etf_provider_unit_value_fallback",
+        "start": {"close": previous_value, "source": "provider_valuation_krw"},
+        "end": {"close": current_value, "source": "provider_valuation_krw"},
+        "message": "외부 종가가 없어서 ETF PDF의 평가금액/수량 단가(KRW)를 보조 수익률로 사용했습니다.",
+    }
+
+
 def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, Any], price_provider: PriceProvider) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    current_top = current.get("top10", [])
     if not prev:
         rows = []
-        for holding in current.get("top10", []):
+        for holding in current_top:
             rows.append({
                 "date": current["date"],
                 "name": holding.get("name"),
@@ -554,27 +776,64 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
                 "confidence": "low",
                 "message": "첫 추적 스냅샷이라 전일 비교가 없습니다.",
             })
-        return rows, [], {"returnCoverage": 0, "returnCoverageStatus": "insufficient", "benchmarkReturn": None}
+        return rows, [], {
+            "returnCoverage": 0,
+            "returnCoverageStatus": "insufficient",
+            "returnCoverageUniverse": "full_holdings",
+            "benchmarkReturn": None,
+        }
 
     prev_top = prev.get("top10", [])
-    curr_top = current.get("top10", [])
-    prev_map = {holding_key(row): row for row in prev_top}
-    curr_map = {holding_key(row): row for row in curr_top}
+    curr_top = current_top
+    prev_all = all_holdings(prev)
+    curr_all = all_holdings(current)
+    prev_top_map = ranked_map(prev_top)
+    curr_top_map = ranked_map(curr_top)
+    prev_all_map = ranked_map(prev_all)
+    curr_all_map = ranked_map(curr_all)
     prev_date = str(prev.get("date"))
     curr_date = str(current.get("date"))
     prev_price_basis = str(prev.get("priceBasisDate") or previous_weekday(prev_date))
     curr_price_basis = str(current.get("priceBasisDate") or previous_weekday(curr_date))
+    display_keys = list(dict.fromkeys([*(holding_key(row) for row in curr_top), *(holding_key(row) for row in prev_top)]))
 
-    returns: dict[str, tuple[float | None, dict[str, Any]]] = {}
-    for key, row in {**prev_map, **curr_map}.items():
-        returns[key] = price_provider.return_between(row.get("ticker"), prev_price_basis, curr_price_basis)
+    def resolve_return(key: str) -> tuple[float | None, dict[str, Any]]:
+        prev_row = prev_all_map.get(key)
+        curr_row = curr_all_map.get(key)
+        reference = curr_row or prev_row or {}
+        ticker = reference.get("ticker")
 
-    total_prev_weight = sum(float(row.get("weightPercent") or 0) for row in prev_top)
-    valid_prev_weight = sum(float(row.get("weightPercent") or 0) for key, row in prev_map.items() if returns.get(key, (None,))[0] is not None)
+        def valuation_fallback(external_meta: dict[str, Any] | None = None) -> tuple[float | None, dict[str, Any]] | None:
+            fallback = provider_valuation_return(prev_row, curr_row)
+            if fallback:
+                fallback_return, fallback_meta = fallback
+                if external_meta:
+                    fallback_meta["externalPriceMeta"] = external_meta
+                if ticker:
+                    price_provider.errors.pop(str(ticker), None)
+                return fallback_return, fallback_meta
+            return None
+
+        security_return, price_meta = price_provider.return_between(ticker, prev_price_basis, curr_price_basis)
+        if security_return is None and prev_row and curr_row:
+            fallback = valuation_fallback(price_meta)
+            if fallback:
+                return fallback
+        return security_return, price_meta
+
+    return_keys = list(dict.fromkeys([*prev_all_map.keys(), *curr_all_map.keys()]))
+    returns: dict[str, tuple[float | None, dict[str, Any]]] = {key: resolve_return(key) for key in return_keys}
+
+    total_prev_weight = sum(float(row.get("weightPercent") or 0) for row in prev_all)
+    valid_prev_weight = sum(
+        float(row.get("weightPercent") or 0)
+        for key, row in prev_all_map.items()
+        if returns.get(key, (None,))[0] is not None
+    )
     coverage = (valid_prev_weight / total_prev_weight) if total_prev_weight else 0
 
     benchmark_numerator = 0.0
-    for key, row in prev_map.items():
+    for key, row in prev_all_map.items():
         security_return = returns.get(key, (None,))[0]
         if security_return is None:
             continue
@@ -584,41 +843,78 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
     decompositions: list[dict[str, Any]] = []
     signals: list[dict[str, Any]] = []
 
-    for curr in curr_top:
-        key = holding_key(curr)
-        prev_row = prev_map.get(key)
-        actual = parse_number(curr.get("weightPercent"))
-        rank = curr.get("rank")
+    for key in display_keys:
+        if not key:
+            continue
+        curr_row = curr_all_map.get(key)
+        prev_row = prev_all_map.get(key)
+        reference = curr_row or prev_row or {}
+        current_is_top10 = key in curr_top_map
+        previous_was_top10 = key in prev_top_map
+        membership_change = None
+        if current_is_top10 and not previous_was_top10:
+            membership_change = "top10_entry"
+        elif previous_was_top10 and not current_is_top10:
+            membership_change = "top10_exit"
+
+        actual = parse_number(curr_row.get("weightPercent")) if curr_row else 0.0
+        prev_weight = parse_number(prev_row.get("weightPercent")) if prev_row else None
         base = {
             "date": curr_date,
             "previousDate": prev_date,
-            "name": curr.get("name"),
-            "ticker": curr.get("ticker"),
-            "rank": rank,
+            "name": reference.get("name"),
+            "ticker": reference.get("ticker"),
+            "rank": curr_row.get("rank") if curr_row else None,
             "previousRank": prev_row.get("rank") if prev_row else None,
             "actualWeightPercent": actual,
-            "previousWeightPercent": parse_number(prev_row.get("weightPercent")) if prev_row else None,
+            "previousWeightPercent": prev_weight,
+            "membershipChange": membership_change,
+            "positionStatus": "held" if curr_row and prev_row else ("new_holding" if curr_row else "fund_exit"),
         }
+
         if not prev_row:
-            row = {**base, "classification": "new_entry", "confidence": "high", "message": "TOP10 신규 편입"}
+            row = {
+                **base,
+                "classification": "new_entry",
+                "confidence": "high",
+                "message": "ETF 보유목록 신규 편입" if current_is_top10 else "신규 보유",
+            }
             decompositions.append(row)
-            signals.append(signal_from_row(row, "top10_entry", "high"))
+            if current_is_top10:
+                signals.append(signal_from_row(row, "top10_entry", "high"))
             continue
-        prev_weight = parse_number(prev_row.get("weightPercent"))
+
+        if not curr_row:
+            row = {
+                **base,
+                "classification": "fund_exit",
+                "confidence": "high",
+                "message": "ETF 보유목록에서 제외되었습니다.",
+            }
+            decompositions.append(row)
+            if previous_was_top10:
+                signals.append(signal_from_row(row, "top10_exit", "high"))
+            continue
+
         security_return, price_meta = returns.get(key, (None, {}))
         if actual is None or prev_weight is None or security_return is None or benchmark_return is None:
             row = {
                 **base,
                 "securityReturn": security_return,
                 "priceMeta": price_meta,
+                "priceSource": price_meta.get("source") if isinstance(price_meta, dict) else None,
+                "benchmarkReturn": benchmark_return,
+                "returnCoverage": coverage,
                 "classification": "insufficient_data",
                 "confidence": "low",
-                "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다.",
+                "message": "종가·보조평가액 또는 비중 데이터가 부족해 분해하지 못했습니다.",
             }
             decompositions.append(row)
+            if membership_change:
+                signals.append(signal_from_row(row, membership_change, "high"))
             continue
 
-        predicted = 100 * ((prev_weight / 100) * (1 + security_return)) / (1 + benchmark_return)
+        predicted = prev_weight * (1 + security_return) / (1 + benchmark_return)
         delta_actual = actual - prev_weight
         delta_price = predicted - prev_weight
         residual = delta_actual - delta_price
@@ -626,6 +922,10 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         classification = "price_explained"
         message = "가격 수익률로 대부분 설명됩니다."
         confidence = "high"
+        price_source = price_meta.get("source") if isinstance(price_meta, dict) else None
+        if price_source == "provider_valuation_krw":
+            confidence = "medium"
+            message = "외부 종가 대신 ETF 평가금액/수량 단가로 보조 추정했습니다."
         if coverage < RETURN_COVERAGE_MIN:
             classification = "mixed"
             message = "종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다."
@@ -638,6 +938,10 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             classification = "likely_sell"
             message = "가격 효과보다 비중 감소가 커 매도/축소 가능성이 있습니다."
             confidence = "medium"
+        if membership_change == "top10_entry":
+            message = f"TOP10 편입 · {message}"
+        elif membership_change == "top10_exit":
+            message = f"TOP10 밖으로 이동(현재 {curr_row.get('rank')}위) · {message}"
         row = {
             **base,
             "securityReturn": security_return,
@@ -649,42 +953,31 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "tolerancePercentPoint": tolerance,
             "returnCoverage": coverage,
             "priceMeta": price_meta,
+            "priceSource": price_source,
             "classification": classification,
             "confidence": confidence,
             "message": message,
         }
         decompositions.append(row)
+        if membership_change:
+            signals.append(signal_from_row(row, membership_change, "high"))
         if classification in {"likely_buy", "likely_sell", "mixed"}:
             signals.append(signal_from_row(row, classification, "medium" if classification != "mixed" else "low"))
-
-    for key, prev_row in prev_map.items():
-        if key in curr_map:
-            continue
-        row = {
-            "date": curr_date,
-            "previousDate": prev_date,
-            "name": prev_row.get("name"),
-            "ticker": prev_row.get("ticker"),
-            "rank": None,
-            "previousRank": prev_row.get("rank"),
-            "actualWeightPercent": None,
-            "previousWeightPercent": prev_row.get("weightPercent"),
-            "classification": "exit",
-            "confidence": "high",
-            "message": "TOP10에서 편출되었습니다.",
-        }
-        decompositions.append(row)
-        signals.append(signal_from_row(row, "top10_exit", "high"))
 
     summary = {
         "returnCoverage": coverage,
         "returnCoverageStatus": "ok" if coverage >= RETURN_COVERAGE_MIN else "low",
+        "returnCoverageUniverse": "full_holdings",
+        "validReturnWeightPercent": valid_prev_weight,
+        "totalReturnWeightPercent": total_prev_weight,
         "benchmarkReturn": benchmark_return,
+        "fullHoldingCount": len(curr_all),
+        "previousFullHoldingCount": len(prev_all),
         "priceBasis": {"previous": prev_price_basis, "current": curr_price_basis},
-        "priceErrors": price_provider.errors,
+        "priceErrors": copy.deepcopy(price_provider.errors),
+        "priceDiagnostics": copy.deepcopy(price_provider.diagnostics),
     }
     return decompositions, signals, summary
-
 
 def signal_from_row(row: dict[str, Any], signal_type: str, severity: str) -> dict[str, Any]:
     return {
@@ -759,8 +1052,11 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         "disclaimer": "가격 수익률 분해는 추정이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.",
         "sourcePolicy": {
             "holdings": "ETF provider public pages/APIs",
-            "prices": "Yahoo Finance best-effort adjusted daily closes",
-            "confidenceRule": "returnCoverage below 60% is marked mixed/low confidence",
+            "holdingsHistory": "Full provider holdings are persisted; TOP10 is a derived dashboard view.",
+            "prices": "Ordered best-effort chain: local fixtures, Yahoo Chart query1/query2 adjusted closes, Stooq CSV, optional FinanceDataReader, then ETF provider valuation-per-share KRW fallback for still-held names.",
+            "googleFinance": "Google Finance has no stable public historical HTTP API in this updater; use it only as manual cross-check outside scheduled automation.",
+            "attribution": "No-trade predicted weight = previous full-holding weight × (1 + security return) / (1 + full-holdings benchmark return).",
+            "confidenceRule": "returnCoverage below 60% is marked mixed/low confidence; provider valuation fallback lowers price-source confidence.",
         },
         "updatePolicy": {
             "timezone": "Asia/Seoul",
@@ -942,7 +1238,7 @@ def github_warning(message: str) -> None:
 def write_csv_summary(path: Path, dashboard: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.writer(handle)
+        writer = csv.writer(handle, lineterminator="\n")
         writer.writerow(["etf_id", "date", "rank", "ticker", "name", "weight_percent", "classification", "residual_pp"])
         for etf in dashboard.get("etfs", []):
             latest = etf.get("latest") or {}
@@ -991,6 +1287,7 @@ def collect_snapshots(args: argparse.Namespace) -> tuple[dict[str, list[dict[str
                 "sourceWarning": raw.get("sourceWarning"),
                 "hasTop10": bool(raw.get("top10")),
                 "top10Count": len(raw.get("top10", [])),
+                "holdingCount": len(raw.get("holdings", [])),
                 "fetchedAt": raw.get("fetchedAt"),
             }
             diagnostics[config.id].append(diagnostic)

@@ -153,6 +153,7 @@
       sourceWarning: stringOr(snapshot.sourceWarning, ''),
       totalHoldings: numberOr(snapshot.totalHoldings, 0),
       fetchedAt: stringOr(snapshot.fetchedAt, ''),
+      holdings: asRecords(snapshot.holdings).map(normalizeHolding),
       top10: asRecords(snapshot.top10).map(normalizeHolding),
       decomposition: asRecords(snapshot.decomposition).map(normalizeDecomposition),
       signals: asRecords(snapshot.signals).map(normalizeSignal),
@@ -190,6 +191,9 @@
       deltaActualPercentPoint: finiteOrNull(row.deltaActualPercentPoint),
       deltaPricePercentPoint: finiteOrNull(row.deltaPricePercentPoint),
       deltaResidualPercentPoint: finiteOrNull(row.deltaResidualPercentPoint),
+      membershipChange: stringOr(row.membershipChange, ''),
+      positionStatus: stringOr(row.positionStatus, ''),
+      priceSource: stringOr(row.priceSource, ''),
       classification: stringOr(row.classification, 'insufficient_data'),
       confidence: stringOr(row.confidence, ''),
       message: stringOr(row.message, ''),
@@ -387,7 +391,8 @@
       const latest = latestTop10.find((row) => holdingKey(row) === key) || {};
       const label = latest.ticker || latest.name || key;
       const points = history.map((snapshot) => {
-        const holding = snapshot.top10.find((row) => holdingKey(row) === key);
+        const universe = snapshot.holdings?.length ? snapshot.holdings : snapshot.top10;
+        const holding = universe.find((row) => holdingKey(row) === key);
         return { date: snapshot.date, value: holding?.weightPercent ?? 0 };
       });
       return { key, label, points };
@@ -416,7 +421,7 @@
 
   function renderDecomposition(latest) {
     const rows = (latest?.decomposition || []).slice().sort((a, b) => {
-      const severity = { new_entry: 0, exit: 0, likely_buy: 1, likely_sell: 1, mixed: 2, price_explained: 3, insufficient_data: 4 };
+      const severity = { new_entry: 0, fund_exit: 0, top10_entry: 0, top10_exit: 0, likely_buy: 1, likely_sell: 1, mixed: 2, price_explained: 3, insufficient_data: 4 };
       return (severity[a.classification] ?? 9) - (severity[b.classification] ?? 9);
     });
     renderRows('#decomposition-rows', rows, (row) => [
@@ -532,6 +537,7 @@
       top10_entry: 'TOP10 편입',
       exit: 'TOP10 편출',
       top10_exit: 'TOP10 편출',
+      fund_exit: '보유 제외',
       insufficient_data: '데이터 부족',
       signal: '신호',
     };

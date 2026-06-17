@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.0.0",
-  "generatedAt": "2026-06-17T07:54:12+00:00",
+  "schemaVersion": "1.1.0",
+  "generatedAt": "2026-06-17T11:06:36+00:00",
   "targetDate": "2026-06-17",
   "overallStatus": "ok",
   "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
@@ -18,7 +18,7 @@
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
-      "returnCoverage": 0.9323999124917962,
+      "returnCoverage": 0.9762047590481904,
       "priceBasis": {
         "previous": "2026-06-15",
         "current": "2026-06-16"
@@ -35,7 +35,7 @@
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
-      "returnCoverage": 0.8508266051518647,
+      "returnCoverage": 0.9604039596040396,
       "priceBasis": {
         "previous": "2026-06-15",
         "current": "2026-06-16"
@@ -52,7 +52,7 @@
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
-      "returnCoverage": 0.8491030601477313,
+      "returnCoverage": 1.0,
       "priceBasis": {
         "previous": "2026-06-15",
         "current": "2026-06-16"
