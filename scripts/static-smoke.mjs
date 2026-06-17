@@ -24,6 +24,12 @@ if (parsed.manualUpdatePolicy?.workflowUrl !== 'https://github.com/SonChangGi/et
 const selected = parsed.etfs[0];
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
+const segmented = api.splitPointSegments([
+  { date: '2026-06-15', value: 1 },
+  { date: '2026-06-16', value: null },
+  { date: '2026-06-17', value: 2 },
+]);
+if (segmented.length !== 2) throw new Error('weight chart should not connect through missing holdings');
 const colorMap = api.buildSeriesColorMap(series);
 const visibleColors = series.map((item) => colorMap.get(item.key));
 if (new Set(visibleColors).size !== visibleColors.length) throw new Error('visible chart series colors should not overlap');
@@ -45,6 +51,8 @@ if (api.AUTOMATION_STATUS_URL !== 'data/automation-status.json') throw new Error
 if (api.WORKFLOW_URL !== 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml') throw new Error('workflow URL changed');
 if (!api.MANUAL_UPDATE_COMMAND?.includes('refresh_existing=false')) throw new Error('manual update command changed');
 if (api.formatPriceSource('provider_valuation_krw') !== 'ETF KRW 평가단가') throw new Error('KRW valuation source label changed');
+if (api.formatPriceSource('fx_adjusted_external_close') !== '외부 종가+환율') throw new Error('FX-adjusted source label changed');
+if (api.formatCoverageUniverse('priced_subset_of_full_holdings') !== '전체 보유종목 중 가격확보분') throw new Error('coverage universe label changed');
 const automation = api.normalizeAutomationStatus(JSON.parse(readFileSync('data/automation-status.json', 'utf8')));
 if (!automation?.runStatus) throw new Error('automation status missing runStatus');
 

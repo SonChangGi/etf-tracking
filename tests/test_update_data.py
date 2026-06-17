@@ -38,6 +38,13 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIsNone(parsed["navAsOfDate"])
         self.assertEqual(parsed["priceBasisDate"], "2026-06-09")
 
+    def test_time_requested_date_mismatch_is_stale(self):
+        html = (ROOT / "tests" / "fixtures" / "time-2.html").read_text(encoding="utf-8")
+        parsed = update_data.parse_time_page(html, update_data.ETFS[0], requested_date="2026-06-10")
+        self.assertEqual(parsed["asOfDate"], "2026-06-17")
+        self.assertEqual(parsed["sourceStatus"], "stale")
+        self.assertIn("Requested 2026-06-10", parsed["sourceWarning"])
+
     def test_parse_samsung_payload_extracts_pdf_rows_without_cash(self):
         payload = json.loads((ROOT / "tests" / "fixtures" / "samsung-2ETFQ1.json").read_text(encoding="utf-8"))
         parsed = update_data.parse_samsung_payload(payload, update_data.ETFS[2], requested_date="2026-06-17")
@@ -90,6 +97,9 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(by_ticker["AAA"]["classification"], "likely_buy")
         self.assertEqual(by_ticker["CCC"]["classification"], "new_entry")
         self.assertTrue(any(signal["type"] == "top10_entry" for signal in signals))
+        self.assertEqual(summary["returnCoverageUniverse"], "top10_fallback")
+        self.assertFalse(summary["fullHoldingsAvailable"])
+        self.assertFalse(summary["previousFullHoldingsAvailable"])
 
     def test_decomposition_uses_full_holdings_for_top10_entry_and_exit(self):
         fixture_dir = ROOT / "tests" / "fixtures"
@@ -211,6 +221,39 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(by_ticker["AAA"]["priceSourceType"], "etf_provider_unit_value_krw")
         self.assertAlmostEqual(summary["benchmarkReturn"], 0.05)
 
+    def test_usd_external_close_is_fx_adjusted_to_krw_return(self):
+        with tempfile.TemporaryDirectory() as temp:
+            fixture_dir = Path(temp)
+            (fixture_dir / "prices.json").write_text(json.dumps({
+                "closes": {
+                    "AAA": {"2026-06-16": 100, "2026-06-17": 110},
+                    "USDKRW": {"2026-06-16": 1300, "2026-06-17": 1430},
+                }
+            }), encoding="utf-8")
+            provider = update_data.PriceProvider(fixture_dir=fixture_dir)
+            value, meta = provider.return_between_krw("AAA", "2026-06-16", "2026-06-17")
+        self.assertAlmostEqual(value, 0.21)
+        self.assertEqual(meta["sourceType"], "external_close_fx_adjusted_krw")
+        self.assertEqual(meta["currency"], "USD")
+        self.assertTrue(meta["fxApplied"])
+        self.assertAlmostEqual(meta["localCurrencyReturn"], 0.10)
+        self.assertAlmostEqual(meta["fxReturn"], 0.10)
+
+    def test_missing_fx_keeps_usd_return_but_marks_low_confidence_metadata(self):
+        with tempfile.TemporaryDirectory() as temp:
+            fixture_dir = Path(temp)
+            (fixture_dir / "prices.json").write_text(json.dumps({
+                "closes": {
+                    "AAA": {"2026-06-16": 100, "2026-06-17": 110}
+                }
+            }), encoding="utf-8")
+            provider = update_data.PriceProvider(fixture_dir=fixture_dir)
+            value, meta = provider.return_between_krw("AAA", "2026-06-16", "2026-06-17")
+        self.assertAlmostEqual(value, 0.10)
+        self.assertEqual(meta["sourceType"], "external_close_local_currency")
+        self.assertTrue(meta["fxRequired"])
+        self.assertFalse(meta["fxApplied"])
+
     def test_decomposition_exports_code_raw_and_resolved_date_basis_for_ui_join(self):
         provider = update_data.PriceProvider(no_live=True)
         previous = {
@@ -263,10 +306,56 @@ class UpdateDataTests(unittest.TestCase):
 
     def test_history_merge_is_idempotent(self):
         existing = {cfg.id: [] for cfg in update_data.ETFS}
-        snap = {"date": "2026-06-17", "top10": [{"ticker": "AAA", "weightPercent": 1}]}
+        snap = {"date": "2026-06-17", "sourceStatus": "live", "top10": [{"ticker": "AAA", "weightPercent": 1}]}
         once = update_data.merge_history(existing, {update_data.ETFS[0].id: [snap]})
         twice = update_data.merge_history(once, {update_data.ETFS[0].id: [snap]})
         self.assertEqual(len(twice[update_data.ETFS[0].id]), 1)
+
+    def test_stale_snapshot_does_not_overwrite_live_history(self):
+        config_id = update_data.ETFS[0].id
+        existing = {cfg.id: [] for cfg in update_data.ETFS}
+        existing[config_id] = [{
+            "date": "2026-06-17",
+            "queryDate": "2026-06-17",
+            "sourceStatus": "live",
+            "top10": [{"ticker": "LIVE", "weightPercent": 1.0}],
+        }]
+        stale = {
+            "date": "2026-06-17",
+            "sourceStatus": "stale",
+            "top10": [{"ticker": "STALE", "weightPercent": 99.0}],
+        }
+        merged = update_data.merge_history(existing, {config_id: [stale]})
+        self.assertEqual(merged[config_id][0]["top10"][0]["ticker"], "LIVE")
+
+    def test_merge_drops_existing_live_snapshot_when_query_date_mismatches(self):
+        config_id = update_data.ETFS[0].id
+        existing = {cfg.id: [] for cfg in update_data.ETFS}
+        existing[config_id] = [{
+            "date": "2026-06-17",
+            "queryDate": "2026-06-10",
+            "sourceStatus": "live",
+            "top10": [{"ticker": "BAD", "weightPercent": 99.0}],
+        }]
+        merged = update_data.merge_history(existing, {config_id: []})
+        self.assertEqual(merged[config_id], [])
+
+    def test_collect_rejects_fixture_when_provider_date_mismatches_target(self):
+        class Args:
+            fixture_dir = ROOT / "tests" / "fixtures"
+            target_date = "2026-06-10"
+            backfill_all = False
+            backfill_days = 1
+            backfill_start_date = None
+            refresh_existing = True
+            include_empty = False
+            provider_delay = 0
+
+        snapshots, diagnostics = update_data.collect_snapshots(Args)
+        first_id = update_data.ETFS[0].id
+        self.assertEqual(snapshots[first_id], [])
+        self.assertEqual(diagnostics[first_id][0]["sourceStatus"], "stale")
+        self.assertEqual(diagnostics[first_id][0]["dateMismatch"]["targetDate"], "2026-06-10")
 
     def test_bounded_backfill_start_date_and_target_priority(self):
         config = update_data.ETFS[0]
@@ -324,6 +413,7 @@ class UpdateDataTests(unittest.TestCase):
         existing = {cfg.id: [] for cfg in update_data.ETFS}
         existing[update_data.ETFS[0].id] = [{
             "date": "2026-06-17",
+            "queryDate": "2026-06-17",
             "sourceStatus": "live",
             "sourceConfidence": "high",
             "top10": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 1.0}],
@@ -335,6 +425,32 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(diagnostics[first_id][0]["sourceStatus"], "cached_live")
         self.assertTrue(diagnostics[first_id][0]["skippedFetch"])
         self.assertEqual(diagnostics[first_id][0]["top10Count"], 1)
+
+    def test_collect_refetches_existing_live_snapshot_when_query_date_mismatches(self):
+        class Args:
+            fixture_dir = ROOT / "tests" / "fixtures"
+            target_date = "2026-06-17"
+            backfill_all = False
+            backfill_days = 1
+            backfill_start_date = None
+            refresh_existing = False
+            include_empty = False
+            provider_delay = 0
+
+        existing = {cfg.id: [] for cfg in update_data.ETFS}
+        existing[update_data.ETFS[0].id] = [{
+            "date": "2026-06-17",
+            "queryDate": "2026-06-10",
+            "sourceStatus": "live",
+            "sourceConfidence": "high",
+            "top10": [{"rank": 1, "ticker": "BAD", "name": "Bad", "weightPercent": 99.0}],
+            "holdings": [{"rank": 1, "ticker": "BAD", "name": "Bad", "weightPercent": 99.0}],
+        }]
+        snapshots, diagnostics = update_data.collect_snapshots(Args, existing)
+        first_id = update_data.ETFS[0].id
+        self.assertTrue(snapshots[first_id])
+        self.assertEqual(snapshots[first_id][0]["queryDate"], "2026-06-17")
+        self.assertFalse(diagnostics[first_id][0].get("skippedFetch", False))
 
     def test_refresh_existing_refetches_usable_snapshots(self):
         class Args:
@@ -484,6 +600,7 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("--refresh-existing", workflow)
         self.assertIn("continue-on-error", workflow)
         self.assertIn("safe_to_commit", workflow)
+        self.assertIn('run_status == "ok"', workflow)
         self.assertFalse((ROOT / ".github" / "workflows" / "deploy-pages.yml").exists())
 
 

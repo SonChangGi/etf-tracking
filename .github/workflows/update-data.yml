@@ -112,7 +112,7 @@ jobs:
           else:
               status = {"runStatus": "missing_status", "error": "data/automation-status.json was not written"}
           run_status = str(status.get("runStatus") or "unknown")
-          safe = update == "success" and verify == "success" and run_status not in {"soft_failed", "missing_status", "unreadable_status"}
+          safe = update == "success" and verify == "success" and run_status == "ok"
           output.write_text(f"safe_to_commit={'true' if safe else 'false'}\nrun_status={run_status}\n", encoding="utf-8")
           lines = [
               "## ETF tracking automation assessment",

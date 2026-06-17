@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.1.1",
-  "generatedAt": "2026-06-17T12:33:11+00:00",
+  "schemaVersion": "1.2.0",
+  "generatedAt": "2026-06-17T13:31:19+00:00",
   "targetDate": "2026-06-17",
   "overallStatus": "ok",
   "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
@@ -28,7 +28,9 @@
         "requestedDates": 8,
         "skippedExisting": 8,
         "fetchedLive": 0,
-        "errors": 0
+        "errors": 0,
+        "stale": 0,
+        "dateMismatches": 0
       }
     },
     {
@@ -52,7 +54,9 @@
         "requestedDates": 8,
         "skippedExisting": 8,
         "fetchedLive": 0,
-        "errors": 0
+        "errors": 0,
+        "stale": 0,
+        "dateMismatches": 0
       }
     },
     {
@@ -76,7 +80,9 @@
         "requestedDates": 8,
         "skippedExisting": 8,
         "fetchedLive": 0,
-        "errors": 0
+        "errors": 0,
+        "stale": 0,
+        "dateMismatches": 0
       }
     }
   ]

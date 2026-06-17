@@ -25,16 +25,38 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 from typing import Any, Iterable
+from zoneinfo import ZoneInfo
 
 KST = dt.timezone(dt.timedelta(hours=9), name="KST")
 USER_AGENT = "Mozilla/5.0 (compatible; ETFTrackingBot/0.1; +https://sonchanggi.github.io/etf-tracking/)"
-SCHEMA_VERSION = "1.1.1"
+SCHEMA_VERSION = "1.2.0"
 DEFAULT_SCHEDULED_BACKFILL_DAYS = 10
 PRICE_EXPLAINED_TOLERANCE_PP = 0.20
 PRICE_EXPLAINED_TOLERANCE_RATIO = 0.10
 RETURN_COVERAGE_MIN = 0.60
 HTTP_MAX_BYTES = 5_000_000
 PRICE_CACHE_FORWARD_DAYS = 21
+
+FX_PAIR_CONFIG: dict[str, dict[str, Any]] = {
+    "USDKRW": {
+        "currency": "USD",
+        "label": "USD/KRW",
+        "yahoo": ["KRW=X", "USDKRW=X"],
+        "stooq": ["usdkrw"],
+    },
+    "JPYKRW": {
+        "currency": "JPY",
+        "label": "JPY/KRW",
+        "yahoo": ["JPYKRW=X"],
+        "stooq": ["jpykrw"],
+    },
+    "HKDKRW": {
+        "currency": "HKD",
+        "label": "HKD/KRW",
+        "yahoo": ["HKDKRW=X"],
+        "stooq": ["hkdkrw"],
+    },
+}
 
 
 @dataclasses.dataclass(frozen=True)
@@ -248,6 +270,55 @@ def all_holdings(snapshot: dict[str, Any] | None) -> list[dict[str, Any]]:
     return []
 
 
+def holdings_universe(snapshot: dict[str, Any] | None) -> tuple[list[dict[str, Any]], str, bool]:
+    if not snapshot:
+        return [], "none", False
+    holdings = snapshot.get("holdings")
+    if isinstance(holdings, list) and holdings:
+        return [row for row in holdings if isinstance(row, dict)], "full_holdings", True
+    top10 = snapshot.get("top10")
+    if isinstance(top10, list) and top10:
+        return [row for row in top10 if isinstance(row, dict)], "top10_fallback", False
+    return [], "none", False
+
+
+def source_status_rank(status: Any) -> int:
+    return {
+        "live": 4,
+        "cached_live": 4,
+        "cached_history": 3,
+        "stale": 2,
+        "empty": 1,
+        "error": 1,
+        "missing": 0,
+    }.get(str(status or ""), 0)
+
+
+def snapshot_is_live_for_target(raw: dict[str, Any], target: str) -> bool:
+    as_of = str(raw.get("asOfDate") or raw.get("date") or "")
+    query_date = str(raw.get("queryDate") or target)
+    return (
+        raw.get("sourceStatus") == "live"
+        and bool(raw.get("top10"))
+        and as_of == target
+        and query_date == target
+    )
+
+
+def history_snapshot_is_usable(snapshot: dict[str, Any], expected_date: str | None = None) -> bool:
+    if not snapshot.get("top10") or str(snapshot.get("sourceStatus") or "") != "live":
+        return False
+    date = str(snapshot.get("date") or snapshot.get("asOfDate") or "")
+    query_date = snapshot.get("queryDate")
+    if not date:
+        return False
+    if expected_date and date != expected_date:
+        return False
+    if expected_date:
+        return str(query_date or "") == expected_date
+    return not query_date or str(query_date) == date
+
+
 def ranked_map(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
     out: dict[str, dict[str, Any]] = {}
     for row in rows:
@@ -314,8 +385,11 @@ def parse_time_page(html_text: str, config: EtfConfig, *, requested_date: str | 
     if nav_as_of_date and nav_as_of_date > query_date:
         nav_as_of_date = None
 
-    source_status = "live" if holdings else "empty"
-    warning = "" if holdings else "TIME provider returned no constituent rows for the requested date."
+    actual_date_warning = ""
+    if requested_date and query_date != requested_date:
+        actual_date_warning = f"Requested {requested_date}, provider returned {query_date}."
+    source_status = "live" if holdings and not actual_date_warning else ("stale" if holdings else "empty")
+    warning = actual_date_warning if holdings else "TIME provider returned no constituent rows for the requested date."
     return {
         "etfId": config.id,
         "asOfDate": query_date,
@@ -324,7 +398,7 @@ def parse_time_page(html_text: str, config: EtfConfig, *, requested_date: str | 
         "priceBasisDate": previous_weekday(query_date),
         "listingDate": listing_date,
         "sourceStatus": source_status,
-        "sourceConfidence": "high" if holdings else "low",
+        "sourceConfidence": "high" if source_status == "live" else ("medium" if holdings else "low"),
         "sourceWarning": warning,
         "provider": config.provider,
         "sourceUrl": config.source_url,
@@ -469,11 +543,16 @@ def merge_history(existing: dict[str, list[dict[str, Any]]], snapshots: dict[str
         by_date: dict[str, dict[str, Any]] = {}
         for snap in existing.get(config.id, []):
             date = snap.get("date") or snap.get("asOfDate")
-            if date:
+            if date and history_snapshot_is_usable(snap):
                 by_date[str(date)] = snap
         for snap in snapshots.get(config.id, []):
-            if snap.get("holdings") or snap.get("top10"):
-                by_date[str(snap["date"])] = snap
+            if not history_snapshot_is_usable(snap):
+                continue
+            date = str(snap["date"])
+            current = by_date.get(date)
+            if current and source_status_rank(current.get("sourceStatus")) > source_status_rank(snap.get("sourceStatus")):
+                continue
+            by_date[date] = snap
         merged[config.id] = [by_date[key] for key in sorted(by_date)]
     return merged
 
@@ -511,12 +590,10 @@ def prioritized_fetch_dates(dates: list[str], target_date: str) -> list[str]:
     return ([target] if target in dates else []) + [date for date in dates if date != target]
 
 
-def snapshot_has_usable_data(snapshot: dict[str, Any] | None) -> bool:
+def snapshot_has_usable_data(snapshot: dict[str, Any] | None, expected_date: str | None = None) -> bool:
     if not snapshot:
         return False
-    if not snapshot.get("top10"):
-        return False
-    return snapshot.get("sourceStatus") not in {"missing", "empty", "error", "stale"}
+    return history_snapshot_is_usable(snapshot, expected_date)
 
 
 def cached_snapshot_diagnostic(snapshot: dict[str, Any], target: str, run_target_date: str) -> dict[str, Any]:
@@ -575,8 +652,9 @@ class PriceProvider:
             series["attempts"].append({"source": "fixture_prices", "status": "ok" if fixture else "no_data", "points": len(fixture)})
             self.cache[key] = series
             return series
-        if self.no_live:
-            series["attempts"].append({"source": "live_prices", "status": "disabled", "points": 0})
+        if self.no_live or (self.fixture_dir and ticker not in self.fixture_prices):
+            reason = "disabled" if self.no_live else "fixture_missing"
+            series["attempts"].append({"source": "live_prices", "status": reason, "points": 0})
             self.cache[key] = series
             return series
         series = self._cached_live_series(ticker, start_date, end_date)
@@ -605,12 +683,20 @@ class PriceProvider:
 
     def _fetch_live_series(self, ticker: str, start_date: str, end_date: str) -> dict[str, Any]:
         series: dict[str, Any] = {"closes": {}, "sources": {}, "attempts": [], "errors": []}
-        providers = (
-            ("yahoo_chart_query1", lambda: self._fetch_yahoo_chart(ticker, start_date, end_date, host="query1.finance.yahoo.com")),
-            ("yahoo_chart_query2", lambda: self._fetch_yahoo_chart(ticker, start_date, end_date, host="query2.finance.yahoo.com")),
-            ("stooq_csv", lambda: self._fetch_stooq_csv(ticker, start_date, end_date)),
-            ("finance_datareader", lambda: self._fetch_finance_datareader(ticker, start_date, end_date)),
-        )
+        if ticker in FX_PAIR_CONFIG:
+            fx_symbols = FX_PAIR_CONFIG[ticker]
+            providers = (
+                ("yahoo_fx_query1", lambda: self._fetch_yahoo_chart_candidates(fx_symbols["yahoo"], start_date, end_date, host="query1.finance.yahoo.com")),
+                ("yahoo_fx_query2", lambda: self._fetch_yahoo_chart_candidates(fx_symbols["yahoo"], start_date, end_date, host="query2.finance.yahoo.com")),
+                ("stooq_fx_csv", lambda: self._fetch_stooq_csv_candidates(fx_symbols["stooq"], start_date, end_date)),
+            )
+        else:
+            providers = (
+                ("yahoo_chart_query1", lambda: self._fetch_yahoo_chart(ticker, start_date, end_date, host="query1.finance.yahoo.com")),
+                ("yahoo_chart_query2", lambda: self._fetch_yahoo_chart(ticker, start_date, end_date, host="query2.finance.yahoo.com")),
+                ("stooq_csv", lambda: self._fetch_stooq_csv(ticker, start_date, end_date)),
+                ("finance_datareader", lambda: self._fetch_finance_datareader(ticker, start_date, end_date)),
+            )
         for source, fetcher in providers:
             try:
                 data = fetcher()
@@ -629,6 +715,20 @@ class PriceProvider:
         if not series["closes"] and series["errors"]:
             self.errors[ticker] = "; ".join(f"{item['source']}: {item['message']}" for item in series["errors"][:3])
         return series
+
+    def _fetch_yahoo_chart_candidates(self, tickers: list[str], start_date: str, end_date: str, *, host: str) -> dict[str, float]:
+        last_error: Exception | None = None
+        for ticker in tickers:
+            try:
+                data = self._fetch_yahoo_chart(ticker, start_date, end_date, host=host)
+            except Exception as exc:
+                last_error = exc
+                continue
+            if data:
+                return data
+        if last_error:
+            raise last_error
+        return {}
 
     @staticmethod
     def _merge_closes(series: dict[str, Any], closes: dict[str, float], source: str) -> None:
@@ -662,23 +762,32 @@ class PriceProvider:
         if not result:
             raise ValueError(payload.get("chart", {}).get("error") or "No chart result")
         item = result[0]
+        meta = item.get("meta", {}) if isinstance(item.get("meta"), dict) else {}
         timestamps = item.get("timestamp") or []
         quote = (item.get("indicators", {}).get("adjclose") or item.get("indicators", {}).get("quote") or [{}])[0]
         closes = quote.get("adjclose") or quote.get("close") or []
         out: dict[str, float] = {}
+        timezone_name = str(meta.get("exchangeTimezoneName") or "UTC")
+        is_fx = yahoo_symbol_is_fx(ticker)
         for stamp, close in zip(timestamps, closes):
             if close is None:
                 continue
-            date = dt.datetime.fromtimestamp(int(stamp), tz=dt.timezone.utc).date().isoformat()
-            out[date] = float(close)
+            value = float(close)
+            if is_fx and not plausible_fx_close(ticker, value):
+                continue
+            date = yahoo_timestamp_date(int(stamp), timezone_name if is_fx else "UTC")
+            out[date] = value
         # Keep provider calls gentle when backfilling many tickers.
         time.sleep(0.05)
         return out
 
     def _fetch_stooq_csv(self, ticker: str, start_date: str, end_date: str) -> dict[str, float]:
+        return self._fetch_stooq_csv_candidates(stooq_symbol_candidates(ticker), start_date, end_date)
+
+    def _fetch_stooq_csv_candidates(self, symbols: list[str], start_date: str, end_date: str) -> dict[str, float]:
         start_dt = dt.date.fromisoformat(start_date) - dt.timedelta(days=7)
         end_dt = dt.date.fromisoformat(end_date) + dt.timedelta(days=2)
-        for symbol in stooq_symbol_candidates(ticker):
+        for symbol in symbols:
             params = urllib.parse.urlencode({
                 "s": symbol,
                 "d1": start_dt.strftime("%Y%m%d"),
@@ -709,6 +818,76 @@ class PriceProvider:
             date = index.date().isoformat() if hasattr(index, "date") else iso_date(str(index)[:10])
             out[date] = value
         return out
+
+    def return_between_krw(self, ticker: str | None, start_date: str, end_date: str) -> tuple[float | None, dict[str, Any]]:
+        local_return, local_meta = self.return_between(ticker, start_date, end_date)
+        currency = currency_for_ticker(ticker)
+        if local_return is None:
+            if isinstance(local_meta, dict):
+                local_meta["currency"] = currency
+            return local_return, local_meta
+        if currency == "KRW":
+            local_meta["currency"] = currency
+            local_meta["fxRequired"] = False
+            local_meta.setdefault("sourceType", "external_close_krw")
+            return local_return, local_meta
+        pair = fx_pair_for_currency(currency)
+        if pair not in FX_PAIR_CONFIG:
+            local_meta.update({
+                "currency": currency,
+                "fxRequired": False,
+                "fxApplied": False,
+                "sourceType": "external_close_local_currency",
+                "message": f"{currency} 환율 소스가 없어 현지통화 수익률만 사용했습니다.",
+            })
+            return local_return, local_meta
+
+        fx_return, fx_meta = self.fx_return_between(currency, start_date, end_date)
+        if fx_return is None:
+            local_meta.update({
+                "currency": currency,
+                "fxRequired": True,
+                "fxApplied": False,
+                "fxMeta": fx_meta,
+                "sourceType": "external_close_local_currency",
+                "message": f"{currency} 종가 수익률만 사용했습니다. 환율 데이터를 찾지 못해 KRW 환산 정확도가 낮습니다.",
+            })
+            return local_return, local_meta
+
+        combined = (1 + local_return) * (1 + fx_return) - 1
+        sources = [str(local_meta.get("source") or "external_close"), str(fx_meta.get("source") or "fx")]
+        return combined, {
+            "source": "fx_adjusted_external_close",
+            "sourceType": "external_close_fx_adjusted_krw",
+            "localPriceSource": local_meta.get("source"),
+            "currency": currency,
+            "fxRequired": True,
+            "fxApplied": True,
+            "localCurrencyReturn": local_return,
+            "fxReturn": fx_return,
+            "fxPair": pair,
+            "sourceChain": sources,
+            "start": local_meta.get("start"),
+            "end": local_meta.get("end"),
+            "fxStart": fx_meta.get("start") if isinstance(fx_meta, dict) else None,
+            "fxEnd": fx_meta.get("end") if isinstance(fx_meta, dict) else None,
+            "fxMeta": fx_meta,
+            "attempts": local_meta.get("attempts", []),
+            "message": f"{currency} 종가 수익률에 {FX_PAIR_CONFIG[pair]['label']} 환율 수익률을 곱해 KRW 기준 가격효과를 계산했습니다.",
+        }
+
+    def fx_return_between(self, currency: str, start_date: str, end_date: str) -> tuple[float | None, dict[str, Any]]:
+        pair = fx_pair_for_currency(currency)
+        if pair == "KRW":
+            return 0.0, {"source": "base_currency", "currency": "KRW", "fxApplied": False}
+        if pair not in FX_PAIR_CONFIG:
+            return None, {"reason": "unsupported_currency", "currency": currency, "fxPair": pair}
+        value, meta = self.return_between(pair, start_date, end_date)
+        if isinstance(meta, dict):
+            meta["currency"] = currency
+            meta["fxPair"] = pair
+            meta["sourceType"] = "fx_close"
+        return value, meta
 
     def return_between(self, ticker: str | None, start_date: str, end_date: str) -> tuple[float | None, dict[str, Any]]:
         if not ticker:
@@ -800,6 +979,56 @@ def parse_stooq_csv(text: str) -> dict[str, float]:
     return out
 
 
+def yahoo_symbol_is_fx(symbol: str) -> bool:
+    upper = clean_text(symbol).upper()
+    return upper.endswith("=X") or upper in {alias.upper() for config in FX_PAIR_CONFIG.values() for alias in config.get("yahoo", [])}
+
+
+def yahoo_timestamp_date(timestamp: int, timezone_name: str) -> str:
+    try:
+        tz = ZoneInfo(timezone_name)
+    except Exception:
+        tz = dt.timezone.utc
+    return dt.datetime.fromtimestamp(timestamp, tz=dt.timezone.utc).astimezone(tz).date().isoformat()
+
+
+def plausible_fx_close(symbol: str, value: float) -> bool:
+    if not math.isfinite(value) or value <= 0:
+        return False
+    upper = clean_text(symbol).upper()
+    if "JPYKRW" in upper:
+        return 5 <= value <= 20
+    if "HKDKRW" in upper:
+        return 100 <= value <= 300
+    if "KRW" in upper or upper in {"KRW=X", "USDKRW=X"}:
+        return 500 <= value <= 3000
+    return True
+
+
+def currency_for_ticker(ticker: str | None) -> str:
+    raw = clean_text(ticker or "").upper()
+    if not raw:
+        return "UNKNOWN"
+    if raw.endswith(".KS") or raw.endswith(".KQ"):
+        return "KRW"
+    if raw.endswith(".T"):
+        return "JPY"
+    if raw.endswith(".HK"):
+        return "HKD"
+    # Plain tickers in this project are US-listed securities by construction.
+    return "USD"
+
+
+def fx_pair_for_currency(currency: str | None) -> str:
+    code = clean_text(currency or "").upper()
+    if code == "KRW":
+        return "KRW"
+    for pair, config in FX_PAIR_CONFIG.items():
+        if config.get("currency") == code:
+            return pair
+    return "UNSUPPORTED"
+
+
 def provider_unit_value_krw(row: dict[str, Any] | None) -> float | None:
     if not row:
         return None
@@ -835,6 +1064,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
     if not prev:
         curr_date = str(current.get("date"))
         curr_price_basis = str(current.get("priceBasisDate") or previous_weekday(curr_date))
+        curr_universe, curr_universe_source, curr_full_holdings_available = holdings_universe(current)
         rows = []
         for order, holding in enumerate(current_top, start=1):
             rows.append({
@@ -858,7 +1088,13 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         return rows, [], {
             "returnCoverage": 0,
             "returnCoverageStatus": "insufficient",
-            "returnCoverageUniverse": "full_holdings",
+            "returnCoverageUniverse": curr_universe_source,
+            "benchmarkUniverse": curr_universe_source,
+            "fullHoldingsAvailable": curr_full_holdings_available,
+            "previousFullHoldingsAvailable": False,
+            "validReturnWeightPercent": 0,
+            "totalReturnWeightPercent": sum(float(row.get("weightPercent") or 0) for row in curr_universe),
+            "unpricedReturnWeightPercent": sum(float(row.get("weightPercent") or 0) for row in curr_universe),
             "benchmarkReturn": None,
             "priceBasis": {"previous": None, "current": curr_price_basis},
             "dateBasis": {
@@ -874,8 +1110,8 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
 
     prev_top = prev.get("top10", [])
     curr_top = current_top
-    prev_all = all_holdings(prev)
-    curr_all = all_holdings(current)
+    prev_all, prev_universe_source, prev_full_holdings_available = holdings_universe(prev)
+    curr_all, curr_universe_source, curr_full_holdings_available = holdings_universe(current)
     prev_top_map = ranked_map(prev_top)
     curr_top_map = ranked_map(curr_top)
     prev_all_map = ranked_map(prev_all)
@@ -908,7 +1144,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         if provider_return:
             return provider_return
 
-        security_return, price_meta = price_provider.return_between(ticker, prev_price_basis, curr_price_basis)
+        security_return, price_meta = price_provider.return_between_krw(ticker, prev_price_basis, curr_price_basis)
         if security_return is None and prev_row and curr_row:
             valuation_after_external_attempt = valuation_return(price_meta)
             if valuation_after_external_attempt:
@@ -925,6 +1161,17 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         if returns.get(key, (None,))[0] is not None
     )
     coverage = (valid_prev_weight / total_prev_weight) if total_prev_weight else 0
+    unpriced_prev_weight = max(total_prev_weight - valid_prev_weight, 0)
+    if prev_universe_source == curr_universe_source:
+        benchmark_universe = prev_universe_source
+    else:
+        benchmark_universe = f"{prev_universe_source}_to_{curr_universe_source}"
+    if unpriced_prev_weight > 0 and benchmark_universe == "full_holdings":
+        return_coverage_universe = "priced_subset_of_full_holdings"
+    elif unpriced_prev_weight > 0 and benchmark_universe == "top10_fallback":
+        return_coverage_universe = "priced_subset_of_top10_fallback"
+    else:
+        return_coverage_universe = benchmark_universe
 
     benchmark_numerator = 0.0
     for key, row in prev_all_map.items():
@@ -1028,8 +1275,17 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         message = "가격 수익률로 대부분 설명됩니다."
         confidence = "high"
         price_source = price_meta.get("source") if isinstance(price_meta, dict) else None
+        price_source_type = price_meta.get("sourceType") if isinstance(price_meta, dict) else None
         if price_source == "provider_valuation_krw":
             message = "ETF 평가단가(KRW)로 환율을 포함한 가격 효과를 계산했습니다."
+        elif price_source_type == "external_close_fx_adjusted_krw":
+            message = "외부 종가에 환율 수익률을 반영해 KRW 기준 가격 효과를 계산했습니다."
+        elif isinstance(price_meta, dict) and price_meta.get("fxRequired") and not price_meta.get("fxApplied"):
+            message = "외부 종가 환율 보정이 부족해 잔차 신뢰도를 낮춰 해석해야 합니다."
+            confidence = "medium"
+        if not prev_full_holdings_available or not curr_full_holdings_available:
+            confidence = "low" if coverage < 1 else "medium"
+            message = f"전체 보유종목 대신 {return_coverage_universe} 기준으로 추정했습니다. {message}"
         if coverage < RETURN_COVERAGE_MIN:
             classification = "mixed"
             message = "종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다."
@@ -1060,8 +1316,13 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "priceReturnStartDate": price_meta.get("start", {}).get("date") if isinstance(price_meta.get("start"), dict) else prev_price_basis,
             "priceReturnEndDate": price_meta.get("end", {}).get("date") if isinstance(price_meta.get("end"), dict) else curr_price_basis,
             "priceSource": price_source,
-            "priceSourceType": price_meta.get("sourceType") if isinstance(price_meta, dict) else None,
-            "attributionFormula": "previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn)",
+            "priceSourceType": price_source_type,
+            "currency": price_meta.get("currency") if isinstance(price_meta, dict) else None,
+            "fxApplied": price_meta.get("fxApplied") if isinstance(price_meta, dict) else None,
+            "fxPair": price_meta.get("fxPair") if isinstance(price_meta, dict) else None,
+            "fxReturn": price_meta.get("fxReturn") if isinstance(price_meta, dict) else None,
+            "localCurrencyReturn": price_meta.get("localCurrencyReturn") if isinstance(price_meta, dict) else None,
+            "attributionFormula": "previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn)",
             "classification": classification,
             "economicSignal": classification,
             "confidence": confidence,
@@ -1076,12 +1337,18 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
     summary = {
         "returnCoverage": coverage,
         "returnCoverageStatus": "ok" if coverage >= RETURN_COVERAGE_MIN else "low",
-        "returnCoverageUniverse": "full_holdings",
+        "returnCoverageUniverse": return_coverage_universe,
+        "benchmarkUniverse": benchmark_universe,
         "validReturnWeightPercent": valid_prev_weight,
         "totalReturnWeightPercent": total_prev_weight,
+        "unpricedReturnWeightPercent": unpriced_prev_weight,
         "benchmarkReturn": benchmark_return,
         "fullHoldingCount": len(curr_all),
         "previousFullHoldingCount": len(prev_all),
+        "fullHoldingsAvailable": curr_full_holdings_available,
+        "previousFullHoldingsAvailable": prev_full_holdings_available,
+        "currentHoldingsUniverse": curr_universe_source,
+        "previousHoldingsUniverse": prev_universe_source,
         "priceBasis": {"previous": prev_price_basis, "current": curr_price_basis},
         "dateBasis": {
             "currentSnapshotDate": curr_date,
@@ -1092,7 +1359,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "priceDateTimezone": "security valuation / market close date",
             "rule": "ETF disclosed weight date D is decomposed using the security valuation return from previous priceBasisDate to current priceBasisDate.",
         },
-        "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturn) / (1 + fullHoldingsBenchmarkReturn); residual = actualWeightChange - priceEffect",
+        "decompositionFormula": "predictedWeightPercent = previousWeightPercent * (1 + securityReturnKrw) / (1 + pricedBenchmarkReturn); residual = actualWeightChange - priceEffect",
         "priceErrors": copy.deepcopy(price_provider.errors),
         "priceDiagnostics": copy.deepcopy(price_provider.diagnostics),
     }
@@ -1167,6 +1434,12 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
                 "returnCoverageStatus": summaries.get(config.id, {}).get("returnCoverageStatus"),
             },
         })
+    severity_rank = {"high": 0, "medium": 1, "low": 2}
+    sorted_signals = sorted(
+        all_signals,
+        key=lambda item: (item.get("date") or "", -severity_rank.get(str(item.get("severity") or ""), 9)),
+        reverse=True,
+    )
     return {
         "schemaVersion": SCHEMA_VERSION,
         "generatedAt": generated_at,
@@ -1176,10 +1449,11 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "holdings": "ETF provider public pages/APIs",
             "holdingsHistory": "Full provider holdings are persisted; TOP10 is a derived dashboard view.",
             "prices": "For attribution, ETF provider valuation-per-share KRW is preferred when available because ETF weights are KRW NAV weights; otherwise the updater falls back to local fixtures, Yahoo Chart query1/query2 adjusted closes, Stooq CSV, and optional FinanceDataReader.",
+            "fx": "External USD/JPY/HKD closes are converted to KRW returns with direct FX series where available: Yahoo Chart FX first, then Stooq FX CSV. Google Finance is not used in automation because it lacks a stable historical HTTP API.",
             "googleFinance": "Google Finance has no stable public historical HTTP API in this updater; use it only as manual cross-check outside scheduled automation.",
             "dateBasis": "ETF disclosed weight date is Korean-calendar based; return intervals use previous/current priceBasisDate valuation dates recorded on each decomposition row.",
-            "attribution": "No-trade predicted weight = previous full-holding weight × (1 + security return) / (1 + full-holdings benchmark return). Residual is actual weight change minus this price effect.",
-            "confidenceRule": "returnCoverage below 60% is marked mixed/low confidence; external closes are fallback data when KRW valuation-per-share is unavailable.",
+            "attribution": "No-trade predicted weight = previous weight × (1 + KRW-adjusted security return) / (1 + priced benchmark return). Residual is actual weight change minus this price effect.",
+            "confidenceRule": "returnCoverage below 60%, missing FX, or TOP10 fallback is marked with lower confidence; external closes are fallback data when KRW valuation-per-share is unavailable.",
         },
         "updatePolicy": {
             "timezone": "Asia/Seoul",
@@ -1207,7 +1481,7 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "defaultMode": "missing_only",
         },
         "etfs": etf_payloads,
-        "signals": sorted(all_signals, key=lambda item: (item.get("date") or "", item.get("severity") or ""), reverse=True)[:50],
+        "signals": sorted_signals[:50],
     }
 
 
@@ -1236,7 +1510,8 @@ def build_status(
 ) -> dict[str, Any]:
     diagnostics = diagnostics or {config.id: [] for config in ETFS}
     etf_status = []
-    waiting = False
+    waiting_for_target = False
+    degraded = False
     for config in ETFS:
         latest = (history.get(config.id) or [None])[-1]
         source_status = latest.get("sourceStatus") if latest else "missing"
@@ -1250,6 +1525,8 @@ def build_status(
         skipped_fetch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("skippedFetch"))
         fetched_count = sum(1 for item in diagnostics.get(config.id, []) if not item.get("skippedFetch") and item.get("sourceStatus") == "live")
         error_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "error")
+        stale_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "stale")
+        mismatch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("dateMismatch"))
         reused_existing_target = (
             latest_date == target_date
             and source_status == "live"
@@ -1259,19 +1536,26 @@ def build_status(
         if reused_existing_target:
             target_status = "cached_live"
             target_has_top10 = True
+            if target_diag and target_diag.get("sourceStatus") == "error":
+                error_count = max(error_count - 1, 0)
+            if target_diag and target_diag.get("sourceStatus") == "stale":
+                stale_count = max(stale_count - 1, 0)
+            if target_diag and target_diag.get("dateMismatch"):
+                mismatch_count = max(mismatch_count - 1, 0)
             if target_diag and target_diag.get("skippedFetch"):
                 target_warning = target_warning or "Existing live target-date snapshot reused."
             else:
                 target_warning = f"Target fetch {target_diag.get('sourceStatus') if target_diag else 'not_attempted'}: {target_warning}; reused existing live target-date snapshot."
-        is_waiting = (
+        is_target_waiting = (
             source_status in {"missing", "empty", "error", "stale"}
-            or analysis.get("returnCoverageStatus") == "low"
             or latest_date != target_date
             or target_status in {"missing", "empty", "error", "stale", "not_attempted"}
             or not target_has_top10
         )
-        if is_waiting:
-            waiting = True
+        if is_target_waiting:
+            waiting_for_target = True
+        if analysis.get("returnCoverageStatus") == "low" or error_count or stale_count or mismatch_count:
+            degraded = True
         etf_status.append({
             "id": config.id,
             "name": config.name,
@@ -1291,13 +1575,15 @@ def build_status(
                 "skippedExisting": skipped_fetch_count,
                 "fetchedLive": fetched_count,
                 "errors": error_count,
+                "stale": stale_count,
+                "dateMismatches": mismatch_count,
             },
         })
     return {
         "schemaVersion": SCHEMA_VERSION,
         "generatedAt": generated_at,
         "targetDate": target_date,
-        "overallStatus": "waiting_for_prior_close" if waiting else "ok",
+        "overallStatus": "waiting_for_prior_close" if waiting_for_target else ("degraded" if degraded else "ok"),
         "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
         "priceErrorCount": len(price_provider.errors),
         "priceErrors": price_provider.errors,
@@ -1322,6 +1608,13 @@ def automation_warnings(status: dict[str, Any]) -> list[str]:
         coverage_status = item.get("returnCoverageStatus")
         if coverage_status and coverage_status != "ok":
             warnings.append(f"{name}: return coverage {coverage_status}")
+        stats = item.get("fetchStats") if isinstance(item.get("fetchStats"), dict) else {}
+        if stats.get("errors"):
+            warnings.append(f"{name}: fetch errors {stats.get('errors')}")
+        if stats.get("stale"):
+            warnings.append(f"{name}: stale provider responses {stats.get('stale')}")
+        if stats.get("dateMismatches"):
+            warnings.append(f"{name}: date mismatches {stats.get('dateMismatches')}")
     if status.get("priceErrorCount"):
         warnings.append(f"price errors: {status.get('priceErrorCount')}")
     return warnings
@@ -1444,7 +1737,7 @@ def collect_snapshots(
         )
         for target in prioritized_fetch_dates(fetch_dates, args.target_date):
             cached_snapshot = existing_by_date.get(target)
-            if not args.refresh_existing and snapshot_has_usable_data(cached_snapshot):
+            if not args.refresh_existing and snapshot_has_usable_data(cached_snapshot, target):
                 diagnostics[config.id].append(cached_snapshot_diagnostic(cached_snapshot, target, args.target_date))
                 continue
             try:
@@ -1475,8 +1768,14 @@ def collect_snapshots(
                 "holdingCount": len(raw.get("holdings", [])),
                 "fetchedAt": raw.get("fetchedAt"),
             }
+            if raw.get("asOfDate") != target or raw.get("queryDate") != target:
+                diagnostic["dateMismatch"] = {
+                    "targetDate": target,
+                    "asOfDate": raw.get("asOfDate"),
+                    "queryDate": raw.get("queryDate"),
+                }
             diagnostics[config.id].append(diagnostic)
-            if raw.get("top10"):
+            if snapshot_is_live_for_target(raw, target):
                 snapshots[config.id].append(snapshot_for_history(raw))
             elif args.include_empty:
                 snapshots[config.id].append(snapshot_for_history(raw))

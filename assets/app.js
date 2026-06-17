@@ -7,6 +7,8 @@
   const QUANT_DASHBOARD_URL = 'https://sonchanggi.github.io/quant-dashboard/';
   const WORKFLOW_URL = 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml';
   const MANUAL_UPDATE_COMMAND = 'gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false';
+  const SUPPORTED_SCHEMA_MAJOR = 1;
+  const ALLOWED_LINK_HOSTS = new Set(['github.com', 'sonchanggi.github.io', 'timeetf.co.kr', 'www.samsungactive.co.kr', 'samsungactive.co.kr']);
   const CHART_COLORS = [
     '#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed',
     '#0891b2', '#db2777', '#4d7c0f', '#92400e', '#111827',
@@ -149,6 +151,7 @@
     });
     return {
       schemaVersion: stringOr(payload?.schemaVersion, ''),
+      schemaWarning: schemaWarning(payload?.schemaVersion),
       generatedAt: stringOr(payload?.generatedAt, ''),
       disclaimer: stringOr(payload?.disclaimer, ''),
       sourcePolicy: isRecord(payload?.sourcePolicy) ? payload.sourcePolicy : {},
@@ -227,6 +230,11 @@
       displayOrder: numberOr(row.displayOrder, 999),
       priceSource: stringOr(row.priceSource, ''),
       priceSourceType: stringOr(row.priceSourceType, ''),
+      currency: stringOr(row.currency, ''),
+      fxApplied: row.fxApplied === null || row.fxApplied === undefined ? null : Boolean(row.fxApplied),
+      fxPair: stringOr(row.fxPair, ''),
+      fxReturn: finiteOrNull(row.fxReturn),
+      localCurrencyReturn: finiteOrNull(row.localCurrencyReturn),
       attributionFormula: stringOr(row.attributionFormula, ''),
       classification: stringOr(row.classification, 'insufficient_data'),
       economicSignal: stringOr(row.economicSignal, row.classification, 'insufficient_data'),
@@ -354,7 +362,8 @@
     const status = $('#data-status');
     if (status) {
       const mode = dashboard.loadMode === 'fallback' ? 'fallback 표시 중' : '공개 JSON 로드 완료';
-      status.textContent = `${mode} · 생성 ${formatFreshness(dashboard.generatedAt)} · 자동화 ${formatAutomationStatus(dashboard.automationStatusPayload)} · ${dashboard.disclaimer || '투자 조언이 아닙니다.'}`;
+      const schema = dashboard.schemaWarning ? ` · ${dashboard.schemaWarning}` : '';
+      status.textContent = `${mode} · 생성 ${formatFreshness(dashboard.generatedAt)} · 자동화 ${formatAutomationStatus(dashboard.automationStatusPayload)}${schema} · ${dashboard.disclaimer || '투자 조언이 아닙니다.'}`;
     }
   }
 
@@ -366,8 +375,8 @@
     const workflowLink = $('#workflow-status-link');
     const commandTarget = $('#manual-update-command');
     const status = $('#manual-update-status');
-    if (manualLink) manualLink.href = workflowUrl;
-    if (workflowLink) workflowLink.href = workflowUrl;
+    if (manualLink) manualLink.href = safeHttpUrl(workflowUrl, WORKFLOW_URL);
+    if (workflowLink) workflowLink.href = safeHttpUrl(workflowUrl, WORKFLOW_URL);
     if (commandTarget) commandTarget.textContent = command;
     if (status) {
       const mode = policy.defaultMode === 'missing_only' ? 'missing-only' : stringOr(policy.defaultMode, 'missing-only');
@@ -401,7 +410,7 @@
     renderDecomposition(latest);
     renderSource(etf, latest, filtered);
     const provider = $('#provider-link');
-    if (provider) provider.href = etf.sourceUrl || '#';
+    if (provider) provider.href = safeHttpUrl(etf.sourceUrl, '#');
   }
 
   function filterHistory(history, startDate, endDate) {
@@ -419,17 +428,24 @@
     const points = series.flatMap((item) => item.points);
     const dates = points.map((point) => Date.parse(point.date)).filter(Number.isFinite);
     const values = points.map((point) => point.value).filter(Number.isFinite);
-    const width = 960;
-    const height = 420;
-    const margin = { top: 30, right: 32, bottom: 82, left: 76 };
+    const width = 1080;
+    const height = 460;
+    const margin = { top: 42, right: 172, bottom: 92, left: 82 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const minDate = Math.min(...dates);
     const maxDate = Math.max(...dates);
-    const yTicks = buildNiceTicks(0, Math.max(...values, 1) * 1.08, 6);
+    const minValue = Math.min(...values);
+    const maxValue = Math.max(...values);
+    const useZoomedAxis = minValue > 1 && (maxValue - minValue) < 8;
+    const yDomainMin = useZoomedAxis ? Math.max(0, Math.floor((minValue - 0.45) * 2) / 2) : 0;
+    const yDomainMax = useZoomedAxis ? Math.ceil((maxValue + 0.45) * 2) / 2 : Math.max(maxValue, 1) * 1.08;
+    const yTicks = buildNiceTicks(yDomainMin, yDomainMax, useZoomedAxis ? 7 : 6);
     const yMin = yTicks[0] ?? 0;
     const yMax = yTicks.at(-1) ?? Math.max(...values, 1);
-    const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), 14);
+    const targetWidth = Number(target.clientWidth || width);
+    const maxTicks = targetWidth < 520 ? 5 : targetWidth < 820 ? 8 : 12;
+    const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), maxTicks);
     const xTickYears = new Set(xTicks.map((date) => date.slice(0, 4)));
     const showYearOnTicks = xTickYears.size > 1;
     const colorByKey = buildSeriesColorMap(series);
@@ -442,35 +458,73 @@
     }).join('');
     const paths = series.map((item, index) => {
       const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
-      const valid = item.points.filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
-      const path = valid.map((point, pointIndex) => `${pointIndex ? 'L' : 'M'} ${x(point.date).toFixed(1)} ${y(point.value).toFixed(1)}`).join(' ');
-      const circles = valid.map((point) => `<circle cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="3.4" fill="${color}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
-      return `<path d="${path}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${circles}`;
+      const widthByRank = item.rank && item.rank <= 3 ? 3.7 : 2.5;
+      const dash = item.isSparse ? ' stroke-dasharray="7 5"' : '';
+      const segments = splitPointSegments(item.points);
+      const segmentPaths = segments.map((segment) => {
+        const path = segment.map((point, pointIndex) => `${pointIndex ? 'L' : 'M'} ${x(point.date).toFixed(1)} ${y(point.value).toFixed(1)}`).join(' ');
+        return `<path d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`;
+      }).join('');
+      const circles = item.validPoints.map((point) => `<circle cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? '#fff' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
+      return `${segmentPaths}${circles}`;
     }).join('');
-    const legend = series.map((item, index) => {
-      const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
-      return `<span><i class="legend-key" style="background:${color}"></i>${escapeHtml(item.label)}</span>`;
-    }).join('');
+    const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
+    const legend = renderChartLegend(series, colorByKey);
+    const summaryCards = renderChartSummaryCards(series, colorByKey);
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
+    const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
+    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}.`;
     target.innerHTML = `
-      <svg viewBox="0 0 ${width} ${height}" aria-hidden="true">
+      <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
+      <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
+        <title id="weight-chart-svg-title">TOP10 비중 변화 그래프</title>
+        <desc id="weight-chart-svg-desc">${escapeHtml(summaryText)}</desc>
         <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
         ${yGrid}
         ${xGrid}
         <line x1="${margin.left}" x2="${width - margin.right}" y1="${height - margin.bottom}" y2="${height - margin.bottom}" stroke="#aab7cf"/>
         <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="#aab7cf"/>
         <text class="axis-title" x="${margin.left}" y="20">TOP10 비중(%)</text>
+        <text class="axis-note" x="${width - margin.right}" y="22" text-anchor="end">${escapeHtml(axisNote)}</text>
         <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)}</text>
         ${paths}
+        ${endLabels}
       </svg>
       <div class="chart-legend">${legend}</div>
+      <div class="chart-summary-grid">${summaryCards}</div>
     `;
+  }
+
+  function renderEndLabels(labels, colorByKey) {
+    return asArray(labels).map((item) => {
+      const color = colorByKey.get(item.key) || '#475467';
+      return `<g class="line-end-label"><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><text x="${item.x2 + 6}" y="${(item.y2 + 4).toFixed(1)}" fill="${color}">${escapeHtml(item.text)}</text></g>`;
+    }).join('');
+  }
+
+  function renderChartLegend(series, colorByKey) {
+    return asArray(series).map((item, index) => {
+      const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
+      const delta = item.periodDelta === null ? '' : ` · ${formatPercentPoint(item.periodDelta)}`;
+      const sparse = item.isSparse ? ` · ${item.validPoints.length}/${item.points.length}일` : '';
+      const label = `${item.rank ? `${item.rank}. ` : ''}${item.label} ${formatWeight(item.latestWeight)}${delta}${sparse}`;
+      return `<span title="${escapeAttribute(item.fullLabel)}"><i class="legend-key" style="background:${color}"></i>${escapeHtml(label)}</span>`;
+    }).join('');
+  }
+
+  function renderChartSummaryCards(series, colorByKey) {
+    return asArray(series).slice(0, 10).map((item, index) => {
+      const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
+      const label = item.rank ? `${item.rank}. ${item.label}` : item.label;
+      const delta = item.periodDelta === null ? '-' : formatPercentPoint(item.periodDelta);
+      return `<div class="chart-summary-item"><span class="legend-key" style="background:${color}"></span><strong>${escapeHtml(label)}</strong><em>${escapeHtml(formatWeight(item.latestWeight))}</em><small>기간 Δ ${escapeHtml(delta)} · 데이터 ${item.validPoints.length}/${item.points.length}일</small></div>`;
+    }).join('');
   }
 
   function buildWeightSeries(history, latestTop10) {
     const keys = latestTop10.map((row) => holdingKey(row)).filter(Boolean).slice(0, 10);
-    return keys.map((key) => {
+    return keys.map((key, orderIndex) => {
       const latest = latestTop10.find((row) => holdingKey(row) === key) || {};
       const label = latest.ticker || latest.name || key;
       const points = history.map((snapshot) => {
@@ -479,8 +533,68 @@
         const holding = universe.find((row) => holdingKey(row) === key);
         return { date: snapshot.date, value: holding?.weightPercent ?? null };
       });
-      return { key, label, points };
+      const validPoints = points.filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
+      const first = validPoints[0] || null;
+      const last = validPoints.at(-1) || null;
+      const periodDelta = first && last ? last.value - first.value : null;
+      const rank = finiteOrNull(latest.rank) || orderIndex + 1;
+      return {
+        key,
+        label: truncateLabel(label, 18),
+        fullLabel: label,
+        rank,
+        latestWeight: finiteOrNull(latest.weightPercent),
+        periodDelta,
+        points,
+        validPoints,
+        isSparse: validPoints.length < points.length * 0.75,
+      };
     }).filter((item) => item.points.some((point) => point.value > 0));
+  }
+
+  function splitPointSegments(points) {
+    const segments = [];
+    let current = [];
+    asArray(points).forEach((point) => {
+      if (Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date))) {
+        current.push(point);
+      } else if (current.length) {
+        segments.push(current);
+        current = [];
+      }
+    });
+    if (current.length) segments.push(current);
+    return segments;
+  }
+
+  function buildEndLabels(series, x, y, topY, bottomY) {
+    const labels = asArray(series)
+      .map((item) => {
+        const point = item.validPoints.at(-1);
+        if (!point) return null;
+        return {
+          key: item.key,
+          y1: y(point.value),
+          y2: y(point.value),
+          x1: x(point.date),
+          x2: x(point.date) + 26,
+          text: `${item.rank}. ${item.label} ${formatWeight(point.value)}`,
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.y2 - b.y2);
+    let previousY = -Infinity;
+    labels.forEach((label) => {
+      if (label.y2 - previousY < 18) label.y2 = previousY + 18;
+      previousY = label.y2;
+    });
+    const overflow = labels.length ? labels.at(-1).y2 - (bottomY - 4) : 0;
+    if (overflow > 0) labels.forEach((label) => { label.y2 -= overflow; });
+    for (let index = labels.length - 2; index >= 0; index -= 1) {
+      if (labels[index + 1].y2 - labels[index].y2 < 18) labels[index].y2 = labels[index + 1].y2 - 18;
+    }
+    labels.forEach((label) => { label.y2 = Math.max(topY + 8, Math.min(label.y2, bottomY - 4)); });
+    return labels;
   }
 
   function buildSeriesColorMap(series) {
@@ -543,7 +657,8 @@
       <div class="source-item"><strong>히스토리 범위</strong><span>선택 ${escapeHtml(formatMaybeDate(selectedStart))} → ${escapeHtml(formatMaybeDate(selectedEnd))} · 저장 전체 ${escapeHtml(formatMaybeDate(etf.availableStartDate))} → ${escapeHtml(formatMaybeDate(etf.availableEndDate))}</span><small>${escapeHtml(historyPolicy.startDateExplanation || '예약 업데이트는 최근 구간을 갱신하고, 수동 백필로 더 과거 구간을 확장할 수 있습니다.')}</small></div>
       <div class="source-item"><strong>전일대비 분해 기준</strong><span>ETF 비중 ${escapeHtml(formatMaybeDate(dateBasis.previousSnapshotDate))} → ${escapeHtml(formatMaybeDate(dateBasis.currentSnapshotDate || latest?.date))} · 가격 기준 ${escapeHtml(formatMaybeDate(priceBasis.previous))} → ${escapeHtml(formatMaybeDate(priceBasis.current || latest?.priceBasisDate))}</span></div>
       <div class="source-item"><strong>소스 상태</strong><span class="${latest?.sourceStatus === 'live' ? '' : 'warning'}">${escapeHtml(latest?.sourceStatus || 'unknown')} · ${escapeHtml(latest?.sourceWarning || '정상')}</span></div>
-      <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')}</span></div>
+      <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')} · ${escapeHtml(formatCoverageUniverse(summary.returnCoverageUniverse))}</span><small>가격 반영 비중 ${escapeHtml(formatWeight(summary.validReturnWeightPercent))} / 전체 ${escapeHtml(formatWeight(summary.totalReturnWeightPercent))} · 미가격 ${escapeHtml(formatWeight(summary.unpricedReturnWeightPercent))}</small></div>
+      <div class="source-item"><strong>벤치마크·환율</strong><span>벤치마크 ${escapeHtml(formatReturn(summary.benchmarkReturn))} · ${escapeHtml(formatFxCoverage(latest?.decomposition || []))}</span><small>외부 USD/JPY/HKD 종가는 가능한 경우 환율 수익률을 곱해 KRW 기준으로 환산합니다.</small></div>
     `;
     const pill = $('#coverage-pill');
     if (pill) {
@@ -800,8 +915,15 @@
       etf_provider_unit_value_krw: 'ETF KRW 평가단가',
       yahoo_chart_query1: 'Yahoo Chart',
       yahoo_chart_query2: 'Yahoo Chart 보조',
+      yahoo_fx_query1: 'Yahoo FX',
+      yahoo_fx_query2: 'Yahoo FX 보조',
       stooq_csv: 'Stooq CSV',
+      stooq_fx_csv: 'Stooq FX CSV',
       finance_datareader: 'FinanceDataReader',
+      fx_adjusted_external_close: '외부 종가+환율',
+      external_close_fx_adjusted_krw: '외부 종가+환율',
+      external_close_local_currency: '외부 종가(환율 미반영)',
+      external_close_krw: '외부 KRW 종가',
     };
     const key = stringOr(value, '');
     return labels[key] || key || '가격 소스 없음';
@@ -811,6 +933,25 @@
     const num = finiteOrNull(value);
     if (num === null) return '-';
     return `${(num * 100).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}%`;
+  }
+
+  function formatCoverageUniverse(value) {
+    const labels = {
+      full_holdings: '전체 보유종목',
+      priced_subset_of_full_holdings: '전체 보유종목 중 가격확보분',
+      top10_fallback: 'TOP10 fallback',
+      priced_subset_of_top10_fallback: 'TOP10 중 가격확보분',
+      none: '보유종목 없음',
+    };
+    const key = stringOr(value, '');
+    return labels[key] || key || '범위 알 수 없음';
+  }
+
+  function formatFxCoverage(rows) {
+    const tracked = asArray(rows).filter((row) => row.currency && row.currency !== 'KRW' && row.currency !== 'UNKNOWN');
+    if (!tracked.length) return '환율 보정 대상 없음';
+    const applied = tracked.filter((row) => row.fxApplied === true).length;
+    return `환율 보정 ${applied}/${tracked.length}개`;
   }
 
   function formatAutomationStatus(value) {
@@ -838,6 +979,29 @@
     if (!value) return '-';
     const text = String(value);
     return /^\d{4}-\d{2}-\d{2}/.test(text) ? text.slice(0, 10) : text;
+  }
+
+  function schemaWarning(value) {
+    const text = stringOr(value, '');
+    if (!text || text === 'fallback') return '';
+    const major = Number(text.split('.')[0]);
+    return major === SUPPORTED_SCHEMA_MAJOR ? '' : `schema ${text} 미지원 가능`;
+  }
+
+  function truncateLabel(value, maxLength) {
+    const text = stringOr(value, '');
+    return text.length > maxLength ? `${text.slice(0, Math.max(maxLength - 1, 1))}…` : text;
+  }
+
+  function safeHttpUrl(value, fallback) {
+    try {
+      const url = new URL(stringOr(value, fallback), window.location.href);
+      if (url.protocol !== 'https:') return fallback;
+      if (!ALLOWED_LINK_HOSTS.has(url.hostname)) return fallback;
+      return url.href;
+    } catch {
+      return fallback;
+    }
   }
 
   function asArray(value) { return Array.isArray(value) ? value : []; }
@@ -874,6 +1038,7 @@
       filterHistory,
       buildWeightSeries,
       buildSeriesColorMap,
+      splitPointSegments,
       buildNiceTicks,
       buildDateTicks,
       formatAxisWeight,
@@ -886,6 +1051,8 @@
       formatReturn,
       formatPriceSource,
       formatCoverage,
+      formatCoverageUniverse,
+      formatFxCoverage,
       formatAutomationStatus,
       FALLBACK_DASHBOARD,
       AUTOMATION_STATUS_URL,
