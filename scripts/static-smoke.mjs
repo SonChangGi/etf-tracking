@@ -24,10 +24,15 @@ if (parsed.manualUpdatePolicy?.workflowUrl !== 'https://github.com/SonChangGi/et
 const selected = parsed.etfs[0];
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
+const colorMap = api.buildSeriesColorMap(series);
+const visibleColors = series.map((item) => colorMap.get(item.key));
+if (new Set(visibleColors).size !== visibleColors.length) throw new Error('visible chart series colors should not overlap');
 const weightTicks = api.buildNiceTicks(0, 2.82, 6);
 if (!weightTicks.includes(3) || weightTicks.includes(2.82)) throw new Error('weight axis ticks should use nice readable bounds');
-const dateTicks = api.buildDateTicks(selected.history.map((row) => row.date), 8);
+const dateTicks = api.buildDateTicks(selected.history.map((row) => row.date), 14);
 if (selected.history.length > 2 && dateTicks.length < 3) throw new Error('date axis should include intermediate ticks');
+if (selected.history.length > 20 && !dateTicks.some((date) => new Date(Date.parse(date)).getUTCDay() === 1)) throw new Error('date axis should include rule-based Monday ticks');
+if (dateTicks[0] !== selected.history[0]?.date || dateTicks.at(-1) !== selected.history.at(-1)?.date) throw new Error('date axis should keep first and last dates');
 if (api.formatAxisDate('2026-06-17') !== '06.17') throw new Error('axis date label format changed');
 const decompositionKeys = new Set((selected.latest?.decomposition || []).map((row) => api.holdingKey(row)));
 for (const holding of selected.latest?.top10 || []) {
@@ -80,6 +85,7 @@ try {
   if (!html.includes('GitHub Actions에서 수동 업데이트 열기')) throw new Error('manual update CTA missing');
   if (!html.includes('https://sonchanggi.github.io/quant-dashboard/')) throw new Error('quant dashboard return link missing');
   if (!app.includes('buildWeightSeries')) throw new Error('chart series builder missing');
+  if (!app.includes('buildSeriesColorMap')) throw new Error('chart color collision guard missing');
   if (!app.includes('buildNiceTicks')) throw new Error('nice axis tick builder missing');
   if (!app.includes('axis-range')) throw new Error('chart axis range label missing');
   if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');

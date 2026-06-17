@@ -7,7 +7,12 @@
   const QUANT_DASHBOARD_URL = 'https://sonchanggi.github.io/quant-dashboard/';
   const WORKFLOW_URL = 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml';
   const MANUAL_UPDATE_COMMAND = 'gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false';
-  const COLORS = ['#2457d6', '#0f766e', '#e11d48', '#f97316', '#7c3aed', '#0891b2', '#059669', '#db2777', '#2563eb', '#9333ea'];
+  const CHART_COLORS = [
+    '#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed',
+    '#0891b2', '#db2777', '#4d7c0f', '#92400e', '#111827',
+    '#0f766e', '#be123c', '#4338ca', '#0369a1', '#a16207',
+    '#15803d', '#c2410c', '#7f1d1d', '#581c87', '#0e7490',
+  ];
   const $ = (selector) => (typeof document === 'undefined' ? null : document.querySelector(selector));
 
   const state = {
@@ -424,9 +429,10 @@
     const yTicks = buildNiceTicks(0, Math.max(...values, 1) * 1.08, 6);
     const yMin = yTicks[0] ?? 0;
     const yMax = yTicks.at(-1) ?? Math.max(...values, 1);
-    const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), 8);
+    const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), 14);
     const xTickYears = new Set(xTicks.map((date) => date.slice(0, 4)));
     const showYearOnTicks = xTickYears.size > 1;
+    const colorByKey = buildSeriesColorMap(series);
     const x = (date) => margin.left + ((Date.parse(date) - minDate) / Math.max(maxDate - minDate, 1)) * innerWidth;
     const y = (value) => margin.top + (1 - (value - yMin) / Math.max(yMax - yMin, 1)) * innerHeight;
     const yGrid = yTicks.map((tick) => `<g class="axis-row"><line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick).toFixed(1)}" y2="${y(tick).toFixed(1)}" stroke="#d9e2f1"/><text x="${margin.left - 14}" y="${(y(tick) + 4).toFixed(1)}" text-anchor="end">${formatAxisWeight(tick)}</text></g>`).join('');
@@ -435,13 +441,16 @@
       return `<g class="axis-column"><line x1="${xPos.toFixed(1)}" x2="${xPos.toFixed(1)}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="#e7edf7"/><text x="${xPos.toFixed(1)}" y="${height - margin.bottom + 24}" text-anchor="middle">${escapeHtml(formatAxisDate(tick, showYearOnTicks))}</text></g>`;
     }).join('');
     const paths = series.map((item, index) => {
-      const color = COLORS[index % COLORS.length];
+      const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
       const valid = item.points.filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
       const path = valid.map((point, pointIndex) => `${pointIndex ? 'L' : 'M'} ${x(point.date).toFixed(1)} ${y(point.value).toFixed(1)}`).join(' ');
       const circles = valid.map((point) => `<circle cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="3.4" fill="${color}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
       return `<path d="${path}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${circles}`;
     }).join('');
-    const legend = series.map((item, index) => `<span><i class="legend-key" style="background:${COLORS[index % COLORS.length]}"></i>${escapeHtml(item.label)}</span>`).join('');
+    const legend = series.map((item, index) => {
+      const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
+      return `<span><i class="legend-key" style="background:${color}"></i>${escapeHtml(item.label)}</span>`;
+    }).join('');
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     target.innerHTML = `
@@ -472,6 +481,15 @@
       });
       return { key, label, points };
     }).filter((item) => item.points.some((point) => point.value > 0));
+  }
+
+  function buildSeriesColorMap(series) {
+    const colorMap = new Map();
+    asArray(series).forEach((item, orderIndex) => {
+      const color = CHART_COLORS[orderIndex] || `hsl(${Math.round((orderIndex * 137.508) % 360)} 78% 38%)`;
+      colorMap.set(item.key, color);
+    });
+    return colorMap;
   }
 
   function holdingKey(row) {
@@ -709,9 +727,20 @@
     return Number(value.toFixed(8));
   }
 
-  function buildDateTicks(dates, maxTicks = 8) {
+  function buildDateTicks(dates, maxTicks = 14) {
     const unique = Array.from(new Set(asArray(dates).filter((date) => Number.isFinite(Date.parse(date))))).sort();
     if (unique.length <= maxTicks) return unique;
+    const first = unique[0];
+    const last = unique.at(-1);
+    const weeklyMondays = unique.filter(isUtcMonday);
+    const ruleTicks = uniqueDateTicks([first, ...weeklyMondays, last]);
+    if (weeklyMondays.length && ruleTicks.length <= maxTicks) return ruleTicks;
+    if (weeklyMondays.length) return downsampleDateTicks(ruleTicks, maxTicks);
+    return downsampleDateTicks(unique, maxTicks);
+  }
+
+  function downsampleDateTicks(dates, maxTicks) {
+    const unique = uniqueDateTicks(dates);
     const ticks = [];
     for (let index = 0; index < maxTicks; index += 1) {
       const date = unique[Math.round(index * (unique.length - 1) / (maxTicks - 1))];
@@ -719,6 +748,15 @@
     }
     if (ticks.at(-1) !== unique.at(-1)) ticks.push(unique.at(-1));
     return ticks;
+  }
+
+  function uniqueDateTicks(dates) {
+    return Array.from(new Set(asArray(dates).filter(Boolean))).sort();
+  }
+
+  function isUtcMonday(date) {
+    const time = Date.parse(date);
+    return Number.isFinite(time) && new Date(time).getUTCDay() === 1;
   }
 
   function formatAxisWeight(value) {
@@ -835,6 +873,7 @@
       normalizeAutomationStatus,
       filterHistory,
       buildWeightSeries,
+      buildSeriesColorMap,
       buildNiceTicks,
       buildDateTicks,
       formatAxisWeight,
