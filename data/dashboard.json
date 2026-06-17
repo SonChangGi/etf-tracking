@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "generatedAt": "2026-06-17T07:50:30+00:00",
+  "generatedAt": "2026-06-17T07:54:12+00:00",
   "timezone": "Asia/Seoul",
   "disclaimer": "가격 수익률 분해는 추정이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.",
   "sourcePolicy": {
@@ -156,7 +156,7 @@
           }
         ],
         "totalHoldings": 44,
-        "fetchedAt": "2026-06-17T07:50:36.811129+00:00",
+        "fetchedAt": "2026-06-17T07:54:25.342901+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
@@ -168,13 +168,13 @@
             "actualWeightPercent": 6.73,
             "previousWeightPercent": 6.58,
             "securityReturn": -0.06179282996369051,
-            "benchmarkReturn": -0.0600109290631951,
-            "predictedWeightPercent": 6.567526548671917,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 6.5423069347145075,
             "deltaActualPercentPoint": 0.15000000000000036,
-            "deltaPricePercentPoint": -0.012473451328083307,
-            "deltaResidualPercentPoint": 0.16247345132808366,
+            "deltaPricePercentPoint": -0.037693065285492544,
+            "deltaResidualPercentPoint": 0.1876930652854929,
             "tolerancePercentPoint": 0.658,
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -199,13 +199,13 @@
             "actualWeightPercent": 6.66,
             "previousWeightPercent": 6.9,
             "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": -0.0600109290631951,
-            "predictedWeightPercent": 6.9354672756297555,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 6.908834751800674,
             "deltaActualPercentPoint": -0.2400000000000002,
-            "deltaPricePercentPoint": 0.03546727562975516,
-            "deltaResidualPercentPoint": -0.27546727562975537,
+            "deltaPricePercentPoint": 0.008834751800673502,
+            "deltaResidualPercentPoint": -0.24883475180067371,
             "tolerancePercentPoint": 0.6900000000000001,
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -230,13 +230,13 @@
             "actualWeightPercent": 5.54,
             "previousWeightPercent": 5.74,
             "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": -0.0600109290631951,
-            "predictedWeightPercent": 5.590180300029223,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 5.568713742098436,
             "deltaActualPercentPoint": -0.20000000000000018,
-            "deltaPricePercentPoint": -0.14981969997077726,
-            "deltaResidualPercentPoint": -0.05018030002922291,
+            "deltaPricePercentPoint": -0.17128625790156438,
+            "deltaResidualPercentPoint": -0.0287137420984358,
             "tolerancePercentPoint": 0.5740000000000001,
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -261,13 +261,13 @@
             "actualWeightPercent": 5.32,
             "previousWeightPercent": 5.25,
             "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": -0.0600109290631951,
-            "predictedWeightPercent": 5.365717721412014,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 5.3451131104469,
             "deltaActualPercentPoint": 0.07000000000000028,
-            "deltaPricePercentPoint": 0.11571772141201375,
-            "deltaResidualPercentPoint": -0.04571772141201347,
+            "deltaPricePercentPoint": 0.09511311044690007,
+            "deltaResidualPercentPoint": -0.02511311044689979,
             "tolerancePercentPoint": 0.525,
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -292,13 +292,13 @@
             "actualWeightPercent": 4.67,
             "previousWeightPercent": 4.78,
             "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": -0.0600109290631951,
-            "predictedWeightPercent": 4.964529119665179,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 4.945465091990469,
             "deltaActualPercentPoint": -0.11000000000000032,
-            "deltaPricePercentPoint": 0.1845291196651786,
-            "deltaResidualPercentPoint": -0.2945291196651789,
+            "deltaPricePercentPoint": 0.16546509199046877,
+            "deltaResidualPercentPoint": -0.2754650919904691,
             "tolerancePercentPoint": 0.47800000000000004,
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -323,13 +323,13 @@
             "actualWeightPercent": 4.02,
             "previousWeightPercent": 3.86,
             "securityReturn": -0.0978049435946482,
-            "benchmarkReturn": -0.0600109290631951,
-            "predictedWeightPercent": 3.704801497589734,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 3.6905748838310215,
             "deltaActualPercentPoint": 0.1599999999999997,
-            "deltaPricePercentPoint": -0.15519850241026578,
-            "deltaResidualPercentPoint": 0.3151985024102655,
+            "deltaPricePercentPoint": -0.16942511616897837,
+            "deltaResidualPercentPoint": 0.32942511616897807,
             "tolerancePercentPoint": 0.386,
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -354,13 +354,13 @@
             "actualWeightPercent": 3.46,
             "previousWeightPercent": 3.43,
             "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": -0.0600109290631951,
-            "predictedWeightPercent": 3.3824696669575607,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 3.369480822741839,
             "deltaActualPercentPoint": 0.029999999999999805,
-            "deltaPricePercentPoint": -0.04753033304243948,
-            "deltaResidualPercentPoint": 0.07753033304243928,
+            "deltaPricePercentPoint": -0.06051917725816125,
+            "deltaResidualPercentPoint": 0.09051917725816105,
             "tolerancePercentPoint": 0.343,
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -384,17 +384,27 @@
             "previousRank": 8,
             "actualWeightPercent": 3.15,
             "previousWeightPercent": 3.23,
-            "securityReturn": null,
+            "securityReturn": -0.012198451762800988,
+            "benchmarkReturn": -0.05638741189566171,
+            "predictedWeightPercent": 3.381259471342871,
+            "deltaActualPercentPoint": -0.08000000000000007,
+            "deltaPricePercentPoint": 0.151259471342871,
+            "deltaResidualPercentPoint": -0.23125947134287106,
+            "tolerancePercentPoint": 0.323,
+            "returnCoverage": 0.9323999124917962,
             "priceMeta": {
-              "reason": "stale_close",
-              "startDate": "2026-06-15",
-              "endDate": "2026-06-16",
-              "startCloseDate": "2026-06-15",
-              "endCloseDate": "2026-06-15"
+              "start": {
+                "date": "2026-06-15",
+                "close": 409.07000732421875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 404.0799865722656
+              }
             },
-            "classification": "insufficient_data",
-            "confidence": "low",
-            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
           },
           {
             "date": "2026-06-17",
@@ -473,9 +483,9 @@
           }
         ],
         "analysisSummary": {
-          "returnCoverage": 0.8617370378472982,
+          "returnCoverage": 0.9323999124917962,
           "returnCoverageStatus": "ok",
-          "benchmarkReturn": -0.0600109290631951,
+          "benchmarkReturn": -0.05638741189566171,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
@@ -605,7 +615,7 @@
             }
           ],
           "totalHoldings": 42,
-          "fetchedAt": "2026-06-17T07:50:30.764853+00:00",
+          "fetchedAt": "2026-06-17T07:54:14.220114+00:00",
           "decomposition": [
             {
               "date": "2026-06-08",
@@ -836,7 +846,7 @@
             }
           ],
           "totalHoldings": 42,
-          "fetchedAt": "2026-06-17T07:50:31.382557+00:00",
+          "fetchedAt": "2026-06-17T07:54:15.897452+00:00",
           "decomposition": [
             {
               "date": "2026-06-09",
@@ -1356,7 +1366,7 @@
             }
           ],
           "totalHoldings": 43,
-          "fetchedAt": "2026-06-17T07:50:32.192873+00:00",
+          "fetchedAt": "2026-06-17T07:54:17.375812+00:00",
           "decomposition": [
             {
               "date": "2026-06-10",
@@ -1894,7 +1904,7 @@
             }
           ],
           "totalHoldings": 40,
-          "fetchedAt": "2026-06-17T07:50:33.109894+00:00",
+          "fetchedAt": "2026-06-17T07:54:18.770866+00:00",
           "decomposition": [
             {
               "date": "2026-06-11",
@@ -2375,7 +2385,7 @@
             }
           ],
           "totalHoldings": 40,
-          "fetchedAt": "2026-06-17T07:50:33.717483+00:00",
+          "fetchedAt": "2026-06-17T07:54:20.429345+00:00",
           "decomposition": [
             {
               "date": "2026-06-12",
@@ -2821,7 +2831,7 @@
             }
           ],
           "totalHoldings": 44,
-          "fetchedAt": "2026-06-17T07:50:34.651028+00:00",
+          "fetchedAt": "2026-06-17T07:54:22.075695+00:00",
           "decomposition": [
             {
               "date": "2026-06-15",
@@ -3344,7 +3354,7 @@
             }
           ],
           "totalHoldings": 44,
-          "fetchedAt": "2026-06-17T07:50:35.907326+00:00",
+          "fetchedAt": "2026-06-17T07:54:23.716225+00:00",
           "decomposition": [
             {
               "date": "2026-06-16",
@@ -3825,7 +3835,7 @@
             }
           ],
           "totalHoldings": 44,
-          "fetchedAt": "2026-06-17T07:50:36.811129+00:00",
+          "fetchedAt": "2026-06-17T07:54:25.342901+00:00",
           "decomposition": [
             {
               "date": "2026-06-17",
@@ -3837,13 +3847,13 @@
               "actualWeightPercent": 6.73,
               "previousWeightPercent": 6.58,
               "securityReturn": -0.06179282996369051,
-              "benchmarkReturn": -0.0600109290631951,
-              "predictedWeightPercent": 6.567526548671917,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 6.5423069347145075,
               "deltaActualPercentPoint": 0.15000000000000036,
-              "deltaPricePercentPoint": -0.012473451328083307,
-              "deltaResidualPercentPoint": 0.16247345132808366,
+              "deltaPricePercentPoint": -0.037693065285492544,
+              "deltaResidualPercentPoint": 0.1876930652854929,
               "tolerancePercentPoint": 0.658,
-              "returnCoverage": 0.8617370378472982,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -3868,13 +3878,13 @@
               "actualWeightPercent": 6.66,
               "previousWeightPercent": 6.9,
               "securityReturn": -0.05517921145915561,
-              "benchmarkReturn": -0.0600109290631951,
-              "predictedWeightPercent": 6.9354672756297555,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 6.908834751800674,
               "deltaActualPercentPoint": -0.2400000000000002,
-              "deltaPricePercentPoint": 0.03546727562975516,
-              "deltaResidualPercentPoint": -0.27546727562975537,
+              "deltaPricePercentPoint": 0.008834751800673502,
+              "deltaResidualPercentPoint": -0.24883475180067371,
               "tolerancePercentPoint": 0.6900000000000001,
-              "returnCoverage": 0.8617370378472982,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -3899,13 +3909,13 @@
               "actualWeightPercent": 5.54,
               "previousWeightPercent": 5.74,
               "securityReturn": -0.08454557724848444,
-              "benchmarkReturn": -0.0600109290631951,
-              "predictedWeightPercent": 5.590180300029223,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 5.568713742098436,
               "deltaActualPercentPoint": -0.20000000000000018,
-              "deltaPricePercentPoint": -0.14981969997077726,
-              "deltaResidualPercentPoint": -0.05018030002922291,
+              "deltaPricePercentPoint": -0.17128625790156438,
+              "deltaResidualPercentPoint": -0.0287137420984358,
               "tolerancePercentPoint": 0.5740000000000001,
-              "returnCoverage": 0.8617370378472982,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -3930,13 +3940,13 @@
               "actualWeightPercent": 5.32,
               "previousWeightPercent": 5.25,
               "securityReturn": -0.039292187455384986,
-              "benchmarkReturn": -0.0600109290631951,
-              "predictedWeightPercent": 5.365717721412014,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 5.3451131104469,
               "deltaActualPercentPoint": 0.07000000000000028,
-              "deltaPricePercentPoint": 0.11571772141201375,
-              "deltaResidualPercentPoint": -0.04571772141201347,
+              "deltaPricePercentPoint": 0.09511311044690007,
+              "deltaResidualPercentPoint": -0.02511311044689979,
               "tolerancePercentPoint": 0.525,
-              "returnCoverage": 0.8617370378472982,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -3961,13 +3971,13 @@
               "actualWeightPercent": 4.67,
               "previousWeightPercent": 4.78,
               "securityReturn": -0.023723197733726886,
-              "benchmarkReturn": -0.0600109290631951,
-              "predictedWeightPercent": 4.964529119665179,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 4.945465091990469,
               "deltaActualPercentPoint": -0.11000000000000032,
-              "deltaPricePercentPoint": 0.1845291196651786,
-              "deltaResidualPercentPoint": -0.2945291196651789,
+              "deltaPricePercentPoint": 0.16546509199046877,
+              "deltaResidualPercentPoint": -0.2754650919904691,
               "tolerancePercentPoint": 0.47800000000000004,
-              "returnCoverage": 0.8617370378472982,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -3992,13 +4002,13 @@
               "actualWeightPercent": 4.02,
               "previousWeightPercent": 3.86,
               "securityReturn": -0.0978049435946482,
-              "benchmarkReturn": -0.0600109290631951,
-              "predictedWeightPercent": 3.704801497589734,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 3.6905748838310215,
               "deltaActualPercentPoint": 0.1599999999999997,
-              "deltaPricePercentPoint": -0.15519850241026578,
-              "deltaResidualPercentPoint": 0.3151985024102655,
+              "deltaPricePercentPoint": -0.16942511616897837,
+              "deltaResidualPercentPoint": 0.32942511616897807,
               "tolerancePercentPoint": 0.386,
-              "returnCoverage": 0.8617370378472982,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -4023,13 +4033,13 @@
               "actualWeightPercent": 3.46,
               "previousWeightPercent": 3.43,
               "securityReturn": -0.07303658317336414,
-              "benchmarkReturn": -0.0600109290631951,
-              "predictedWeightPercent": 3.3824696669575607,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 3.369480822741839,
               "deltaActualPercentPoint": 0.029999999999999805,
-              "deltaPricePercentPoint": -0.04753033304243948,
-              "deltaResidualPercentPoint": 0.07753033304243928,
+              "deltaPricePercentPoint": -0.06051917725816125,
+              "deltaResidualPercentPoint": 0.09051917725816105,
               "tolerancePercentPoint": 0.343,
-              "returnCoverage": 0.8617370378472982,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -4053,17 +4063,27 @@
               "previousRank": 8,
               "actualWeightPercent": 3.15,
               "previousWeightPercent": 3.23,
-              "securityReturn": null,
+              "securityReturn": -0.012198451762800988,
+              "benchmarkReturn": -0.05638741189566171,
+              "predictedWeightPercent": 3.381259471342871,
+              "deltaActualPercentPoint": -0.08000000000000007,
+              "deltaPricePercentPoint": 0.151259471342871,
+              "deltaResidualPercentPoint": -0.23125947134287106,
+              "tolerancePercentPoint": 0.323,
+              "returnCoverage": 0.9323999124917962,
               "priceMeta": {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15"
+                "start": {
+                  "date": "2026-06-15",
+                  "close": 409.07000732421875
+                },
+                "end": {
+                  "date": "2026-06-16",
+                  "close": 404.0799865722656
+                }
               },
-              "classification": "insufficient_data",
-              "confidence": "low",
-              "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+              "classification": "price_explained",
+              "confidence": "high",
+              "message": "가격 수익률로 대부분 설명됩니다."
             },
             {
               "date": "2026-06-17",
@@ -4142,9 +4162,9 @@
             }
           ],
           "analysisSummary": {
-            "returnCoverage": 0.8617370378472982,
+            "returnCoverage": 0.9323999124917962,
             "returnCoverageStatus": "ok",
-            "benchmarkReturn": -0.0600109290631951,
+            "benchmarkReturn": -0.05638741189566171,
             "priceBasis": {
               "previous": "2026-06-15",
               "current": "2026-06-16"
@@ -4185,7 +4205,7 @@
         "top10Count": 10,
         "entryExitSignalCount": 2,
         "signalCount": 2,
-        "returnCoverage": 0.8617370378472982,
+        "returnCoverage": 0.9323999124917962,
         "returnCoverageStatus": "ok"
       }
     },
@@ -4321,7 +4341,7 @@
           }
         ],
         "totalHoldings": 37,
-        "fetchedAt": "2026-06-17T07:50:43.879431+00:00",
+        "fetchedAt": "2026-06-17T07:54:37.799556+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
@@ -4780,7 +4800,7 @@
             }
           ],
           "totalHoldings": 36,
-          "fetchedAt": "2026-06-17T07:50:37.743790+00:00",
+          "fetchedAt": "2026-06-17T07:54:26.796551+00:00",
           "decomposition": [
             {
               "date": "2026-06-08",
@@ -5011,7 +5031,7 @@
             }
           ],
           "totalHoldings": 36,
-          "fetchedAt": "2026-06-17T07:50:38.675241+00:00",
+          "fetchedAt": "2026-06-17T07:54:28.548330+00:00",
           "decomposition": [
             {
               "date": "2026-06-09",
@@ -5505,7 +5525,7 @@
             }
           ],
           "totalHoldings": 36,
-          "fetchedAt": "2026-06-17T07:50:39.583973+00:00",
+          "fetchedAt": "2026-06-17T07:54:30.080285+00:00",
           "decomposition": [
             {
               "date": "2026-06-10",
@@ -5999,7 +6019,7 @@
             }
           ],
           "totalHoldings": 36,
-          "fetchedAt": "2026-06-17T07:50:40.514622+00:00",
+          "fetchedAt": "2026-06-17T07:54:31.754483+00:00",
           "decomposition": [
             {
               "date": "2026-06-11",
@@ -6459,7 +6479,7 @@
             }
           ],
           "totalHoldings": 36,
-          "fetchedAt": "2026-06-17T07:50:41.401567+00:00",
+          "fetchedAt": "2026-06-17T07:54:33.227666+00:00",
           "decomposition": [
             {
               "date": "2026-06-12",
@@ -6940,7 +6960,7 @@
             }
           ],
           "totalHoldings": 37,
-          "fetchedAt": "2026-06-17T07:50:42.038845+00:00",
+          "fetchedAt": "2026-06-17T07:54:34.625558+00:00",
           "decomposition": [
             {
               "date": "2026-06-15",
@@ -7386,7 +7406,7 @@
             }
           ],
           "totalHoldings": 37,
-          "fetchedAt": "2026-06-17T07:50:42.800122+00:00",
+          "fetchedAt": "2026-06-17T07:54:36.102619+00:00",
           "decomposition": [
             {
               "date": "2026-06-16",
@@ -7818,7 +7838,7 @@
             }
           ],
           "totalHoldings": 37,
-          "fetchedAt": "2026-06-17T07:50:43.879431+00:00",
+          "fetchedAt": "2026-06-17T07:54:37.799556+00:00",
           "decomposition": [
             {
               "date": "2026-06-17",
@@ -8374,7 +8394,7 @@
           }
         ],
         "totalHoldings": 55,
-        "fetchedAt": "2026-06-17T07:50:47.640910+00:00",
+        "fetchedAt": "2026-06-17T07:54:49.028406+00:00",
         "decomposition": [
           {
             "date": "2026-06-17",
@@ -8403,13 +8423,13 @@
             "actualWeightPercent": 7.45,
             "previousWeightPercent": 7.42,
             "securityReturn": -0.07303658317336414,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 7.197178243686292,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 7.152757188247266,
             "deltaActualPercentPoint": 0.03000000000000025,
-            "deltaPricePercentPoint": -0.22282175631370826,
-            "deltaResidualPercentPoint": 0.2528217563137085,
+            "deltaPricePercentPoint": -0.2672428117527339,
+            "deltaResidualPercentPoint": 0.29724281175273415,
             "tolerancePercentPoint": 0.742,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8434,13 +8454,13 @@
             "actualWeightPercent": 7.34,
             "previousWeightPercent": 7.22,
             "securityReturn": -0.039292187455384986,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 7.258122242605975,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 7.213325040201705,
             "deltaActualPercentPoint": 0.1200000000000001,
-            "deltaPricePercentPoint": 0.038122242605974854,
-            "deltaResidualPercentPoint": 0.08187775739402525,
+            "deltaPricePercentPoint": -0.006674959798294466,
+            "deltaResidualPercentPoint": 0.12667495979829457,
             "tolerancePercentPoint": 0.722,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8465,13 +8485,13 @@
             "actualWeightPercent": 5.94,
             "previousWeightPercent": 5.95,
             "securityReturn": -0.05517921145915561,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 5.882503096432818,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 5.846196229030151,
             "deltaActualPercentPoint": -0.009999999999999787,
-            "deltaPricePercentPoint": -0.06749690356718219,
-            "deltaResidualPercentPoint": 0.0574969035671824,
+            "deltaPricePercentPoint": -0.10380377096984894,
+            "deltaResidualPercentPoint": 0.09380377096984915,
             "tolerancePercentPoint": 0.5950000000000001,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8496,13 +8516,13 @@
             "actualWeightPercent": 5.57,
             "previousWeightPercent": 5.79,
             "securityReturn": -0.08454557724848444,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 5.546398239053075,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 5.51216581416072,
             "deltaActualPercentPoint": -0.21999999999999975,
-            "deltaPricePercentPoint": -0.24360176094692498,
-            "deltaResidualPercentPoint": 0.023601760946925232,
+            "deltaPricePercentPoint": -0.2778341858392803,
+            "deltaResidualPercentPoint": 0.05783418583928057,
             "tolerancePercentPoint": 0.5790000000000001,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8527,13 +8547,13 @@
             "actualWeightPercent": 4.91,
             "previousWeightPercent": 5.06,
             "securityReturn": -0.023723197733726886,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 5.169151313612094,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 5.1372472604818125,
             "deltaActualPercentPoint": -0.14999999999999947,
-            "deltaPricePercentPoint": 0.10915131361209429,
-            "deltaResidualPercentPoint": -0.25915131361209376,
+            "deltaPricePercentPoint": 0.07724726048181285,
+            "deltaResidualPercentPoint": -0.22724726048181232,
             "tolerancePercentPoint": 0.506,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8558,13 +8578,13 @@
             "actualWeightPercent": 4.7,
             "previousWeightPercent": 4.88,
             "securityReturn": 0.010559073594251789,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 5.160327752770657,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 5.128478158745324,
             "deltaActualPercentPoint": -0.17999999999999972,
-            "deltaPricePercentPoint": 0.28032775277065713,
-            "deltaResidualPercentPoint": -0.46032775277065685,
+            "deltaPricePercentPoint": 0.24847815874532397,
+            "deltaResidualPercentPoint": -0.4284781587453237,
             "tolerancePercentPoint": 0.488,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8588,17 +8608,27 @@
             "previousRank": 8,
             "actualWeightPercent": 4.2,
             "previousWeightPercent": 4.24,
-            "securityReturn": null,
+            "securityReturn": 0.023242276440118337,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 4.511815316405542,
+            "deltaActualPercentPoint": -0.040000000000000036,
+            "deltaPricePercentPoint": 0.2718153164055419,
+            "deltaResidualPercentPoint": -0.31181531640554194,
+            "tolerancePercentPoint": 0.42400000000000004,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
-              "reason": "stale_close",
-              "startDate": "2026-06-15",
-              "endDate": "2026-06-16",
-              "startCloseDate": "2026-06-15",
-              "endCloseDate": "2026-06-15"
+              "start": {
+                "date": "2026-06-15",
+                "close": 274.5
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 280.8800048828125
+              }
             },
-            "classification": "insufficient_data",
-            "confidence": "low",
-            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
           },
           {
             "date": "2026-06-17",
@@ -8610,13 +8640,13 @@
             "actualWeightPercent": 4.05,
             "previousWeightPercent": 3.89,
             "securityReturn": -0.06179282996369051,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 3.818951186896387,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 3.7953805823277325,
             "deltaActualPercentPoint": 0.1599999999999997,
-            "deltaPricePercentPoint": -0.0710488131036131,
-            "deltaResidualPercentPoint": 0.2310488131036128,
+            "deltaPricePercentPoint": -0.09461941767226767,
+            "deltaResidualPercentPoint": 0.25461941767226737,
             "tolerancePercentPoint": 0.389,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8641,13 +8671,13 @@
             "actualWeightPercent": 3.71,
             "previousWeightPercent": 3.83,
             "securityReturn": -8.13115686266741e-05,
-            "benchmarkReturn": -0.0443381669910138,
-            "predictedWeightPercent": 4.007367924942701,
+            "benchmarkReturn": -0.0384031819009558,
+            "predictedWeightPercent": 3.982634410399747,
             "deltaActualPercentPoint": -0.1200000000000001,
-            "deltaPricePercentPoint": 0.17736792494270137,
-            "deltaResidualPercentPoint": -0.2973679249427015,
+            "deltaPricePercentPoint": 0.152634410399747,
+            "deltaResidualPercentPoint": -0.2726344103997471,
             "tolerancePercentPoint": 0.383,
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "priceMeta": {
               "start": {
                 "date": "2026-06-15",
@@ -8665,9 +8695,9 @@
         ],
         "signals": [],
         "analysisSummary": {
-          "returnCoverage": 0.7745339430179388,
+          "returnCoverage": 0.8491030601477313,
           "returnCoverageStatus": "ok",
-          "benchmarkReturn": -0.0443381669910138,
+          "benchmarkReturn": -0.0384031819009558,
           "priceBasis": {
             "previous": "2026-06-15",
             "current": "2026-06-16"
@@ -8847,7 +8877,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:44.339588+00:00",
+          "fetchedAt": "2026-06-17T07:54:39.926199+00:00",
           "decomposition": [
             {
               "date": "2026-06-08",
@@ -9128,7 +9158,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:45.012771+00:00",
+          "fetchedAt": "2026-06-17T07:54:41.769311+00:00",
           "decomposition": [
             {
               "date": "2026-06-09",
@@ -9745,7 +9775,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:45.400975+00:00",
+          "fetchedAt": "2026-06-17T07:54:42.998490+00:00",
           "decomposition": [
             {
               "date": "2026-06-10",
@@ -10276,7 +10306,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:45.935319+00:00",
+          "fetchedAt": "2026-06-17T07:54:44.755565+00:00",
           "decomposition": [
             {
               "date": "2026-06-11",
@@ -10786,7 +10816,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:46.318590+00:00",
+          "fetchedAt": "2026-06-17T07:54:45.270640+00:00",
           "decomposition": [
             {
               "date": "2026-06-12",
@@ -11330,7 +11360,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:46.857269+00:00",
+          "fetchedAt": "2026-06-17T07:54:45.694798+00:00",
           "decomposition": [
             {
               "date": "2026-06-15",
@@ -11848,7 +11878,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:47.235489+00:00",
+          "fetchedAt": "2026-06-17T07:54:47.713028+00:00",
           "decomposition": [
             {
               "date": "2026-06-16",
@@ -12366,7 +12396,7 @@
             }
           ],
           "totalHoldings": 55,
-          "fetchedAt": "2026-06-17T07:50:47.640910+00:00",
+          "fetchedAt": "2026-06-17T07:54:49.028406+00:00",
           "decomposition": [
             {
               "date": "2026-06-17",
@@ -12395,13 +12425,13 @@
               "actualWeightPercent": 7.45,
               "previousWeightPercent": 7.42,
               "securityReturn": -0.07303658317336414,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 7.197178243686292,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 7.152757188247266,
               "deltaActualPercentPoint": 0.03000000000000025,
-              "deltaPricePercentPoint": -0.22282175631370826,
-              "deltaResidualPercentPoint": 0.2528217563137085,
+              "deltaPricePercentPoint": -0.2672428117527339,
+              "deltaResidualPercentPoint": 0.29724281175273415,
               "tolerancePercentPoint": 0.742,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12426,13 +12456,13 @@
               "actualWeightPercent": 7.34,
               "previousWeightPercent": 7.22,
               "securityReturn": -0.039292187455384986,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 7.258122242605975,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 7.213325040201705,
               "deltaActualPercentPoint": 0.1200000000000001,
-              "deltaPricePercentPoint": 0.038122242605974854,
-              "deltaResidualPercentPoint": 0.08187775739402525,
+              "deltaPricePercentPoint": -0.006674959798294466,
+              "deltaResidualPercentPoint": 0.12667495979829457,
               "tolerancePercentPoint": 0.722,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12457,13 +12487,13 @@
               "actualWeightPercent": 5.94,
               "previousWeightPercent": 5.95,
               "securityReturn": -0.05517921145915561,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 5.882503096432818,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 5.846196229030151,
               "deltaActualPercentPoint": -0.009999999999999787,
-              "deltaPricePercentPoint": -0.06749690356718219,
-              "deltaResidualPercentPoint": 0.0574969035671824,
+              "deltaPricePercentPoint": -0.10380377096984894,
+              "deltaResidualPercentPoint": 0.09380377096984915,
               "tolerancePercentPoint": 0.5950000000000001,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12488,13 +12518,13 @@
               "actualWeightPercent": 5.57,
               "previousWeightPercent": 5.79,
               "securityReturn": -0.08454557724848444,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 5.546398239053075,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 5.51216581416072,
               "deltaActualPercentPoint": -0.21999999999999975,
-              "deltaPricePercentPoint": -0.24360176094692498,
-              "deltaResidualPercentPoint": 0.023601760946925232,
+              "deltaPricePercentPoint": -0.2778341858392803,
+              "deltaResidualPercentPoint": 0.05783418583928057,
               "tolerancePercentPoint": 0.5790000000000001,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12519,13 +12549,13 @@
               "actualWeightPercent": 4.91,
               "previousWeightPercent": 5.06,
               "securityReturn": -0.023723197733726886,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 5.169151313612094,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 5.1372472604818125,
               "deltaActualPercentPoint": -0.14999999999999947,
-              "deltaPricePercentPoint": 0.10915131361209429,
-              "deltaResidualPercentPoint": -0.25915131361209376,
+              "deltaPricePercentPoint": 0.07724726048181285,
+              "deltaResidualPercentPoint": -0.22724726048181232,
               "tolerancePercentPoint": 0.506,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12550,13 +12580,13 @@
               "actualWeightPercent": 4.7,
               "previousWeightPercent": 4.88,
               "securityReturn": 0.010559073594251789,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 5.160327752770657,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 5.128478158745324,
               "deltaActualPercentPoint": -0.17999999999999972,
-              "deltaPricePercentPoint": 0.28032775277065713,
-              "deltaResidualPercentPoint": -0.46032775277065685,
+              "deltaPricePercentPoint": 0.24847815874532397,
+              "deltaResidualPercentPoint": -0.4284781587453237,
               "tolerancePercentPoint": 0.488,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12580,17 +12610,27 @@
               "previousRank": 8,
               "actualWeightPercent": 4.2,
               "previousWeightPercent": 4.24,
-              "securityReturn": null,
+              "securityReturn": 0.023242276440118337,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 4.511815316405542,
+              "deltaActualPercentPoint": -0.040000000000000036,
+              "deltaPricePercentPoint": 0.2718153164055419,
+              "deltaResidualPercentPoint": -0.31181531640554194,
+              "tolerancePercentPoint": 0.42400000000000004,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
-                "reason": "stale_close",
-                "startDate": "2026-06-15",
-                "endDate": "2026-06-16",
-                "startCloseDate": "2026-06-15",
-                "endCloseDate": "2026-06-15"
+                "start": {
+                  "date": "2026-06-15",
+                  "close": 274.5
+                },
+                "end": {
+                  "date": "2026-06-16",
+                  "close": 280.8800048828125
+                }
               },
-              "classification": "insufficient_data",
-              "confidence": "low",
-              "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+              "classification": "price_explained",
+              "confidence": "high",
+              "message": "가격 수익률로 대부분 설명됩니다."
             },
             {
               "date": "2026-06-17",
@@ -12602,13 +12642,13 @@
               "actualWeightPercent": 4.05,
               "previousWeightPercent": 3.89,
               "securityReturn": -0.06179282996369051,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 3.818951186896387,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 3.7953805823277325,
               "deltaActualPercentPoint": 0.1599999999999997,
-              "deltaPricePercentPoint": -0.0710488131036131,
-              "deltaResidualPercentPoint": 0.2310488131036128,
+              "deltaPricePercentPoint": -0.09461941767226767,
+              "deltaResidualPercentPoint": 0.25461941767226737,
               "tolerancePercentPoint": 0.389,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12633,13 +12673,13 @@
               "actualWeightPercent": 3.71,
               "previousWeightPercent": 3.83,
               "securityReturn": -8.13115686266741e-05,
-              "benchmarkReturn": -0.0443381669910138,
-              "predictedWeightPercent": 4.007367924942701,
+              "benchmarkReturn": -0.0384031819009558,
+              "predictedWeightPercent": 3.982634410399747,
               "deltaActualPercentPoint": -0.1200000000000001,
-              "deltaPricePercentPoint": 0.17736792494270137,
-              "deltaResidualPercentPoint": -0.2973679249427015,
+              "deltaPricePercentPoint": 0.152634410399747,
+              "deltaResidualPercentPoint": -0.2726344103997471,
               "tolerancePercentPoint": 0.383,
-              "returnCoverage": 0.7745339430179388,
+              "returnCoverage": 0.8491030601477313,
               "priceMeta": {
                 "start": {
                   "date": "2026-06-15",
@@ -12657,9 +12697,9 @@
           ],
           "signals": [],
           "analysisSummary": {
-            "returnCoverage": 0.7745339430179388,
+            "returnCoverage": 0.8491030601477313,
             "returnCoverageStatus": "ok",
-            "benchmarkReturn": -0.0443381669910138,
+            "benchmarkReturn": -0.0384031819009558,
             "priceBasis": {
               "previous": "2026-06-15",
               "current": "2026-06-16"
@@ -12673,7 +12713,7 @@
         "top10Count": 10,
         "entryExitSignalCount": 0,
         "signalCount": 0,
-        "returnCoverage": 0.7745339430179388,
+        "returnCoverage": 0.8491030601477313,
         "returnCoverageStatus": "ok"
       }
     }
