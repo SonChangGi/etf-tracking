@@ -445,6 +445,22 @@ tbody tr:hover { background: #f3f7ff; }
 .basis-cell span,
 .confidence-text { color: var(--muted); font-size: 0.82rem; }
 .badge-stack { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; min-width: 150px; }
+.action-hint-text {
+  flex-basis: 100%;
+  color: var(--ink);
+  font-weight: 900;
+  font-size: 0.86rem;
+}
+.action-hint-text.likely_buy,
+.action-hint-text.weak_buy_watch { color: var(--success); }
+.action-hint-text.likely_sell,
+.action-hint-text.weak_sell_watch { color: var(--danger); }
+.action-explanation {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
 
 .source-list { display: grid; gap: 14px; }
 .source-item { border: 1px solid var(--line); border-radius: var(--radius-md); padding: 14px; background: #fbfdff; }

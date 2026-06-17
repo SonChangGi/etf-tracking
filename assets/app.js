@@ -238,6 +238,9 @@
       attributionFormula: stringOr(row.attributionFormula, ''),
       classification: stringOr(row.classification, 'insufficient_data'),
       economicSignal: stringOr(row.economicSignal, row.classification, 'insufficient_data'),
+      actionEstimate: stringOr(row.actionEstimate, ''),
+      actionLabel: stringOr(row.actionLabel, ''),
+      actionExplanation: stringOr(row.actionExplanation, ''),
       confidence: stringOr(row.confidence, ''),
       message: stringOr(row.message, ''),
     };
@@ -258,6 +261,9 @@
       previousRank: finiteOrNull(signal.previousRank),
       weightPercent: finiteOrNull(signal.weightPercent),
       previousWeightPercent: finiteOrNull(signal.previousWeightPercent),
+      actionEstimate: stringOr(signal.actionEstimate, ''),
+      actionLabel: stringOr(signal.actionLabel, ''),
+      actionExplanation: stringOr(signal.actionExplanation, ''),
       message: stringOr(signal.message, ''),
     };
   }
@@ -662,7 +668,7 @@
       <div class="source-item"><strong>소스 상태</strong><span class="${latest?.sourceStatus === 'live' ? '' : 'warning'}">${escapeHtml(latest?.sourceStatus || 'unknown')} · ${escapeHtml(latest?.sourceWarning || '정상')}</span></div>
       <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')} · ${escapeHtml(formatCoverageUniverse(summary.returnCoverageUniverse))}</span><small>가격 반영 비중 ${escapeHtml(formatWeight(summary.validReturnWeightPercent))} / 전체 ${escapeHtml(formatWeight(summary.totalReturnWeightPercent))} · 미가격 ${escapeHtml(formatWeight(summary.unpricedReturnWeightPercent))}</small></div>
       <div class="source-item"><strong>벤치마크·환율</strong><span>벤치마크 ${escapeHtml(formatReturn(summary.benchmarkReturn))} · ${escapeHtml(formatFxCoverage(latest?.decomposition || []))}</span><small>벤치마크는 가격 확보 종목의 전일비중 가중 수익률이며 실제 ETF NAV 수익률이 아닙니다. 외부 USD/JPY/HKD 종가는 가능한 경우 환율 수익률을 곱해 KRW 기준으로 환산합니다.</small></div>
-      <div class="source-item"><strong>잔차 판정</strong><span>가격 우세는 no-trade 가격 효과가 우세하다는 뜻이며 완전 설명/무거래 확정이 아닙니다.</span><small>중간 잔차는 ‘잔차 관찰’, 임계치 이상 방향성 잔차만 ‘매수·매도 가능성’으로 표시합니다.</small></div>
+      <div class="source-item"><strong>잔차 판정</strong><span>가격 우세는 no-trade 가격 효과가 우세하다는 뜻이며 완전 설명/무거래 확정이 아닙니다.</span><small>중간 잔차도 방향에 따라 ‘약한 매수 관찰’ 또는 ‘약한 매도·축소 관찰’을 설명하고, 임계치 이상 방향성 잔차만 ‘매수·매도 가능성’으로 표시합니다.</small></div>
     `;
     const pill = $('#coverage-pill');
     if (pill) {
@@ -686,10 +692,12 @@
     target.replaceChildren(...signals.map((signal) => {
       const article = document.createElement('article');
       article.className = `signal-card ${escapeAttribute(signal.severity || '')}`;
+      const action = signal.actionLabel ? `${signal.actionLabel} · ` : '';
+      const signalMessage = signal.actionExplanation || signal.message || signal.type;
       article.innerHTML = `
         ${classificationBadge(signal.type || 'signal').outerHTML}
         <strong>${escapeHtml(signal.etfName || '')} ${escapeHtml(signal.name || signal.ticker || '신호')}</strong>
-        <p>${escapeHtml(formatMaybeDate(signal.date))} · ${escapeHtml(signal.message || signal.type)} · ${formatWeight(signal.previousWeightPercent)} → ${formatWeight(signal.weightPercent)}</p>
+        <p>${escapeHtml(formatMaybeDate(signal.date))} · ${escapeHtml(action)}${escapeHtml(signalMessage)} · ${formatWeight(signal.previousWeightPercent)} → ${formatWeight(signal.weightPercent)}</p>
       `;
       return article;
     }));
@@ -768,7 +776,37 @@
       confidence.textContent = row.confidence;
       div.appendChild(confidence);
     }
+    const action = actionHint(row);
+    if (action.label) {
+      const actionText = document.createElement('span');
+      actionText.className = `action-hint-text ${escapeAttribute(action.kind)}`;
+      actionText.textContent = action.label;
+      div.appendChild(actionText);
+    }
+    if (action.explanation) {
+      const explanation = document.createElement('small');
+      explanation.className = 'action-explanation';
+      explanation.textContent = action.explanation;
+      div.appendChild(explanation);
+    }
     return div;
+  }
+
+  function actionHint(row) {
+    const estimate = stringOr(row?.actionEstimate, '');
+    const classification = stringOr(row?.classification, '');
+    const residual = finiteOrNull(row?.deltaResidualPercentPoint);
+    const kind = estimate || classification;
+    const derivedLabel = residual === null
+      ? ''
+      : residual > 0
+        ? '약한 매수 관찰'
+        : residual < 0
+          ? '약한 매도·축소 관찰'
+          : '';
+    const label = stringOr(row?.actionLabel, classification === 'residual_watch' ? derivedLabel : '');
+    const explanation = stringOr(row?.actionExplanation, row?.message, '');
+    return { kind, label, explanation };
   }
 
   function sortAttributionRows(rows) {
@@ -1082,6 +1120,7 @@
       formatAxisWeight,
       formatAxisDate,
       sortAttributionRows,
+      actionHint,
       priceIdentifierCell,
       holdingKey,
       classLabel,

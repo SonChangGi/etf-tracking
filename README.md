@@ -65,7 +65,7 @@ npm test
 - ETF 비중은 KRW NAV 비중이므로 가격 효과는 우선 ETF PDF의 `평가금액/수량` KRW 평가단가 수익률을 사용합니다. 해당 값이 없을 때만 로컬 fixture → Yahoo Chart(query1/query2) → Stooq CSV → 선택적 FinanceDataReader 공개 종가 체인을 사용합니다.
 - 외부 USD/JPY/HKD 종가를 사용할 때는 Yahoo Chart FX(`KRW=X` 등)와 Stooq FX CSV 보조 소스를 통해 환율을 직접 가져와 `현지통화 종가수익률 × 환율수익률`로 KRW 기준 수익률을 계산합니다. FX 데이터가 없으면 현지통화 수익률을 표시하되 `fxApplied=false`와 낮은 신뢰도 문구로 표기합니다. Google Finance는 안정적인 공개 historical HTTP API가 없어 자동화 소스로 사용하지 않고 수동 교차확인 대상으로만 봅니다.
 - 전체 보유종목 또는 일부 종목 가격이 없으면 `returnCoverageUniverse`가 `priced_subset_of_full_holdings`, `top10_fallback` 등으로 낮아지고 화면에 가격확보 비중/미가격 비중이 표시됩니다.
-- `가격 우세(price_aligned)`는 잔차가 작은 no-trade 가격 효과 우세 구간이라는 뜻이며 “완전히 가격으로 설명됨” 또는 “거래가 없었다”는 확정 표현이 아닙니다. 중간 잔차는 `잔차 관찰(residual_watch)`로 두고, 임계치 이상인 방향성 잔차만 `likely_buy`/`likely_sell` 가능성 신호로 분류합니다.
+- `가격 우세(price_aligned)`는 잔차가 작은 no-trade 가격 효과 우세 구간이라는 뜻이며 “완전히 가격으로 설명됨” 또는 “거래가 없었다”는 확정 표현이 아닙니다. 중간 잔차는 `잔차 관찰(residual_watch)`로 두되 방향에 따라 `약한 매수 관찰`/`약한 매도·축소 관찰` 설명을 붙이고, 임계치 이상인 방향성 잔차만 `likely_buy`/`likely_sell` 가능성 신호로 분류합니다.
 - 환율 보정에도 불구하고 장중 체결, 현금/선물/비상장 종목, AP 설정·환매 효과를 완전히 복원하지는 못합니다.
 - `likely_buy`/`likely_sell`은 실제 운용사 주문 확정이 아니라 가격 변화로 설명되지 않는 비중 잔차 신호입니다.
 - 본 페이지는 개인 리서치 도구이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.

@@ -29,7 +29,7 @@ from zoneinfo import ZoneInfo
 
 KST = dt.timezone(dt.timedelta(hours=9), name="KST")
 USER_AGENT = "Mozilla/5.0 (compatible; ETFTrackingBot/0.1; +https://sonchanggi.github.io/etf-tracking/)"
-SCHEMA_VERSION = "1.2.0"
+SCHEMA_VERSION = "1.2.1"
 DEFAULT_SCHEDULED_BACKFILL_DAYS = 10
 PRICE_ALIGNED_TOLERANCE_PP = 0.10
 PRICE_ALIGNED_TOLERANCE_RATIO = 0.03
@@ -1114,6 +1114,9 @@ def classify_residual_signal(
             **thresholds,
             "classification": "mixed",
             "economicSignal": "mixed",
+            "actionEstimate": "undetermined",
+            "actionLabel": "매수·매도 판단 보류",
+            "actionExplanation": "종가 커버리지가 낮아 방향성 잔차를 매수·매도 가능성으로 해석하지 않습니다.",
             "confidence": "low",
             "residualBand": "low_coverage",
             "message": "종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다.",
@@ -1123,6 +1126,9 @@ def classify_residual_signal(
             **thresholds,
             "classification": "price_aligned",
             "economicSignal": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "confidence": confidence,
             "residualBand": "price_aligned",
             "message": message,
@@ -1132,6 +1138,9 @@ def classify_residual_signal(
             **thresholds,
             "classification": "likely_buy",
             "economicSignal": "likely_buy",
+            "actionEstimate": "likely_buy",
+            "actionLabel": "매수 가능성",
+            "actionExplanation": "실제 비중이 no-trade 예상비중보다 충분히 높아 추가 매수 또는 편입 확대 가능성이 있습니다.",
             "confidence": "medium",
             "residualBand": "directional_action",
             "message": "가격 효과 대비 비중 증가 잔차가 매수 가능성 임계치 이상입니다.",
@@ -1141,18 +1150,30 @@ def classify_residual_signal(
             **thresholds,
             "classification": "likely_sell",
             "economicSignal": "likely_sell",
+            "actionEstimate": "likely_sell",
+            "actionLabel": "매도·축소 가능성",
+            "actionExplanation": "실제 비중이 no-trade 예상비중보다 충분히 낮아 매도 또는 편입 축소 가능성이 있습니다.",
             "confidence": "medium",
             "residualBand": "directional_action",
             "message": "가격 효과 대비 비중 감소 잔차가 매도/축소 가능성 임계치 이상입니다.",
         }
-    direction = "감소" if residual_percent_point < 0 else "증가"
+    action_estimate = "weak_sell_watch" if residual_percent_point < 0 else "weak_buy_watch"
+    action_label = "약한 매도·축소 관찰" if residual_percent_point < 0 else "약한 매수 관찰"
+    action_explanation = (
+        "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다."
+        if residual_percent_point < 0
+        else "실제 비중이 no-trade 예상비중보다 높아 매수 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다."
+    )
     return {
         **thresholds,
         "classification": "residual_watch",
         "economicSignal": "residual_watch",
+        "actionEstimate": action_estimate,
+        "actionLabel": action_label,
+        "actionExplanation": action_explanation,
         "confidence": "medium" if confidence != "low" else "low",
         "residualBand": "watch",
-        "message": f"비중 {direction} 잔차가 남아 있지만 매수·매도 추정 임계치에는 미달합니다.",
+        "message": f"{action_label}: 매수·매도 추정 임계치에는 미달해 관찰 신호로 표시합니다.",
     }
 
 
@@ -1396,6 +1417,9 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "residualActionTolerancePercentPoint": signal["residualActionTolerancePercentPoint"],
             "tolerancePercentPoint": signal["residualActionTolerancePercentPoint"],
             "residualBand": signal["residualBand"],
+            "actionEstimate": signal["actionEstimate"],
+            "actionLabel": signal["actionLabel"],
+            "actionExplanation": signal["actionExplanation"],
             "returnCoverage": coverage,
             "priceMeta": price_meta,
             "priceReturnStartDate": price_meta.get("start", {}).get("date") if isinstance(price_meta.get("start"), dict) else prev_price_basis,
@@ -1416,7 +1440,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         decompositions.append(row)
         if membership_change:
             signals.append(signal_from_row(row, membership_change, "high"))
-        if classification in {"likely_buy", "likely_sell", "mixed"}:
+        if classification in {"likely_buy", "likely_sell", "residual_watch", "mixed"}:
             signals.append(signal_from_row(row, classification, "medium" if classification != "mixed" else "low"))
 
     summary = {
@@ -1451,7 +1475,7 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
             "directionalActionTolerance": f"max({RESIDUAL_ACTION_TOLERANCE_PP}pp, previousWeightPercent × {RESIDUAL_ACTION_TOLERANCE_RATIO})",
             "labels": {
                 "price_aligned": "small residual; price effect is dominant, not proof of no trade",
-                "residual_watch": "residual exists but is below the directional buy/sell threshold",
+                "residual_watch": "residual direction is shown as weak buy or weak sell watch, but it is below the directional buy/sell threshold",
                 "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading",
             },
         },
@@ -1473,6 +1497,9 @@ def signal_from_row(row: dict[str, Any], signal_type: str, severity: str) -> dic
         "previousRank": row.get("previousRank"),
         "weightPercent": row.get("actualWeightPercent"),
         "previousWeightPercent": row.get("previousWeightPercent"),
+        "actionEstimate": row.get("actionEstimate"),
+        "actionLabel": row.get("actionLabel"),
+        "actionExplanation": row.get("actionExplanation"),
         "message": row.get("message"),
     }
 

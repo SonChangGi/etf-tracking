@@ -1,6 +1,6 @@
 {
-  "schemaVersion": "1.2.0",
-  "generatedAt": "2026-06-17T14:48:55+00:00",
+  "schemaVersion": "1.2.1",
+  "generatedAt": "2026-06-17T15:10:26+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -806,6 +806,9 @@
             "residualActionTolerancePercentPoint": 0.658,
             "tolerancePercentPoint": 0.658,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -866,6 +869,9 @@
             "residualActionTolerancePercentPoint": 0.6900000000000001,
             "tolerancePercentPoint": 0.6900000000000001,
             "residualBand": "watch",
+            "actionEstimate": "weak_sell_watch",
+            "actionLabel": "약한 매도·축소 관찰",
+            "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -895,7 +901,7 @@
             "classification": "residual_watch",
             "economicSignal": "residual_watch",
             "confidence": "medium",
-            "message": "비중 감소 잔차가 남아 있지만 매수·매도 추정 임계치에는 미달합니다."
+            "message": "약한 매도·축소 관찰: 매수·매도 추정 임계치에는 미달해 관찰 신호로 표시합니다."
           },
           {
             "date": "2026-06-17",
@@ -926,6 +932,9 @@
             "residualActionTolerancePercentPoint": 0.5740000000000001,
             "tolerancePercentPoint": 0.5740000000000001,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -986,6 +995,9 @@
             "residualActionTolerancePercentPoint": 0.525,
             "tolerancePercentPoint": 0.525,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1046,6 +1058,9 @@
             "residualActionTolerancePercentPoint": 0.47800000000000004,
             "tolerancePercentPoint": 0.47800000000000004,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1106,6 +1121,9 @@
             "residualActionTolerancePercentPoint": 0.386,
             "tolerancePercentPoint": 0.386,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1166,6 +1184,9 @@
             "residualActionTolerancePercentPoint": 0.35,
             "tolerancePercentPoint": 0.35,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1226,6 +1247,9 @@
             "residualActionTolerancePercentPoint": 0.35,
             "tolerancePercentPoint": 0.35,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1286,6 +1310,9 @@
             "residualActionTolerancePercentPoint": 0.35,
             "tolerancePercentPoint": 0.35,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1346,6 +1373,9 @@
             "residualActionTolerancePercentPoint": 0.35,
             "tolerancePercentPoint": 0.35,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1406,6 +1436,9 @@
             "residualActionTolerancePercentPoint": 0.35,
             "tolerancePercentPoint": 0.35,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9762047590481904,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -1442,6 +1475,23 @@
           {
             "date": "2026-06-17",
             "previousDate": "2026-06-16",
+            "type": "residual_watch",
+            "severity": "medium",
+            "name": "Sandisk Corp",
+            "codeRaw": "SNDK US EQUITY",
+            "ticker": "SNDK",
+            "rank": 2,
+            "previousRank": 1,
+            "weightPercent": 6.66,
+            "previousWeightPercent": 6.9,
+            "actionEstimate": "weak_sell_watch",
+            "actionLabel": "약한 매도·축소 관찰",
+            "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
+            "message": "약한 매도·축소 관찰: 매수·매도 추정 임계치에는 미달해 관찰 신호로 표시합니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
             "type": "top10_entry",
             "severity": "high",
             "name": "Space Exploration Technologies Corp",
@@ -1451,6 +1501,9 @@
             "previousRank": 12,
             "weightPercent": 3.02,
             "previousWeightPercent": 2.72,
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "message": "TOP10 편입 · ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           },
           {
@@ -1465,6 +1518,9 @@
             "previousRank": 10,
             "weightPercent": 2.85,
             "previousWeightPercent": 2.85,
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "message": "TOP10 밖으로 이동(현재 12위) · ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
           }
         ],
@@ -1503,7 +1559,7 @@
             "directionalActionTolerance": "max(0.35pp, previousWeightPercent × 0.1)",
             "labels": {
               "price_aligned": "small residual; price effect is dominant, not proof of no trade",
-              "residual_watch": "residual exists but is below the directional buy/sell threshold",
+              "residual_watch": "residual direction is shown as weak buy or weak sell watch, but it is below the directional buy/sell threshold",
               "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
             }
           },
@@ -2218,6 +2274,9 @@
             "residualActionTolerancePercentPoint": 0.806,
             "tolerancePercentPoint": 0.806,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2278,6 +2337,9 @@
             "residualActionTolerancePercentPoint": 0.7490000000000001,
             "tolerancePercentPoint": 0.7490000000000001,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2338,6 +2400,9 @@
             "residualActionTolerancePercentPoint": 0.677,
             "tolerancePercentPoint": 0.677,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2398,6 +2463,9 @@
             "residualActionTolerancePercentPoint": 0.6000000000000001,
             "tolerancePercentPoint": 0.6000000000000001,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2458,6 +2526,9 @@
             "residualActionTolerancePercentPoint": 0.476,
             "tolerancePercentPoint": 0.476,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2518,6 +2589,9 @@
             "residualActionTolerancePercentPoint": 0.40199999999999997,
             "tolerancePercentPoint": 0.40199999999999997,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2602,6 +2676,9 @@
             "residualActionTolerancePercentPoint": 0.37400000000000005,
             "tolerancePercentPoint": 0.37400000000000005,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2662,6 +2739,9 @@
             "residualActionTolerancePercentPoint": 0.38,
             "tolerancePercentPoint": 0.38,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2722,6 +2802,9 @@
             "residualActionTolerancePercentPoint": 0.35,
             "tolerancePercentPoint": 0.35,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9604039596040396,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -2791,6 +2874,9 @@
             "previousRank": null,
             "weightPercent": 3.89,
             "previousWeightPercent": null,
+            "actionEstimate": null,
+            "actionLabel": null,
+            "actionExplanation": null,
             "message": "ETF 보유목록 신규 편입"
           },
           {
@@ -2805,6 +2891,9 @@
             "previousRank": 7,
             "weightPercent": 0.0,
             "previousWeightPercent": 3.96,
+            "actionEstimate": null,
+            "actionLabel": null,
+            "actionExplanation": null,
             "message": "ETF 보유목록에서 제외되었습니다."
           }
         ],
@@ -2843,7 +2932,7 @@
             "directionalActionTolerance": "max(0.35pp, previousWeightPercent × 0.1)",
             "labels": {
               "price_aligned": "small residual; price effect is dominant, not proof of no trade",
-              "residual_watch": "residual exists but is below the directional buy/sell threshold",
+              "residual_watch": "residual direction is shown as weak buy or weak sell watch, but it is below the directional buy/sell threshold",
               "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
             }
           },
@@ -4097,6 +4186,9 @@
             "residualActionTolerancePercentPoint": 0.8580000000000001,
             "tolerancePercentPoint": 0.8580000000000001,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4157,6 +4249,9 @@
             "residualActionTolerancePercentPoint": 0.742,
             "tolerancePercentPoint": 0.742,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4217,6 +4312,9 @@
             "residualActionTolerancePercentPoint": 0.722,
             "tolerancePercentPoint": 0.722,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4277,6 +4375,9 @@
             "residualActionTolerancePercentPoint": 0.5950000000000001,
             "tolerancePercentPoint": 0.5950000000000001,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4337,6 +4438,9 @@
             "residualActionTolerancePercentPoint": 0.5790000000000001,
             "tolerancePercentPoint": 0.5790000000000001,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4397,6 +4501,9 @@
             "residualActionTolerancePercentPoint": 0.506,
             "tolerancePercentPoint": 0.506,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4457,6 +4564,9 @@
             "residualActionTolerancePercentPoint": 0.488,
             "tolerancePercentPoint": 0.488,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4517,6 +4627,9 @@
             "residualActionTolerancePercentPoint": 0.42400000000000004,
             "tolerancePercentPoint": 0.42400000000000004,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4577,6 +4690,9 @@
             "residualActionTolerancePercentPoint": 0.389,
             "tolerancePercentPoint": 0.389,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4637,6 +4753,9 @@
             "residualActionTolerancePercentPoint": 0.383,
             "tolerancePercentPoint": 0.383,
             "residualBand": "price_aligned",
+            "actionEstimate": "price_aligned",
+            "actionLabel": "매수·매도 추정 없음",
+            "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
             "priceMeta": {
               "source": "provider_valuation_krw",
@@ -4705,7 +4824,7 @@
             "directionalActionTolerance": "max(0.35pp, previousWeightPercent × 0.1)",
             "labels": {
               "price_aligned": "small residual; price effect is dominant, not proof of no trade",
-              "residual_watch": "residual exists but is below the directional buy/sell threshold",
+              "residual_watch": "residual direction is shown as weak buy or weak sell watch, but it is below the directional buy/sell threshold",
               "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
             }
           },

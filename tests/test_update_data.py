@@ -95,6 +95,7 @@ class UpdateDataTests(unittest.TestCase):
         by_ticker = {row.get("ticker"): row for row in rows}
         self.assertEqual(summary["returnCoverageStatus"], "ok")
         self.assertEqual(by_ticker["AAA"]["classification"], "likely_buy")
+        self.assertEqual(by_ticker["AAA"]["actionLabel"], "매수 가능성")
         self.assertEqual(by_ticker["CCC"]["classification"], "new_entry")
         self.assertTrue(any(signal["type"] == "top10_entry" for signal in signals))
         self.assertEqual(summary["returnCoverageUniverse"], "top10_fallback")
@@ -297,8 +298,12 @@ class UpdateDataTests(unittest.TestCase):
         self.assertGreater(abs(sndk["deltaResidualPercentPoint"]), sndk["priceAlignedTolerancePercentPoint"])
         self.assertLess(abs(sndk["deltaResidualPercentPoint"]), sndk["residualActionTolerancePercentPoint"])
         self.assertEqual(sndk["classification"], "residual_watch")
+        self.assertEqual(sndk["actionEstimate"], "weak_sell_watch")
+        self.assertEqual(sndk["actionLabel"], "약한 매도·축소 관찰")
+        self.assertIn("추정 임계치에는 미달", sndk["actionExplanation"])
         self.assertNotEqual(sndk["classification"], "likely_sell")
         self.assertFalse(any(signal["type"] == "likely_sell" and signal["ticker"] == "SNDK" for signal in signals))
+        self.assertTrue(any(signal["type"] == "residual_watch" and signal["actionLabel"] == "약한 매도·축소 관찰" for signal in signals))
 
     def test_usd_external_close_is_fx_adjusted_to_krw_return(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -641,10 +646,14 @@ class UpdateDataTests(unittest.TestCase):
                 elif row["classification"] == "residual_watch":
                     self.assertGreater(residual_abs, aligned - 1e-9)
                     self.assertLess(residual_abs, action + 1e-9)
+                    self.assertIn(row["actionEstimate"], {"weak_buy_watch", "weak_sell_watch"})
+                    self.assertIn("관찰", row["actionLabel"])
                 elif row["classification"] == "likely_buy":
                     self.assertGreaterEqual(row["deltaResidualPercentPoint"], action - 1e-9)
+                    self.assertEqual(row["actionEstimate"], "likely_buy")
                 elif row["classification"] == "likely_sell":
                     self.assertLessEqual(row["deltaResidualPercentPoint"], -action + 1e-9)
+                    self.assertEqual(row["actionEstimate"], "likely_sell")
         self.assertTrue(seen_formula_row)
 
     def test_status_waits_when_target_fetch_failed_despite_old_live_snapshot(self):
