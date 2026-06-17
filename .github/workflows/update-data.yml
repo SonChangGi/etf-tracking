@@ -16,65 +16,137 @@ on:
         default: 'false'
         type: choice
         options: ['false', 'true']
+      strict_validation:
+        description: 'Fail this manual run on updater/test/commit errors'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
+
+env:
+  # GitHub warned that Node 20 JavaScript actions are being deprecated. Opt in now
+  # so scheduled runs do not start warning/failing only because the runner default changes.
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
-  group: etf-tracking-update-pages
+  group: etf-tracking-update
   cancel-in-progress: false
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
+        id: checkout
+        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
+        with:
+          fetch-depth: 0
       - uses: actions/setup-python@v5
+        id: setup-python
+        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         with:
           python-version: '3.12'
       - uses: actions/setup-node@v4
+        id: setup-node
+        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         with:
           node-version: '22'
-      - name: Update data
+      - name: Update data with soft-fail status
+        id: update
+        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         run: |
-          if [ "${{ github.event.inputs.backfill_all }}" = "true" ]; then
-            python3 scripts/update_data.py --output-dir data --backfill-all
+          set -uo pipefail
+          update_args=(--output-dir data --soft-fail)
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.backfill_all }}" = "true" ]; then
+            update_args+=(--backfill-all)
           else
-            python3 scripts/update_data.py --output-dir data --backfill-days 10
+            update_args+=(--backfill-days 10)
           fi
+          python3 scripts/update_data.py "${update_args[@]}"
       - name: Verify static site and data
+        id: verify
+        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         run: npm test
-      - name: Commit refreshed data
+      - name: Assess whether generated data is safe to commit
+        id: assess
+        if: always()
+        env:
+          UPDATE_OUTCOME: ${{ steps.update.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
         run: |
-          if git diff --quiet -- data; then
-            echo "No data changes to commit."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add data
-            cat > /tmp/etf-tracking-data-commit-message <<'MSG'
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          output = Path(os.environ["GITHUB_OUTPUT"])
+          summary = Path(os.environ["GITHUB_STEP_SUMMARY"])
+          update = os.environ.get("UPDATE_OUTCOME", "missing")
+          verify = os.environ.get("VERIFY_OUTCOME", "missing")
+          status_path = Path("data/automation-status.json")
+          status = {}
+          if status_path.exists():
+              try:
+                  status = json.loads(status_path.read_text(encoding="utf-8"))
+              except Exception as exc:
+                  status = {"runStatus": "unreadable_status", "error": str(exc)}
+          else:
+              status = {"runStatus": "missing_status", "error": "data/automation-status.json was not written"}
+          run_status = str(status.get("runStatus") or "unknown")
+          safe = update == "success" and verify == "success" and run_status not in {"soft_failed", "missing_status", "unreadable_status"}
+          output.write_text(f"safe_to_commit={'true' if safe else 'false'}\nrun_status={run_status}\n", encoding="utf-8")
+          lines = [
+              "## ETF tracking automation assessment",
+              f"- update step: `{update}`",
+              f"- verify step: `{verify}`",
+              f"- automation status: `{run_status}`",
+              f"- safe to commit data: `{str(safe).lower()}`",
+          ]
+          for warning in status.get("warnings", [])[:10]:
+              lines.append(f"- warning: {warning}")
+          summary.write_text("\n".join(lines) + "\n", encoding="utf-8")
+          if not safe:
+              print("::warning::Generated ETF data was not committed; see automation assessment summary.")
+          PY
+      - name: Commit refreshed data
+        id: commit-data
+        if: steps.assess.outputs.safe_to_commit == 'true'
+        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No safe data changes to commit."
+            exit 0
+          fi
+          cat > /tmp/etf-tracking-data-commit-message <<'MSG'
           Keep ETF tracking data fresh
-          
+
           Constraint: Scheduled runs start after 08:00 KST with retry slots for delayed prior closes.
           Confidence: high
           Scope-risk: narrow
-          Directive: Do not commit provider credentials; updater uses public pages/APIs only.
+          Directive: Expected provider/price delays must be recorded in data/automation-status.json instead of failing scheduled runs.
           Tested: npm test
           Not-tested: Manual investment interpretation.
           MSG
-            git commit -F /tmp/etf-tracking-data-commit-message
-            git push
-          fi
-      - name: Build Pages artifact
-        run: |
-          rm -rf _site
-          mkdir -p _site
-          cp index.html README.md .nojekyll _site/
-          cp -R assets data _site/
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+          git commit -F /tmp/etf-tracking-data-commit-message
+          git push
+      - name: Upload automation diagnostics
+        if: always() && hashFiles('data/automation-status.json') != ''
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
         with:
-          path: _site
-      - uses: actions/deploy-pages@v4
+          name: etf-tracking-automation-status
+          path: |
+            data/automation-status.json
+            data/status.json
+          retention-days: 14
+      - name: Strict manual failure gate
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.strict_validation == 'true' && (steps.update.outcome != 'success' || steps.verify.outcome != 'success' || steps.assess.outputs.safe_to_commit != 'true' || steps.commit-data.outcome == 'failure')
+        run: |
+          echo "Strict validation requested and one or more gates failed." >&2
+          exit 1

@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import vm from 'node:vm';
 
-for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/dashboard.json', 'data/status.json']) {
+for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/dashboard.json', 'data/status.json', 'data/automation-status.json']) {
   if (!existsSync(file)) throw new Error(`${file} missing`);
 }
 
@@ -20,6 +20,9 @@ const selected = parsed.etfs[0];
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
 if (api.QUANT_DASHBOARD_URL !== 'https://sonchanggi.github.io/quant-dashboard/') throw new Error('return dashboard URL changed');
+if (api.AUTOMATION_STATUS_URL !== 'data/automation-status.json') throw new Error('automation status URL changed');
+const automation = api.normalizeAutomationStatus(JSON.parse(readFileSync('data/automation-status.json', 'utf8')));
+if (!automation?.runStatus) throw new Error('automation status missing runStatus');
 
 const root = process.cwd();
 const types = new Map([

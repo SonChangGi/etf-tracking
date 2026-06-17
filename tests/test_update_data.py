@@ -107,6 +107,19 @@ class UpdateDataTests(unittest.TestCase):
         self.assertTrue(all(items and items[0]["top10"] for items in snapshots.values()))
         self.assertTrue(all(items and items[0]["hasTop10"] for items in diagnostics.values()))
 
+    def test_automation_status_records_waiting_without_failure_email_policy(self):
+        status = update_data.build_failure_status("2026-06-17T00:00:00+00:00", "2026-06-17", "provider timeout")
+        automation = update_data.build_automation_status(
+            status,
+            "2026-06-17T00:00:00+00:00",
+            "2026-06-17",
+            run_status="soft_failed",
+            error="provider timeout",
+        )
+        self.assertEqual(automation["runStatus"], "soft_failed")
+        self.assertGreaterEqual(automation["warningCount"], 3)
+        self.assertIn("Expected provider/price delays", automation["notificationPolicy"]["scheduledWorkflow"])
+        self.assertEqual(automation["error"], "provider timeout")
 
     def test_stale_same_close_does_not_count_as_return_coverage(self):
         fixture_dir = ROOT / "tests" / "fixtures"
@@ -157,6 +170,11 @@ class UpdateDataTests(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
         for cron in ["5 23 * * 0-5", "30 0 * * 1-6", "0 2 * * 1-6", "0 4 * * 1-6"]:
             self.assertIn(cron, workflow)
+        self.assertIn("--soft-fail", workflow)
+        self.assertIn("strict_validation", workflow)
+        self.assertIn("continue-on-error", workflow)
+        self.assertIn("safe_to_commit", workflow)
+        self.assertFalse((ROOT / ".github" / "workflows" / "deploy-pages.yml").exists())
 
 
 if __name__ == "__main__":

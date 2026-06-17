@@ -15,6 +15,7 @@ import datetime as dt
 import html
 import json
 import math
+import os
 import re
 import time
 import urllib.parse
@@ -847,6 +848,97 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=False) + "\n", encoding="utf-8")
 
 
+def automation_warnings(status: dict[str, Any]) -> list[str]:
+    warnings: list[str] = []
+    for item in status.get("etfs", []):
+        name = item.get("name") or item.get("id") or "ETF"
+        if item.get("latestDate") != item.get("targetDate"):
+            warnings.append(f"{name}: latest snapshot {item.get('latestDate') or 'missing'} != target {item.get('targetDate')}")
+        if item.get("targetFetchStatus") not in {"live"}:
+            warnings.append(f"{name}: target fetch status {item.get('targetFetchStatus') or 'unknown'}")
+        if item.get("targetFetchHasTop10") is False:
+            warnings.append(f"{name}: target TOP10 rows missing")
+        coverage_status = item.get("returnCoverageStatus")
+        if coverage_status and coverage_status != "ok":
+            warnings.append(f"{name}: return coverage {coverage_status}")
+    if status.get("priceErrorCount"):
+        warnings.append(f"price errors: {status.get('priceErrorCount')}")
+    return warnings
+
+
+def build_automation_status(
+    status: dict[str, Any],
+    generated_at: str,
+    target_date: str,
+    *,
+    run_status: str | None = None,
+    error: str | None = None,
+) -> dict[str, Any]:
+    warnings = automation_warnings(status)
+    if run_status is None:
+        if error:
+            run_status = "soft_failed"
+        elif status.get("overallStatus") == "ok" and not warnings:
+            run_status = "ok"
+        elif status.get("overallStatus") == "waiting_for_prior_close":
+            run_status = "waiting_for_data"
+        else:
+            run_status = "degraded"
+    payload: dict[str, Any] = {
+        "schemaVersion": SCHEMA_VERSION,
+        "generatedAt": generated_at,
+        "targetDate": target_date,
+        "runStatus": run_status,
+        "overallStatus": status.get("overallStatus"),
+        "priceErrorCount": status.get("priceErrorCount", 0),
+        "warningCount": len(warnings),
+        "warnings": warnings[:40],
+        "notificationPolicy": {
+            "scheduledWorkflow": "Expected provider/price delays are recorded as data status instead of exiting non-zero.",
+            "manualStrictMode": "workflow_dispatch strict_validation=true still fails for debugging.",
+        },
+    }
+    if error:
+        payload["error"] = error
+    return payload
+
+
+def build_failure_status(generated_at: str, target_date: str, error: str) -> dict[str, Any]:
+    return {
+        "schemaVersion": SCHEMA_VERSION,
+        "generatedAt": generated_at,
+        "targetDate": target_date,
+        "overallStatus": "automation_error",
+        "message": "Updater failed before new ETF data could be written; the site should continue serving the previous committed snapshot.",
+        "priceErrorCount": 0,
+        "priceErrors": {},
+        "etfs": [
+            {
+                "id": config.id,
+                "name": config.name,
+                "targetDate": target_date,
+                "latestDate": None,
+                "targetFetchStatus": "not_attempted",
+                "targetFetchWarning": error,
+                "targetFetchHasTop10": False,
+                "sourceStatus": "unknown",
+                "sourceWarning": "Updater failed before collection completed.",
+                "returnCoverageStatus": "unknown",
+                "returnCoverage": None,
+                "priceBasis": None,
+            }
+            for config in ETFS
+        ],
+    }
+
+
+def github_warning(message: str) -> None:
+    if os.environ.get("GITHUB_ACTIONS"):
+        print(f"::warning::{message}")
+    else:
+        print(f"WARNING: {message}")
+
+
 def write_csv_summary(path: Path, dashboard: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
@@ -920,11 +1012,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--include-empty", action="store_true", help="Persist empty/error snapshots for diagnostics.")
     parser.add_argument("--no-live-prices", action="store_true", help="Skip live Yahoo price calls.")
     parser.add_argument("--provider-delay", type=float, default=0.12, help="Delay between provider requests outside fixture mode.")
+    parser.add_argument("--soft-fail", action="store_true", help="Record automation failure status and return success for scheduled workflows.")
     return parser.parse_args()
 
 
-def main() -> int:
-    args = parse_args()
+def run_update(args: argparse.Namespace) -> dict[str, Any]:
     args.target_date = iso_date(args.target_date)
     output_dir: Path = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -940,15 +1032,43 @@ def main() -> int:
     history_payload = {"schemaVersion": SCHEMA_VERSION, "generatedAt": generated_at, "etfs": enriched, "diagnostics": diagnostics}
     status = build_status(enriched, generated_at, price_provider, args.target_date, diagnostics)
 
+    automation_status = build_automation_status(status, generated_at, args.target_date)
+
     write_json(output_dir / "history.json", history_payload)
     write_json(output_dir / "latest.json", latest)
     write_json(output_dir / "dashboard.json", dashboard)
     write_json(output_dir / "status.json", status)
+    write_json(output_dir / "automation-status.json", automation_status)
     write_csv_summary(output_dir / "latest-summary.csv", dashboard)
 
     print(f"Wrote ETF tracking data to {output_dir} ({sum(len(v) for v in enriched.values())} snapshots).")
-    print(f"Status: {status['overallStatus']} | price errors: {status['priceErrorCount']}")
-    return 0
+    print(f"Status: {status['overallStatus']} | price errors: {status['priceErrorCount']} | automation: {automation_status['runStatus']}")
+    return {"status": status, "automationStatus": automation_status}
+
+
+def main() -> int:
+    args = parse_args()
+    try:
+        run_update(args)
+        return 0
+    except Exception as exc:
+        if not args.soft_fail:
+            raise
+        output_dir: Path = args.output_dir
+        output_dir.mkdir(parents=True, exist_ok=True)
+        generated_at = dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+        try:
+            target_date = iso_date(args.target_date)
+        except Exception:
+            target_date = str(args.target_date or today_kst())
+        error = f"{type(exc).__name__}: {exc}"
+        status = build_failure_status(generated_at, target_date, error)
+        automation_status = build_automation_status(status, generated_at, target_date, run_status="soft_failed", error=error)
+        write_json(output_dir / "automation-status.json", automation_status)
+        if not (output_dir / "status.json").exists():
+            write_json(output_dir / "status.json", status)
+        github_warning(f"ETF updater soft-failed: {error}")
+        return 0
 
 
 if __name__ == "__main__":

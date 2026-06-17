@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-17T07:50:30+00:00",
+  "targetDate": "2026-06-17",
+  "runStatus": "ok",
+  "overallStatus": "ok",
+  "priceErrorCount": 0,
+  "warningCount": 0,
+  "warnings": [],
+  "notificationPolicy": {
+    "scheduledWorkflow": "Expected provider/price delays are recorded as data status instead of exiting non-zero.",
+    "manualStrictMode": "workflow_dispatch strict_validation=true still fails for debugging."
+  }
+}

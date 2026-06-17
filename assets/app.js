@@ -3,6 +3,7 @@
 
   const DATA_URL = 'data/dashboard.json';
   const STATUS_URL = 'data/status.json';
+  const AUTOMATION_STATUS_URL = 'data/automation-status.json';
   const QUANT_DASHBOARD_URL = 'https://sonchanggi.github.io/quant-dashboard/';
   const COLORS = ['#2457d6', '#0f766e', '#e11d48', '#f97316', '#7c3aed', '#0891b2', '#059669', '#db2777', '#2563eb', '#9333ea'];
   const $ = (selector) => (typeof document === 'undefined' ? null : document.querySelector(selector));
@@ -69,12 +70,14 @@
   async function loadAndRender() {
     const target = $('#data-status');
     try {
-      const [dashboardResult, statusResult] = await Promise.all([
+      const [dashboardResult, statusResult, automationResult] = await Promise.all([
         getJsonBestEffort(DATA_URL),
         getJsonBestEffort(STATUS_URL),
+        getJsonBestEffort(AUTOMATION_STATUS_URL),
       ]);
       const dashboard = parseDashboard(dashboardResult.ok ? dashboardResult.data : FALLBACK_DASHBOARD);
       dashboard.statusPayload = statusResult.ok ? statusResult.data : null;
+      dashboard.automationStatusPayload = automationResult.ok ? normalizeAutomationStatus(automationResult.data) : null;
       dashboard.loadMode = dashboardResult.ok ? 'live' : 'fallback';
       dashboard.loadError = dashboardResult.ok ? '' : dashboardResult.error;
       state.dashboard = dashboard;
@@ -211,6 +214,18 @@
     };
   }
 
+  function normalizeAutomationStatus(payload) {
+    if (!isRecord(payload)) return null;
+    return {
+      generatedAt: stringOr(payload.generatedAt, ''),
+      targetDate: stringOr(payload.targetDate, ''),
+      runStatus: stringOr(payload.runStatus, 'unknown'),
+      overallStatus: stringOr(payload.overallStatus, ''),
+      warningCount: numberOr(payload.warningCount, 0),
+      warnings: asArray(payload.warnings).map((item) => stringOr(item, '')).filter(Boolean),
+    };
+  }
+
   function wireControls() {
     $('#etf-select')?.addEventListener('change', (event) => {
       state.selectedEtfId = event.target.value;
@@ -293,7 +308,7 @@
     const status = $('#data-status');
     if (status) {
       const mode = dashboard.loadMode === 'fallback' ? 'fallback 표시 중' : '공개 JSON 로드 완료';
-      status.textContent = `${mode} · 생성 ${formatFreshness(dashboard.generatedAt)} · ${dashboard.disclaimer || '투자 조언이 아닙니다.'}`;
+      status.textContent = `${mode} · 생성 ${formatFreshness(dashboard.generatedAt)} · 자동화 ${formatAutomationStatus(dashboard.automationStatusPayload)} · ${dashboard.disclaimer || '투자 조언이 아닙니다.'}`;
     }
   }
 
@@ -548,6 +563,20 @@
     return `${(num * 100).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}%`;
   }
 
+  function formatAutomationStatus(value) {
+    if (!value) return '상태 파일 없음';
+    const labels = {
+      ok: '정상',
+      waiting_for_data: '데이터 대기',
+      degraded: '주의',
+      soft_failed: '소프트 실패 기록',
+      missing_status: '상태 누락',
+      unreadable_status: '상태 파싱 실패',
+    };
+    const base = labels[value.runStatus] || value.runStatus || 'unknown';
+    return value.warningCount ? `${base} · 경고 ${value.warningCount}건` : base;
+  }
+
   function formatFreshness(value) {
     if (!value) return '업데이트 시각 알 수 없음';
     const date = new Date(value);
@@ -591,13 +620,16 @@
       normalizeHolding,
       normalizeDecomposition,
       normalizeSignal,
+      normalizeAutomationStatus,
       filterHistory,
       buildWeightSeries,
       holdingKey,
       classLabel,
       formatWeight,
       formatCoverage,
+      formatAutomationStatus,
       FALLBACK_DASHBOARD,
+      AUTOMATION_STATUS_URL,
       QUANT_DASHBOARD_URL,
     };
   }
