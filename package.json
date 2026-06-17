@@ -1,0 +1,10 @@
+{
+  "name": "etf-tracking",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static ETF TOP10 holdings tracking dashboard with daily data updater.",
+  "scripts": {
+    "update:data": "python3 scripts/update_data.py --output-dir data --backfill-days 10",
+    "test": "python3 -m unittest discover -s tests -p 'test_*.py' && node --check assets/app.js && node --check scripts/static-smoke.mjs && node scripts/static-smoke.mjs"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-17T07:19:22+00:00",
+  "targetDate": "2026-06-17",
+  "overallStatus": "ok",
+  "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
+  "priceErrorCount": 0,
+  "priceErrors": {},
+  "etfs": [
+    {
+      "id": "time-nasdaq100-active",
+      "name": "TIME 미국나스닥100액티브",
+      "targetDate": "2026-06-17",
+      "latestDate": "2026-06-17",
+      "targetFetchStatus": "live",
+      "targetFetchWarning": "",
+      "targetFetchHasTop10": true,
+      "sourceStatus": "live",
+      "sourceWarning": "",
+      "returnCoverageStatus": "ok",
+      "returnCoverage": 0.8617370378472982,
+      "priceBasis": {
+        "previous": "2026-06-15",
+        "current": "2026-06-16"
+      }
+    },
+    {
+      "id": "time-global-ai-active",
+      "name": "TIME 글로벌AI인공지능액티브",
+      "targetDate": "2026-06-17",
+      "latestDate": "2026-06-17",
+      "targetFetchStatus": "live",
+      "targetFetchWarning": "",
+      "targetFetchHasTop10": true,
+      "sourceStatus": "live",
+      "sourceWarning": "",
+      "returnCoverageStatus": "ok",
+      "returnCoverage": 0.8508266051518647,
+      "priceBasis": {
+        "previous": "2026-06-15",
+        "current": "2026-06-16"
+      }
+    },
+    {
+      "id": "koact-nasdaq-growth-active",
+      "name": "KoAct 미국나스닥성장기업액티브",
+      "targetDate": "2026-06-17",
+      "latestDate": "2026-06-17",
+      "targetFetchStatus": "live",
+      "targetFetchWarning": "",
+      "targetFetchHasTop10": true,
+      "sourceStatus": "live",
+      "sourceWarning": "",
+      "returnCoverageStatus": "ok",
+      "returnCoverage": 0.7745339430179388,
+      "priceBasis": {
+        "previous": "2026-06-15",
+        "current": "2026-06-16"
+      }
+    }
+  ]
+}

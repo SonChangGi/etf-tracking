@@ -1,0 +1,1399 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-06-17T07:19:22+00:00",
+  "etfs": [
+    {
+      "id": "time-nasdaq100-active",
+      "name": "TIME 미국나스닥100액티브",
+      "code": "426030",
+      "latest": {
+        "date": "2026-06-17",
+        "queryDate": "2026-06-17",
+        "navAsOfDate": "2026-06-16",
+        "priceBasisDate": "2026-06-16",
+        "sourceStatus": "live",
+        "sourceConfidence": "high",
+        "sourceWarning": "",
+        "top10": [
+          {
+            "rank": 1,
+            "codeRaw": "MU US EQUITY",
+            "ticker": "MU",
+            "name": "Micron Technology Inc",
+            "shares": 49.0,
+            "marketValueKrw": 80585678.0,
+            "weightPercent": 6.73,
+            "weight": 0.0673,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 2,
+            "codeRaw": "SNDK US EQUITY",
+            "ticker": "SNDK",
+            "name": "Sandisk Corp",
+            "shares": 25.0,
+            "marketValueKrw": 79656029.0,
+            "weightPercent": 6.66,
+            "weight": 0.0666,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 3,
+            "codeRaw": "INTC US EQUITY",
+            "ticker": "INTC",
+            "name": "Intel Corp",
+            "shares": 343.0,
+            "marketValueKrw": 66292699.0,
+            "weightPercent": 5.54,
+            "weight": 0.0554,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 4,
+            "codeRaw": "ARM US EQUITY",
+            "ticker": "ARM",
+            "name": "ARM Holdings PLC",
+            "shares": 102.0,
+            "marketValueKrw": 63608279.0,
+            "weightPercent": 5.32,
+            "weight": 0.053200000000000004,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 5,
+            "codeRaw": "NVDA US EQUITY",
+            "ticker": "NVDA",
+            "name": "NVIDIA Corp",
+            "shares": 174.0,
+            "marketValueKrw": 55878259.0,
+            "weightPercent": 4.67,
+            "weight": 0.0467,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 6,
+            "codeRaw": "MRVL US EQUITY",
+            "ticker": "MRVL",
+            "name": "Marvell Technology Inc",
+            "shares": 103.0,
+            "marketValueKrw": 48091009.0,
+            "weightPercent": 4.02,
+            "weight": 0.04019999999999999,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 7,
+            "codeRaw": "AMD US EQUITY",
+            "ticker": "AMD",
+            "name": "Advanced Micro Devices Inc",
+            "shares": 50.0,
+            "marketValueKrw": 41361910.0,
+            "weightPercent": 3.46,
+            "weight": 0.0346,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 8,
+            "codeRaw": "DELL US EQUITY",
+            "ticker": "DELL",
+            "name": "Dell Technologies Inc",
+            "shares": 61.0,
+            "marketValueKrw": 37719362.0,
+            "weightPercent": 3.15,
+            "weight": 0.0315,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 9,
+            "codeRaw": "CRDO US EQUITY",
+            "ticker": "CRDO",
+            "name": "Credo Technology Group Holding Ltd",
+            "shares": 92.0,
+            "marketValueKrw": 36075422.0,
+            "weightPercent": 3.02,
+            "weight": 0.0302,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 10,
+            "codeRaw": "SPCX US EQUITY",
+            "ticker": null,
+            "name": "Space Exploration Technologies Corp",
+            "shares": 124.0,
+            "marketValueKrw": 36081892.0,
+            "weightPercent": 3.02,
+            "weight": 0.0302,
+            "isPriceTracked": false
+          }
+        ],
+        "totalHoldings": 44,
+        "fetchedAt": "2026-06-17T07:19:24.424130+00:00",
+        "decomposition": [
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Micron Technology Inc",
+            "ticker": "MU",
+            "rank": 1,
+            "previousRank": 2,
+            "actualWeightPercent": 6.73,
+            "previousWeightPercent": 6.58,
+            "securityReturn": -0.06179282996369051,
+            "benchmarkReturn": -0.0600109290631951,
+            "predictedWeightPercent": 6.567526548671917,
+            "deltaActualPercentPoint": 0.15000000000000036,
+            "deltaPricePercentPoint": -0.012473451328083307,
+            "deltaResidualPercentPoint": 0.16247345132808366,
+            "tolerancePercentPoint": 0.658,
+            "returnCoverage": 0.8617370378472982,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 1087.989990234375
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 1020.760009765625
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Sandisk Corp",
+            "ticker": "SNDK",
+            "rank": 2,
+            "previousRank": 1,
+            "actualWeightPercent": 6.66,
+            "previousWeightPercent": 6.9,
+            "securityReturn": -0.05517921145915561,
+            "benchmarkReturn": -0.0600109290631951,
+            "predictedWeightPercent": 6.9354672756297555,
+            "deltaActualPercentPoint": -0.2400000000000002,
+            "deltaPricePercentPoint": 0.03546727562975516,
+            "deltaResidualPercentPoint": -0.27546727562975537,
+            "tolerancePercentPoint": 0.6900000000000001,
+            "returnCoverage": 0.8617370378472982,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 2107.860107421875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 1991.550048828125
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Intel Corp",
+            "ticker": "INTC",
+            "rank": 3,
+            "previousRank": 3,
+            "actualWeightPercent": 5.54,
+            "previousWeightPercent": 5.74,
+            "securityReturn": -0.08454557724848444,
+            "benchmarkReturn": -0.0600109290631951,
+            "predictedWeightPercent": 5.590180300029223,
+            "deltaActualPercentPoint": -0.20000000000000018,
+            "deltaPricePercentPoint": -0.14981969997077726,
+            "deltaResidualPercentPoint": -0.05018030002922291,
+            "tolerancePercentPoint": 0.5740000000000001,
+            "returnCoverage": 0.8617370378472982,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 127.86000061035156
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 117.05000305175781
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "ARM Holdings PLC",
+            "ticker": "ARM",
+            "rank": 4,
+            "previousRank": 4,
+            "actualWeightPercent": 5.32,
+            "previousWeightPercent": 5.25,
+            "securityReturn": -0.039292187455384986,
+            "benchmarkReturn": -0.0600109290631951,
+            "predictedWeightPercent": 5.365717721412014,
+            "deltaActualPercentPoint": 0.07000000000000028,
+            "deltaPricePercentPoint": 0.11571772141201375,
+            "deltaResidualPercentPoint": -0.04571772141201347,
+            "tolerancePercentPoint": 0.525,
+            "returnCoverage": 0.8617370378472982,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 412.54998779296875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 396.3399963378906
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "NVIDIA Corp",
+            "ticker": "NVDA",
+            "rank": 5,
+            "previousRank": 5,
+            "actualWeightPercent": 4.67,
+            "previousWeightPercent": 4.78,
+            "securityReturn": -0.023723197733726886,
+            "benchmarkReturn": -0.0600109290631951,
+            "predictedWeightPercent": 4.964529119665179,
+            "deltaActualPercentPoint": -0.11000000000000032,
+            "deltaPricePercentPoint": 0.1845291196651786,
+            "deltaResidualPercentPoint": -0.2945291196651789,
+            "tolerancePercentPoint": 0.47800000000000004,
+            "returnCoverage": 0.8617370378472982,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 212.4499969482422
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 207.41000366210938
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Marvell Technology Inc",
+            "ticker": "MRVL",
+            "rank": 6,
+            "previousRank": 6,
+            "actualWeightPercent": 4.02,
+            "previousWeightPercent": 3.86,
+            "securityReturn": -0.0978049435946482,
+            "benchmarkReturn": -0.0600109290631951,
+            "predictedWeightPercent": 3.704801497589734,
+            "deltaActualPercentPoint": 0.1599999999999997,
+            "deltaPricePercentPoint": -0.15519850241026578,
+            "deltaResidualPercentPoint": 0.3151985024102655,
+            "tolerancePercentPoint": 0.386,
+            "returnCoverage": 0.8617370378472982,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 308.8800048828125
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 278.6700134277344
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Advanced Micro Devices Inc",
+            "ticker": "AMD",
+            "rank": 7,
+            "previousRank": 7,
+            "actualWeightPercent": 3.46,
+            "previousWeightPercent": 3.43,
+            "securityReturn": -0.07303658317336414,
+            "benchmarkReturn": -0.0600109290631951,
+            "predictedWeightPercent": 3.3824696669575607,
+            "deltaActualPercentPoint": 0.029999999999999805,
+            "deltaPricePercentPoint": -0.04753033304243948,
+            "deltaResidualPercentPoint": 0.07753033304243928,
+            "tolerancePercentPoint": 0.343,
+            "returnCoverage": 0.8617370378472982,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 547.260009765625
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 507.2900085449219
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Dell Technologies Inc",
+            "ticker": "DELL",
+            "rank": 8,
+            "previousRank": 8,
+            "actualWeightPercent": 3.15,
+            "previousWeightPercent": 3.23,
+            "securityReturn": null,
+            "priceMeta": {
+              "reason": "stale_close",
+              "startDate": "2026-06-15",
+              "endDate": "2026-06-16",
+              "startCloseDate": "2026-06-15",
+              "endCloseDate": "2026-06-15"
+            },
+            "classification": "insufficient_data",
+            "confidence": "low",
+            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Credo Technology Group Holding Ltd",
+            "ticker": "CRDO",
+            "rank": 9,
+            "previousRank": 9,
+            "actualWeightPercent": 3.02,
+            "previousWeightPercent": 3.09,
+            "securityReturn": null,
+            "priceMeta": {
+              "reason": "stale_close",
+              "startDate": "2026-06-15",
+              "endDate": "2026-06-16",
+              "startCloseDate": "2026-06-15",
+              "endCloseDate": "2026-06-15"
+            },
+            "classification": "insufficient_data",
+            "confidence": "low",
+            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Space Exploration Technologies Corp",
+            "ticker": null,
+            "rank": 10,
+            "previousRank": null,
+            "actualWeightPercent": 3.02,
+            "previousWeightPercent": null,
+            "classification": "new_entry",
+            "confidence": "high",
+            "message": "TOP10 신규 편입"
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Lam Research Corp",
+            "ticker": "LRCX",
+            "rank": null,
+            "previousRank": 10,
+            "actualWeightPercent": null,
+            "previousWeightPercent": 2.85,
+            "classification": "exit",
+            "confidence": "high",
+            "message": "TOP10에서 편출되었습니다."
+          }
+        ],
+        "signals": [
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "type": "top10_entry",
+            "severity": "high",
+            "name": "Space Exploration Technologies Corp",
+            "ticker": null,
+            "rank": 10,
+            "previousRank": null,
+            "weightPercent": 3.02,
+            "previousWeightPercent": null,
+            "message": "TOP10 신규 편입"
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "type": "top10_exit",
+            "severity": "high",
+            "name": "Lam Research Corp",
+            "ticker": "LRCX",
+            "rank": null,
+            "previousRank": 10,
+            "weightPercent": null,
+            "previousWeightPercent": 2.85,
+            "message": "TOP10에서 편출되었습니다."
+          }
+        ],
+        "analysisSummary": {
+          "returnCoverage": 0.8617370378472982,
+          "returnCoverageStatus": "ok",
+          "benchmarkReturn": -0.0600109290631951,
+          "priceBasis": {
+            "previous": "2026-06-15",
+            "current": "2026-06-16"
+          },
+          "priceErrors": {}
+        }
+      }
+    },
+    {
+      "id": "time-global-ai-active",
+      "name": "TIME 글로벌AI인공지능액티브",
+      "code": "456600",
+      "latest": {
+        "date": "2026-06-17",
+        "queryDate": "2026-06-17",
+        "navAsOfDate": "2026-06-16",
+        "priceBasisDate": "2026-06-16",
+        "sourceStatus": "live",
+        "sourceConfidence": "high",
+        "sourceWarning": "",
+        "top10": [
+          {
+            "rank": 1,
+            "codeRaw": "285A JP EQUITY",
+            "ticker": "285A.T",
+            "name": "Kioxia Holdings Corp",
+            "shares": 143.0,
+            "marketValueKrw": 122657526.0,
+            "weightPercent": 8.52,
+            "weight": 0.0852,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 2,
+            "codeRaw": "INTC US EQUITY",
+            "ticker": "INTC",
+            "name": "Intel Corp",
+            "shares": 538.0,
+            "marketValueKrw": 103980968.0,
+            "weightPercent": 7.22,
+            "weight": 0.0722,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 3,
+            "codeRaw": "AMD US EQUITY",
+            "ticker": "AMD",
+            "name": "Advanced Micro Devices Inc",
+            "shares": 118.0,
+            "marketValueKrw": 97614109.0,
+            "weightPercent": 6.78,
+            "weight": 0.0678,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 4,
+            "codeRaw": "STX US EQUITY",
+            "ticker": "STX",
+            "name": "Seagate Technology Holdings PLC",
+            "shares": 58.0,
+            "marketValueKrw": 89321048.0,
+            "weightPercent": 6.21,
+            "weight": 0.0621,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 5,
+            "codeRaw": "WDC US EQUITY",
+            "ticker": "WDC",
+            "name": "Western Digital Corp",
+            "shares": 76.0,
+            "marketValueKrw": 75078572.0,
+            "weightPercent": 5.22,
+            "weight": 0.052199999999999996,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 6,
+            "codeRaw": "ARM US EQUITY",
+            "ticker": "ARM",
+            "name": "ARM Holdings PLC",
+            "shares": 95.0,
+            "marketValueKrw": 59243005.0,
+            "weightPercent": 4.12,
+            "weight": 0.0412,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 7,
+            "codeRaw": "NQU6 INDEX",
+            "ticker": null,
+            "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
+            "shares": 0.0,
+            "marketValueKrw": 55985280.0,
+            "weightPercent": 3.89,
+            "weight": 0.038900000000000004,
+            "isPriceTracked": false
+          },
+          {
+            "rank": 8,
+            "codeRaw": "SNDK US EQUITY",
+            "ticker": "SNDK",
+            "name": "Sandisk Corp",
+            "shares": 17.0,
+            "marketValueKrw": 54166099.0,
+            "weightPercent": 3.76,
+            "weight": 0.037599999999999995,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 9,
+            "codeRaw": "SNOW US EQUITY",
+            "ticker": "SNOW",
+            "name": "Snowflake Inc",
+            "shares": 147.0,
+            "marketValueKrw": 53502568.0,
+            "weightPercent": 3.72,
+            "weight": 0.037200000000000004,
+            "isPriceTracked": true
+          },
+          {
+            "rank": 10,
+            "codeRaw": "NVDA US EQUITY",
+            "ticker": "NVDA",
+            "name": "NVIDIA Corp",
+            "shares": 149.0,
+            "marketValueKrw": 47849773.0,
+            "weightPercent": 3.32,
+            "weight": 0.0332,
+            "isPriceTracked": true
+          }
+        ],
+        "totalHoldings": 37,
+        "fetchedAt": "2026-06-17T07:19:26.938491+00:00",
+        "decomposition": [
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Kioxia Holdings Corp",
+            "ticker": "285A.T",
+            "rank": 1,
+            "previousRank": 1,
+            "actualWeightPercent": 8.52,
+            "previousWeightPercent": 8.06,
+            "securityReturn": 0.041909580904190946,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 8.584148035431252,
+            "deltaActualPercentPoint": 0.4599999999999991,
+            "deltaPricePercentPoint": 0.5241480354312511,
+            "deltaResidualPercentPoint": -0.06414803543125203,
+            "tolerancePercentPoint": 0.806,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 90910.0
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 94720.0
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Intel Corp",
+            "ticker": "INTC",
+            "rank": 2,
+            "previousRank": 2,
+            "actualWeightPercent": 7.22,
+            "previousWeightPercent": 7.49,
+            "securityReturn": -0.08454557724848444,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 7.008913012360006,
+            "deltaActualPercentPoint": -0.27000000000000046,
+            "deltaPricePercentPoint": -0.48108698763999413,
+            "deltaResidualPercentPoint": 0.21108698763999367,
+            "tolerancePercentPoint": 0.7490000000000001,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 127.86000061035156
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 117.05000305175781
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Advanced Micro Devices Inc",
+            "ticker": "AMD",
+            "rank": 3,
+            "previousRank": 3,
+            "actualWeightPercent": 6.78,
+            "previousWeightPercent": 6.77,
+            "securityReturn": -0.07303658317336414,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 6.414803959176361,
+            "deltaActualPercentPoint": 0.010000000000000675,
+            "deltaPricePercentPoint": -0.355196040823639,
+            "deltaResidualPercentPoint": 0.36519604082363966,
+            "tolerancePercentPoint": 0.677,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 547.260009765625
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 507.2900085449219
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Seagate Technology Holdings PLC",
+            "ticker": "STX",
+            "rank": 4,
+            "previousRank": 4,
+            "actualWeightPercent": 6.21,
+            "previousWeightPercent": 6.0,
+            "securityReturn": 0.01230857693128673,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 6.208637332439804,
+            "deltaActualPercentPoint": 0.20999999999999996,
+            "deltaPricePercentPoint": 0.2086373324398041,
+            "deltaResidualPercentPoint": 0.0013626675601958738,
+            "tolerancePercentPoint": 0.6000000000000001,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 1018.7999877929688
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 1031.3399658203125
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Western Digital Corp",
+            "ticker": "WDC",
+            "rank": 5,
+            "previousRank": 5,
+            "actualWeightPercent": 5.22,
+            "previousWeightPercent": 4.76,
+            "securityReturn": 0.042155657059262275,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 5.070743797978041,
+            "deltaActualPercentPoint": 0.45999999999999996,
+            "deltaPricePercentPoint": 0.3107437979780414,
+            "deltaResidualPercentPoint": 0.14925620202195855,
+            "tolerancePercentPoint": 0.476,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 653.530029296875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 681.0800170898438
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "ARM Holdings PLC",
+            "ticker": "ARM",
+            "rank": 6,
+            "previousRank": 6,
+            "actualWeightPercent": 4.12,
+            "previousWeightPercent": 4.02,
+            "securityReturn": -0.039292187455384986,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 3.947748712917488,
+            "deltaActualPercentPoint": 0.10000000000000053,
+            "deltaPricePercentPoint": -0.0722512870825116,
+            "deltaResidualPercentPoint": 0.17225128708251214,
+            "tolerancePercentPoint": 0.40199999999999997,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 412.54998779296875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 396.3399963378906
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
+            "ticker": null,
+            "rank": 7,
+            "previousRank": null,
+            "actualWeightPercent": 3.89,
+            "previousWeightPercent": null,
+            "classification": "new_entry",
+            "confidence": "high",
+            "message": "TOP10 신규 편입"
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Sandisk Corp",
+            "ticker": "SNDK",
+            "rank": 8,
+            "previousRank": 9,
+            "actualWeightPercent": 3.76,
+            "previousWeightPercent": 3.74,
+            "securityReturn": -0.05517921145915561,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 3.612045127921635,
+            "deltaActualPercentPoint": 0.019999999999999574,
+            "deltaPricePercentPoint": -0.12795487207836542,
+            "deltaResidualPercentPoint": 0.147954872078365,
+            "tolerancePercentPoint": 0.37400000000000005,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 2107.860107421875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 1991.550048828125
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Snowflake Inc",
+            "ticker": "SNOW",
+            "rank": 9,
+            "previousRank": 8,
+            "actualWeightPercent": 3.72,
+            "previousWeightPercent": 3.8,
+            "securityReturn": null,
+            "priceMeta": {
+              "reason": "stale_close",
+              "startDate": "2026-06-15",
+              "endDate": "2026-06-16",
+              "startCloseDate": "2026-06-15",
+              "endCloseDate": "2026-06-15"
+            },
+            "classification": "insufficient_data",
+            "confidence": "low",
+            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "NVIDIA Corp",
+            "ticker": "NVDA",
+            "rank": 10,
+            "previousRank": 10,
+            "actualWeightPercent": 3.32,
+            "previousWeightPercent": 3.42,
+            "securityReturn": -0.023723197733726886,
+            "benchmarkReturn": -0.021709412812346847,
+            "predictedWeightPercent": 3.412960021775413,
+            "deltaActualPercentPoint": -0.10000000000000009,
+            "deltaPricePercentPoint": -0.007039978224586907,
+            "deltaResidualPercentPoint": -0.09296002177541318,
+            "tolerancePercentPoint": 0.342,
+            "returnCoverage": 0.8508266051518647,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 212.4499969482422
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 207.41000366210938
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "NASDAQ 100 E-MINI INDEX JUN 2026",
+            "ticker": null,
+            "rank": null,
+            "previousRank": 7,
+            "actualWeightPercent": null,
+            "previousWeightPercent": 3.96,
+            "classification": "exit",
+            "confidence": "high",
+            "message": "TOP10에서 편출되었습니다."
+          }
+        ],
+        "signals": [
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "type": "top10_entry",
+            "severity": "high",
+            "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
+            "ticker": null,
+            "rank": 7,
+            "previousRank": null,
+            "weightPercent": 3.89,
+            "previousWeightPercent": null,
+            "message": "TOP10 신규 편입"
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "type": "top10_exit",
+            "severity": "high",
+            "name": "NASDAQ 100 E-MINI INDEX JUN 2026",
+            "ticker": null,
+            "rank": null,
+            "previousRank": 7,
+            "weightPercent": null,
+            "previousWeightPercent": 3.96,
+            "message": "TOP10에서 편출되었습니다."
+          }
+        ],
+        "analysisSummary": {
+          "returnCoverage": 0.8508266051518647,
+          "returnCoverageStatus": "ok",
+          "benchmarkReturn": -0.021709412812346847,
+          "priceBasis": {
+            "previous": "2026-06-15",
+            "current": "2026-06-16"
+          },
+          "priceErrors": {}
+        }
+      }
+    },
+    {
+      "id": "koact-nasdaq-growth-active",
+      "name": "KoAct 미국나스닥성장기업액티브",
+      "code": "2ETFQ1",
+      "latest": {
+        "date": "2026-06-17",
+        "queryDate": "2026-06-17",
+        "navAsOfDate": null,
+        "priceBasisDate": "2026-06-16",
+        "sourceStatus": "live",
+        "sourceConfidence": "high",
+        "sourceWarning": "",
+        "top10": [
+          {
+            "rank": 1,
+            "codeRaw": "SPCX US Equity",
+            "ticker": null,
+            "name": "Space Exploration Technologies Corp",
+            "shares": 397.85,
+            "marketValueKrw": 115767586.0,
+            "weightPercent": 9.63,
+            "weight": 0.09630000000000001,
+            "isPriceTracked": false,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 2,
+            "codeRaw": "AMD US Equity",
+            "ticker": "AMD",
+            "name": "ADVANCED MICRO DEVICES",
+            "shares": 108.31,
+            "marketValueKrw": 89598171.0,
+            "weightPercent": 7.45,
+            "weight": 0.0745,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 3,
+            "codeRaw": "ARM US Equity",
+            "ticker": "ARM",
+            "name": "ARM Holdings PLC",
+            "shares": 141.55,
+            "marketValueKrw": 88272077.0,
+            "weightPercent": 7.34,
+            "weight": 0.07339999999999999,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 4,
+            "codeRaw": "SNDK US Equity",
+            "ticker": "SNDK",
+            "name": "Sandisk Corp/DE",
+            "shares": 22.42,
+            "marketValueKrw": 71435527.0,
+            "weightPercent": 5.94,
+            "weight": 0.0594,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 5,
+            "codeRaw": "INTC US Equity",
+            "ticker": "INTC",
+            "name": "INTEL Corp",
+            "shares": 346.64,
+            "marketValueKrw": 66996213.0,
+            "weightPercent": 5.57,
+            "weight": 0.0557,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 6,
+            "codeRaw": "NVDA US Equity",
+            "ticker": "NVDA",
+            "name": "NVIDIA Corp",
+            "shares": 183.97,
+            "marketValueKrw": 59080019.0,
+            "weightPercent": 4.91,
+            "weight": 0.049100000000000005,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 7,
+            "codeRaw": "GOOGL US Equity",
+            "ticker": "GOOGL",
+            "name": "ALPHABET INC-CL A",
+            "shares": 101.32,
+            "marketValueKrw": 56567914.0,
+            "weightPercent": 4.7,
+            "weight": 0.047,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 8,
+            "codeRaw": "BE US Equity",
+            "ticker": "BE",
+            "name": "BLOOM ENERGY CORPORATION",
+            "shares": 121.66,
+            "marketValueKrw": 50480894.0,
+            "weightPercent": 4.2,
+            "weight": 0.042,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 9,
+            "codeRaw": "MU US Equity",
+            "ticker": "MU",
+            "name": "MICRON TECH",
+            "shares": 29.58,
+            "marketValueKrw": 48647436.0,
+            "weightPercent": 4.05,
+            "weight": 0.0405,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          },
+          {
+            "rank": 10,
+            "codeRaw": "AMZN US Equity",
+            "ticker": "AMZN",
+            "name": "Amazon.com Inc",
+            "shares": 119.87,
+            "marketValueKrw": 44577714.0,
+            "weightPercent": 3.71,
+            "weight": 0.0371,
+            "isPriceTracked": true,
+            "sourceFields": {
+              "secId": null,
+              "risep": "",
+              "curp": ""
+            }
+          }
+        ],
+        "totalHoldings": 55,
+        "fetchedAt": "2026-06-17T07:19:28.430446+00:00",
+        "decomposition": [
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Space Exploration Technologies Corp",
+            "ticker": null,
+            "rank": 1,
+            "previousRank": 1,
+            "actualWeightPercent": 9.63,
+            "previousWeightPercent": 8.58,
+            "securityReturn": null,
+            "priceMeta": {
+              "reason": "not_price_tracked"
+            },
+            "classification": "insufficient_data",
+            "confidence": "low",
+            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "ADVANCED MICRO DEVICES",
+            "ticker": "AMD",
+            "rank": 2,
+            "previousRank": 2,
+            "actualWeightPercent": 7.45,
+            "previousWeightPercent": 7.42,
+            "securityReturn": -0.07303658317336414,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 7.197178243686292,
+            "deltaActualPercentPoint": 0.03000000000000025,
+            "deltaPricePercentPoint": -0.22282175631370826,
+            "deltaResidualPercentPoint": 0.2528217563137085,
+            "tolerancePercentPoint": 0.742,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 547.260009765625
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 507.2900085449219
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "ARM Holdings PLC",
+            "ticker": "ARM",
+            "rank": 3,
+            "previousRank": 3,
+            "actualWeightPercent": 7.34,
+            "previousWeightPercent": 7.22,
+            "securityReturn": -0.039292187455384986,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 7.258122242605975,
+            "deltaActualPercentPoint": 0.1200000000000001,
+            "deltaPricePercentPoint": 0.038122242605974854,
+            "deltaResidualPercentPoint": 0.08187775739402525,
+            "tolerancePercentPoint": 0.722,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 412.54998779296875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 396.3399963378906
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Sandisk Corp/DE",
+            "ticker": "SNDK",
+            "rank": 4,
+            "previousRank": 4,
+            "actualWeightPercent": 5.94,
+            "previousWeightPercent": 5.95,
+            "securityReturn": -0.05517921145915561,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 5.882503096432818,
+            "deltaActualPercentPoint": -0.009999999999999787,
+            "deltaPricePercentPoint": -0.06749690356718219,
+            "deltaResidualPercentPoint": 0.0574969035671824,
+            "tolerancePercentPoint": 0.5950000000000001,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 2107.860107421875
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 1991.550048828125
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "INTEL Corp",
+            "ticker": "INTC",
+            "rank": 5,
+            "previousRank": 5,
+            "actualWeightPercent": 5.57,
+            "previousWeightPercent": 5.79,
+            "securityReturn": -0.08454557724848444,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 5.546398239053075,
+            "deltaActualPercentPoint": -0.21999999999999975,
+            "deltaPricePercentPoint": -0.24360176094692498,
+            "deltaResidualPercentPoint": 0.023601760946925232,
+            "tolerancePercentPoint": 0.5790000000000001,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 127.86000061035156
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 117.05000305175781
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "NVIDIA Corp",
+            "ticker": "NVDA",
+            "rank": 6,
+            "previousRank": 6,
+            "actualWeightPercent": 4.91,
+            "previousWeightPercent": 5.06,
+            "securityReturn": -0.023723197733726886,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 5.169151313612094,
+            "deltaActualPercentPoint": -0.14999999999999947,
+            "deltaPricePercentPoint": 0.10915131361209429,
+            "deltaResidualPercentPoint": -0.25915131361209376,
+            "tolerancePercentPoint": 0.506,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 212.4499969482422
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 207.41000366210938
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "ALPHABET INC-CL A",
+            "ticker": "GOOGL",
+            "rank": 7,
+            "previousRank": 7,
+            "actualWeightPercent": 4.7,
+            "previousWeightPercent": 4.88,
+            "securityReturn": 0.010559073594251789,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 5.160327752770657,
+            "deltaActualPercentPoint": -0.17999999999999972,
+            "deltaPricePercentPoint": 0.28032775277065713,
+            "deltaResidualPercentPoint": -0.46032775277065685,
+            "tolerancePercentPoint": 0.488,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 369.3500061035156
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 373.25
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "BLOOM ENERGY CORPORATION",
+            "ticker": "BE",
+            "rank": 8,
+            "previousRank": 8,
+            "actualWeightPercent": 4.2,
+            "previousWeightPercent": 4.24,
+            "securityReturn": null,
+            "priceMeta": {
+              "reason": "stale_close",
+              "startDate": "2026-06-15",
+              "endDate": "2026-06-16",
+              "startCloseDate": "2026-06-15",
+              "endCloseDate": "2026-06-15"
+            },
+            "classification": "insufficient_data",
+            "confidence": "low",
+            "message": "종가 또는 비중 데이터가 부족해 분해하지 못했습니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "MICRON TECH",
+            "ticker": "MU",
+            "rank": 9,
+            "previousRank": 9,
+            "actualWeightPercent": 4.05,
+            "previousWeightPercent": 3.89,
+            "securityReturn": -0.06179282996369051,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 3.818951186896387,
+            "deltaActualPercentPoint": 0.1599999999999997,
+            "deltaPricePercentPoint": -0.0710488131036131,
+            "deltaResidualPercentPoint": 0.2310488131036128,
+            "tolerancePercentPoint": 0.389,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 1087.989990234375
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 1020.760009765625
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          },
+          {
+            "date": "2026-06-17",
+            "previousDate": "2026-06-16",
+            "name": "Amazon.com Inc",
+            "ticker": "AMZN",
+            "rank": 10,
+            "previousRank": 10,
+            "actualWeightPercent": 3.71,
+            "previousWeightPercent": 3.83,
+            "securityReturn": -8.13115686266741e-05,
+            "benchmarkReturn": -0.0443381669910138,
+            "predictedWeightPercent": 4.007367924942701,
+            "deltaActualPercentPoint": -0.1200000000000001,
+            "deltaPricePercentPoint": 0.17736792494270137,
+            "deltaResidualPercentPoint": -0.2973679249427015,
+            "tolerancePercentPoint": 0.383,
+            "returnCoverage": 0.7745339430179388,
+            "priceMeta": {
+              "start": {
+                "date": "2026-06-15",
+                "close": 246.02000427246094
+              },
+              "end": {
+                "date": "2026-06-16",
+                "close": 246.0
+              }
+            },
+            "classification": "price_explained",
+            "confidence": "high",
+            "message": "가격 수익률로 대부분 설명됩니다."
+          }
+        ],
+        "signals": [],
+        "analysisSummary": {
+          "returnCoverage": 0.7745339430179388,
+          "returnCoverageStatus": "ok",
+          "benchmarkReturn": -0.0443381669910138,
+          "priceBasis": {
+            "previous": "2026-06-15",
+            "current": "2026-06-16"
+          },
+          "priceErrors": {}
+        }
+      }
+    }
+  ]
+}

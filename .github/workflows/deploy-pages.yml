@@ -1,0 +1,41 @@
+name: Deploy ETF tracking site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: etf-tracking-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify static sources
+        run: |
+          test -f index.html
+          test -f data/dashboard.json
+          test -f data/status.json
+      - name: Build Pages artifact
+        run: |
+          rm -rf _site
+          mkdir -p _site
+          cp index.html README.md .nojekyll _site/
+          cp -R assets data _site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

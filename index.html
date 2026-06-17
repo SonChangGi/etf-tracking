@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="한국 상장 액티브 ETF 3종의 TOP10 편입 종목과 비중 변화를 추적하는 정적 대시보드" />
+  <title>ETF TOP10 Tracking</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script src="assets/app.js" defer></script>
+</head>
+<body>
+  <header class="hero" aria-labelledby="page-title">
+    <nav class="top-nav" aria-label="프로젝트 이동">
+      <a class="ghost-link" href="https://sonchanggi.github.io/quant-dashboard/">← Quant Dashboard로 돌아가기</a>
+      <a href="#etf-dashboard">ETF 대시보드</a>
+      <a href="#signals">신호</a>
+      <a href="#methodology">해석 방법</a>
+    </nav>
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">ETF Tracking</p>
+        <h1 id="page-title">ETF TOP10 투자 비중 추적</h1>
+        <p class="hero-copy">
+          TIME ETF 2종과 KoAct 미국나스닥성장기업액티브의 일별 TOP10 구성 종목,
+          비중 변화, 가격 수익률로 설명되지 않는 매수·매도 가능성 신호를 한 화면에서 확인합니다.
+        </p>
+        <div class="hero-actions">
+          <a class="primary-button" href="#etf-dashboard">대시보드 보기</a>
+          <a class="secondary-button" href="data/dashboard.json">원천 JSON 보기</a>
+        </div>
+      </div>
+      <aside class="hero-note" aria-label="데이터 정책">
+        <strong>데이터/해석 경계</strong>
+        <p>
+          공급자 공개 데이터와 공개 종가를 이용한 추정 도구입니다. 실제 운용사 주문 확정이 아니며,
+          투자·세무·법률 또는 매매 조언이 아닙니다.
+        </p>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" aria-labelledby="summary-title">
+      <div class="section-heading centered">
+        <p class="eyebrow">Daily Summary</p>
+        <h2 id="summary-title">최근 업데이트 요약</h2>
+        <p id="data-status">데이터를 불러오는 중...</p>
+      </div>
+      <div class="metric-row" id="overview-metrics" aria-live="polite">
+        <div class="skeleton-line">요약 지표를 준비하는 중...</div>
+      </div>
+    </section>
+
+    <section class="section dashboard-section" id="etf-dashboard" aria-labelledby="dashboard-title">
+      <div class="section-heading">
+        <p class="eyebrow">Holdings Monitor</p>
+        <h2 id="dashboard-title">ETF별 TOP10 비중 추이</h2>
+        <p>ETF와 날짜 범위를 선택해 편입 종목의 비중 추이를 비교합니다.</p>
+      </div>
+
+      <div class="control-card" aria-label="ETF 및 기간 선택">
+        <label>
+          ETF 선택
+          <select id="etf-select"></select>
+        </label>
+        <label>
+          시작일
+          <input type="date" id="start-date" />
+        </label>
+        <label>
+          종료일
+          <input type="date" id="end-date" />
+        </label>
+        <button type="button" id="reset-range">전체 기간</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="panel panel-wide" aria-labelledby="chart-title">
+          <div class="panel-header">
+            <div>
+              <p class="eyebrow">Weight Trend</p>
+              <h3 id="chart-title">TOP10 비중 변화 그래프</h3>
+            </div>
+            <span class="status-pill" id="coverage-pill">커버리지 확인 중</span>
+          </div>
+          <div class="chart-card" id="weight-chart" role="img" aria-label="선택 ETF의 TOP10 비중 추이"></div>
+        </article>
+
+        <article class="panel" aria-labelledby="source-title">
+          <div class="panel-header compact">
+            <div>
+              <p class="eyebrow">Source</p>
+              <h3 id="source-title">소스 상태</h3>
+            </div>
+          </div>
+          <div class="source-list" id="source-list"></div>
+        </article>
+      </div>
+
+      <article class="panel panel-wide" aria-labelledby="top10-title">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Latest TOP10</p>
+            <h3 id="top10-title">최근 TOP10 구성 종목</h3>
+          </div>
+          <a class="panel-link" id="provider-link" href="#" target="_blank" rel="noreferrer">공급자 페이지</a>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption>최근 ETF TOP10 편입 종목과 비중</caption>
+            <thead>
+              <tr>
+                <th scope="col">순위</th>
+                <th scope="col">종목</th>
+                <th scope="col">티커</th>
+                <th scope="col">비중</th>
+                <th scope="col">전일 대비 분해</th>
+                <th scope="col">신뢰도</th>
+              </tr>
+            </thead>
+            <tbody id="top10-rows">
+              <tr><td colspan="6">데이터를 불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="panel panel-wide" aria-labelledby="decomp-title">
+        <div class="panel-header">
+          <div>
+            <p class="eyebrow">Price vs Flow</p>
+            <h3 id="decomp-title">가격 효과와 ETF 매수·매도 가능성</h3>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <caption>전일 대비 비중 변화 분해</caption>
+            <thead>
+              <tr>
+                <th scope="col">종목</th>
+                <th scope="col">전일 비중</th>
+                <th scope="col">현재 비중</th>
+                <th scope="col">가격 기여</th>
+                <th scope="col">잔차</th>
+                <th scope="col">분류</th>
+              </tr>
+            </thead>
+            <tbody id="decomposition-rows">
+              <tr><td colspan="6">데이터를 불러오는 중...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="signals" aria-labelledby="signals-title">
+      <div class="section-heading centered">
+        <p class="eyebrow">Signals</p>
+        <h2 id="signals-title">특별 신호</h2>
+        <p>TOP10 신규 편입·편출과 가격으로 설명되지 않는 잔차 신호를 우선 표시합니다.</p>
+      </div>
+      <div class="signal-grid" id="signal-grid"></div>
+    </section>
+
+    <section class="section methodology-section" id="methodology" aria-labelledby="method-title">
+      <div class="section-heading">
+        <p class="eyebrow">Methodology</p>
+        <h2 id="method-title">계산 방법과 한계</h2>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <h3>가격 효과</h3>
+          <p>전일 TOP10 비중에 개별 종목 수익률을 적용하고, TOP10 내 가중 평균 수익률로 정규화한 예측 비중을 계산합니다.</p>
+        </article>
+        <article>
+          <h3>잔차 신호</h3>
+          <p>실제 비중 변화가 예측 비중 변화보다 허용오차 이상 크면 <code>likely_buy</code>, 작으면 <code>likely_sell</code>로 표시합니다.</p>
+        </article>
+        <article>
+          <h3>커버리지</h3>
+          <p>종가가 확보된 전일 TOP10 비중 합계가 60% 미만이면 가격/매매 요인을 단정하지 않고 <code>mixed</code> 또는 낮은 신뢰도로 표시합니다.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      <a href="https://sonchanggi.github.io/quant-dashboard/">Quant Dashboard로 돌아가기</a>
+      · 본 페이지는 개인 리서치 대시보드이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.
+    </p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+name: Update ETF tracking data
+
+on:
+  schedule:
+    # 08:05 KST primary run after Korean provider morning refresh window starts.
+    - cron: '5 23 * * 0-5'
+    # Retry slots if prior US close or provider PDF rows are not available yet.
+    - cron: '30 0 * * 1-6'
+    - cron: '0 2 * * 1-6'
+    - cron: '0 4 * * 1-6'
+  workflow_dispatch:
+    inputs:
+      backfill_all:
+        description: 'Fetch all weekdays since each ETF listing date'
+        required: false
+        default: 'false'
+        type: choice
+        options: ['false', 'true']
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: etf-tracking-update-pages
+  cancel-in-progress: false
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Update data
+        run: |
+          if [ "${{ github.event.inputs.backfill_all }}" = "true" ]; then
+            python3 scripts/update_data.py --output-dir data --backfill-all
+          else
+            python3 scripts/update_data.py --output-dir data --backfill-days 10
+          fi
+      - name: Verify static site and data
+        run: npm test
+      - name: Commit refreshed data
+        run: |
+          if git diff --quiet -- data; then
+            echo "No data changes to commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data
+            git commit -m "Keep ETF tracking data fresh
+
+Constraint: Scheduled runs start after 08:00 KST with retry slots for delayed prior closes.
+Confidence: high
+Scope-risk: narrow
+Directive: Do not commit provider credentials; updater uses public pages/APIs only.
+Tested: npm test
+Not-tested: Manual investment interpretation."
+            git push
+          fi
+      - name: Build Pages artifact
+        run: |
+          rm -rf _site
+          mkdir -p _site
+          cp index.html README.md .nojekyll _site/
+          cp -R assets data _site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - uses: actions/deploy-pages@v4

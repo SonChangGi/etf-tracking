@@ -1,0 +1,13 @@
+{
+  "pdf": {
+    "gijunYMD": "20260617",
+    "totalCnt": 55,
+    "list": [
+      {"secNm": "설정현금액", "evalA": "1259090517", "applyQ": "1259090517", "itmNo": "CASH00000001", "ratio": ""},
+      {"secNm": "Space Exploration Technologies Corp", "evalA": "115767586", "applyQ": "397.85", "itmNo": "SPCX US Equity", "ratio": "9.63"},
+      {"secNm": "ADVANCED MICRO DEVICES", "evalA": "89598171", "applyQ": "108.31", "itmNo": "AMD US Equity", "ratio": "7.45"},
+      {"secNm": "ARM Holdings PLC", "evalA": "88272077", "applyQ": "141.55", "itmNo": "ARM US Equity", "ratio": "7.34"}
+    ]
+  },
+  "info": {"product": {"fId": "2ETFQ1", "fNm": "KoAct 미국나스닥성장기업액티브", "listD": "20250225", "gijunYMD": "20260616"}}
+}
