@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.1",
-  "generatedAt": "2026-06-18T07:00:11+00:00",
+  "generatedAt": "2026-06-18T08:52:20+00:00",
   "targetDate": "2026-06-18",
   "overallStatus": "ok",
   "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
