@@ -41,6 +41,19 @@ if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_bu
 if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_sell' && point.direction === 'sell')) {
   throw new Error('hover chart should include selected-period sell markers, not just residual watches');
 }
+const spacexSeries = series.find((item) => /Space Exploration Technologies/i.test(item.fullLabel));
+if (!spacexSeries?.signalPoints.some((point) => point.kind === 'entry' && point.actionEstimate === 'top10_entry' && point.glyph === '＋')) {
+  throw new Error('hover chart should show TOP10 entry markers for SpaceX-like recent entrants');
+}
+const koact = parsed.etfs.find((etf) => etf.id === 'koact-nasdaq-growth-active');
+const koactSeries = api.buildWeightSeries(koact.history, koact.latest?.top10 || []);
+const koactSpacex = koactSeries.find((item) => /Space Exploration Technologies/i.test(item.fullLabel));
+if (!koactSpacex?.signalPoints.some((point) => point.date === '2026-06-16' && point.kind === 'entry' && point.actionEstimate === 'new_entry')) {
+  throw new Error('hover chart should show 신규 편입 markers when no residual buy estimate exists');
+}
+if (api.lifecycleDirection({ classification: 'new_entry', holdingLifecycle: 'new_holding' })?.kind !== 'entry') throw new Error('new_entry should map to an entry marker');
+if (api.lifecycleDirection({ membershipChange: 'top10_entry' })?.glyph !== '＋') throw new Error('top10_entry should map to plus marker');
+if (api.lifecycleDirection({ membershipChange: 'top10_exit' })?.kind !== 'exit') throw new Error('top10_exit should map to exit marker');
 if (api.residualDirection({ actionEstimate: 'likely_buy' })?.direction !== 'buy') throw new Error('likely_buy should map to up-arrow buy direction');
 if (api.residualDirection({ classification: 'residual_watch', deltaResidualPercentPoint: -0.2 })?.direction !== 'sell') throw new Error('negative residual_watch should map to down-arrow sell direction');
 const segmented = api.splitPointSegments([
@@ -126,6 +139,8 @@ try {
   if (!app.includes('buildNiceTicks')) throw new Error('nice axis tick builder missing');
   if (!app.includes('axis-range')) throw new Error('chart axis range label missing');
   if (!app.includes('chart-series') || !app.includes('series-hit')) throw new Error('chart hover emphasis missing');
+  if (!app.includes('lifecycleDirection') || !styles.includes('signal-entry')) throw new Error('chart lifecycle entry markers missing');
+  if (!html.includes('marker-entry') || !html.includes('＋ 편입')) throw new Error('chart marker UX legend missing');
   if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
   if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');

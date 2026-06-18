@@ -475,7 +475,7 @@
       const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? '#fff' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
       const signalMarkers = renderSeriesSignalMarkers(item.signalPoints, x, y);
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
-      const signalCount = item.signalPoints.length ? `, 기간 내 방향 신호 ${item.signalPoints.length}개` : '';
+      const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
       return `<g class="chart-series" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
     }).join('');
@@ -484,7 +484,7 @@
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
-    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 매수·매도 방향 신호가 화살표로 표시됩니다.`;
+    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 편입·편출 이벤트와 매수·매도 방향 신호가 마커로 표시됩니다.`;
     target.innerHTML = `
       <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
       <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
@@ -516,13 +516,18 @@
     const markers = asArray(signalPoints).filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
     if (!markers.length) return '';
     return `<g class="series-signal-layer">${markers.map((point) => {
-      const buy = point.direction === 'buy';
+      const kind = stringOr(point.kind, point.direction, 'signal');
+      const isSellLike = point.direction === 'sell' || kind === 'exit';
       const markerX = x(point.date);
-      const markerY = y(point.value) + (buy ? -18 : 20);
-      const label = point.actionLabel || (buy ? '매수 관찰' : '매도 관찰');
-      const title = `${point.date} ${label}: 잔차 ${formatPercentPoint(point.residual)}`;
-      const classes = `series-signal ${buy ? 'signal-buy' : 'signal-sell'} ${point.strength === 'watch' ? 'signal-watch' : 'signal-strong'}`;
-      return `<g class="${escapeAttribute(classes)}" transform="translate(${markerX.toFixed(1)} ${markerY.toFixed(1)})"><title>${escapeHtml(title)}</title><circle r="${point.strength === 'watch' ? 7 : 8}"/><text text-anchor="middle" dominant-baseline="central">${buy ? '↑' : '↓'}</text></g>`;
+      const slot = numberOr(point.slot, 0);
+      const markerY = y(point.value) + (isSellLike ? 20 + slot * 14 : -18 - slot * 14);
+      const label = point.actionLabel || (point.direction === 'buy' ? '매수 관찰' : point.direction === 'sell' ? '매도 관찰' : '편입 이벤트');
+      const residualText = point.residual === null ? '' : ` · 잔차 ${formatPercentPoint(point.residual)}`;
+      const title = `${point.date} ${label}${residualText} · 비중 ${formatWeight(point.value)}`;
+      const strengthClass = point.strength === 'watch' ? 'signal-watch' : 'signal-strong';
+      const classes = `series-signal signal-${kind} ${strengthClass}`;
+      const glyph = stringOr(point.glyph, point.direction === 'buy' ? '↑' : point.direction === 'sell' ? '↓' : '•');
+      return `<g class="${escapeAttribute(classes)}" transform="translate(${markerX.toFixed(1)} ${markerY.toFixed(1)})"><title>${escapeHtml(title)}</title><circle r="${point.strength === 'watch' ? 7 : 8}"/><text text-anchor="middle" dominant-baseline="central">${escapeHtml(glyph)}</text></g>`;
     }).join('')}</g>`;
   }
 
@@ -572,20 +577,82 @@
     return asArray(history).flatMap((snapshot) => {
       const decomposition = asArray(snapshot.decomposition);
       const row = decomposition.find((item) => holdingKey(item) === key);
-      const signal = residualDirection(row);
-      if (!signal) return [];
+      if (!row) return [];
       const weight = finiteOrNull(row.actualWeightPercent) ?? finiteOrNull(pointByDate.get(snapshot.date)?.value);
       if (weight === null) return [];
-      return [{
+      return rowChartSignals(row).map((signal, slot) => ({
         date: snapshot.date,
         value: weight,
         residual: finiteOrNull(row.deltaResidualPercentPoint),
         actionEstimate: signal.estimate,
-        actionLabel: stringOr(row.actionLabel, signal.direction === 'buy' ? '매수 관찰' : '매도·축소 관찰'),
+        actionLabel: stringOr(signal.label, row.actionLabel, signal.direction === 'buy' ? '매수 관찰' : signal.direction === 'sell' ? '매도·축소 관찰' : '편입 이벤트'),
+        actionExplanation: stringOr(signal.explanation, row.actionExplanation, row.message),
         direction: signal.direction,
+        kind: signal.kind,
+        glyph: signal.glyph,
         strength: signal.strength,
-      }];
+        slot,
+      }));
     });
+  }
+
+  function rowChartSignals(row) {
+    if (!isRecord(row)) return [];
+    const lifecycle = lifecycleDirection(row);
+    const residual = residualDirection(row);
+    return [lifecycle, residual].filter(Boolean);
+  }
+
+  function lifecycleDirection(row) {
+    if (!isRecord(row)) return null;
+    const membership = stringOr(row.membershipChange, '');
+    const classification = stringOr(row.classification, '');
+    const lifecycle = stringOr(row.holdingLifecycle, row.positionStatus, '');
+    if (classification === 'new_entry' || lifecycle === 'new_holding') {
+      return {
+        estimate: classification || 'new_entry',
+        direction: 'entry',
+        kind: 'entry',
+        glyph: '＋',
+        strength: 'strong',
+        label: '신규 편입',
+        explanation: '전일 보유가 확인되지 않은 신규 보유 이벤트입니다. 잔차 기반 매수 추정과는 별도로 표시합니다.',
+      };
+    }
+    if (membership === 'top10_entry') {
+      return {
+        estimate: 'top10_entry',
+        direction: 'entry',
+        kind: 'entry',
+        glyph: '＋',
+        strength: 'watch',
+        label: 'TOP10 편입',
+        explanation: '이미 보유했거나 전일 10위 밖이던 종목이 TOP10에 들어온 이벤트입니다.',
+      };
+    }
+    if (classification === 'fund_exit' || lifecycle === 'fund_exit') {
+      return {
+        estimate: classification || 'fund_exit',
+        direction: 'exit',
+        kind: 'exit',
+        glyph: '－',
+        strength: 'strong',
+        label: '보유 제외',
+        explanation: '보유목록에서 제외된 이벤트입니다.',
+      };
+    }
+    if (membership === 'top10_exit') {
+      return {
+        estimate: 'top10_exit',
+        direction: 'exit',
+        kind: 'exit',
+        glyph: '－',
+        strength: 'watch',
+        label: 'TOP10 편출',
+        explanation: '보유는 유지됐지만 TOP10 밖으로 내려간 이벤트입니다.',
+      };
+    }
+    return null;
   }
 
   function residualDirection(row) {
@@ -1160,6 +1227,8 @@
       buildWeightSeries,
       buildSeriesColorMap,
       buildSeriesSignalPoints,
+      rowChartSignals,
+      lifecycleDirection,
       residualDirection,
       splitPointSegments,
       buildNiceTicks,

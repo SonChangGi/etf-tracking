@@ -373,6 +373,10 @@ input[type="date"] {
 .chart-card .series-signal.signal-buy text { fill: var(--success); }
 .chart-card .series-signal.signal-sell circle { stroke: var(--danger); }
 .chart-card .series-signal.signal-sell text { fill: var(--danger); }
+.chart-card .series-signal.signal-entry circle { stroke: var(--accent); fill: #f5f8ff; }
+.chart-card .series-signal.signal-entry text { fill: var(--accent); }
+.chart-card .series-signal.signal-exit circle { stroke: var(--warning); fill: #fff8ed; }
+.chart-card .series-signal.signal-exit text { fill: var(--warning); }
 .chart-card .series-signal.signal-watch circle {
   stroke-dasharray: 2.5 2.5;
   opacity: 0.94;
@@ -390,8 +394,24 @@ input[type="date"] {
   margin: 10px 6px 0;
   color: var(--muted);
   font-size: 0.9rem;
-  line-height: 1.55;
+  line-height: 1.65;
 }
+.marker-help {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  margin: 2px 3px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #f8fbff;
+  border: 1px solid var(--line);
+  font-weight: 900;
+  white-space: nowrap;
+}
+.marker-entry { color: var(--accent); border-color: rgba(36, 87, 214, 0.25); background: #f5f8ff; }
+.marker-exit { color: var(--warning); border-color: rgba(180, 83, 9, 0.25); background: #fff8ed; }
+.marker-buy { color: var(--success); border-color: rgba(4, 120, 87, 0.22); background: #f0fdf7; }
+.marker-sell { color: var(--danger); border-color: rgba(192, 38, 45, 0.22); background: #fff5f5; }
 .chart-summary-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
