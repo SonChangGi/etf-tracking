@@ -1,31 +1,31 @@
 etf_id,date,rank,ticker,name,weight_percent,classification,residual_pp
-time-nasdaq100-active,2026-06-17,1,MU,Micron Technology Inc,6.73,price_aligned,-0.13869206570083215
-time-nasdaq100-active,2026-06-17,2,SNDK,Sandisk Corp,6.66,residual_watch,-0.2577673955495481
-time-nasdaq100-active,2026-06-17,3,INTC,Intel Corp,5.54,price_aligned,-0.008752443225684914
-time-nasdaq100-active,2026-06-17,4,ARM,ARM Holdings PLC,5.32,price_aligned,-0.03660685777271677
-time-nasdaq100-active,2026-06-17,5,NVDA,NVIDIA Corp,4.67,price_aligned,0.00887584847478795
-time-nasdaq100-active,2026-06-17,6,MRVL,Marvell Technology Inc,4.02,price_aligned,0.005357825635623925
-time-nasdaq100-active,2026-06-17,7,AMD,Advanced Micro Devices Inc,3.46,price_aligned,0.004228835428047084
-time-nasdaq100-active,2026-06-17,8,DELL,Dell Technologies Inc,3.15,price_aligned,0.004142665031760195
-time-nasdaq100-active,2026-06-17,9,CRDO,Credo Technology Group Holding Ltd,3.02,price_aligned,0.01002723586530907
-time-nasdaq100-active,2026-06-17,10,,Space Exploration Technologies Corp,3.02,price_aligned,-0.04387391648855754
-time-global-ai-active,2026-06-17,1,285A.T,Kioxia Holdings Corp,8.52,price_aligned,0.013877768983855177
-time-global-ai-active,2026-06-17,2,INTC,Intel Corp,7.22,price_aligned,-0.031080699224211195
-time-global-ai-active,2026-06-17,3,AMD,Advanced Micro Devices Inc,6.78,price_aligned,-0.05088533143925922
-time-global-ai-active,2026-06-17,4,STX,Seagate Technology Holdings PLC,6.21,price_aligned,0.017421317623997012
-time-global-ai-active,2026-06-17,5,WDC,Western Digital Corp,5.22,price_aligned,0.007793245172512009
-time-global-ai-active,2026-06-17,6,ARM,ARM Holdings PLC,4.12,price_aligned,0.012344743867427788
-time-global-ai-active,2026-06-17,7,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.89,new_entry,
-time-global-ai-active,2026-06-17,8,SNDK,Sandisk Corp,3.76,price_aligned,0.004861780855459852
-time-global-ai-active,2026-06-17,9,SNOW,Snowflake Inc,3.72,price_aligned,0.012697447154410124
-time-global-ai-active,2026-06-17,10,NVDA,NVIDIA Corp,3.32,price_aligned,-0.01984517534121588
-koact-nasdaq-growth-active,2026-06-17,1,,Space Exploration Technologies Corp,9.63,price_aligned,0.004502938582774618
-koact-nasdaq-growth-active,2026-06-17,2,AMD,ADVANCED MICRO DEVICES,7.45,price_aligned,0.004589145038597309
-koact-nasdaq-growth-active,2026-06-17,3,ARM,ARM Holdings PLC,7.34,price_aligned,0.003286322554869159
-koact-nasdaq-growth-active,2026-06-17,4,SNDK,Sandisk Corp/DE,5.94,price_aligned,-0.0011119178765159887
-koact-nasdaq-growth-active,2026-06-17,5,INTC,INTEL Corp,5.57,price_aligned,-0.004371680280702783
-koact-nasdaq-growth-active,2026-06-17,6,NVDA,NVIDIA Corp,4.91,price_aligned,-0.00413619276631394
-koact-nasdaq-growth-active,2026-06-17,7,GOOGL,ALPHABET INC-CL A,4.7,price_aligned,-0.0004318539274521527
-koact-nasdaq-growth-active,2026-06-17,8,BE,BLOOM ENERGY CORPORATION,4.2,price_aligned,0.004693844529779945
-koact-nasdaq-growth-active,2026-06-17,9,MU,MICRON TECH,4.05,price_aligned,0.005809024101948168
-koact-nasdaq-growth-active,2026-06-17,10,AMZN,Amazon.com Inc,3.71,price_aligned,0.005019857575762288
+time-nasdaq100-active,2026-06-18,1,MU,Micron Technology Inc,6.54,price_aligned,0.010548132343519256
+time-nasdaq100-active,2026-06-18,2,SNDK,Sandisk Corp,6.51,price_aligned,0.002913198843742748
+time-nasdaq100-active,2026-06-18,3,ARM,ARM Holdings PLC,5.29,price_aligned,0.0047460233466294355
+time-nasdaq100-active,2026-06-18,4,INTC,Intel Corp,5.2,price_aligned,-0.044564097705955596
+time-nasdaq100-active,2026-06-18,5,NVDA,NVIDIA Corp,4.66,price_aligned,-0.05468575193225789
+time-nasdaq100-active,2026-06-18,6,MRVL,Marvell Technology Inc,3.72,price_aligned,-0.030502041893741616
+time-nasdaq100-active,2026-06-18,7,AMD,Advanced Micro Devices Inc,3.25,price_aligned,-0.06666504466148293
+time-nasdaq100-active,2026-06-18,8,,Space Exploration Technologies Corp,3.25,price_aligned,-0.023861332690655157
+time-nasdaq100-active,2026-06-18,9,DELL,Dell Technologies Inc,3.22,price_aligned,0.0023174445138898214
+time-nasdaq100-active,2026-06-18,10,WDC,Western Digital Corp,3.03,price_aligned,-0.08453604663292769
+time-global-ai-active,2026-06-18,1,285A.T,Kioxia Holdings Corp,8.93,price_aligned,-0.0580806799861584
+time-global-ai-active,2026-06-18,2,INTC,Intel Corp,6.7,price_aligned,0.0050458166229887524
+time-global-ai-active,2026-06-18,3,AMD,Advanced Micro Devices Inc,6.37,price_aligned,0.004009568100122429
+time-global-ai-active,2026-06-18,4,STX,Seagate Technology Holdings PLC,6.37,price_aligned,0.002364113756319952
+time-global-ai-active,2026-06-18,5,WDC,Western Digital Corp,5.51,price_aligned,-0.000319642927078867
+time-global-ai-active,2026-06-18,6,ARM,ARM Holdings PLC,3.96,price_aligned,-0.04924151291799728
+time-global-ai-active,2026-06-18,7,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.87,insufficient_data,
+time-global-ai-active,2026-06-18,8,SNOW,Snowflake Inc,3.7,price_aligned,-0.029552398806724778
+time-global-ai-active,2026-06-18,9,SNDK,Sandisk Corp,3.6,price_aligned,0.0015870688822516854
+time-global-ai-active,2026-06-18,10,NVDA,NVIDIA Corp,3.29,price_aligned,0.006895303487139515
+koact-nasdaq-growth-active,2026-06-18,1,,Space Exploration Technologies Corp,9.85,residual_watch,-0.48839192275933385
+koact-nasdaq-growth-active,2026-06-18,2,ARM,ARM Holdings PLC,6.88,residual_watch,-0.34143740707962333
+koact-nasdaq-growth-active,2026-06-18,3,AMD,ADVANCED MICRO DEVICES,6.74,residual_watch,-0.3322099222012769
+koact-nasdaq-growth-active,2026-06-18,4,SNDK,Sandisk Corp/DE,5.48,residual_watch,-0.26740988445555924
+koact-nasdaq-growth-active,2026-06-18,5,INTC,INTEL Corp,5.32,price_aligned,0.09810432895368848
+koact-nasdaq-growth-active,2026-06-18,6,NVDA,NVIDIA Corp,4.68,residual_watch,-0.22897384025189638
+koact-nasdaq-growth-active,2026-06-18,7,GOOGL,ALPHABET INC-CL A,4.64,residual_watch,-0.2240255023828741
+koact-nasdaq-growth-active,2026-06-18,8,MU,MICRON TECH,4.46,likely_buy,0.5687418872261363
+koact-nasdaq-growth-active,2026-06-18,9,BE,BLOOM ENERGY CORPORATION,4.19,residual_watch,-0.21112835783340778
+koact-nasdaq-growth-active,2026-06-18,10,AMZN,Amazon.com Inc,3.62,residual_watch,-0.17904886754464533
