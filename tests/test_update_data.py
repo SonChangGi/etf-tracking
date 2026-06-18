@@ -3,6 +3,7 @@ import json
 import sys
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -510,6 +511,31 @@ class UpdateDataTests(unittest.TestCase):
         self.assertTrue(diagnostics[first_id][0]["skippedFetch"])
         self.assertEqual(diagnostics[first_id][0]["top10Count"], 1)
 
+    def test_collect_skips_compact_existing_snapshot_without_query_date(self):
+        class Args:
+            fixture_dir = ROOT / "tests" / "fixtures"
+            target_date = "2026-06-17"
+            backfill_all = False
+            backfill_days = 1
+            backfill_start_date = None
+            refresh_existing = False
+            include_empty = False
+            provider_delay = 0
+
+        existing = {cfg.id: [] for cfg in update_data.ETFS}
+        existing[update_data.ETFS[0].id] = [{
+            "date": "2026-06-17",
+            "sourceStatus": "live",
+            "top10": [{"rank": 1, "ticker": "AAA", "weightPercent": 1.0}],
+            "holdings": [{"rank": 1, "ticker": "AAA", "weightPercent": 1.0}],
+        }]
+        self.assertTrue(update_data.snapshot_has_usable_data(existing[update_data.ETFS[0].id][0], "2026-06-17"))
+        snapshots, diagnostics = update_data.collect_snapshots(Args, existing)
+        first_id = update_data.ETFS[0].id
+        self.assertEqual(snapshots[first_id], [])
+        self.assertEqual(diagnostics[first_id][0]["sourceStatus"], "cached_live")
+        self.assertTrue(diagnostics[first_id][0]["skippedFetch"])
+
     def test_collect_refetches_existing_live_snapshot_when_query_date_mismatches(self):
         class Args:
             fixture_dir = ROOT / "tests" / "fixtures"
@@ -613,6 +639,125 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("MISSING", summary["priceDiagnostics"])
         self.assertNotIn("LATER", summary["priceDiagnostics"])
         self.assertNotIn("LATER", summary["priceErrors"])
+
+    def test_public_snapshot_strips_large_internal_diagnostics(self):
+        snap = {
+            "date": "2026-06-17",
+            "queryDate": "2026-06-17",
+            "navAsOfDate": "2026-06-16",
+            "sourceConfidence": "high",
+            "sourceWarning": "",
+            "totalHoldings": 20,
+            "fetchedAt": "2026-06-17T00:00:00+00:00",
+            "holdings": [{
+                "rank": 11,
+                "ticker": "AAA",
+                "sourceFields": {"raw": "large"},
+                "shares": 10,
+                "marketValueKrw": 1000,
+                "weightPercent": 1.0,
+                "priceTrackingMethod": "external_ticker",
+            }],
+            "top10": [{
+                "rank": 1,
+                "ticker": "AAA",
+                "sourceFields": {"raw": "large"},
+                "weightPercent": 1.0,
+                "priceTrackingMethod": "external_ticker",
+            }],
+            "decomposition": [{
+                "ticker": "AAA",
+                "deltaResidualPercentPoint": 0.1,
+                "priceSource": "provider_valuation_krw",
+                "priceMeta": {"attempts": [{"large": True}]},
+            }],
+            "signals": [{"ticker": "AAA", "type": "residual_watch"}],
+            "analysisSummary": {
+                "returnCoverage": 1.0,
+                "returnCoverageStatus": "ok",
+                "priceErrors": {"AAA": "missing_close"},
+                "priceDiagnostics": {"AAA": [{"huge": True}]},
+            },
+        }
+        public = update_data.public_snapshot(snap)
+        self.assertNotIn("queryDate", public)
+        self.assertNotIn("navAsOfDate", public)
+        self.assertNotIn("sourceConfidence", public)
+        self.assertNotIn("sourceWarning", public)
+        self.assertNotIn("totalHoldings", public)
+        self.assertNotIn("fetchedAt", public)
+        self.assertNotIn("sourceFields", public["holdings"][0])
+        self.assertNotIn("sourceFields", public["top10"][0])
+        self.assertEqual(set(public["holdings"][0]), {"rank", "ticker", "shares", "marketValueKrw", "weightPercent"})
+        self.assertEqual(public["holdings"][0]["rank"], 11)
+        self.assertEqual(public["holdings"][0]["shares"], 10)
+        self.assertNotIn("priceTrackingMethod", public["holdings"][0])
+        self.assertEqual(public["top10"][0]["priceTrackingMethod"], "external_ticker")
+        self.assertNotIn("priceMeta", public["decomposition"][0])
+        self.assertEqual(public["decomposition"][0]["priceSource"], "provider_valuation_krw")
+        self.assertEqual(public["analysisSummary"]["returnCoverage"], 1.0)
+        self.assertNotIn("priceDiagnostics", public["analysisSummary"])
+        self.assertNotIn("priceErrors", public["analysisSummary"])
+
+    def test_write_json_can_compact_large_public_payloads(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / "payload.json"
+            update_data.write_json(path, {"outer": [{"name": "Alpha", "weight": 1.23}]}, compact=True)
+            body = path.read_text(encoding="utf-8")
+        self.assertEqual(body, '{"outer":[{"name":"Alpha","weight":1.23}]}\n')
+
+    def test_collect_snapshots_stops_provider_loop_on_rate_limit(self):
+        class Args:
+            fixture_dir = None
+            target_date = "2026-06-17"
+            backfill_all = False
+            backfill_days = 3
+            backfill_start_date = None
+            refresh_existing = True
+            include_empty = False
+            provider_delay = 0
+
+        calls = []
+
+        def fake_fetch(config, target):
+            calls.append((config.id, target))
+            raise update_data.urllib.error.HTTPError("url", 429, "Too Many Requests", hdrs=None, fp=None)
+
+        with mock.patch.object(update_data, "fetch_snapshot", side_effect=fake_fetch), mock.patch.object(update_data.time, "sleep"):
+            snapshots, diagnostics = update_data.collect_snapshots(Args, {cfg.id: [] for cfg in update_data.ETFS})
+
+        self.assertEqual(snapshots[update_data.ETFS[0].id], [])
+        self.assertEqual(diagnostics[update_data.ETFS[0].id][0]["sourceStatus"], "rate_limited")
+        self.assertEqual(len([call for call in calls if call[0] == update_data.ETFS[0].id]), 1)
+
+    def test_status_ignores_historical_backfill_errors_when_target_is_cached_live(self):
+        target = "2026-06-17"
+        history = {
+            cfg.id: [{
+                "date": target,
+                "sourceStatus": "live",
+                "sourceWarning": "",
+                "analysisSummary": {"returnCoverageStatus": "ok", "returnCoverage": 1.0, "priceErrors": {}},
+                "top10": [{"ticker": "AAA", "weightPercent": 1}],
+            }]
+            for cfg in update_data.ETFS
+        }
+        diagnostics = {
+            cfg.id: [
+                {"targetDate": target, "date": target, "sourceStatus": "cached_live", "hasTop10": True, "skippedFetch": True},
+                {"targetDate": "2025-03-31", "date": "2025-03-31", "sourceStatus": "error", "sourceWarning": "old 429", "hasTop10": False},
+                {"targetDate": "2025-04-01", "date": "2025-04-01", "sourceStatus": "rate_limited", "sourceWarning": "old 429", "hasTop10": False},
+            ]
+            for cfg in update_data.ETFS
+        }
+        provider = update_data.PriceProvider(no_live=True)
+        provider.errors["OLD"] = "historical_missing_close"
+        status = update_data.build_status(history, "2026-06-17T00:00:00+00:00", provider, target, diagnostics)
+        self.assertEqual(status["overallStatus"], "ok")
+        self.assertEqual(status["priceErrorCount"], 0)
+        self.assertEqual(update_data.automation_warnings(status), [])
+        self.assertEqual(status["etfs"][0]["fetchStats"]["historicalErrors"], 1)
+        self.assertEqual(status["etfs"][0]["fetchStats"]["historicalRateLimited"], 1)
 
     def test_committed_dashboard_latest_decomposition_matches_formula_and_policy(self):
         dashboard = json.loads((ROOT / "data" / "dashboard.json").read_text(encoding="utf-8"))

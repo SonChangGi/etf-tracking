@@ -156,6 +156,7 @@
         availableStartDate: stringOr(etf.availableStartDate, history[0]?.date, ''),
         availableEndDate: stringOr(etf.availableEndDate, history.at(-1)?.date, ''),
         historyCount: numberOr(etf.historyCount, history.length),
+        sourceAvailability: isRecord(etf.sourceAvailability) ? etf.sourceAvailability : {},
         latest,
         history,
         signals,
@@ -880,10 +881,12 @@
     const historyPolicy = state.dashboard?.historyPolicy || {};
     const selectedStart = filteredHistory[0]?.date || etf.availableStartDate;
     const selectedEnd = filteredHistory.at(-1)?.date || etf.availableEndDate;
+    const availability = formatSourceAvailability(etf.sourceAvailability);
     target.innerHTML = `
       <div class="source-item"><strong>${escapeHtml(etf.name)}</strong><span>${escapeHtml(etf.provider)} · ${escapeHtml(etf.code)}</span></div>
       <div class="source-item"><strong>기준일</strong><span>${escapeHtml(formatMaybeDate(latest?.date))} · 선택 범위 ${filteredHistory.length.toLocaleString('ko-KR')}개 스냅샷</span></div>
       <div class="source-item"><strong>히스토리 범위</strong><span>선택 ${escapeHtml(formatMaybeDate(selectedStart))} → ${escapeHtml(formatMaybeDate(selectedEnd))} · 저장 전체 ${escapeHtml(formatMaybeDate(etf.availableStartDate))} → ${escapeHtml(formatMaybeDate(etf.availableEndDate))}</span><small>${escapeHtml(historyPolicy.startDateExplanation || '예약 업데이트는 최근 구간을 갱신하고, 수동 백필로 더 과거 구간을 확장할 수 있습니다.')}</small></div>
+      <div class="source-item"><strong>상장일 백필</strong><span>${escapeHtml(availability.summary)}</span><small>${escapeHtml(availability.detail)}</small></div>
       <div class="source-item"><strong>전일대비 분해 기준</strong><span>ETF 비중 ${escapeHtml(formatMaybeDate(dateBasis.previousSnapshotDate))} → ${escapeHtml(formatMaybeDate(dateBasis.currentSnapshotDate || latest?.date))} · 가격 기준 ${escapeHtml(formatMaybeDate(priceBasis.previous))} → ${escapeHtml(formatMaybeDate(priceBasis.current || latest?.priceBasisDate))}</span></div>
       <div class="source-item"><strong>소스 상태</strong><span class="${latest?.sourceStatus === 'live' ? '' : 'warning'}">${escapeHtml(latest?.sourceStatus || 'unknown')} · ${escapeHtml(latest?.sourceWarning || '정상')}</span></div>
       <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')} · ${escapeHtml(formatCoverageUniverse(summary.returnCoverageUniverse))}</span><small>가격 반영 비중 ${escapeHtml(formatWeight(summary.validReturnWeightPercent))} / 전체 ${escapeHtml(formatWeight(summary.totalReturnWeightPercent))} · 미가격 ${escapeHtml(formatWeight(summary.unpricedReturnWeightPercent))}</small></div>
@@ -1651,6 +1654,22 @@
     return value.warningCount ? `${base} · 경고 ${value.warningCount}건` : base;
   }
 
+  function formatSourceAvailability(value) {
+    if (!isRecord(value)) return { summary: '상장일 백필 정보 없음', detail: '이 데이터는 이전 schema에서 생성되었을 수 있습니다.' };
+    const listing = formatMaybeDate(value.listingDate);
+    const oldest = formatMaybeDate(value.oldestStoredDate);
+    const latest = formatMaybeDate(value.latestStoredDate);
+    const coverage = finiteOrNull(value.coverageRatioThroughLatest);
+    const stored = numberOr(value.storedWeekdayCount, 0).toLocaleString('ko-KR');
+    const possible = numberOr(value.possibleWeekdayCountThroughLatest, 0).toLocaleString('ko-KR');
+    const status = value.storedFromListingDate ? '상장일부터 저장' : '상장일 이후 일부부터 저장';
+    const coverageText = coverage === null ? '커버리지 계산 불가' : `거래일 커버리지 ${(coverage * 100).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}%`;
+    return {
+      summary: `${status} · ${oldest} → ${latest}`,
+      detail: `상장일 ${listing} · 저장 ${stored}/${possible}개 weekday · ${coverageText}`,
+    };
+  }
+
   function formatFreshness(value) {
     if (!value) return '업데이트 시각 알 수 없음';
     const date = new Date(value);
@@ -1785,6 +1804,7 @@
       formatCoverageUniverse,
       formatFxCoverage,
       formatAutomationStatus,
+      formatSourceAvailability,
       FALLBACK_DASHBOARD,
       AUTOMATION_STATUS_URL,
       QUANT_DASHBOARD_URL,

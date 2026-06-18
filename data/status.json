@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.1",
-  "generatedAt": "2026-06-18T08:52:20+00:00",
+  "generatedAt": "2026-06-18T16:00:55+00:00",
   "targetDate": "2026-06-18",
   "overallStatus": "ok",
   "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
@@ -28,9 +28,14 @@
         "requestedDates": 8,
         "skippedExisting": 8,
         "fetchedLive": 0,
-        "errors": 0,
-        "stale": 0,
-        "dateMismatches": 0
+        "targetErrors": 0,
+        "targetRateLimited": 0,
+        "targetStale": 0,
+        "targetDateMismatches": 0,
+        "historicalErrors": 0,
+        "historicalRateLimited": 0,
+        "historicalStale": 0,
+        "historicalDateMismatches": 0
       }
     },
     {
@@ -54,9 +59,14 @@
         "requestedDates": 8,
         "skippedExisting": 8,
         "fetchedLive": 0,
-        "errors": 0,
-        "stale": 0,
-        "dateMismatches": 0
+        "targetErrors": 0,
+        "targetRateLimited": 0,
+        "targetStale": 0,
+        "targetDateMismatches": 0,
+        "historicalErrors": 0,
+        "historicalRateLimited": 0,
+        "historicalStale": 0,
+        "historicalDateMismatches": 0
       }
     },
     {
@@ -80,9 +90,14 @@
         "requestedDates": 8,
         "skippedExisting": 8,
         "fetchedLive": 0,
-        "errors": 0,
-        "stale": 0,
-        "dateMismatches": 0
+        "targetErrors": 0,
+        "targetRateLimited": 0,
+        "targetStale": 0,
+        "targetDateMismatches": 0,
+        "historicalErrors": 0,
+        "historicalRateLimited": 0,
+        "historicalStale": 0,
+        "historicalDateMismatches": 0
       }
     }
   ]

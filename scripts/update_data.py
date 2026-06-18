@@ -23,6 +23,7 @@ import re
 import time
 import urllib.parse
 import urllib.request
+import urllib.error
 from pathlib import Path
 from typing import Any, Iterable
 from zoneinfo import ZoneInfo
@@ -38,6 +39,31 @@ RESIDUAL_ACTION_TOLERANCE_RATIO = 0.10
 RETURN_COVERAGE_MIN = 0.60
 HTTP_MAX_BYTES = 5_000_000
 PRICE_CACHE_FORWARD_DAYS = 21
+PUBLIC_ANALYSIS_SUMMARY_FIELDS = (
+    "returnCoverage",
+    "returnCoverageStatus",
+    "returnCoverageUniverse",
+    "benchmarkUniverse",
+    "validReturnWeightPercent",
+    "totalReturnWeightPercent",
+    "unpricedReturnWeightPercent",
+    "benchmarkReturn",
+    "fullHoldingCount",
+    "previousFullHoldingCount",
+    "fullHoldingsAvailable",
+    "previousFullHoldingsAvailable",
+    "currentHoldingsUniverse",
+    "previousHoldingsUniverse",
+    "priceBasis",
+    "dateBasis",
+    "decompositionFormula",
+    "decompositionFormulaCaveat",
+    "residualClassificationPolicy",
+)
+PUBLIC_DECOMPOSITION_DROP_FIELDS = {"priceMeta"}
+PUBLIC_HOLDING_DROP_FIELDS = {"sourceFields"}
+PUBLIC_HISTORY_HOLDING_FIELDS = ("rank", "codeRaw", "ticker", "name", "shares", "marketValueKrw", "weightPercent")
+PUBLIC_SNAPSHOT_DROP_FIELDS = {"queryDate", "navAsOfDate", "sourceConfidence", "sourceWarning", "totalHoldings", "fetchedAt"}
 
 FX_PAIR_CONFIG: dict[str, dict[str, Any]] = {
     "USDKRW": {
@@ -223,6 +249,10 @@ def http_get(url: str, *, accept: str = "text/html,application/json", timeout: i
         return data.decode(charset, errors="replace")
 
 
+def is_rate_limited_error(error: BaseException) -> bool:
+    return isinstance(error, urllib.error.HTTPError) and error.code == 429
+
+
 def normalize_ticker(code_or_name: str | None, name: str | None = None) -> str | None:
     raw = clean_text(code_or_name or "")
     nm = clean_text(name or "")
@@ -317,7 +347,7 @@ def history_snapshot_is_usable(snapshot: dict[str, Any], expected_date: str | No
     if expected_date and date != expected_date:
         return False
     if expected_date:
-        return str(query_date or "") == expected_date
+        return not query_date or str(query_date) == expected_date
     return not query_date or str(query_date) == date
 
 
@@ -528,6 +558,44 @@ def snapshot_for_history(snapshot: dict[str, Any]) -> dict[str, Any]:
         "totalHoldings": snapshot.get("totalHoldings"),
         "fetchedAt": snapshot.get("fetchedAt"),
     }
+
+
+def public_holding(row: dict[str, Any], *, compact: bool = False) -> dict[str, Any]:
+    if compact:
+        compacted = {key: row[key] for key in PUBLIC_HISTORY_HOLDING_FIELDS if key in row and row[key] is not None}
+        if compacted.get("ticker"):
+            compacted.pop("codeRaw", None)
+            compacted.pop("name", None)
+        return compacted
+    return {key: value for key, value in row.items() if key not in PUBLIC_HOLDING_DROP_FIELDS}
+
+
+def public_decomposition_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {key: value for key, value in row.items() if key not in PUBLIC_DECOMPOSITION_DROP_FIELDS}
+
+
+def public_analysis_summary(summary: dict[str, Any] | None) -> dict[str, Any]:
+    if not isinstance(summary, dict):
+        return {}
+    return {key: summary[key] for key in PUBLIC_ANALYSIS_SUMMARY_FIELDS if key in summary}
+
+
+def public_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
+    sanitized = {key: value for key, value in snapshot.items() if key not in PUBLIC_SNAPSHOT_DROP_FIELDS}
+    sanitized["holdings"] = [public_holding(row, compact=True) for row in as_records(snapshot.get("holdings"))]
+    sanitized["top10"] = [public_holding(row) for row in as_records(snapshot.get("top10"))]
+    sanitized["decomposition"] = [public_decomposition_row(row) for row in as_records(snapshot.get("decomposition"))]
+    sanitized["signals"] = [dict(row) for row in as_records(snapshot.get("signals"))]
+    sanitized["analysisSummary"] = public_analysis_summary(snapshot.get("analysisSummary"))
+    return sanitized
+
+
+def public_history(history: dict[str, list[dict[str, Any]]]) -> dict[str, list[dict[str, Any]]]:
+    return {config.id: [public_snapshot(snapshot) for snapshot in history.get(config.id, [])] for config in ETFS}
+
+
+def as_records(value: Any) -> list[dict[str, Any]]:
+    return [row for row in value if isinstance(row, dict)] if isinstance(value, list) else []
 
 
 def load_history(output_dir: Path) -> dict[str, list[dict[str, Any]]]:
@@ -1240,6 +1308,8 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
     curr_price_basis = str(current.get("priceBasisDate") or previous_weekday(curr_date))
     display_keys = list(dict.fromkeys([*(holding_key(row) for row in curr_top), *(holding_key(row) for row in prev_top)]))
     display_order = {key: index for index, key in enumerate(display_keys, start=1) if key}
+    prior_price_errors = dict(price_provider.errors)
+    prior_diagnostic_counts = {ticker: len(items) for ticker, items in price_provider.diagnostics.items()}
 
     def resolve_return(key: str) -> tuple[float | None, dict[str, Any]]:
         prev_row = prev_all_map.get(key)
@@ -1443,6 +1513,17 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
         if classification in {"likely_buy", "likely_sell", "residual_watch", "mixed"}:
             signals.append(signal_from_row(row, classification, "medium" if classification != "mixed" else "low"))
 
+    pair_price_errors = {
+        ticker: error
+        for ticker, error in price_provider.errors.items()
+        if prior_price_errors.get(ticker) != error
+    }
+    pair_price_diagnostics = {
+        ticker: items[prior_diagnostic_counts.get(ticker, 0):]
+        for ticker, items in price_provider.diagnostics.items()
+        if len(items) > prior_diagnostic_counts.get(ticker, 0)
+    }
+
     summary = {
         "returnCoverage": coverage,
         "returnCoverageStatus": "ok" if coverage >= RETURN_COVERAGE_MIN else "low",
@@ -1479,8 +1560,8 @@ def compute_pair_decomposition(prev: dict[str, Any] | None, current: dict[str, A
                 "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading",
             },
         },
-        "priceErrors": copy.deepcopy(price_provider.errors),
-        "priceDiagnostics": copy.deepcopy(price_provider.diagnostics),
+        "priceErrors": copy.deepcopy(pair_price_errors),
+        "priceDiagnostics": copy.deepcopy(pair_price_diagnostics),
     }
     return decompositions, signals, summary
 
@@ -1526,6 +1607,7 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
     etf_payloads = []
     all_signals: list[dict[str, Any]] = []
     all_dates: list[str] = []
+    source_earliest_dates: dict[str, str | None] = {}
     for config in ETFS:
         rows = history.get(config.id, [])
         latest = rows[-1] if rows else None
@@ -1533,6 +1615,16 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         all_signals.extend({**signal, "etfId": config.id, "etfName": config.name} for signal in signals)
         dates = [row.get("date") for row in rows if row.get("date")]
         all_dates.extend(str(date) for date in dates if date)
+        available_start = min(dates) if dates else None
+        available_end = max(dates) if dates else None
+        possible_weekdays = dates_to_fetch(
+            config,
+            str(available_end or generated_at[:10]),
+            backfill_all=True,
+            backfill_days=1,
+        ) if available_end else []
+        stored_date_set = {str(date) for date in dates if date}
+        source_earliest_dates[config.id] = str(available_start) if available_start else None
         entry_exit_count = sum(1 for signal in signals if signal.get("type") in {"top10_entry", "top10_exit"})
         etf_payloads.append({
             "id": config.id,
@@ -1542,9 +1634,19 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "provider": config.provider,
             "sourceUrl": config.source_url,
             "listingDate": config.listing_date,
-            "availableStartDate": min(dates) if dates else None,
-            "availableEndDate": max(dates) if dates else None,
+            "availableStartDate": available_start,
+            "availableEndDate": available_end,
             "historyCount": len(rows),
+            "sourceAvailability": {
+                "listingDate": config.listing_date,
+                "oldestStoredDate": available_start,
+                "latestStoredDate": available_end,
+                "storedFromListingDate": available_start == config.listing_date,
+                "storedWeekdayCount": len(stored_date_set),
+                "possibleWeekdayCountThroughLatest": len(possible_weekdays),
+                "coverageRatioThroughLatest": (len(stored_date_set) / len(possible_weekdays)) if possible_weekdays else None,
+                "note": "공급자 public holdings endpoint가 반환한 live 스냅샷만 저장합니다. 휴장일, 공급자 공백, rate limit 날짜는 다음 missing-only 백필에서 이어서 채웁니다.",
+            },
             "latest": latest,
             "history": rows,
             "signals": signals,
@@ -1586,9 +1688,10 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         "historyPolicy": {
             "availableStartDate": min(all_dates) if all_dates else None,
             "availableEndDate": max(all_dates) if all_dates else None,
+            "sourceEarliestStoredDates": source_earliest_dates,
             "scheduledLookbackDays": DEFAULT_SCHEDULED_BACKFILL_DAYS,
             "missingOnlyDefault": True,
-            "startDateExplanation": "히스토리 시작일은 현재 커밋된 백필 범위의 가장 이른 usable 스냅샷입니다. ETF별 시작일은 상장일, 공급자 과거 조회 가능성, 수동 backfill_start_date/backfill_all 실행 여부에 따라 달라집니다.",
+            "startDateExplanation": "2026-04-01은 공급자 한계가 아니라 이전 커밋의 백필 범위였습니다. 현재는 공급자 public holdings endpoint가 live로 반환한 상장일 이후 usable 스냅샷을 저장하며, 공급자 공백·휴장일·rate limit 날짜는 missing-only 백필에서 이어서 채웁니다.",
             "manualBackfillStartDate": "--backfill-start-date YYYY-MM-DD",
             "manualBackfillAll": "--backfill-all",
             "manualRefreshExisting": "--refresh-existing",
@@ -1634,10 +1737,13 @@ def build_status(
     etf_status = []
     waiting_for_target = False
     degraded = False
+    latest_price_errors: dict[str, str] = {}
     for config in ETFS:
         latest = (history.get(config.id) or [None])[-1]
         source_status = latest.get("sourceStatus") if latest else "missing"
         analysis = latest.get("analysisSummary", {}) if latest else {}
+        if isinstance(analysis.get("priceErrors"), dict):
+            latest_price_errors.update({f"{config.id}:{ticker}": error for ticker, error in analysis["priceErrors"].items()})
         target_diagnostics = [item for item in diagnostics.get(config.id, []) if item.get("targetDate", item.get("queryDate", item.get("date"))) == target_date]
         target_diag = target_diagnostics[-1] if target_diagnostics else None
         latest_date = latest.get("date") if latest else None
@@ -1646,9 +1752,14 @@ def build_status(
         target_warning = target_diag.get("sourceWarning") if target_diag else "No target-date fetch diagnostic available"
         skipped_fetch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("skippedFetch"))
         fetched_count = sum(1 for item in diagnostics.get(config.id, []) if not item.get("skippedFetch") and item.get("sourceStatus") == "live")
-        error_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "error")
-        stale_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "stale")
-        mismatch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("dateMismatch"))
+        historical_error_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "error")
+        historical_rate_limited_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "rate_limited")
+        historical_stale_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "stale")
+        historical_mismatch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("dateMismatch"))
+        target_error_count = sum(1 for item in target_diagnostics if item.get("sourceStatus") == "error")
+        target_rate_limited_count = sum(1 for item in target_diagnostics if item.get("sourceStatus") == "rate_limited")
+        target_stale_count = sum(1 for item in target_diagnostics if item.get("sourceStatus") == "stale")
+        target_mismatch_count = sum(1 for item in target_diagnostics if item.get("dateMismatch"))
         reused_existing_target = (
             latest_date == target_date
             and source_status == "live"
@@ -1659,11 +1770,13 @@ def build_status(
             target_status = "cached_live"
             target_has_top10 = True
             if target_diag and target_diag.get("sourceStatus") == "error":
-                error_count = max(error_count - 1, 0)
+                target_error_count = max(target_error_count - 1, 0)
             if target_diag and target_diag.get("sourceStatus") == "stale":
-                stale_count = max(stale_count - 1, 0)
+                target_stale_count = max(target_stale_count - 1, 0)
+            if target_diag and target_diag.get("sourceStatus") == "rate_limited":
+                target_rate_limited_count = max(target_rate_limited_count - 1, 0)
             if target_diag and target_diag.get("dateMismatch"):
-                mismatch_count = max(mismatch_count - 1, 0)
+                target_mismatch_count = max(target_mismatch_count - 1, 0)
             if target_diag and target_diag.get("skippedFetch"):
                 target_warning = target_warning or "Existing live target-date snapshot reused."
             else:
@@ -1676,7 +1789,7 @@ def build_status(
         )
         if is_target_waiting:
             waiting_for_target = True
-        if analysis.get("returnCoverageStatus") == "low" or error_count or stale_count or mismatch_count:
+        if analysis.get("returnCoverageStatus") == "low" or target_error_count or target_stale_count or target_mismatch_count or target_rate_limited_count:
             degraded = True
         etf_status.append({
             "id": config.id,
@@ -1696,9 +1809,14 @@ def build_status(
                 "requestedDates": len(diagnostics.get(config.id, [])),
                 "skippedExisting": skipped_fetch_count,
                 "fetchedLive": fetched_count,
-                "errors": error_count,
-                "stale": stale_count,
-                "dateMismatches": mismatch_count,
+                "targetErrors": target_error_count,
+                "targetRateLimited": target_rate_limited_count,
+                "targetStale": target_stale_count,
+                "targetDateMismatches": target_mismatch_count,
+                "historicalErrors": historical_error_count,
+                "historicalRateLimited": historical_rate_limited_count,
+                "historicalStale": historical_stale_count,
+                "historicalDateMismatches": historical_mismatch_count,
             },
         })
     return {
@@ -1707,14 +1825,18 @@ def build_status(
         "targetDate": target_date,
         "overallStatus": "waiting_for_prior_close" if waiting_for_target else ("degraded" if degraded else "ok"),
         "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
-        "priceErrorCount": len(price_provider.errors),
-        "priceErrors": price_provider.errors,
+        "priceErrorCount": len(latest_price_errors),
+        "priceErrors": latest_price_errors,
         "etfs": etf_status,
     }
 
-def write_json(path: Path, payload: Any) -> None:
+def write_json(path: Path, payload: Any, *, compact: bool = False) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=False) + "\n", encoding="utf-8")
+    if compact:
+        body = json.dumps(payload, ensure_ascii=False, separators=(",", ":"), sort_keys=False)
+    else:
+        body = json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=False)
+    path.write_text(body + "\n", encoding="utf-8")
 
 
 def automation_warnings(status: dict[str, Any]) -> list[str]:
@@ -1731,12 +1853,14 @@ def automation_warnings(status: dict[str, Any]) -> list[str]:
         if coverage_status and coverage_status != "ok":
             warnings.append(f"{name}: return coverage {coverage_status}")
         stats = item.get("fetchStats") if isinstance(item.get("fetchStats"), dict) else {}
-        if stats.get("errors"):
-            warnings.append(f"{name}: fetch errors {stats.get('errors')}")
-        if stats.get("stale"):
-            warnings.append(f"{name}: stale provider responses {stats.get('stale')}")
-        if stats.get("dateMismatches"):
-            warnings.append(f"{name}: date mismatches {stats.get('dateMismatches')}")
+        if stats.get("targetErrors"):
+            warnings.append(f"{name}: target fetch errors {stats.get('targetErrors')}")
+        if stats.get("targetRateLimited"):
+            warnings.append(f"{name}: target rate limited {stats.get('targetRateLimited')}")
+        if stats.get("targetStale"):
+            warnings.append(f"{name}: target stale provider responses {stats.get('targetStale')}")
+        if stats.get("targetDateMismatches"):
+            warnings.append(f"{name}: target date mismatches {stats.get('targetDateMismatches')}")
     if status.get("priceErrorCount"):
         warnings.append(f"price errors: {status.get('priceErrorCount')}")
     return warnings
@@ -1865,10 +1989,11 @@ def collect_snapshots(
             try:
                 raw = load_fixture_snapshot(config, args.fixture_dir, target) if args.fixture_dir else fetch_snapshot(config, target)
             except Exception as exc:
+                rate_limited = is_rate_limited_error(exc)
                 diagnostic = {
                     "date": target,
                     "queryDate": target,
-                    "sourceStatus": "error",
+                    "sourceStatus": "rate_limited" if rate_limited else "error",
                     "sourceConfidence": "low",
                     "sourceWarning": str(exc),
                     "hasTop10": False,
@@ -1877,6 +2002,8 @@ def collect_snapshots(
                 diagnostics[config.id].append(diagnostic)
                 if args.include_empty:
                     snapshots[config.id].append({**diagnostic, "top10": [], "totalHoldings": 0})
+                if rate_limited and not args.fixture_dir:
+                    break
                 continue
             diagnostic = {
                 "date": raw.get("asOfDate") or target,
@@ -1932,16 +2059,17 @@ def run_update(args: argparse.Namespace) -> dict[str, Any]:
     merged = merge_history(existing, new_snapshots)
     price_provider = PriceProvider(args.fixture_dir, no_live=args.no_live_prices)
     enriched, summaries = enrich_history(merged, price_provider)
-    dashboard = build_dashboard(enriched, summaries, generated_at)
-    latest = build_latest(enriched, generated_at)
-    history_payload = {"schemaVersion": SCHEMA_VERSION, "generatedAt": generated_at, "etfs": enriched, "diagnostics": diagnostics}
+    public_enriched = public_history(enriched)
+    dashboard = build_dashboard(public_enriched, summaries, generated_at)
+    latest = build_latest(public_enriched, generated_at)
+    history_payload = {"schemaVersion": SCHEMA_VERSION, "generatedAt": generated_at, "etfs": public_enriched}
     status = build_status(enriched, generated_at, price_provider, args.target_date, diagnostics)
 
     automation_status = build_automation_status(status, generated_at, args.target_date)
 
-    write_json(output_dir / "history.json", history_payload)
+    write_json(output_dir / "history.json", history_payload, compact=True)
     write_json(output_dir / "latest.json", latest)
-    write_json(output_dir / "dashboard.json", dashboard)
+    write_json(output_dir / "dashboard.json", dashboard, compact=True)
     write_json(output_dir / "status.json", status)
     write_json(output_dir / "automation-status.json", automation_status)
     write_csv_summary(output_dir / "latest-summary.csv", dashboard)

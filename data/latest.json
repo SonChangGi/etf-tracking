@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.1",
-  "generatedAt": "2026-06-18T08:52:20+00:00",
+  "generatedAt": "2026-06-18T16:00:55+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -8,642 +8,326 @@
       "code": "426030",
       "latest": {
         "date": "2026-06-18",
-        "queryDate": "2026-06-18",
-        "navAsOfDate": "2026-06-17",
         "priceBasisDate": "2026-06-17",
         "sourceStatus": "live",
-        "sourceConfidence": "high",
-        "sourceWarning": "",
         "holdings": [
           {
             "rank": 1,
-            "codeRaw": "MU US EQUITY",
             "ticker": "MU",
-            "name": "Micron Technology Inc",
             "shares": 49.0,
             "marketValueKrw": 75696091.0,
-            "weightPercent": 6.54,
-            "weight": 0.0654,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 6.54
           },
           {
             "rank": 2,
-            "codeRaw": "SNDK US EQUITY",
             "ticker": "SNDK",
-            "name": "Sandisk Corp",
             "shares": 25.0,
             "marketValueKrw": 75350294.0,
-            "weightPercent": 6.51,
-            "weight": 0.06509999999999999,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 6.51
           },
           {
             "rank": 3,
-            "codeRaw": "ARM US EQUITY",
             "ticker": "ARM",
-            "name": "ARM Holdings PLC",
             "shares": 102.0,
             "marketValueKrw": 61181737.0,
-            "weightPercent": 5.29,
-            "weight": 0.0529,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 5.29
           },
           {
             "rank": 4,
-            "codeRaw": "INTC US EQUITY",
             "ticker": "INTC",
-            "name": "Intel Corp",
             "shares": 340.0,
             "marketValueKrw": 60228779.0,
-            "weightPercent": 5.2,
-            "weight": 0.052000000000000005,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 5.2
           },
           {
             "rank": 5,
-            "codeRaw": "NVDA US EQUITY",
             "ticker": "NVDA",
-            "name": "NVIDIA Corp",
             "shares": 172.0,
             "marketValueKrw": 53989818.0,
-            "weightPercent": 4.66,
-            "weight": 0.0466,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 4.66
           },
           {
             "rank": 6,
-            "codeRaw": "MRVL US EQUITY",
             "ticker": "MRVL",
-            "name": "Marvell Technology Inc",
             "shares": 102.0,
             "marketValueKrw": 43017396.0,
-            "weightPercent": 3.72,
-            "weight": 0.037200000000000004,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.72
           },
           {
             "rank": 7,
-            "codeRaw": "AMD US EQUITY",
             "ticker": "AMD",
-            "name": "Advanced Micro Devices Inc",
             "shares": 49.0,
             "marketValueKrw": 37618901.0,
-            "weightPercent": 3.25,
-            "weight": 0.0325,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.25
           },
           {
             "rank": 8,
             "codeRaw": "SPCX US EQUITY",
-            "ticker": null,
             "name": "Space Exploration Technologies Corp",
             "shares": 123.0,
             "marketValueKrw": 37564706.0,
-            "weightPercent": 3.25,
-            "weight": 0.0325,
-            "hasExternalTicker": false,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "provider_valuation_krw",
-            "isPriceTracked": true
+            "weightPercent": 3.25
           },
           {
             "rank": 9,
-            "codeRaw": "DELL US EQUITY",
             "ticker": "DELL",
-            "name": "Dell Technologies Inc",
             "shares": 61.0,
             "marketValueKrw": 37303614.0,
-            "weightPercent": 3.22,
-            "weight": 0.0322,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.22
           },
           {
             "rank": 10,
-            "codeRaw": "WDC US EQUITY",
             "ticker": "WDC",
-            "name": "Western Digital Corp",
             "shares": 34.0,
             "marketValueKrw": 35045380.0,
-            "weightPercent": 3.03,
-            "weight": 0.030299999999999997,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.03
           },
           {
             "rank": 11,
-            "codeRaw": "STX US EQUITY",
             "ticker": "STX",
-            "name": "Seagate Technology Holdings PLC",
             "shares": 22.0,
             "marketValueKrw": 34338259.0,
-            "weightPercent": 2.97,
-            "weight": 0.0297,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.97
           },
           {
             "rank": 12,
-            "codeRaw": "GOOGL US EQUITY",
             "ticker": "GOOGL",
-            "name": "Alphabet Inc",
             "shares": 59.0,
             "marketValueKrw": 33327716.0,
-            "weightPercent": 2.88,
-            "weight": 0.0288,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.88
           },
           {
             "rank": 13,
-            "codeRaw": "CRDO US EQUITY",
             "ticker": "CRDO",
-            "name": "Credo Technology Group Holding Ltd",
             "shares": 91.0,
             "marketValueKrw": 32939726.0,
-            "weightPercent": 2.85,
-            "weight": 0.0285,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.85
           },
           {
             "rank": 14,
-            "codeRaw": "LRCX US EQUITY",
             "ticker": "LRCX",
-            "name": "Lam Research Corp",
             "shares": 58.0,
             "marketValueKrw": 32419631.0,
-            "weightPercent": 2.8,
-            "weight": 0.027999999999999997,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.8
           },
           {
             "rank": 15,
-            "codeRaw": "AMAT US EQUITY",
             "ticker": "AMAT",
-            "name": "Applied Materials Inc",
             "shares": 35.0,
             "marketValueKrw": 30098574.0,
-            "weightPercent": 2.6,
-            "weight": 0.026000000000000002,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.6
           },
           {
             "rank": 16,
-            "codeRaw": "AAPL US EQUITY",
             "ticker": "AAPL",
-            "name": "Apple Inc",
             "shares": 64.0,
             "marketValueKrw": 28983668.0,
-            "weightPercent": 2.5,
-            "weight": 0.025,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.5
           },
           {
             "rank": 17,
             "codeRaw": "NQU6 INDEX",
-            "ticker": null,
             "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
             "shares": 0.0,
             "marketValueKrw": 27526097.0,
-            "weightPercent": 2.38,
-            "weight": 0.023799999999999998,
-            "hasExternalTicker": false,
-            "hasProviderValuation": false,
-            "priceTrackingMethod": null,
-            "isPriceTracked": false
+            "weightPercent": 2.38
           },
           {
             "rank": 18,
-            "codeRaw": "NBIS US EQUITY",
             "ticker": "NBIS",
-            "name": "Nebius Group NV",
             "shares": 66.0,
             "marketValueKrw": 26479354.0,
-            "weightPercent": 2.29,
-            "weight": 0.0229,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.29
           },
           {
             "rank": 19,
             "codeRaw": "",
-            "ticker": null,
             "name": "현금",
             "shares": 25208541.0,
             "marketValueKrw": 25208541.0,
-            "weightPercent": 2.18,
-            "weight": 0.0218,
-            "hasExternalTicker": false,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "provider_valuation_krw",
-            "isPriceTracked": true
+            "weightPercent": 2.18
           },
           {
             "rank": 20,
-            "codeRaw": "AVGO US EQUITY",
             "ticker": "AVGO",
-            "name": "Broadcom Inc",
             "shares": 44.0,
             "marketValueKrw": 25084968.0,
-            "weightPercent": 2.17,
-            "weight": 0.0217,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.17
           },
           {
             "rank": 21,
-            "codeRaw": "MSFT US EQUITY",
             "ticker": "MSFT",
-            "name": "Microsoft Corp",
             "shares": 42.0,
             "marketValueKrw": 25032937.0,
-            "weightPercent": 2.16,
-            "weight": 0.0216,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.16
           },
           {
             "rank": 22,
-            "codeRaw": "AAOI US EQUITY",
             "ticker": "AAOI",
-            "name": "Applied Optoelectronics Inc",
             "shares": 93.0,
             "marketValueKrw": 24040858.0,
-            "weightPercent": 2.08,
-            "weight": 0.0208,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.08
           },
           {
             "rank": 23,
-            "codeRaw": "AMZN US EQUITY",
             "ticker": "AMZN",
-            "name": "Amazon.com Inc",
             "shares": 60.0,
             "marketValueKrw": 22337784.0,
-            "weightPercent": 1.93,
-            "weight": 0.019299999999999998,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.93
           },
           {
             "rank": 24,
-            "codeRaw": "HOOD US EQUITY",
             "ticker": "HOOD",
-            "name": "Robinhood Markets Inc",
             "shares": 136.0,
             "marketValueKrw": 19905084.0,
-            "weightPercent": 1.72,
-            "weight": 0.0172,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.72
           },
           {
             "rank": 25,
-            "codeRaw": "ASML US EQUITY",
             "ticker": "ASML",
-            "name": "ASML Holding NV",
             "shares": 7.0,
             "marketValueKrw": 19110049.0,
-            "weightPercent": 1.65,
-            "weight": 0.0165,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.65
           },
           {
             "rank": 26,
-            "codeRaw": "COIN US EQUITY",
             "ticker": "COIN",
-            "name": "Coinbase Global Inc",
             "shares": 66.0,
             "marketValueKrw": 16907432.0,
-            "weightPercent": 1.46,
-            "weight": 0.0146,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.46
           },
           {
             "rank": 27,
-            "codeRaw": "CRCL US EQUITY",
             "ticker": "CRCL",
-            "name": "Circle Internet Group Inc",
             "shares": 132.0,
             "marketValueKrw": 15925568.0,
-            "weightPercent": 1.38,
-            "weight": 0.0138,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.38
           },
           {
             "rank": 28,
-            "codeRaw": "SIMO US EQUITY",
             "ticker": "SIMO",
-            "name": "Silicon Motion Technology Corp",
             "shares": 32.0,
             "marketValueKrw": 13689853.0,
-            "weightPercent": 1.18,
-            "weight": 0.0118,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.18
           },
           {
             "rank": 29,
-            "codeRaw": "KLAC US EQUITY",
             "ticker": "KLAC",
-            "name": "KLA Corp",
             "shares": 38.0,
             "marketValueKrw": 13648658.0,
-            "weightPercent": 1.18,
-            "weight": 0.0118,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.18
           },
           {
             "rank": 30,
-            "codeRaw": "QCOM US EQUITY",
             "ticker": "QCOM",
-            "name": "QUALCOMM Inc",
             "shares": 40.0,
             "marketValueKrw": 12958941.0,
-            "weightPercent": 1.12,
-            "weight": 0.011200000000000002,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.12
           },
           {
             "rank": 31,
-            "codeRaw": "META US EQUITY",
             "ticker": "META",
-            "name": "Meta Platforms Inc",
             "shares": 14.0,
             "marketValueKrw": 12717009.0,
-            "weightPercent": 1.1,
-            "weight": 0.011000000000000001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.1
           },
           {
             "rank": 32,
-            "codeRaw": "APP US EQUITY",
             "ticker": "APP",
-            "name": "AppLovin Corp",
             "shares": 16.0,
             "marketValueKrw": 12475258.0,
-            "weightPercent": 1.08,
-            "weight": 0.0108,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.08
           },
           {
             "rank": 33,
-            "codeRaw": "BE US EQUITY",
             "ticker": "BE",
-            "name": "Bloom Energy Corp",
             "shares": 28.0,
             "marketValueKrw": 11902346.0,
-            "weightPercent": 1.03,
-            "weight": 0.0103,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.03
           },
           {
             "rank": 34,
-            "codeRaw": "GEV US EQUITY",
             "ticker": "GEV",
-            "name": "GE Vernova Inc",
             "shares": 8.0,
             "marketValueKrw": 11893507.0,
-            "weightPercent": 1.03,
-            "weight": 0.0103,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.03
           },
           {
             "rank": 35,
-            "codeRaw": "GLW US EQUITY",
             "ticker": "GLW",
-            "name": "Corning Inc",
             "shares": 44.0,
             "marketValueKrw": 11814326.0,
-            "weightPercent": 1.02,
-            "weight": 0.0102,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.02
           },
           {
             "rank": 36,
-            "codeRaw": "MSTR US EQUITY",
             "ticker": "MSTR",
-            "name": "Strategy Inc",
             "shares": 63.0,
             "marketValueKrw": 11709221.0,
-            "weightPercent": 1.01,
-            "weight": 0.0101,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.01
           },
           {
             "rank": 37,
-            "codeRaw": "TSM US EQUITY",
             "ticker": "TSM",
-            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
             "shares": 17.0,
             "marketValueKrw": 10955669.0,
-            "weightPercent": 0.95,
-            "weight": 0.0095,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.95
           },
           {
             "rank": 38,
-            "codeRaw": "VRT US EQUITY",
             "ticker": "VRT",
-            "name": "Vertiv Holdings Co",
             "shares": 24.0,
             "marketValueKrw": 10881951.0,
-            "weightPercent": 0.94,
-            "weight": 0.009399999999999999,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.94
           },
           {
             "rank": 39,
-            "codeRaw": "LITE US EQUITY",
             "ticker": "LITE",
-            "name": "Lumentum Holdings Inc",
             "shares": 8.0,
             "marketValueKrw": 10598158.0,
-            "weightPercent": 0.92,
-            "weight": 0.0092,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.92
           },
           {
             "rank": 40,
-            "codeRaw": "CRWV US EQUITY",
             "ticker": "CRWV",
-            "name": "CoreWeave Inc",
             "shares": 59.0,
             "marketValueKrw": 10449678.0,
-            "weightPercent": 0.9,
-            "weight": 0.009000000000000001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.9
           },
           {
             "rank": 41,
-            "codeRaw": "RKLB US EQUITY",
             "ticker": "RKLB",
-            "name": "Rocket Lab Corp",
             "shares": 65.0,
             "marketValueKrw": 10292557.0,
-            "weightPercent": 0.89,
-            "weight": 0.0089,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.89
           },
           {
             "rank": 42,
-            "codeRaw": "TSLA US EQUITY",
             "ticker": "TSLA",
-            "name": "Tesla Inc",
             "shares": 16.0,
             "marketValueKrw": 9798599.0,
-            "weightPercent": 0.85,
-            "weight": 0.0085,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.85
           },
           {
             "rank": 43,
-            "codeRaw": "TER US EQUITY",
             "ticker": "TER",
-            "name": "Teradyne Inc",
             "shares": 14.0,
             "marketValueKrw": 8673144.0,
-            "weightPercent": 0.75,
-            "weight": 0.0075,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.75
           },
           {
             "rank": 44,
-            "codeRaw": "ORCL US EQUITY",
             "ticker": "ORCL",
-            "name": "Oracle Corp",
             "shares": 29.0,
             "marketValueKrw": 8265540.0,
-            "weightPercent": 0.71,
-            "weight": 0.0070999999999999995,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.71
           },
           {
             "rank": 45,
-            "codeRaw": "ALAB US EQUITY",
             "ticker": "ALAB",
-            "name": "Astera Labs Inc",
             "shares": 15.0,
             "marketValueKrw": 8211178.0,
-            "weightPercent": 0.71,
-            "weight": 0.0070999999999999995,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.71
           }
         ],
         "top10": [
@@ -788,8 +472,6 @@
             "isPriceTracked": true
           }
         ],
-        "totalHoldings": 45,
-        "fetchedAt": "2026-06-18T00:18:55.526370+00:00",
         "decomposition": [
           {
             "date": "2026-06-18",
@@ -824,21 +506,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 1644605.6734693877,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 1544818.1836734693,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -887,21 +554,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 3186241.16,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 3014011.76,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -950,21 +602,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 623610.5784313725,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 599820.9509803922,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1013,21 +650,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 193273.1749271137,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 177143.46764705883,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1076,21 +698,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 321139.4195402299,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 313894.29069767444,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1139,21 +746,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 466903.0,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 421739.17647058825,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1202,21 +794,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 827238.2,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 767732.6734693878,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1265,21 +842,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 290983.0,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 305404.1138211382,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1328,21 +890,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 618350.1967213114,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 611534.655737705,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1391,21 +938,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 987875.9428571429,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 1030746.4705882353,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1454,21 +986,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.976609356257497,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 392124.152173913,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 361975.010989011,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -1559,9 +1076,7 @@
               "residual_watch": "residual direction is shown as weak buy or weak sell watch, but it is below the directional buy/sell threshold",
               "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
             }
-          },
-          "priceErrors": {},
-          "priceDiagnostics": {}
+          }
         }
       }
     },
@@ -1571,530 +1086,271 @@
       "code": "456600",
       "latest": {
         "date": "2026-06-18",
-        "queryDate": "2026-06-18",
-        "navAsOfDate": "2026-06-17",
         "priceBasisDate": "2026-06-17",
         "sourceStatus": "live",
-        "sourceConfidence": "high",
-        "sourceWarning": "",
         "holdings": [
           {
             "rank": 1,
-            "codeRaw": "285A JP EQUITY",
             "ticker": "285A.T",
-            "name": "Kioxia Holdings Corp",
             "shares": 142.0,
             "marketValueKrw": 127003891.0,
-            "weightPercent": 8.93,
-            "weight": 0.08929999999999999,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 8.93
           },
           {
             "rank": 2,
-            "codeRaw": "INTC US EQUITY",
             "ticker": "INTC",
-            "name": "Intel Corp",
             "shares": 538.0,
             "marketValueKrw": 95303186.0,
-            "weightPercent": 6.7,
-            "weight": 0.067,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 6.7
           },
           {
             "rank": 3,
-            "codeRaw": "AMD US EQUITY",
             "ticker": "AMD",
-            "name": "Advanced Micro Devices Inc",
             "shares": 118.0,
             "marketValueKrw": 90592456.0,
-            "weightPercent": 6.37,
-            "weight": 0.0637,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 6.37
           },
           {
             "rank": 4,
-            "codeRaw": "STX US EQUITY",
             "ticker": "STX",
-            "name": "Seagate Technology Holdings PLC",
             "shares": 58.0,
             "marketValueKrw": 90528137.0,
-            "weightPercent": 6.37,
-            "weight": 0.0637,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 6.37
           },
           {
             "rank": 5,
-            "codeRaw": "WDC US EQUITY",
             "ticker": "WDC",
-            "name": "Western Digital Corp",
             "shares": 76.0,
             "marketValueKrw": 78336731.0,
-            "weightPercent": 5.51,
-            "weight": 0.055099999999999996,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 5.51
           },
           {
             "rank": 6,
-            "codeRaw": "ARM US EQUITY",
             "ticker": "ARM",
-            "name": "ARM Holdings PLC",
             "shares": 94.0,
             "marketValueKrw": 56383169.0,
-            "weightPercent": 3.96,
-            "weight": 0.039599999999999996,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.96
           },
           {
             "rank": 7,
             "codeRaw": "NQU6 INDEX",
-            "ticker": null,
             "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
             "shares": 0.0,
             "marketValueKrw": 55052195.0,
-            "weightPercent": 3.87,
-            "weight": 0.0387,
-            "hasExternalTicker": false,
-            "hasProviderValuation": false,
-            "priceTrackingMethod": null,
-            "isPriceTracked": false
+            "weightPercent": 3.87
           },
           {
             "rank": 8,
-            "codeRaw": "SNOW US EQUITY",
             "ticker": "SNOW",
-            "name": "Snowflake Inc",
             "shares": 146.0,
             "marketValueKrw": 52658329.0,
-            "weightPercent": 3.7,
-            "weight": 0.037000000000000005,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.7
           },
           {
             "rank": 9,
-            "codeRaw": "SNDK US EQUITY",
             "ticker": "SNDK",
-            "name": "Sandisk Corp",
             "shares": 17.0,
             "marketValueKrw": 51238200.0,
-            "weightPercent": 3.6,
-            "weight": 0.036000000000000004,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.6
           },
           {
             "rank": 10,
-            "codeRaw": "NVDA US EQUITY",
             "ticker": "NVDA",
-            "name": "NVIDIA Corp",
             "shares": 149.0,
             "marketValueKrw": 46770249.0,
-            "weightPercent": 3.29,
-            "weight": 0.0329,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.29
           },
           {
             "rank": 11,
-            "codeRaw": "QCOM US EQUITY",
             "ticker": "QCOM",
-            "name": "QUALCOMM Inc",
             "shares": 133.0,
             "marketValueKrw": 43088480.0,
-            "weightPercent": 3.03,
-            "weight": 0.030299999999999997,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 3.03
           },
           {
             "rank": 12,
-            "codeRaw": "NTAP US EQUITY",
             "ticker": "NTAP",
-            "name": "NetApp Inc",
             "shares": 159.0,
             "marketValueKrw": 38804090.0,
-            "weightPercent": 2.73,
-            "weight": 0.0273,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.73
           },
           {
             "rank": 13,
-            "codeRaw": "ASML US EQUITY",
             "ticker": "ASML",
-            "name": "ASML Holding NV",
             "shares": 14.0,
             "marketValueKrw": 38220099.0,
-            "weightPercent": 2.69,
-            "weight": 0.0269,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.69
           },
           {
             "rank": 14,
             "codeRaw": "SPCX US EQUITY",
-            "ticker": null,
             "name": "Space Exploration Technologies Corp",
             "shares": 120.0,
             "marketValueKrw": 36648494.0,
-            "weightPercent": 2.58,
-            "weight": 0.0258,
-            "hasExternalTicker": false,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "provider_valuation_krw",
-            "isPriceTracked": true
+            "weightPercent": 2.58
           },
           {
             "rank": 15,
-            "codeRaw": "IBM US EQUITY",
             "ticker": "IBM",
-            "name": "International Business Machines Corp",
             "shares": 86.0,
             "marketValueKrw": 35246571.0,
-            "weightPercent": 2.48,
-            "weight": 0.0248,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.48
           },
           {
             "rank": 16,
-            "codeRaw": "AMZN US EQUITY",
             "ticker": "AMZN",
-            "name": "Amazon.com Inc",
             "shares": 90.0,
             "marketValueKrw": 33506676.0,
-            "weightPercent": 2.36,
-            "weight": 0.0236,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.36
           },
           {
             "rank": 17,
-            "codeRaw": "2513 HK EQUITY",
             "ticker": "2513.HK",
-            "name": "Knowledge Atlas Technology JSC Ltd",
             "shares": 107.0,
             "marketValueKrw": 30467963.0,
-            "weightPercent": 2.14,
-            "weight": 0.021400000000000002,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 2.14
           },
           {
             "rank": 18,
             "codeRaw": "0043Y0",
-            "ticker": null,
             "name": "TIME 차이나AI테크액티브",
             "shares": 1086.0,
             "marketValueKrw": 27285750.0,
-            "weightPercent": 1.92,
-            "weight": 0.0192,
-            "hasExternalTicker": false,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "provider_valuation_krw",
-            "isPriceTracked": true
+            "weightPercent": 1.92
           },
           {
             "rank": 19,
-            "codeRaw": "TSM US EQUITY",
             "ticker": "TSM",
-            "name": "Taiwan Semiconductor Manufacturing Co Ltd",
             "shares": 42.0,
             "marketValueKrw": 27066947.0,
-            "weightPercent": 1.9,
-            "weight": 0.019,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.9
           },
           {
             "rank": 20,
-            "codeRaw": "NOW US EQUITY",
             "ticker": "NOW",
-            "name": "ServiceNow Inc",
             "shares": 175.0,
             "marketValueKrw": 26836743.0,
-            "weightPercent": 1.89,
-            "weight": 0.0189,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.89
           },
           {
             "rank": 21,
-            "codeRaw": "MELI US EQUITY",
             "ticker": "MELI",
-            "name": "MercadoLibre Inc",
             "shares": 10.0,
             "marketValueKrw": 25335526.0,
-            "weightPercent": 1.78,
-            "weight": 0.0178,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.78
           },
           {
             "rank": 22,
-            "codeRaw": "GOOG US EQUITY",
             "ticker": "GOOG",
-            "name": "Alphabet Inc",
             "shares": 44.0,
             "marketValueKrw": 24711400.0,
-            "weightPercent": 1.74,
-            "weight": 0.0174,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.74
           },
           {
             "rank": 23,
-            "codeRaw": "ROP US EQUITY",
             "ticker": "ROP",
-            "name": "Roper Technologies Inc",
             "shares": 48.0,
             "marketValueKrw": 24504730.0,
-            "weightPercent": 1.72,
-            "weight": 0.0172,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.72
           },
           {
             "rank": 24,
-            "codeRaw": "9988 HK EQUITY",
             "ticker": "9988.HK",
-            "name": "Alibaba Group Holding Ltd",
             "shares": 1172.0,
             "marketValueKrw": 24225544.0,
-            "weightPercent": 1.7,
-            "weight": 0.017,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.7
           },
           {
             "rank": 25,
-            "codeRaw": "META US EQUITY",
             "ticker": "META",
-            "name": "Meta Platforms Inc",
             "shares": 26.0,
             "marketValueKrw": 23617303.0,
-            "weightPercent": 1.66,
-            "weight": 0.0166,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.66
           },
           {
             "rank": 26,
-            "codeRaw": "CRM US EQUITY",
             "ticker": "CRM",
-            "name": "Salesforce Inc",
             "shares": 95.0,
             "marketValueKrw": 23249531.0,
-            "weightPercent": 1.64,
-            "weight": 0.016399999999999998,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.64
           },
           {
             "rank": 27,
-            "codeRaw": "ACN US EQUITY",
             "ticker": "ACN",
-            "name": "Accenture PLC",
             "shares": 92.0,
             "marketValueKrw": 23045813.0,
-            "weightPercent": 1.62,
-            "weight": 0.016200000000000003,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.62
           },
           {
             "rank": 28,
-            "codeRaw": "6981 JP EQUITY",
             "ticker": "6981.T",
-            "name": "Murata Manufacturing Co Ltd",
             "shares": 219.0,
             "marketValueKrw": 21775065.0,
-            "weightPercent": 1.53,
-            "weight": 0.015300000000000001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.53
           },
           {
             "rank": 29,
-            "codeRaw": "MSTR US EQUITY",
             "ticker": "MSTR",
-            "name": "Strategy Inc",
             "shares": 112.0,
             "marketValueKrw": 20816393.0,
-            "weightPercent": 1.46,
-            "weight": 0.0146,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.46
           },
           {
             "rank": 30,
-            "codeRaw": "PDD US EQUITY",
             "ticker": "PDD",
-            "name": "PDD Holdings Inc",
             "shares": 168.0,
             "marketValueKrw": 20744355.0,
-            "weightPercent": 1.46,
-            "weight": 0.0146,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.46
           },
           {
             "rank": 31,
-            "codeRaw": "DELL US EQUITY",
             "ticker": "DELL",
-            "name": "Dell Technologies Inc",
             "shares": 33.0,
             "marketValueKrw": 20180644.0,
-            "weightPercent": 1.42,
-            "weight": 0.014199999999999999,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.42
           },
           {
             "rank": 32,
             "codeRaw": "",
-            "ticker": null,
             "name": "현금",
             "shares": 18175833.0,
             "marketValueKrw": 18175833.0,
-            "weightPercent": 1.28,
-            "weight": 0.0128,
-            "hasExternalTicker": false,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "provider_valuation_krw",
-            "isPriceTracked": true
+            "weightPercent": 1.28
           },
           {
             "rank": 33,
-            "codeRaw": "EBAY US EQUITY",
             "ticker": "EBAY",
-            "name": "eBay Inc",
             "shares": 108.0,
             "marketValueKrw": 17868047.0,
-            "weightPercent": 1.26,
-            "weight": 0.0126,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.26
           },
           {
             "rank": 34,
-            "codeRaw": "SAP US EQUITY",
             "ticker": "SAP",
-            "name": "SAP SE",
             "shares": 66.0,
             "marketValueKrw": 16521878.0,
-            "weightPercent": 1.16,
-            "weight": 0.0116,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 1.16
           },
           {
             "rank": 35,
-            "codeRaw": "COIN US EQUITY",
             "ticker": "COIN",
-            "name": "Coinbase Global Inc",
             "shares": 54.0,
             "marketValueKrw": 13833353.0,
-            "weightPercent": 0.97,
-            "weight": 0.0097,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.97
           },
           {
             "rank": 36,
-            "codeRaw": "CRCL US EQUITY",
             "ticker": "CRCL",
-            "name": "Circle Internet Group Inc",
             "shares": 105.0,
             "marketValueKrw": 12668066.0,
-            "weightPercent": 0.89,
-            "weight": 0.0089,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.89
           },
           {
             "rank": 37,
-            "codeRaw": "700 HK EQUITY",
             "ticker": "0700.HK",
-            "name": "Tencent Holdings Ltd",
             "shares": 115.0,
             "marketValueKrw": 9939304.0,
-            "weightPercent": 0.7,
-            "weight": 0.006999999999999999,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true
+            "weightPercent": 0.7
           }
         ],
         "top10": [
@@ -2239,8 +1495,6 @@
             "isPriceTracked": true
           }
         ],
-        "totalHoldings": 37,
-        "fetchedAt": "2026-06-18T00:18:56.933252+00:00",
         "decomposition": [
           {
             "date": "2026-06-18",
@@ -2275,21 +1529,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 857744.9370629371,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 894393.5985915493,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2338,21 +1577,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 193273.1747211896,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 177143.46840148699,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2401,21 +1625,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 827238.2118644068,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 767732.6779661017,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2464,21 +1673,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 1540018.0689655172,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 1560829.948275862,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2527,21 +1721,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 987875.947368421,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 1030746.4605263158,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2590,21 +1769,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 623610.5789473684,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 599820.9468085107,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2640,10 +1804,6 @@
             "displayScope": "current_top10",
             "displayOrder": 7,
             "securityReturn": null,
-            "priceMeta": {
-              "reason": "not_price_tracked",
-              "currency": "UNKNOWN"
-            },
             "priceSource": null,
             "benchmarkReturn": -0.011576296857980686,
             "returnCoverage": 0.9611077784443112,
@@ -2685,21 +1845,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 363963.04761904763,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 360673.48630136985,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2748,21 +1893,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 3186241.117647059,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 3014011.7647058824,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2811,21 +1941,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 0.9611077784443112,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 321139.41610738257,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 313894.28859060403,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -2881,9 +1996,7 @@
               "residual_watch": "residual direction is shown as weak buy or weak sell watch, but it is below the directional buy/sell threshold",
               "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
             }
-          },
-          "priceErrors": {},
-          "priceDiagnostics": {}
+          }
         }
       }
     },
@@ -2893,1076 +2006,401 @@
       "code": "2ETFQ1",
       "latest": {
         "date": "2026-06-18",
-        "queryDate": "2026-06-18",
-        "navAsOfDate": null,
         "priceBasisDate": "2026-06-17",
         "sourceStatus": "live",
-        "sourceConfidence": "high",
-        "sourceWarning": "",
         "holdings": [
           {
             "rank": 1,
             "codeRaw": "SPCX US Equity",
-            "ticker": null,
             "name": "Space Exploration Technologies Corp",
             "shares": 395.7,
             "marketValueKrw": 120848410.0,
-            "weightPercent": 9.85,
-            "weight": 0.09849999999999999,
-            "hasExternalTicker": false,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "provider_valuation_krw",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 9.85
           },
           {
             "rank": 2,
-            "codeRaw": "ARM US Equity",
             "ticker": "ARM",
-            "name": "ARM Holdings PLC",
             "shares": 140.78,
             "marketValueKrw": 84442794.0,
-            "weightPercent": 6.88,
-            "weight": 0.0688,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 6.88
           },
           {
             "rank": 3,
-            "codeRaw": "AMD US Equity",
             "ticker": "AMD",
-            "name": "ADVANCED MICRO DEVICES",
             "shares": 107.73,
             "marketValueKrw": 82707842.0,
-            "weightPercent": 6.74,
-            "weight": 0.0674,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 6.74
           },
           {
             "rank": 4,
-            "codeRaw": "SNDK US Equity",
             "ticker": "SNDK",
-            "name": "Sandisk Corp/DE",
             "shares": 22.3,
             "marketValueKrw": 67212462.0,
-            "weightPercent": 5.48,
-            "weight": 0.0548,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 5.48
           },
           {
             "rank": 5,
-            "codeRaw": "INTC US Equity",
             "ticker": "INTC",
-            "name": "INTEL Corp",
             "shares": 368.77,
             "marketValueKrw": 65325197.0,
-            "weightPercent": 5.32,
-            "weight": 0.053200000000000004,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 5.32
           },
           {
             "rank": 6,
-            "codeRaw": "NVDA US Equity",
             "ticker": "NVDA",
-            "name": "NVIDIA Corp",
             "shares": 182.98,
             "marketValueKrw": 57436377.0,
-            "weightPercent": 4.68,
-            "weight": 0.046799999999999994,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 4.68
           },
           {
             "rank": 7,
-            "codeRaw": "GOOGL US Equity",
             "ticker": "GOOGL",
-            "name": "ALPHABET INC-CL A",
             "shares": 100.77,
             "marketValueKrw": 56922609.0,
-            "weightPercent": 4.64,
-            "weight": 0.0464,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 4.64
           },
           {
             "rank": 8,
-            "codeRaw": "MU US Equity",
             "ticker": "MU",
-            "name": "MICRON TECH",
             "shares": 35.42,
             "marketValueKrw": 54717460.0,
-            "weightPercent": 4.46,
-            "weight": 0.0446,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 4.46
           },
           {
             "rank": 9,
-            "codeRaw": "BE US Equity",
             "ticker": "BE",
-            "name": "BLOOM ENERGY CORPORATION",
             "shares": 121.01,
             "marketValueKrw": 51439389.0,
-            "weightPercent": 4.19,
-            "weight": 0.04190000000000001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 4.19
           },
           {
             "rank": 10,
-            "codeRaw": "AMZN US Equity",
             "ticker": "AMZN",
-            "name": "Amazon.com Inc",
             "shares": 119.23,
             "marketValueKrw": 44388899.0,
-            "weightPercent": 3.62,
-            "weight": 0.0362,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 3.62
           },
           {
             "rank": 11,
-            "codeRaw": "DELL US Equity",
             "ticker": "DELL",
-            "name": "Dell Technologies Inc",
             "shares": 70.89,
             "marketValueKrw": 43351692.0,
-            "weightPercent": 3.53,
-            "weight": 0.0353,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 3.53
           },
           {
             "rank": 12,
-            "codeRaw": "MRVL US Equity",
             "ticker": "MRVL",
-            "name": "MARVELL TECHNOLOGY INC",
             "shares": 90.44,
             "marketValueKrw": 38142091.0,
-            "weightPercent": 3.11,
-            "weight": 0.0311,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 3.11
           },
           {
             "rank": 13,
-            "codeRaw": "WDC US Equity",
             "ticker": "WDC",
-            "name": "WESTERN DIGITAL",
             "shares": 35.84,
             "marketValueKrw": 36941953.0,
-            "weightPercent": 3.01,
-            "weight": 0.0301,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 3.01
           },
           {
             "rank": 14,
-            "codeRaw": "AAPL US Equity",
             "ticker": "AAPL",
-            "name": "APPLE Inc",
             "shares": 75.95,
             "marketValueKrw": 34395462.0,
-            "weightPercent": 2.8,
-            "weight": 0.027999999999999997,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 2.8
           },
           {
             "rank": 15,
-            "codeRaw": "STX US Equity",
             "ticker": "STX",
-            "name": "SEAGATE TECHNOLOGY",
             "shares": 21.89,
             "marketValueKrw": 34166567.0,
-            "weightPercent": 2.78,
-            "weight": 0.0278,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 2.78
           },
           {
             "rank": 16,
-            "codeRaw": "LRCX US Equity",
             "ticker": "LRCX",
-            "name": "LAM RESEARCH",
             "shares": 52.44,
             "marketValueKrw": 29311818.0,
-            "weightPercent": 2.39,
-            "weight": 0.0239,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 2.39
           },
           {
             "rank": 17,
-            "codeRaw": "NBIS US Equity",
             "ticker": "NBIS",
-            "name": "YANDEX NV-A",
             "shares": 67.8,
             "marketValueKrw": 27201518.0,
-            "weightPercent": 2.22,
-            "weight": 0.0222,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 2.22
           },
           {
             "rank": 18,
-            "codeRaw": "MSFT US Equity",
             "ticker": "MSFT",
-            "name": "MICROSOFT",
             "shares": 45.52,
             "marketValueKrw": 27130936.0,
-            "weightPercent": 2.21,
-            "weight": 0.022099999999999998,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 2.21
           },
           {
             "rank": 19,
-            "codeRaw": "TSLA US Equity",
             "ticker": "TSLA",
-            "name": "TESLA MOTORS",
             "shares": 44.11,
             "marketValueKrw": 27013512.0,
-            "weightPercent": 2.2,
-            "weight": 0.022000000000000002,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 2.2
           },
           {
             "rank": 20,
-            "codeRaw": "SNOW US Equity",
             "ticker": "SNOW",
-            "name": "Snowflake Inc - CL A",
             "shares": 61.35,
             "marketValueKrw": 22127318.0,
-            "weightPercent": 1.8,
-            "weight": 0.018000000000000002,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 1.8
           },
           {
             "rank": 21,
-            "codeRaw": "LITE US Equity",
             "ticker": "LITE",
-            "name": "Lumentum Holdings Inc",
             "shares": 14.57,
             "marketValueKrw": 19301896.0,
-            "weightPercent": 1.57,
-            "weight": 0.015700000000000002,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 1.57
           },
           {
             "rank": 22,
-            "codeRaw": "AMAT US Equity",
             "ticker": "AMAT",
-            "name": "APPLIED MATERIALS INC",
             "shares": 20.8,
             "marketValueKrw": 17887153.0,
-            "weightPercent": 1.46,
-            "weight": 0.0146,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 1.46
           },
           {
             "rank": 23,
-            "codeRaw": "AVGO US Equity",
             "ticker": "AVGO",
-            "name": "BROADCOM LTD",
             "shares": 29.62,
             "marketValueKrw": 16886744.0,
-            "weightPercent": 1.38,
-            "weight": 0.0138,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 1.38
           },
           {
             "rank": 24,
-            "codeRaw": "CSCO US Equity",
             "ticker": "CSCO",
-            "name": "CISCO SYSTEMS INC",
             "shares": 65.9,
             "marketValueKrw": 11925081.0,
-            "weightPercent": 0.97,
-            "weight": 0.0097,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.97
           },
           {
             "rank": 25,
-            "codeRaw": "RKLB US Equity",
             "ticker": "RKLB",
-            "name": "Rocket Lab USA Inc",
             "shares": 69.61,
             "marketValueKrw": 11022537.0,
-            "weightPercent": 0.9,
-            "weight": 0.009000000000000001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.9
           },
           {
             "rank": 26,
-            "codeRaw": "STM US Equity",
             "ticker": "STM",
-            "name": "STMICROELECTRONICS NV-NY SHS",
             "shares": 97.01,
             "marketValueKrw": 10945053.0,
-            "weightPercent": 0.89,
-            "weight": 0.0089,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.89
           },
           {
             "rank": 27,
-            "codeRaw": "ASML US Equity",
             "ticker": "ASML",
-            "name": "ASML HOLDING",
             "shares": 4.0,
             "marketValueKrw": 10920028.0,
-            "weightPercent": 0.89,
-            "weight": 0.0089,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.89
           },
           {
             "rank": 28,
-            "codeRaw": "COIN US Equity",
             "ticker": "COIN",
-            "name": "COINBASE GLOBAL INC -CLASS A",
             "shares": 42.34,
             "marketValueKrw": 10846374.0,
-            "weightPercent": 0.88,
-            "weight": 0.0088,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.88
           },
           {
             "rank": 29,
-            "codeRaw": "CRCL US Equity",
             "ticker": "CRCL",
-            "name": "Circle Internet Group Inc",
             "shares": 88.68,
             "marketValueKrw": 10699086.0,
-            "weightPercent": 0.87,
-            "weight": 0.0087,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.87
           },
           {
             "rank": 30,
-            "codeRaw": "PLTR US Equity",
             "ticker": "PLTR",
-            "name": "Palantir Technologies Inc -A",
             "shares": 40.05,
             "marketValueKrw": 8076505.0,
-            "weightPercent": 0.66,
-            "weight": 0.0066,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.66
           },
           {
             "rank": 31,
-            "codeRaw": "TXN US Equity",
             "ticker": "TXN",
-            "name": "TEXAS INSTRUMENTS",
             "shares": 17.03,
             "marketValueKrw": 7879125.0,
-            "weightPercent": 0.64,
-            "weight": 0.0064,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.64
           },
           {
             "rank": 32,
-            "codeRaw": "KLAC US Equity",
             "ticker": "KLAC",
-            "name": "KLA Corp",
             "shares": 19.96,
             "marketValueKrw": 7169137.0,
-            "weightPercent": 0.58,
-            "weight": 0.0058,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.58
           },
           {
             "rank": 33,
-            "codeRaw": "PANW US Equity",
             "ticker": "PANW",
-            "name": "PALO ALTO NETWORKS INC",
             "shares": 15.7,
             "marketValueKrw": 6650530.0,
-            "weightPercent": 0.54,
-            "weight": 0.0054,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.54
           },
           {
             "rank": 34,
-            "codeRaw": "SIMO US Equity",
             "ticker": "SIMO",
-            "name": "Silicon Motion Technology Corp",
             "shares": 15.21,
             "marketValueKrw": 6506958.0,
-            "weightPercent": 0.53,
-            "weight": 0.0053,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.53
           },
           {
             "rank": 35,
-            "codeRaw": "QCOM US Equity",
             "ticker": "QCOM",
-            "name": "QUALCOMM Inc",
             "shares": 20.01,
             "marketValueKrw": 6482710.0,
-            "weightPercent": 0.53,
-            "weight": 0.0053,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.53
           },
           {
             "rank": 36,
-            "codeRaw": "VRT US Equity",
             "ticker": "VRT",
-            "name": "Vertiv Holdings Co",
             "shares": 12.85,
             "marketValueKrw": 5826378.0,
-            "weightPercent": 0.47,
-            "weight": 0.004699999999999999,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.47
           },
           {
             "rank": 37,
-            "codeRaw": "ADI US Equity",
             "ticker": "ADI",
-            "name": "ANALOG DEVICES",
             "shares": 9.1,
             "marketValueKrw": 5729127.0,
-            "weightPercent": 0.47,
-            "weight": 0.004699999999999999,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.47
           },
           {
             "rank": 38,
-            "codeRaw": "TSEM US Equity",
             "ticker": "TSEM",
-            "name": "Tower Semiconductor Ltd",
             "shares": 14.0,
             "marketValueKrw": 5689506.0,
-            "weightPercent": 0.46,
-            "weight": 0.0046,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.46
           },
           {
             "rank": 39,
-            "codeRaw": "CRWD US Equity",
             "ticker": "CRWD",
-            "name": "CROWDSTRIKE HOLDINGS INC - A",
             "shares": 5.22,
             "marketValueKrw": 5367935.0,
-            "weightPercent": 0.44,
-            "weight": 0.0044,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.44
           },
           {
             "rank": 40,
-            "codeRaw": "TER US Equity",
             "ticker": "TER",
-            "name": "TERADYNE INC",
             "shares": 7.02,
             "marketValueKrw": 4348962.0,
-            "weightPercent": 0.35,
-            "weight": 0.0034999999999999996,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.35
           },
           {
             "rank": 41,
-            "codeRaw": "GILD US Equity",
             "ticker": "GILD",
-            "name": "GILEAD SCIENCES INC",
             "shares": 18.67,
             "marketValueKrw": 3594906.0,
-            "weightPercent": 0.29,
-            "weight": 0.0029,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.29
           },
           {
             "rank": 42,
-            "codeRaw": "FTNT US Equity",
             "ticker": "FTNT",
-            "name": "FORTINET INC",
             "shares": 16.12,
             "marketValueKrw": 3586701.0,
-            "weightPercent": 0.29,
-            "weight": 0.0029,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.29
           },
           {
             "rank": 43,
-            "codeRaw": "CIEN US Equity",
             "ticker": "CIEN",
-            "name": "Ciena Corp",
             "shares": 5.3,
             "marketValueKrw": 3451444.0,
-            "weightPercent": 0.28,
-            "weight": 0.0028000000000000004,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.28
           },
           {
             "rank": 44,
-            "codeRaw": "COHR US Equity",
             "ticker": "COHR",
-            "name": "COHERENT CORP",
             "shares": 4.48,
             "marketValueKrw": 2595464.0,
-            "weightPercent": 0.21,
-            "weight": 0.0021,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.21
           },
           {
             "rank": 45,
-            "codeRaw": "DDOG US Equity",
             "ticker": "DDOG",
-            "name": "DATADOG INC - CLASS A",
             "shares": 6.92,
             "marketValueKrw": 2420352.0,
-            "weightPercent": 0.2,
-            "weight": 0.002,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.2
           },
           {
             "rank": 46,
-            "codeRaw": "MPWR US Equity",
             "ticker": "MPWR",
-            "name": "MONOLITHIC POWER SYSTEMS INC",
             "shares": 1.01,
             "marketValueKrw": 2290920.0,
-            "weightPercent": 0.19,
-            "weight": 0.0019,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.19
           },
           {
             "rank": 47,
-            "codeRaw": "ALAB US Equity",
             "ticker": "ALAB",
-            "name": "Astera Labs Inc",
             "shares": 4.0,
             "marketValueKrw": 2189647.0,
-            "weightPercent": 0.18,
-            "weight": 0.0018,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.18
           },
           {
             "rank": 48,
-            "codeRaw": "NXPI US Equity",
             "ticker": "NXPI",
-            "name": "NXP SEMICONDUCTORS NV",
             "shares": 4.04,
             "marketValueKrw": 1851910.0,
-            "weightPercent": 0.15,
-            "weight": 0.0015,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.15
           },
           {
             "rank": 49,
-            "codeRaw": "HOOD US Equity",
             "ticker": "HOOD",
-            "name": "Robinhood Markets Inc",
             "shares": 11.3,
             "marketValueKrw": 1653878.0,
-            "weightPercent": 0.13,
-            "weight": 0.0013,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.13
           },
           {
             "rank": 50,
-            "codeRaw": "FLEX US Equity",
             "ticker": "FLEX",
-            "name": "Flextronics International Ltd",
             "shares": 6.06,
             "marketValueKrw": 1347525.0,
-            "weightPercent": 0.11,
-            "weight": 0.0011,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.11
           },
           {
             "rank": 51,
-            "codeRaw": "GFS US Equity",
             "ticker": "GFS",
-            "name": "GLOBALFOUNDRIES Inc",
             "shares": 11.0,
             "marketValueKrw": 1330460.0,
-            "weightPercent": 0.11,
-            "weight": 0.0011,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.11
           },
           {
             "rank": 52,
-            "codeRaw": "MCHP US Equity",
             "ticker": "MCHP",
-            "name": "MICROCHIP TECHNOLOGY INC",
             "shares": 9.1,
             "marketValueKrw": 1317010.0,
-            "weightPercent": 0.11,
-            "weight": 0.0011,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.11
           },
           {
             "rank": 53,
-            "codeRaw": "CRWV US Equity",
             "ticker": "CRWV",
-            "name": "Coreweave Inc",
             "shares": 7.08,
             "marketValueKrw": 1253961.0,
-            "weightPercent": 0.1,
-            "weight": 0.001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.1
           },
           {
             "rank": 54,
-            "codeRaw": "ON US Equity",
             "ticker": "ON",
-            "name": "ON SEMICONDUCTOR",
             "shares": 7.0,
             "marketValueKrw": 1252716.0,
-            "weightPercent": 0.1,
-            "weight": 0.001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.1
           },
           {
             "rank": 55,
-            "codeRaw": "CRDO US Equity",
             "ticker": "CRDO",
-            "name": "Credo Technology Group Holding Ltd",
             "shares": 3.0,
             "marketValueKrw": 1085925.0,
-            "weightPercent": 0.09,
-            "weight": 0.0009,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.09
           },
           {
             "rank": 56,
-            "codeRaw": "FSLR US Equity",
             "ticker": "FSLR",
-            "name": "FIRST SOLAR INC",
             "shares": 2.05,
             "marketValueKrw": 820168.0,
-            "weightPercent": 0.07,
-            "weight": 0.0007000000000000001,
-            "hasExternalTicker": true,
-            "hasProviderValuation": true,
-            "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "weightPercent": 0.07
           }
         ],
         "top10": [
@@ -3978,12 +2416,7 @@
             "hasExternalTicker": false,
             "hasProviderValuation": true,
             "priceTrackingMethod": "provider_valuation_krw",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 2,
@@ -3997,12 +2430,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 3,
@@ -4016,12 +2444,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 4,
@@ -4035,12 +2458,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 5,
@@ -4054,12 +2472,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 6,
@@ -4073,12 +2486,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 7,
@@ -4092,12 +2500,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 8,
@@ -4111,12 +2514,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 9,
@@ -4130,12 +2528,7 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           },
           {
             "rank": 10,
@@ -4149,16 +2542,9 @@
             "hasExternalTicker": true,
             "hasProviderValuation": true,
             "priceTrackingMethod": "external_ticker",
-            "isPriceTracked": true,
-            "sourceFields": {
-              "secId": null,
-              "risep": "",
-              "curp": ""
-            }
+            "isPriceTracked": true
           }
         ],
-        "totalHoldings": 58,
-        "fetchedAt": "2026-06-18T00:18:58.135537+00:00",
         "decomposition": [
           {
             "date": "2026-06-18",
@@ -4193,21 +2579,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 290982.9986175694,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 305404.1192822846,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4256,21 +2627,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 623610.5757682797,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 599820.9546810626,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4319,21 +2675,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 827238.2143846367,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 767732.6835607537,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4382,21 +2723,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 3186241.1685994645,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 3014011.7488789237,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4445,21 +2771,6 @@
             "actionLabel": "매수·매도 추정 없음",
             "actionExplanation": "잔차가 가격 우세 허용구간 안에 있어 추가 매수·매도 방향을 추정하지 않습니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 193273.17389799215,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 177143.4688288093,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4508,21 +2819,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 321139.41947056586,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 313894.2889933326,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4571,21 +2867,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 558309.4551914725,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 564876.5406370944,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4634,21 +2915,6 @@
             "actionLabel": "매수 가능성",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 충분히 높아 추가 매수 또는 편입 확대 가능성이 있습니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 1644605.6795131846,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 1544818.1818181816,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4697,21 +2963,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 414934.1936544468,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 425083.7864639286,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4760,21 +3011,6 @@
             "actionLabel": "약한 매도·축소 관찰",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 낮아 매도·축소 쪽 잔차가 보이지만, 추정 임계치에는 미달합니다.",
             "returnCoverage": 1.0,
-            "priceMeta": {
-              "source": "provider_valuation_krw",
-              "sourceType": "etf_provider_unit_value_krw",
-              "start": {
-                "date": "2026-06-16",
-                "close": 371883.82414282137,
-                "source": "provider_valuation_krw"
-              },
-              "end": {
-                "date": "2026-06-17",
-                "close": 372296.3935251195,
-                "source": "provider_valuation_krw"
-              },
-              "message": "ETF PDF의 평가금액/수량 단가(KRW)를 수익률로 사용해 환율 효과를 포함했습니다."
-            },
             "priceReturnStartDate": "2026-06-16",
             "priceReturnEndDate": "2026-06-17",
             "priceSource": "provider_valuation_krw",
@@ -4984,9 +3220,7 @@
               "residual_watch": "residual direction is shown as weak buy or weak sell watch, but it is below the directional buy/sell threshold",
               "likely_buy_or_sell": "residual is at or beyond the directional threshold; still a possibility signal, not confirmed trading"
             }
-          },
-          "priceErrors": {},
-          "priceDiagnostics": {}
+          }
         }
       }
     }

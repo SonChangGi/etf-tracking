@@ -1,6 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, statSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import vm from 'node:vm';
 
@@ -20,15 +20,38 @@ const context = vm.createContext({ console });
 vm.runInContext(source, context, { filename: 'assets/app.js' });
 const api = context.__ETF_TRACKING_TESTS__;
 if (!api) throw new Error('ETF tracking test API missing');
-const parsed = api.parseDashboard(JSON.parse(readFileSync('data/dashboard.json', 'utf8')));
+const dashboardRaw = readFileSync('data/dashboard.json', 'utf8');
+if (statSync('data/dashboard.json').size > 50_000_000) throw new Error('dashboard payload should stay below GitHub large-file warning threshold');
+const historyRaw = readFileSync('data/history.json', 'utf8');
+if (statSync('data/history.json').size > 50_000_000) throw new Error('history payload should stay below GitHub large-file warning threshold');
+for (const internalKey of ['priceDiagnostics', 'priceMeta', 'sourceFields']) {
+  if (dashboardRaw.includes(internalKey)) throw new Error(`dashboard payload leaked internal diagnostic key: ${internalKey}`);
+  if (historyRaw.includes(internalKey)) throw new Error(`history payload leaked internal diagnostic key: ${internalKey}`);
+}
+if (Object.hasOwn(JSON.parse(historyRaw), 'diagnostics')) throw new Error('public history payload should not include run diagnostics');
+const parsed = api.parseDashboard(JSON.parse(dashboardRaw));
 if (parsed.etfs.length !== 3) throw new Error('dashboard must expose three ETFs');
 if (!parsed.etfs.some((etf) => etf.id === 'koact-nasdaq-growth-active')) throw new Error('KoAct ETF missing');
 if (!parsed.historyPolicy?.scheduledLookbackDays) throw new Error('dashboard history policy missing');
 if (parsed.historyPolicy?.missingOnlyDefault !== true) throw new Error('missing-only history policy missing');
+if (!parsed.historyPolicy?.startDateExplanation?.includes('2026-04-01은 공급자 한계가 아니라')) throw new Error('history policy should explain that 2026-04-01 was not the provider limit');
+const expectedStarts = new Map([
+  ['time-nasdaq100-active', '2022-05-11'],
+  ['time-global-ai-active', '2023-05-16'],
+  ['koact-nasdaq-growth-active', '2025-02-25'],
+]);
+for (const [etfId, expectedStart] of expectedStarts) {
+  const etf = parsed.etfs.find((item) => item.id === etfId);
+  if (etf?.availableStartDate !== expectedStart) throw new Error(`${etfId} should expose listing-date historical start ${expectedStart}`);
+  if (etf?.sourceAvailability?.oldestStoredDate !== expectedStart) throw new Error(`${etfId} source availability should start at listing date`);
+  if (etf?.sourceAvailability?.storedFromListingDate !== true) throw new Error(`${etfId} should report listing-date backfill coverage`);
+}
 if (parsed.manualUpdatePolicy?.workflowUrl !== 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml') {
   throw new Error('manual update workflow policy missing');
 }
 const selected = parsed.etfs[0];
+const sourceAvailabilityText = api.formatSourceAvailability(selected.sourceAvailability);
+if (!sourceAvailabilityText.summary.includes('상장일부터 저장')) throw new Error('source availability label should call out listing-date backfill');
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
 const sndkSeries = series.find((item) => item.key === 'SNDK');
