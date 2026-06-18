@@ -15,6 +15,18 @@
     '#0f766e', '#be123c', '#4338ca', '#0369a1', '#a16207',
     '#15803d', '#c2410c', '#7f1d1d', '#581c87', '#0e7490',
   ];
+  const SIGNAL_TABLE_INITIAL_LIMIT = 30;
+  const SIGNAL_TABLE_LOAD_STEP = 30;
+  const SIGNAL_TABLE_WEIGHT_THRESHOLD = 0.25;
+  const SIGNAL_TABLE_RESIDUAL_THRESHOLD = 0.1;
+  const SIGNAL_TABLE_DEFAULT_FILTER = Object.freeze({
+    bucket: 'signal',
+    query: '',
+    rankScope: 'all',
+    magnitude: 'all',
+    sort: 'recent',
+    limit: SIGNAL_TABLE_INITIAL_LIMIT,
+  });
   const $ = (selector) => (typeof document === 'undefined' ? null : document.querySelector(selector));
 
   const state = {
@@ -22,6 +34,7 @@
     selectedEtfId: null,
     startDate: '',
     endDate: '',
+    signalTableFilters: {},
   };
 
   const FALLBACK_DASHBOARD = {
@@ -296,6 +309,10 @@
     $('#copy-update-command')?.addEventListener('click', () => {
       copyManualUpdateCommand();
     });
+    const signalTables = $('#etf-signal-tables');
+    signalTables?.addEventListener('input', handleSignalTableControlInput);
+    signalTables?.addEventListener('change', handleSignalTableControlChange);
+    signalTables?.addEventListener('click', handleSignalTableControlClick);
   }
 
   function handleEtfSelectionChange(etfId) {
@@ -313,6 +330,80 @@
   function handleDateRangeReset() {
     syncDateInputsForSelected(true);
     renderSelectionDependentViews();
+  }
+
+  function handleSignalTableControlInput(event) {
+    const control = event.target?.closest?.('[data-signal-filter]');
+    if (!control || control.dataset.signalFilter !== 'query') return;
+    const etfId = control.dataset.etfId;
+    updateSignalTableFilter(etfId, { query: control.value }, true);
+    restoreSignalTableFocus(etfId, 'query', control.selectionStart);
+  }
+
+  function handleSignalTableControlChange(event) {
+    const control = event.target?.closest?.('[data-signal-filter]');
+    if (!control || control.dataset.signalFilter === 'query') return;
+    updateSignalTableFilter(control.dataset.etfId, { [control.dataset.signalFilter]: control.value });
+  }
+
+  function handleSignalTableControlClick(event) {
+    const bucketButton = event.target?.closest?.('[data-signal-bucket]');
+    if (bucketButton) {
+      updateSignalTableFilter(bucketButton.dataset.etfId, { bucket: bucketButton.dataset.signalBucket });
+      return;
+    }
+    const loadButton = event.target?.closest?.('[data-signal-load-more]');
+    if (loadButton) {
+      const filter = signalTableFilterFor(loadButton.dataset.etfId);
+      updateSignalTableFilter(loadButton.dataset.etfId, { limit: filter.limit + SIGNAL_TABLE_LOAD_STEP }, false);
+      return;
+    }
+    const showAllButton = event.target?.closest?.('[data-signal-show-all]');
+    if (showAllButton) {
+      updateSignalTableFilter(showAllButton.dataset.etfId, { limit: Number.MAX_SAFE_INTEGER }, false);
+      return;
+    }
+    const resetButton = event.target?.closest?.('[data-signal-reset]');
+    if (resetButton) resetSignalTableFilter(resetButton.dataset.etfId);
+  }
+
+  function signalTableDefaultFilter() {
+    return { ...SIGNAL_TABLE_DEFAULT_FILTER };
+  }
+
+  function signalTableFilterFor(etfId) {
+    const key = stringOr(etfId, 'default');
+    if (!state.signalTableFilters[key]) state.signalTableFilters[key] = signalTableDefaultFilter();
+    return state.signalTableFilters[key];
+  }
+
+  function updateSignalTableFilter(etfId, patch, resetLimit = true) {
+    const key = stringOr(etfId, 'default');
+    state.signalTableFilters[key] = normalizeSignalTableFilter({
+      ...signalTableFilterFor(key),
+      ...patch,
+      limit: resetLimit ? SIGNAL_TABLE_INITIAL_LIMIT : finiteOrNull(patch?.limit) ?? signalTableFilterFor(key).limit,
+    });
+    renderSignalTables();
+  }
+
+  function resetSignalTableFilter(etfId) {
+    state.signalTableFilters[stringOr(etfId, 'default')] = signalTableDefaultFilter();
+    renderSignalTables();
+  }
+
+  function restoreSignalTableFocus(etfId, field, selectionStart) {
+    if (typeof document === 'undefined' || typeof window === 'undefined') return;
+    window.requestAnimationFrame(() => {
+      const next = asArray(document.querySelectorAll('[data-signal-filter]'))
+        .find((control) => control.dataset.etfId === etfId && control.dataset.signalFilter === field);
+      if (!next) return;
+      next.focus();
+      if (typeof next.setSelectionRange === 'function') {
+        const pos = finiteOrNull(selectionStart) ?? next.value.length;
+        next.setSelectionRange(pos, pos);
+      }
+    });
   }
 
   function initializeSelection(dashboard) {
@@ -856,6 +947,10 @@
     const article = document.createElement('article');
     article.className = 'panel signal-table-card';
     const counts = signalTableCounts(rows);
+    const filter = signalTableFilterFor(etf.id);
+    const filteredRows = filterSignalTableRows(rows, filter);
+    const visibleRows = filteredRows.slice(0, filter.limit);
+    const hiddenRows = Math.max(filteredRows.length - visibleRows.length, 0);
     const periodStart = history[0]?.date || etf.availableStartDate || state.startDate;
     const periodEnd = history.at(-1)?.date || etf.availableEndDate || state.endDate;
     article.innerHTML = `
@@ -871,6 +966,55 @@
           <span class="marker-exit">편출 <strong>${counts.exit.toLocaleString('ko-KR')}</strong></span>
           <span class="marker-buy">매수 관찰 <strong>${counts.buy.toLocaleString('ko-KR')}</strong></span>
           <span class="marker-sell">매도 관찰 <strong>${counts.sell.toLocaleString('ko-KR')}</strong></span>
+        </div>
+      </div>
+      <div class="signal-table-toolbar" aria-label="${escapeAttribute(etf.shortName || etf.name || 'ETF')} 표 필터">
+        <div class="signal-filter-chips" role="group" aria-label="이벤트 필터">
+          ${signalBucketButton(etf.id, filter, 'signal', '핵심 신호', counts.entry + counts.exit + counts.buy + counts.sell)}
+          ${signalBucketButton(etf.id, filter, 'all', '전체 TOP10', rows.length)}
+          ${signalBucketButton(etf.id, filter, 'entry', '편입', counts.entry)}
+          ${signalBucketButton(etf.id, filter, 'exit', '편출', counts.exit)}
+          ${signalBucketButton(etf.id, filter, 'buy', '매수 관찰', counts.buy)}
+          ${signalBucketButton(etf.id, filter, 'sell', '매도 관찰', counts.sell)}
+        </div>
+        <div class="signal-filter-grid">
+          <label>
+            <span>종목/티커</span>
+            <input type="search" value="${escapeAttribute(filter.query)}" placeholder="MU, SpaceX…" data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="query" autocomplete="off">
+          </label>
+          <label>
+            <span>순위 조건</span>
+            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="rankScope">
+              ${selectOption('all', filter.rankScope, '전체')}
+              ${selectOption('current_top10', filter.rankScope, '현재 TOP10')}
+              ${selectOption('previous_top10', filter.rankScope, '전일 TOP10')}
+              ${selectOption('rank_changed', filter.rankScope, '순위/편입 변화')}
+            </select>
+          </label>
+          <label>
+            <span>변화 크기</span>
+            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="magnitude">
+              ${selectOption('all', filter.magnitude, '전체')}
+              ${selectOption('weight_025', filter.magnitude, `비중 |Δ| ≥ ${SIGNAL_TABLE_WEIGHT_THRESHOLD}pp`)}
+              ${selectOption('residual_010', filter.magnitude, `잔차 |Δ| ≥ ${SIGNAL_TABLE_RESIDUAL_THRESHOLD}pp`)}
+            </select>
+          </label>
+          <label>
+            <span>정렬</span>
+            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="sort">
+              ${selectOption('recent', filter.sort, '최신순')}
+              ${selectOption('oldest', filter.sort, '오래된순')}
+              ${selectOption('event', filter.sort, '이벤트 우선')}
+              ${selectOption('weight_delta', filter.sort, '비중 변화 큰 순')}
+              ${selectOption('residual_delta', filter.sort, '잔차 큰 순')}
+              ${selectOption('name', filter.sort, '종목명순')}
+            </select>
+          </label>
+          <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-reset>필터 초기화</button>
+        </div>
+        <div class="signal-table-status">
+          <span>필터 결과 <strong>${filteredRows.length.toLocaleString('ko-KR')}</strong> / 전체 <strong>${rows.length.toLocaleString('ko-KR')}</strong>건</span>
+          <span>현재 <strong>${visibleRows.length.toLocaleString('ko-KR')}</strong>건 표시</span>
         </div>
       </div>
       <div class="table-wrap signal-table-wrap">
@@ -890,13 +1034,18 @@
           <tbody></tbody>
         </table>
       </div>
+      <div class="signal-table-actions">
+        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-load-more ${hiddenRows ? '' : 'disabled'}>30개 더 보기</button>
+        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-show-all ${hiddenRows ? '' : 'disabled'}>필터 결과 전체 보기</button>
+        <span>${hiddenRows ? `${hiddenRows.toLocaleString('ko-KR')}건 더 있음` : '모든 필터 결과 표시 중'}</span>
+      </div>
     `;
     const tbody = article.querySelector('tbody');
-    if (!rows.length) {
-      tbody.innerHTML = '<tr><td colspan="7">선택 기간에 표시할 행이 없습니다.</td></tr>';
+    if (!visibleRows.length) {
+      tbody.innerHTML = '<tr><td colspan="7">필터 조건에 맞는 행이 없습니다. 이벤트·검색·변화 크기 조건을 완화해 보세요.</td></tr>';
       return article;
     }
-    tbody.replaceChildren(...rows.map((row) => {
+    tbody.replaceChildren(...visibleRows.map((row) => {
       const tr = document.createElement('tr');
       tr.className = `signal-row ${escapeAttribute(signalBucket(row))}`;
       [
@@ -918,6 +1067,118 @@
     return article;
   }
 
+  function signalBucketButton(etfId, filter, bucket, label, count) {
+    const active = filter.bucket === bucket;
+    return `
+      <button type="button" class="signal-filter-chip ${active ? 'active' : ''}" aria-pressed="${active ? 'true' : 'false'}" data-etf-id="${escapeAttribute(etfId)}" data-signal-bucket="${escapeAttribute(bucket)}">
+        <span>${escapeHtml(label)}</span><strong>${numberOr(count, 0).toLocaleString('ko-KR')}</strong>
+      </button>
+    `;
+  }
+
+  function selectOption(value, selectedValue, label) {
+    return `<option value="${escapeAttribute(value)}" ${value === selectedValue ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+  }
+
+  function normalizeSignalTableFilter(filter) {
+    const bucketOptions = new Set(['signal', 'all', 'entry', 'exit', 'buy', 'sell', 'neutral']);
+    const rankOptions = new Set(['all', 'current_top10', 'previous_top10', 'rank_changed']);
+    const magnitudeOptions = new Set(['all', 'weight_025', 'residual_010']);
+    const sortOptions = new Set(['recent', 'oldest', 'event', 'weight_delta', 'residual_delta', 'name']);
+    const limit = Math.trunc(numberOr(filter?.limit, SIGNAL_TABLE_INITIAL_LIMIT));
+    return {
+      bucket: bucketOptions.has(filter?.bucket) ? filter.bucket : SIGNAL_TABLE_DEFAULT_FILTER.bucket,
+      query: stringOr(filter?.query, '').trim(),
+      rankScope: rankOptions.has(filter?.rankScope) ? filter.rankScope : SIGNAL_TABLE_DEFAULT_FILTER.rankScope,
+      magnitude: magnitudeOptions.has(filter?.magnitude) ? filter.magnitude : SIGNAL_TABLE_DEFAULT_FILTER.magnitude,
+      sort: sortOptions.has(filter?.sort) ? filter.sort : SIGNAL_TABLE_DEFAULT_FILTER.sort,
+      limit: Math.max(1, Math.min(Number.MAX_SAFE_INTEGER, limit)),
+    };
+  }
+
+  function filterSignalTableRows(rows, filter) {
+    const normalized = normalizeSignalTableFilter(filter);
+    const query = normalized.query.toLocaleLowerCase('ko-KR');
+    return asArray(rows)
+      .filter((row) => matchesSignalBucketFilter(row, normalized.bucket))
+      .filter((row) => matchesSignalQuery(row, query))
+      .filter((row) => matchesSignalRankScope(row, normalized.rankScope))
+      .filter((row) => matchesSignalMagnitude(row, normalized.magnitude))
+      .sort((a, b) => signalTableSortComparator(a, b, normalized.sort));
+  }
+
+  function matchesSignalBucketFilter(row, bucket) {
+    const rowBucket = signalBucket(row);
+    if (bucket === 'all') return true;
+    if (bucket === 'signal') return rowBucket !== 'neutral';
+    return rowBucket === bucket;
+  }
+
+  function matchesSignalQuery(row, query) {
+    if (!query) return true;
+    return [
+      row?.name,
+      row?.ticker,
+      row?.codeRaw,
+      row?.instrumentId,
+      row?.etfName,
+    ].some((value) => stringOr(value).toLocaleLowerCase('ko-KR').includes(query));
+  }
+
+  function matchesSignalRankScope(row, scope) {
+    if (scope === 'all') return true;
+    if (scope === 'current_top10') return row?.currentIsTop10 === true;
+    if (scope === 'previous_top10') return row?.previousWasTop10 === true;
+    if (scope === 'rank_changed') {
+      const previousRank = finiteOrNull(row?.previousRank);
+      const rank = finiteOrNull(row?.rank);
+      return Boolean(row?.membershipChange)
+        || row?.currentIsTop10 !== row?.previousWasTop10
+        || (previousRank !== null && rank !== null && previousRank !== rank);
+    }
+    return true;
+  }
+
+  function matchesSignalMagnitude(row, magnitude) {
+    if (magnitude === 'all') return true;
+    if (magnitude === 'weight_025') return Math.abs(numberOr(row?.deltaActualPercentPoint, 0)) >= SIGNAL_TABLE_WEIGHT_THRESHOLD;
+    if (magnitude === 'residual_010') return Math.abs(numberOr(row?.deltaResidualPercentPoint, 0)) >= SIGNAL_TABLE_RESIDUAL_THRESHOLD;
+    return true;
+  }
+
+  function signalTableSortComparator(a, b, sort) {
+    if (sort === 'oldest') return signalTableDateAsc(a, b) || signalTablePriority(a) - signalTablePriority(b) || signalTableNameAsc(a, b);
+    if (sort === 'event') return signalTablePriority(a) - signalTablePriority(b) || signalTableDateDesc(a, b) || signalTableNameAsc(a, b);
+    if (sort === 'weight_delta') return absoluteDesc(a, b, 'deltaActualPercentPoint') || signalTableDateDesc(a, b) || signalTableNameAsc(a, b);
+    if (sort === 'residual_delta') return absoluteDesc(a, b, 'deltaResidualPercentPoint') || signalTableDateDesc(a, b) || signalTableNameAsc(a, b);
+    if (sort === 'name') return signalTableNameAsc(a, b) || signalTableDateDesc(a, b);
+    return signalTableRowComparator(a, b);
+  }
+
+  function signalTableRowComparator(a, b) {
+    return signalTableDateDesc(a, b)
+      || signalTablePriority(a) - signalTablePriority(b)
+      || numberOr(a.displayOrder, 999) - numberOr(b.displayOrder, 999)
+      || numberOr(a.rank, 999) - numberOr(b.rank, 999)
+      || signalTableNameAsc(a, b);
+  }
+
+  function signalTableDateDesc(a, b) {
+    return stringOr(b.date, b.snapshotDate).localeCompare(stringOr(a.date, a.snapshotDate));
+  }
+
+  function signalTableDateAsc(a, b) {
+    return stringOr(a.date, a.snapshotDate).localeCompare(stringOr(b.date, b.snapshotDate));
+  }
+
+  function signalTableNameAsc(a, b) {
+    return stringOr(a.name, a.ticker, a.codeRaw).localeCompare(stringOr(b.name, b.ticker, b.codeRaw), 'ko');
+  }
+
+  function absoluteDesc(a, b, field) {
+    return Math.abs(numberOr(b?.[field], 0)) - Math.abs(numberOr(a?.[field], 0));
+  }
+
   function buildEtfSignalTableRows(etf, startDate, endDate) {
     const rows = [];
     filterHistory(etf?.history || [], startDate, endDate).forEach((snapshot) => {
@@ -932,13 +1193,7 @@
         });
       });
     });
-    return rows.sort((a, b) => (
-      stringOr(b.date, b.snapshotDate).localeCompare(stringOr(a.date, a.snapshotDate))
-      || signalTablePriority(a) - signalTablePriority(b)
-      || numberOr(a.displayOrder, 999) - numberOr(b.displayOrder, 999)
-      || numberOr(a.rank, 999) - numberOr(b.rank, 999)
-      || stringOr(a.name).localeCompare(stringOr(b.name), 'ko')
-    ));
+    return rows.sort(signalTableRowComparator);
   }
 
   function includeSignalTableRow(row) {
@@ -1432,12 +1687,24 @@
       selectedEtfId: state.selectedEtfId,
       startDate: state.startDate,
       endDate: state.endDate,
-      signalTableRows: buildSignalTableGroups().map((group) => ({
-        etfId: group.etf.id,
-        rows: group.rows.length,
-        counts: signalTableCounts(group.rows),
-      })),
+      signalTableRows: buildSignalTableGroups().map((group) => {
+        const filter = signalTableFilterFor(group.etf.id);
+        const filteredRows = filterSignalTableRows(group.rows, filter);
+        return {
+          etfId: group.etf.id,
+          rows: group.rows.length,
+          filteredRows: filteredRows.length,
+          visibleRows: filteredRows.slice(0, filter.limit).length,
+          filter: { ...filter },
+          counts: signalTableCounts(group.rows),
+        };
+      }),
     };
+  }
+
+  function setSignalTableFilterForTests(etfId, patch) {
+    updateSignalTableFilter(etfId, patch);
+    return stateSnapshotForTests();
   }
 
   function safeHttpUrl(value, fallback) {
@@ -1497,6 +1764,8 @@
       sortAttributionRows,
       buildSignalTableGroups,
       buildEtfSignalTableRows,
+      signalTableDefaultFilter,
+      filterSignalTableRows,
       signalBucket,
       signalTableCounts,
       handleEtfSelectionChange,
@@ -1504,6 +1773,7 @@
       handleDateRangeReset,
       stateSnapshotForTests,
       setDashboardForTests,
+      setSignalTableFilterForTests,
       actionHint,
       priceIdentifierCell,
       holdingKey,

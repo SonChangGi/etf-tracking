@@ -92,6 +92,30 @@ if (!selectedSignalRows.length || selectedSignalCounts.entry < 1 || selectedSign
 if (!selectedSignalRows.some((row) => /Space Exploration Technologies/i.test(row.name) && api.signalBucket(row) === 'entry')) {
   throw new Error('ETF signal table should show SpaceX-like TOP10 entry rows');
 }
+const defaultSignalFilter = api.signalTableDefaultFilter();
+if (defaultSignalFilter.bucket !== 'signal' || defaultSignalFilter.limit !== 30) {
+  throw new Error('ETF signal table should default to a compact core-signal view');
+}
+const defaultFilteredRows = api.filterSignalTableRows(selectedSignalRows, defaultSignalFilter);
+if (!defaultFilteredRows.length || defaultFilteredRows.some((row) => api.signalBucket(row) === 'neutral')) {
+  throw new Error('ETF signal table default filter should hide neutral TOP10 rows');
+}
+const entryFilteredRows = api.filterSignalTableRows(selectedSignalRows, { ...defaultSignalFilter, bucket: 'entry' });
+if (!entryFilteredRows.length || entryFilteredRows.some((row) => api.signalBucket(row) !== 'entry')) {
+  throw new Error('ETF signal table event filter should isolate entry rows');
+}
+const queryFilteredRows = api.filterSignalTableRows(selectedSignalRows, { ...defaultSignalFilter, bucket: 'all', query: 'Space' });
+if (!queryFilteredRows.some((row) => /Space Exploration Technologies/i.test(row.name))) {
+  throw new Error('ETF signal table query filter should match holdings by name/ticker');
+}
+const residualFilteredRows = api.filterSignalTableRows(selectedSignalRows, { ...defaultSignalFilter, bucket: 'all', magnitude: 'residual_010' });
+if (!residualFilteredRows.length || residualFilteredRows.some((row) => Math.abs(row.deltaResidualPercentPoint || 0) < 0.1)) {
+  throw new Error('ETF signal table residual magnitude filter should keep meaningful residual rows only');
+}
+const residualSortedRows = api.filterSignalTableRows(selectedSignalRows, { ...defaultSignalFilter, bucket: 'all', sort: 'residual_delta' });
+if (residualSortedRows.length > 1 && Math.abs(residualSortedRows[0].deltaResidualPercentPoint || 0) < Math.abs(residualSortedRows[1].deltaResidualPercentPoint || 0)) {
+  throw new Error('ETF signal table residual sort should put larger residuals first');
+}
 const koactSignalRows = api.buildEtfSignalTableRows(koact, koact.availableStartDate, koact.availableEndDate);
 const koactSignalCounts = api.signalTableCounts(koactSignalRows);
 if (!koactSignalRows.some((row) => /Space Exploration Technologies/i.test(row.name) && row.classification === 'new_entry' && api.signalBucket(row) === 'entry')) {
@@ -102,6 +126,15 @@ if (koactSignalCounts.buy < 1 || koactSignalCounts.sell < 1) {
 }
 const fullSignalSnapshot = api.setDashboardForTests(parsed);
 const selectedFullRows = fullSignalSnapshot.signalTableRows.find((item) => item.etfId === selected.id)?.rows || 0;
+const selectedFullTable = fullSignalSnapshot.signalTableRows.find((item) => item.etfId === selected.id);
+if (!(selectedFullTable?.filteredRows < selectedFullTable?.rows && selectedFullTable?.visibleRows <= 30)) {
+  throw new Error('ETF signal table snapshot should expose compact filtered/visible row counts');
+}
+const querySnapshot = api.setSignalTableFilterForTests(selected.id, { bucket: 'all', query: 'Space' });
+const queryTable = querySnapshot.signalTableRows.find((item) => item.etfId === selected.id);
+if (!queryTable?.filteredRows || queryTable.filteredRows >= selectedFullRows) {
+  throw new Error('ETF signal table controls should narrow rows by query');
+}
 api.handleDateRangeChange('startDate', selected.availableEndDate);
 const narrowedSignalSnapshot = api.stateSnapshotForTests();
 const selectedNarrowRows = narrowedSignalSnapshot.signalTableRows.find((item) => item.etfId === selected.id)?.rows || 0;
@@ -175,8 +208,9 @@ try {
   if (!app.includes('lifecycleDirection') || !styles.includes('signal-entry')) throw new Error('chart lifecycle entry markers missing');
   if (!html.includes('marker-entry') || !html.includes('＋ 편입')) throw new Error('chart marker UX legend missing');
   if (!html.includes('etf-signal-tables') || !html.includes('ETF별 TOP10 신호·비중 변화 표')) throw new Error('ETF signal table shell missing');
-  if (!app.includes('renderSignalTables') || !app.includes('buildEtfSignalTableRows')) throw new Error('ETF signal table renderer missing');
-  if (!styles.includes('signal-table-card') || !styles.includes('signal-count-strip')) throw new Error('ETF signal table styles missing');
+  if (!app.includes('renderSignalTables') || !app.includes('buildEtfSignalTableRows') || !app.includes('filterSignalTableRows')) throw new Error('ETF signal table renderer missing');
+  if (!app.includes('data-signal-filter') || !app.includes('data-signal-bucket')) throw new Error('ETF signal table filter controls missing');
+  if (!styles.includes('signal-table-card') || !styles.includes('signal-count-strip') || !styles.includes('signal-filter-grid')) throw new Error('ETF signal table styles missing');
   if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
   if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');
