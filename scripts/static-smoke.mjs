@@ -24,6 +24,18 @@ if (parsed.manualUpdatePolicy?.workflowUrl !== 'https://github.com/SonChangGi/et
 const selected = parsed.etfs[0];
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
+const sndkSeries = series.find((item) => item.key === 'SNDK');
+if (!sndkSeries?.signalPoints.some((point) => point.actionEstimate === 'weak_sell_watch' && point.direction === 'sell')) {
+  throw new Error('hover chart should carry selected-period residual sell-watch markers for SNDK');
+}
+if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_buy' && point.direction === 'buy')) {
+  throw new Error('hover chart should include selected-period buy markers, not just residual watches');
+}
+if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_sell' && point.direction === 'sell')) {
+  throw new Error('hover chart should include selected-period sell markers, not just residual watches');
+}
+if (api.residualDirection({ actionEstimate: 'likely_buy' })?.direction !== 'buy') throw new Error('likely_buy should map to up-arrow buy direction');
+if (api.residualDirection({ classification: 'residual_watch', deltaResidualPercentPoint: -0.2 })?.direction !== 'sell') throw new Error('negative residual_watch should map to down-arrow sell direction');
 const segmented = api.splitPointSegments([
   { date: '2026-06-15', value: 1 },
   { date: '2026-06-16', value: null },

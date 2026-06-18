@@ -473,9 +473,11 @@
       const hitPaths = segmentPathData.map((path) => `<path class="series-hit" d="${path}" fill="none" stroke="transparent" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
       const segmentPaths = segmentPathData.map((path) => `<path class="series-line" d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`).join('');
       const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? '#fff' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
+      const signalMarkers = renderSeriesSignalMarkers(item.signalPoints, x, y);
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
-      const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}`;
-      return `<g class="chart-series" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}</g>`;
+      const signalCount = item.signalPoints.length ? `, 기간 내 방향 신호 ${item.signalPoints.length}개` : '';
+      const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
+      return `<g class="chart-series" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const legend = renderChartLegend(series, colorByKey);
@@ -483,7 +485,7 @@
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
-    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}.`;
+    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 매수·매도 방향 신호가 화살표로 표시됩니다.`;
     target.innerHTML = `
       <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
       <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
@@ -510,6 +512,20 @@
       const color = colorByKey.get(item.key) || '#475467';
       return `<g class="line-end-label"><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><text x="${item.x2 + 6}" y="${(item.y2 + 4).toFixed(1)}" fill="${color}">${escapeHtml(item.text)}</text></g>`;
     }).join('');
+  }
+
+  function renderSeriesSignalMarkers(signalPoints, x, y) {
+    const markers = asArray(signalPoints).filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
+    if (!markers.length) return '';
+    return `<g class="series-signal-layer">${markers.map((point) => {
+      const buy = point.direction === 'buy';
+      const markerX = x(point.date);
+      const markerY = y(point.value) + (buy ? -18 : 20);
+      const label = point.actionLabel || (buy ? '매수 관찰' : '매도 관찰');
+      const title = `${point.date} ${label}: 잔차 ${formatPercentPoint(point.residual)}`;
+      const classes = `series-signal ${buy ? 'signal-buy' : 'signal-sell'} ${point.strength === 'watch' ? 'signal-watch' : 'signal-strong'}`;
+      return `<g class="${escapeAttribute(classes)}" transform="translate(${markerX.toFixed(1)} ${markerY.toFixed(1)})"><title>${escapeHtml(title)}</title><circle r="${point.strength === 'watch' ? 7 : 8}"/><text text-anchor="middle" dominant-baseline="central">${buy ? '↑' : '↓'}</text></g>`;
+    }).join('')}</g>`;
   }
 
   function renderChartLegend(series, colorByKey) {
@@ -542,6 +558,7 @@
         const holding = universe.find((row) => holdingKey(row) === key);
         return { date: snapshot.date, value: holding?.weightPercent ?? null };
       });
+      const signalPoints = buildSeriesSignalPoints(history, key, points);
       const validPoints = points.filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
       const first = validPoints[0] || null;
       const last = validPoints.at(-1) || null;
@@ -556,9 +573,49 @@
         periodDelta,
         points,
         validPoints,
+        signalPoints,
         isSparse: validPoints.length < points.length * 0.75,
       };
     }).filter((item) => item.points.some((point) => point.value > 0));
+  }
+
+  function buildSeriesSignalPoints(history, key, points) {
+    const pointByDate = new Map(asArray(points).map((point) => [point.date, point]));
+    return asArray(history).flatMap((snapshot) => {
+      const decomposition = asArray(snapshot.decomposition);
+      const row = decomposition.find((item) => holdingKey(item) === key);
+      const signal = residualDirection(row);
+      if (!signal) return [];
+      const weight = finiteOrNull(row.actualWeightPercent) ?? finiteOrNull(pointByDate.get(snapshot.date)?.value);
+      if (weight === null) return [];
+      return [{
+        date: snapshot.date,
+        value: weight,
+        residual: finiteOrNull(row.deltaResidualPercentPoint),
+        actionEstimate: signal.estimate,
+        actionLabel: stringOr(row.actionLabel, signal.direction === 'buy' ? '매수 관찰' : '매도·축소 관찰'),
+        direction: signal.direction,
+        strength: signal.strength,
+      }];
+    });
+  }
+
+  function residualDirection(row) {
+    if (!isRecord(row)) return null;
+    const estimate = stringOr(row.actionEstimate, '');
+    if (estimate === 'likely_buy' || estimate === 'weak_buy_watch') {
+      return { estimate, direction: 'buy', strength: estimate === 'likely_buy' ? 'strong' : 'watch' };
+    }
+    if (estimate === 'likely_sell' || estimate === 'weak_sell_watch') {
+      return { estimate, direction: 'sell', strength: estimate === 'likely_sell' ? 'strong' : 'watch' };
+    }
+    const classification = stringOr(row.classification, '');
+    if (classification !== 'likely_buy' && classification !== 'likely_sell' && classification !== 'residual_watch') return null;
+    const residual = finiteOrNull(row.deltaResidualPercentPoint);
+    if (residual === null || residual === 0) return null;
+    const direction = residual > 0 ? 'buy' : 'sell';
+    const strength = classification === 'residual_watch' ? 'watch' : 'strong';
+    return { estimate: classification, direction, strength };
   }
 
   function splitPointSegments(points) {
@@ -1114,6 +1171,8 @@
       filterHistory,
       buildWeightSeries,
       buildSeriesColorMap,
+      buildSeriesSignalPoints,
+      residualDirection,
       splitPointSegments,
       buildNiceTicks,
       buildDateTicks,
