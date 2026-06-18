@@ -480,7 +480,6 @@
       return `<g class="chart-series" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
-    const legend = renderChartLegend(series, colorByKey);
     const summaryCards = renderChartSummaryCards(series, colorByKey);
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
@@ -502,7 +501,6 @@
         ${paths}
         ${endLabels}
       </svg>
-      <div class="chart-legend">${legend}</div>
       <div class="chart-summary-grid">${summaryCards}</div>
     `;
   }
@@ -526,16 +524,6 @@
       const classes = `series-signal ${buy ? 'signal-buy' : 'signal-sell'} ${point.strength === 'watch' ? 'signal-watch' : 'signal-strong'}`;
       return `<g class="${escapeAttribute(classes)}" transform="translate(${markerX.toFixed(1)} ${markerY.toFixed(1)})"><title>${escapeHtml(title)}</title><circle r="${point.strength === 'watch' ? 7 : 8}"/><text text-anchor="middle" dominant-baseline="central">${buy ? '↑' : '↓'}</text></g>`;
     }).join('')}</g>`;
-  }
-
-  function renderChartLegend(series, colorByKey) {
-    return asArray(series).map((item, index) => {
-      const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
-      const delta = item.periodDelta === null ? '' : ` · ${formatPercentPoint(item.periodDelta)}`;
-      const sparse = item.isSparse ? ` · ${item.validPoints.length}/${item.points.length}일` : '';
-      const label = `${item.rank ? `${item.rank}. ` : ''}${item.label} ${formatWeight(item.latestWeight)}${delta}${sparse}`;
-      return `<span title="${escapeAttribute(item.fullLabel)}"><i class="legend-key" style="background:${color}"></i>${escapeHtml(label)}</span>`;
-    }).join('');
   }
 
   function renderChartSummaryCards(series, colorByKey) {

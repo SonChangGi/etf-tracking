@@ -9,6 +9,13 @@ for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/da
 }
 
 const source = readFileSync('assets/app.js', 'utf8');
+const styles = readFileSync('assets/styles.css', 'utf8');
+if (/class="chart-legend"|renderChartLegend/.test(source)) {
+  throw new Error('weight chart should not render duplicate legend and summary cards');
+}
+if (!/\.chart-summary-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/s.test(styles)) {
+  throw new Error('weight chart summary should use a five-column desktop grid for 1-5 / 6-10 rows');
+}
 const context = vm.createContext({ console });
 vm.runInContext(source, context, { filename: 'assets/app.js' });
 const api = context.__ETF_TRACKING_TESTS__;
