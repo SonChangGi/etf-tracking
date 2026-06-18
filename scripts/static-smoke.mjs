@@ -84,6 +84,39 @@ for (const holding of selected.latest?.top10 || []) {
 }
 const sortedRows = api.sortAttributionRows(selected.latest?.decomposition || []);
 if (sortedRows.length && sortedRows[0].displayScope !== 'current_top10') throw new Error('decomposition rows should show current TOP10 first');
+const selectedSignalRows = api.buildEtfSignalTableRows(selected, selected.availableStartDate, selected.availableEndDate);
+const selectedSignalCounts = api.signalTableCounts(selectedSignalRows);
+if (!selectedSignalRows.length || selectedSignalCounts.entry < 1 || selectedSignalCounts.exit < 1) {
+  throw new Error('ETF signal table should include selected-period TOP10 entry/exit rows');
+}
+if (!selectedSignalRows.some((row) => /Space Exploration Technologies/i.test(row.name) && api.signalBucket(row) === 'entry')) {
+  throw new Error('ETF signal table should show SpaceX-like TOP10 entry rows');
+}
+const koactSignalRows = api.buildEtfSignalTableRows(koact, koact.availableStartDate, koact.availableEndDate);
+const koactSignalCounts = api.signalTableCounts(koactSignalRows);
+if (!koactSignalRows.some((row) => /Space Exploration Technologies/i.test(row.name) && row.classification === 'new_entry' && api.signalBucket(row) === 'entry')) {
+  throw new Error('ETF signal table should show 신규 편입 rows when residual buy is unavailable');
+}
+if (koactSignalCounts.buy < 1 || koactSignalCounts.sell < 1) {
+  throw new Error('ETF signal table should count buy and sell observations');
+}
+const fullSignalSnapshot = api.setDashboardForTests(parsed);
+const selectedFullRows = fullSignalSnapshot.signalTableRows.find((item) => item.etfId === selected.id)?.rows || 0;
+api.handleDateRangeChange('startDate', selected.availableEndDate);
+const narrowedSignalSnapshot = api.stateSnapshotForTests();
+const selectedNarrowRows = narrowedSignalSnapshot.signalTableRows.find((item) => item.etfId === selected.id)?.rows || 0;
+if (!(selectedNarrowRows > 0 && selectedNarrowRows < selectedFullRows)) {
+  throw new Error('ETF signal tables should recompute when the selected date range changes');
+}
+api.handleEtfSelectionChange('koact-nasdaq-growth-active');
+const switchedSignalSnapshot = api.stateSnapshotForTests();
+if (switchedSignalSnapshot.selectedEtfId !== 'koact-nasdaq-growth-active') {
+  throw new Error('ETF signal tables should preserve selected ETF changes through the shared handler');
+}
+if (!switchedSignalSnapshot.signalTableRows.some((item) => item.etfId === 'koact-nasdaq-growth-active' && item.rows > 0)) {
+  throw new Error('ETF signal tables should keep all ETF cards after ETF selection changes');
+}
+api.handleDateRangeReset();
 if (api.QUANT_DASHBOARD_URL !== 'https://sonchanggi.github.io/quant-dashboard/') throw new Error('return dashboard URL changed');
 if (api.AUTOMATION_STATUS_URL !== 'data/automation-status.json') throw new Error('automation status URL changed');
 if (api.WORKFLOW_URL !== 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml') throw new Error('workflow URL changed');
@@ -141,6 +174,9 @@ try {
   if (!app.includes('chart-series') || !app.includes('series-hit')) throw new Error('chart hover emphasis missing');
   if (!app.includes('lifecycleDirection') || !styles.includes('signal-entry')) throw new Error('chart lifecycle entry markers missing');
   if (!html.includes('marker-entry') || !html.includes('＋ 편입')) throw new Error('chart marker UX legend missing');
+  if (!html.includes('etf-signal-tables') || !html.includes('ETF별 TOP10 신호·비중 변화 표')) throw new Error('ETF signal table shell missing');
+  if (!app.includes('renderSignalTables') || !app.includes('buildEtfSignalTableRows')) throw new Error('ETF signal table renderer missing');
+  if (!styles.includes('signal-table-card') || !styles.includes('signal-count-strip')) throw new Error('ETF signal table styles missing');
   if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
   if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');

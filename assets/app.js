@@ -282,25 +282,37 @@
 
   function wireControls() {
     $('#etf-select')?.addEventListener('change', (event) => {
-      state.selectedEtfId = event.target.value;
-      syncDateInputsForSelected(false);
-      renderSelectedEtf();
+      handleEtfSelectionChange(event.target.value);
     });
     $('#start-date')?.addEventListener('change', (event) => {
-      state.startDate = event.target.value;
-      renderSelectedEtf();
+      handleDateRangeChange('startDate', event.target.value);
     });
     $('#end-date')?.addEventListener('change', (event) => {
-      state.endDate = event.target.value;
-      renderSelectedEtf();
+      handleDateRangeChange('endDate', event.target.value);
     });
     $('#reset-range')?.addEventListener('click', () => {
-      syncDateInputsForSelected(true);
-      renderSelectedEtf();
+      handleDateRangeReset();
     });
     $('#copy-update-command')?.addEventListener('click', () => {
       copyManualUpdateCommand();
     });
+  }
+
+  function handleEtfSelectionChange(etfId) {
+    state.selectedEtfId = stringOr(etfId, state.selectedEtfId, '');
+    syncDateInputsForSelected(false);
+    renderSelectionDependentViews();
+  }
+
+  function handleDateRangeChange(field, value) {
+    if (field !== 'startDate' && field !== 'endDate') return;
+    state[field] = stringOr(value, '');
+    renderSelectionDependentViews();
+  }
+
+  function handleDateRangeReset() {
+    syncDateInputsForSelected(true);
+    renderSelectionDependentViews();
   }
 
   function initializeSelection(dashboard) {
@@ -347,8 +359,13 @@
   function renderAll() {
     renderOverview();
     renderManualUpdate();
+    renderSelectionDependentViews();
+  }
+
+  function renderSelectionDependentViews() {
     renderSelectedEtf();
     renderSignals();
+    renderSignalTables();
   }
 
   function renderOverview() {
@@ -815,6 +832,229 @@
     }));
   }
 
+  function renderSignalTables() {
+    const target = $('#etf-signal-tables');
+    if (!target || !state.dashboard) return;
+    const tableGroups = buildSignalTableGroups();
+    if (!tableGroups.some((group) => group.rows.length)) {
+      target.innerHTML = '<div class="skeleton-line">선택 기간에 표시할 TOP10 신호·비중 변화가 없습니다.</div>';
+      return;
+    }
+    target.replaceChildren(...tableGroups.map(({ etf, rows, history }) => renderEtfSignalTableCard(etf, rows, history)));
+  }
+
+  function buildSignalTableGroups(dashboard = state.dashboard, startDate = state.startDate, endDate = state.endDate) {
+    if (!dashboard) return [];
+    return asArray(dashboard.etfs).map((etf) => ({
+      etf,
+      rows: buildEtfSignalTableRows(etf, startDate, endDate),
+      history: filterHistory(etf.history, startDate, endDate),
+    }));
+  }
+
+  function renderEtfSignalTableCard(etf, rows, history) {
+    const article = document.createElement('article');
+    article.className = 'panel signal-table-card';
+    const counts = signalTableCounts(rows);
+    const periodStart = history[0]?.date || etf.availableStartDate || state.startDate;
+    const periodEnd = history.at(-1)?.date || etf.availableEndDate || state.endDate;
+    article.innerHTML = `
+      <div class="signal-table-header">
+        <div>
+          <p class="eyebrow">${escapeHtml(etf.provider || 'ETF')}</p>
+          <h4>${escapeHtml(etf.shortName || etf.name || 'ETF')}</h4>
+          <p>${escapeHtml(formatMaybeDate(periodStart))} → ${escapeHtml(formatMaybeDate(periodEnd))} · ${history.length.toLocaleString('ko-KR')}개 스냅샷</p>
+        </div>
+        <div class="signal-count-strip" aria-label="신호 요약">
+          <span>전체 <strong>${counts.total.toLocaleString('ko-KR')}</strong></span>
+          <span class="marker-entry">편입 <strong>${counts.entry.toLocaleString('ko-KR')}</strong></span>
+          <span class="marker-exit">편출 <strong>${counts.exit.toLocaleString('ko-KR')}</strong></span>
+          <span class="marker-buy">매수 관찰 <strong>${counts.buy.toLocaleString('ko-KR')}</strong></span>
+          <span class="marker-sell">매도 관찰 <strong>${counts.sell.toLocaleString('ko-KR')}</strong></span>
+        </div>
+      </div>
+      <div class="table-wrap signal-table-wrap">
+        <table class="data-table signal-table">
+          <caption>${escapeHtml(etf.shortName || etf.name || 'ETF')} 선택 기간 TOP10 신호와 비중 변화</caption>
+          <thead>
+            <tr>
+              <th scope="col">날짜</th>
+              <th scope="col">이벤트/판정</th>
+              <th scope="col">종목</th>
+              <th scope="col">순위</th>
+              <th scope="col">비중 변화</th>
+              <th scope="col">가격·잔차</th>
+              <th scope="col">해석</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    `;
+    const tbody = article.querySelector('tbody');
+    if (!rows.length) {
+      tbody.innerHTML = '<tr><td colspan="7">선택 기간에 표시할 행이 없습니다.</td></tr>';
+      return article;
+    }
+    tbody.replaceChildren(...rows.map((row) => {
+      const tr = document.createElement('tr');
+      tr.className = `signal-row ${escapeAttribute(signalBucket(row))}`;
+      [
+        dateCell(row),
+        signalTypeCell(row),
+        nameCell(row.name, row.ticker || row.codeRaw),
+        rankMoveCell(row),
+        weightMoveCell(row),
+        priceResidualCell(row),
+        interpretationCell(row),
+      ].forEach((value) => {
+        const td = document.createElement('td');
+        if (isDomNode(value)) td.appendChild(value);
+        else td.textContent = value === null || value === undefined || value === '' ? '-' : String(value);
+        tr.appendChild(td);
+      });
+      return tr;
+    }));
+    return article;
+  }
+
+  function buildEtfSignalTableRows(etf, startDate, endDate) {
+    const rows = [];
+    filterHistory(etf?.history || [], startDate, endDate).forEach((snapshot) => {
+      sortAttributionRows(snapshot.decomposition || []).forEach((row) => {
+        if (!includeSignalTableRow(row)) return;
+        rows.push({
+          ...row,
+          etfId: etf.id,
+          etfName: etf.shortName || etf.name,
+          snapshotDate: snapshot.date,
+          category: signalBucket(row),
+        });
+      });
+    });
+    return rows.sort((a, b) => (
+      stringOr(b.date, b.snapshotDate).localeCompare(stringOr(a.date, a.snapshotDate))
+      || signalTablePriority(a) - signalTablePriority(b)
+      || numberOr(a.displayOrder, 999) - numberOr(b.displayOrder, 999)
+      || numberOr(a.rank, 999) - numberOr(b.rank, 999)
+      || stringOr(a.name).localeCompare(stringOr(b.name), 'ko')
+    ));
+  }
+
+  function includeSignalTableRow(row) {
+    if (!isRecord(row)) return false;
+    if (row.currentIsTop10 || row.previousWasTop10) return true;
+    return signalBucket(row) !== 'neutral';
+  }
+
+  function signalTableCounts(rows) {
+    return asArray(rows).reduce((counts, row) => {
+      const bucket = signalBucket(row);
+      counts.total += 1;
+      if (bucket === 'entry') counts.entry += 1;
+      else if (bucket === 'exit') counts.exit += 1;
+      else if (bucket === 'buy') counts.buy += 1;
+      else if (bucket === 'sell') counts.sell += 1;
+      return counts;
+    }, { total: 0, entry: 0, exit: 0, buy: 0, sell: 0 });
+  }
+
+  function signalBucket(row) {
+    const membership = stringOr(row?.membershipChange, '');
+    const classification = stringOr(row?.classification, '');
+    const lifecycle = stringOr(row?.holdingLifecycle, row?.positionStatus, '');
+    const estimate = stringOr(row?.actionEstimate, '');
+    if (membership === 'top10_entry' || classification === 'new_entry' || lifecycle === 'new_holding') return 'entry';
+    if (membership === 'top10_exit' || classification === 'fund_exit' || lifecycle === 'fund_exit') return 'exit';
+    if (estimate === 'likely_buy' || estimate === 'weak_buy_watch' || classification === 'likely_buy') return 'buy';
+    if (estimate === 'likely_sell' || estimate === 'weak_sell_watch' || classification === 'likely_sell') return 'sell';
+    if (classification === 'residual_watch') {
+      const residual = finiteOrNull(row?.deltaResidualPercentPoint);
+      if (residual > 0) return 'buy';
+      if (residual < 0) return 'sell';
+    }
+    return 'neutral';
+  }
+
+  function signalTablePriority(row) {
+    const priorities = { entry: 0, exit: 1, buy: 2, sell: 3, neutral: 4 };
+    return priorities[signalBucket(row)] ?? 9;
+  }
+
+  function dateCell(row) {
+    const div = document.createElement('div');
+    div.className = 'date-cell';
+    div.innerHTML = `<strong>${escapeHtml(formatMaybeDate(row.date || row.snapshotDate))}</strong><span>전일 ${escapeHtml(formatMaybeDate(row.previousDate))}</span>`;
+    return div;
+  }
+
+  function signalTypeCell(row) {
+    const div = document.createElement('div');
+    div.className = 'badge-stack signal-badge-stack';
+    const membership = stringOr(row?.membershipChange, '');
+    const classification = stringOr(row?.classification, 'insufficient_data');
+    if (membership) div.appendChild(classificationBadge(membership));
+    if (!membership || membership !== classification) div.appendChild(classificationBadge(classification));
+    const action = actionHint(row);
+    if (action.label) {
+      const actionText = document.createElement('span');
+      actionText.className = `action-hint-text ${escapeAttribute(action.kind)}`;
+      actionText.textContent = action.label;
+      div.appendChild(actionText);
+    }
+    return div;
+  }
+
+  function rankMoveCell(row) {
+    const div = document.createElement('div');
+    div.className = 'rank-move-cell';
+    const previous = rankLabel(row.previousRank, row.previousWasTop10 ? '전일 TOP10' : '전일 없음');
+    const current = rankLabel(row.rank, row.currentIsTop10 ? '현재 TOP10' : '10위 밖');
+    div.innerHTML = `<strong>${escapeHtml(current)}</strong><span>${escapeHtml(previous)} → ${escapeHtml(current)}</span>`;
+    return div;
+  }
+
+  function rankLabel(value, fallback = '-') {
+    const rank = finiteOrNull(value);
+    return rank === null || rank <= 0 ? fallback : `${rank.toLocaleString('ko-KR')}위`;
+  }
+
+  function weightMoveCell(row) {
+    const div = document.createElement('div');
+    div.className = 'weight-move-cell';
+    const actual = finiteOrNull(row.actualWeightPercent);
+    const previous = finiteOrNull(row.previousWeightPercent);
+    const delta = finiteOrNull(row.deltaActualPercentPoint) ?? (actual !== null && previous !== null ? actual - previous : null);
+    div.innerHTML = `<strong>${escapeHtml(formatWeight(previous))} → ${escapeHtml(formatWeight(actual))}</strong><span class="${escapeAttribute(deltaClass(delta))}">Δ ${escapeHtml(formatPercentPoint(delta))}</span>`;
+    return div;
+  }
+
+  function priceResidualCell(row) {
+    const div = document.createElement('div');
+    div.className = 'price-residual-cell';
+    const price = finiteOrNull(row.deltaPricePercentPoint);
+    const residual = finiteOrNull(row.deltaResidualPercentPoint);
+    div.innerHTML = `<strong>가격 ${escapeHtml(formatPercentPoint(price))}</strong><span class="${escapeAttribute(deltaClass(residual))}">잔차 ${escapeHtml(formatPercentPoint(residual))}</span>`;
+    return div;
+  }
+
+  function interpretationCell(row) {
+    const div = document.createElement('div');
+    div.className = 'interpretation-cell';
+    const action = actionHint(row);
+    const headline = action.label || classLabel(row.classification || row.membershipChange || 'signal');
+    const detail = action.explanation || row.message || '';
+    const confidence = row.confidence ? ` · ${row.confidence}` : '';
+    div.innerHTML = `<strong>${escapeHtml(headline)}</strong><span>${escapeHtml(detail || '추가 해석 없음')}${escapeHtml(confidence)}</span>`;
+    return div;
+  }
+
+  function deltaClass(value) {
+    const num = finiteOrNull(value);
+    if (num === null || Math.abs(num) < 0.000001) return 'delta-flat';
+    return num > 0 ? 'delta-up' : 'delta-down';
+  }
+
   function renderMetricCards(selector, entries) {
     const target = $(selector);
     if (!target) return;
@@ -1181,6 +1421,25 @@
     return text.length > maxLength ? `${text.slice(0, Math.max(maxLength - 1, 1))}…` : text;
   }
 
+  function setDashboardForTests(dashboard) {
+    state.dashboard = dashboard;
+    initializeSelection(dashboard);
+    return stateSnapshotForTests();
+  }
+
+  function stateSnapshotForTests() {
+    return {
+      selectedEtfId: state.selectedEtfId,
+      startDate: state.startDate,
+      endDate: state.endDate,
+      signalTableRows: buildSignalTableGroups().map((group) => ({
+        etfId: group.etf.id,
+        rows: group.rows.length,
+        counts: signalTableCounts(group.rows),
+      })),
+    };
+  }
+
   function safeHttpUrl(value, fallback) {
     try {
       const url = new URL(stringOr(value, fallback), window.location.href);
@@ -1236,6 +1495,15 @@
       formatAxisWeight,
       formatAxisDate,
       sortAttributionRows,
+      buildSignalTableGroups,
+      buildEtfSignalTableRows,
+      signalBucket,
+      signalTableCounts,
+      handleEtfSelectionChange,
+      handleDateRangeChange,
+      handleDateRangeReset,
+      stateSnapshotForTests,
+      setDashboardForTests,
       actionHint,
       priceIdentifierCell,
       holdingKey,
