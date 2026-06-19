@@ -862,6 +862,12 @@ class UpdateDataTests(unittest.TestCase):
 
     def test_committed_dashboard_latest_decomposition_matches_formula_and_policy(self):
         dashboard = json.loads((ROOT / "data" / "dashboard.json").read_text(encoding="utf-8"))
+        summary = json.loads((ROOT / "data" / "summary.json").read_text(encoding="utf-8"))
+        self.assertEqual(summary["contract"], "quant-research-summary")
+        self.assertEqual(summary["projectId"], "etf")
+        self.assertTrue(summary["primaryEntities"])
+        self.assertIn("entityKey", summary["primaryEntities"][0])
+        self.assertTrue(any("가능성 신호" in text for text in summary["limitations"]))
         seen_formula_row = False
         for etf in dashboard["etfs"]:
             for row in etf["latest"]["decomposition"]:

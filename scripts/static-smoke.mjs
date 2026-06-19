@@ -4,7 +4,7 @@ import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import vm from 'node:vm';
 
-for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/dashboard.json', 'data/history.json', 'data/status.json', 'data/automation-status.json']) {
+for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/dashboard.json', 'data/summary.json', 'data/history.json', 'data/status.json', 'data/automation-status.json']) {
   if (!existsSync(file)) throw new Error(`${file} missing`);
 }
 if (!existsSync('data/history')) throw new Error('data/history directory missing');
@@ -24,6 +24,16 @@ if (!api) throw new Error('ETF tracking test API missing');
 const dashboardRaw = readFileSync('data/dashboard.json', 'utf8');
 const dashboardBytes = statSync('data/dashboard.json').size;
 if (dashboardBytes > 5_000_000) throw new Error(`dashboard payload should stay slim for first paint, got ${dashboardBytes} bytes`);
+const summaryPayload = JSON.parse(readFileSync('data/summary.json', 'utf8'));
+if (summaryPayload.contract !== 'quant-research-summary' || summaryPayload.projectId !== 'etf') {
+  throw new Error('summary.json should expose the quant research summary contract for ETF Tracking');
+}
+if (!Array.isArray(summaryPayload.primaryEntities) || !summaryPayload.primaryEntities.length) {
+  throw new Error('summary.json should expose ticker/entity entries for the dashboard dossier');
+}
+if (!summaryPayload.limitations?.some((text) => String(text).includes('가능성 신호'))) {
+  throw new Error('summary.json should preserve residual signal limitation language');
+}
 const historyRaw = readFileSync('data/history.json', 'utf8');
 const historyManifestBytes = statSync('data/history.json').size;
 if (historyManifestBytes > 1_000_000) throw new Error(`history manifest should stay slim, got ${historyManifestBytes} bytes`);

@@ -1906,6 +1906,98 @@ def build_latest(history: dict[str, list[dict[str, Any]]], generated_at: str) ->
     }
 
 
+def build_public_summary(dashboard: dict[str, Any]) -> dict[str, Any]:
+    """Build the compact cross-project summary consumed by quant-dashboard."""
+
+    etfs = dashboard.get("etfs") if isinstance(dashboard.get("etfs"), list) else []
+    signals = dashboard.get("signals") if isinstance(dashboard.get("signals"), list) else []
+    latest_dates = [
+        str((etf.get("latest") or {}).get("date"))
+        for etf in etfs
+        if isinstance(etf, dict) and isinstance(etf.get("latest"), dict) and (etf.get("latest") or {}).get("date")
+    ]
+    low_coverage = []
+    primary_entities = []
+    for etf in etfs:
+        if not isinstance(etf, dict):
+            continue
+        latest = etf.get("latest") if isinstance(etf.get("latest"), dict) else {}
+        metrics = etf.get("metrics") if isinstance(etf.get("metrics"), dict) else {}
+        coverage = metrics.get("returnCoverage")
+        if isinstance(coverage, (int, float)) and coverage < RETURN_COVERAGE_MIN:
+            low_coverage.append(etf.get("shortName") or etf.get("name") or etf.get("id"))
+        for holding in (latest.get("top10") or [])[:10]:
+            if not isinstance(holding, dict):
+                continue
+            primary_entities.append(
+                {
+                    "entityKey": f"{etf.get('id') or etf.get('code') or etf.get('shortName') or etf.get('name')}:{holding.get('ticker') or holding.get('codeRaw') or holding.get('name')}",
+                    "symbol": holding.get("ticker") or holding.get("codeRaw"),
+                    "name": holding.get("name"),
+                    "label": f"{holding.get('ticker') or holding.get('codeRaw') or holding.get('name')} · {etf.get('shortName') or etf.get('name')}",
+                    "sector": "ETF Holdings",
+                    "sectorLabel": "ETF 보유종목",
+                    "themes": ["ETF", "Active ETF", etf.get("shortName") or etf.get("name") or ""],
+                    "metrics": {
+                        "weight": holding.get("weight"),
+                        "rank": holding.get("rank"),
+                        "date": latest.get("date"),
+                        "etf": etf.get("shortName") or etf.get("name"),
+                        "returnCoverage": coverage,
+                    },
+                    "signals": ["TOP10 보유 노출입니다. residual signal은 실제 매매 증명이 아니라 가능성 신호입니다."],
+                    "warnings": ["가격 정렬은 no-trade 증명이 아니며, 공급자 공시 지연이 있을 수 있습니다."],
+                }
+            )
+    return {
+        "schemaVersion": 1,
+        "contract": "quant-research-summary",
+        "projectId": "etf",
+        "projectName": "ETF TOP10 Tracking",
+        "generatedAt": dashboard.get("generatedAt"),
+        "dataAsOf": max(latest_dates) if latest_dates else None,
+        "timezone": dashboard.get("timezone") or "Asia/Seoul",
+        "detailUrl": "https://sonchanggi.github.io/etf-tracking/",
+        "detailDataUrl": "https://sonchanggi.github.io/etf-tracking/data/dashboard.json",
+        "status": {
+            "state": "degraded" if low_coverage else ("ok" if etfs else "degraded"),
+            "label": f"{len(etfs)}개 ETF · {len(signals)}개 최근 신호",
+            "cadence": "08:05 KST with intraday retries on provider delays",
+            "expectedFreshnessDays": 3,
+            "degradedReasons": [f"low return coverage: {name}" for name in low_coverage],
+        },
+        "coverage": {
+            "etfCount": len(etfs),
+            "signalCount": len(signals),
+            "historyStorage": (dashboard.get("historyPolicy") or {}).get("historyStorage"),
+            "historyManifestUrl": (dashboard.get("historyPolicy") or {}).get("historyManifestUrl"),
+        },
+        "highlights": [
+            {"label": "ETF", "value": len(etfs), "description": "한국 상장 액티브 ETF 추적"},
+            {"label": "신호", "value": len(signals), "description": "편입·편출 및 residual possibility"},
+            {"label": "최근 기준일", "value": max(latest_dates) if latest_dates else None, "description": "ETF별 latest date 기준"},
+        ],
+        "primaryEntities": primary_entities[:40],
+        "limitations": [
+            "Residual signal은 실제 매매 증명이 아니라 가능성 신호입니다.",
+            "가격 정렬은 no-trade 증명이 아니며 provider 공시 지연이 있을 수 있습니다.",
+            "상세 히스토리는 per-ETF lazy files에 분리되어 있습니다.",
+        ],
+        "sources": [
+            {"label": "ETF provider public pages/APIs", "url": "https://sonchanggi.github.io/etf-tracking/"},
+        ],
+        "automation": {
+            "workflowUrl": "https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml",
+            "manualUpdateLabel": "GitHub Actions update-data 수동 실행",
+            "tokenPolicy": "Static page keeps no GitHub token.",
+        },
+        "payload": {
+            "summaryBytes": None,
+            "detailBytes": None,
+        },
+    }
+
+
 def diagnostic_requested_date(item: dict[str, Any]) -> str | None:
     value = item.get("targetDate", item.get("queryDate", item.get("date")))
     return str(value) if value else None
@@ -2257,6 +2349,9 @@ def run_update(args: argparse.Namespace) -> dict[str, Any]:
     write_history_outputs(output_dir, replay_history, generated_at)
     write_json(output_dir / "latest.json", latest)
     write_json(output_dir / "dashboard.json", dashboard, compact=True)
+    summary = build_public_summary(dashboard)
+    summary["payload"]["detailBytes"] = len(json.dumps(dashboard, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+    write_json(output_dir / "summary.json", summary, compact=True)
     write_json(output_dir / "status.json", status)
     write_json(output_dir / "automation-status.json", automation_status)
     write_csv_summary(output_dir / "latest-summary.csv", dashboard)
