@@ -1,12 +1,13 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
-import { existsSync, readFileSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import vm from 'node:vm';
 
-for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/dashboard.json', 'data/status.json', 'data/automation-status.json']) {
+for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/dashboard.json', 'data/history.json', 'data/status.json', 'data/automation-status.json']) {
   if (!existsSync(file)) throw new Error(`${file} missing`);
 }
+if (!existsSync('data/history')) throw new Error('data/history directory missing');
 
 const source = readFileSync('assets/app.js', 'utf8');
 const styles = readFileSync('assets/styles.css', 'utf8');
@@ -21,15 +22,37 @@ vm.runInContext(source, context, { filename: 'assets/app.js' });
 const api = context.__ETF_TRACKING_TESTS__;
 if (!api) throw new Error('ETF tracking test API missing');
 const dashboardRaw = readFileSync('data/dashboard.json', 'utf8');
-if (statSync('data/dashboard.json').size > 50_000_000) throw new Error('dashboard payload should stay below GitHub large-file warning threshold');
+const dashboardBytes = statSync('data/dashboard.json').size;
+if (dashboardBytes > 5_000_000) throw new Error(`dashboard payload should stay slim for first paint, got ${dashboardBytes} bytes`);
 const historyRaw = readFileSync('data/history.json', 'utf8');
-if (statSync('data/history.json').size > 50_000_000) throw new Error('history payload should stay below GitHub large-file warning threshold');
+const historyManifestBytes = statSync('data/history.json').size;
+if (historyManifestBytes > 1_000_000) throw new Error(`history manifest should stay slim, got ${historyManifestBytes} bytes`);
+const historyFiles = readdirSync('data/history').filter((name) => name.endsWith('.json')).sort();
+if (historyFiles.length !== 3) throw new Error('expected one per-ETF history JSON for each tracked ETF');
 for (const internalKey of ['priceDiagnostics', 'priceMeta', 'sourceFields']) {
   if (dashboardRaw.includes(internalKey)) throw new Error(`dashboard payload leaked internal diagnostic key: ${internalKey}`);
-  if (historyRaw.includes(internalKey)) throw new Error(`history payload leaked internal diagnostic key: ${internalKey}`);
+  if (historyRaw.includes(internalKey)) throw new Error(`history manifest leaked internal diagnostic key: ${internalKey}`);
 }
-if (Object.hasOwn(JSON.parse(historyRaw), 'diagnostics')) throw new Error('public history payload should not include run diagnostics');
+const historyManifest = JSON.parse(historyRaw);
+if (Object.hasOwn(historyManifest, 'diagnostics')) throw new Error('public history manifest should not include run diagnostics');
+if (!Array.isArray(historyManifest.etfs)) throw new Error('history.json should be a manifest, not the full monolithic history map');
 const parsed = api.parseDashboard(JSON.parse(dashboardRaw));
+for (const etf of parsed.etfs) {
+  if (!etf.historyUrl?.startsWith('data/history/')) throw new Error(`${etf.id} missing per-ETF historyUrl`);
+  if (etf.history.length !== 0) throw new Error(`${etf.id} should not embed full history in dashboard.json`);
+  const historyPath = etf.historyUrl;
+  if (!existsSync(historyPath)) throw new Error(`${historyPath} missing`);
+  const perEtfRaw = readFileSync(historyPath, 'utf8');
+  const perEtfBytes = statSync(historyPath).size;
+  if (perEtfBytes > 50_000_000) throw new Error(`${historyPath} exceeds GitHub Pages large-file practical limit`);
+  for (const internalKey of ['priceDiagnostics', 'priceMeta', 'sourceFields']) {
+    if (perEtfRaw.includes(internalKey)) throw new Error(`${historyPath} leaked internal diagnostic key: ${internalKey}`);
+  }
+  const perEtfPayload = JSON.parse(perEtfRaw);
+  if (!Array.isArray(perEtfPayload.history)) throw new Error(`${historyPath} missing history array`);
+  if (!perEtfPayload.history.every((row) => row.queryDate || row.date)) throw new Error(`${historyPath} should preserve replay query/date metadata`);
+  api.applyHistoryPayload(etf, perEtfPayload);
+}
 if (parsed.etfs.length !== 3) throw new Error('dashboard must expose three ETFs');
 if (!parsed.etfs.some((etf) => etf.id === 'koact-nasdaq-growth-active')) throw new Error('KoAct ETF missing');
 if (!parsed.historyPolicy?.scheduledLookbackDays) throw new Error('dashboard history policy missing');
@@ -51,7 +74,13 @@ if (parsed.manualUpdatePolicy?.workflowUrl !== 'https://github.com/SonChangGi/et
 }
 const selected = parsed.etfs[0];
 const sourceAvailabilityText = api.formatSourceAvailability(selected.sourceAvailability);
-if (!sourceAvailabilityText.summary.includes('상장일부터 저장')) throw new Error('source availability label should call out listing-date backfill');
+const selectedCoverage = Number(selected.sourceAvailability?.coverageRatioThroughLatest);
+if (Number.isFinite(selectedCoverage) && selectedCoverage < 0.9 && sourceAvailabilityText.summary.includes('상장일부터 저장')) {
+  throw new Error('source availability label should not overstate sparse or partial coverage as continuous storage');
+}
+if (selected.sourceAvailability?.storedFromListingDate && Number.isFinite(selectedCoverage) && selectedCoverage < 0.5 && !sourceAvailabilityText.summary.includes('희소')) {
+  throw new Error('sparse listing-date coverage should be labeled as 희소 백필');
+}
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
 const sndkSeries = series.find((item) => item.key === 'SNDK');
@@ -69,10 +98,9 @@ if (!spacexSeries?.signalPoints.some((point) => point.kind === 'entry' && point.
   throw new Error('hover chart should show TOP10 entry markers for SpaceX-like recent entrants');
 }
 const koact = parsed.etfs.find((etf) => etf.id === 'koact-nasdaq-growth-active');
-const koactSeries = api.buildWeightSeries(koact.history, koact.latest?.top10 || []);
-const koactSpacex = koactSeries.find((item) => /Space Exploration Technologies/i.test(item.fullLabel));
-if (!koactSpacex?.signalPoints.some((point) => point.date === '2026-06-16' && point.kind === 'entry' && point.actionEstimate === 'new_entry')) {
-  throw new Error('hover chart should show 신규 편입 markers when no residual buy estimate exists');
+const allSeries = parsed.etfs.flatMap((etf) => api.buildWeightSeries(etf.history, etf.latest?.top10 || []));
+if (!allSeries.some((item) => item.signalPoints.some((point) => point.kind === 'entry' && point.actionEstimate === 'new_entry'))) {
+  throw new Error('hover chart should show 신규 편입 markers when no residual buy estimate exists for visible current TOP10 holdings');
 }
 if (api.lifecycleDirection({ classification: 'new_entry', holdingLifecycle: 'new_holding' })?.kind !== 'entry') throw new Error('new_entry should map to an entry marker');
 if (api.lifecycleDirection({ membershipChange: 'top10_entry' })?.glyph !== '＋') throw new Error('top10_entry should map to plus marker');
@@ -218,6 +246,8 @@ try {
     fetch(`http://127.0.0.1:${port}/assets/app.js`).then((response) => response.text()),
     fetch(`http://127.0.0.1:${port}/data/dashboard.json`).then((response) => response.json()),
   ]);
+  const firstHistoryUrl = data.etfs?.[0]?.historyUrl;
+  const firstHistory = firstHistoryUrl ? await fetch(`http://127.0.0.1:${port}/${firstHistoryUrl}`).then((response) => response.json()) : null;
   if (!html.includes('ETF TOP10 투자 비중 추적')) throw new Error('index hero missing');
   if (!html.includes('히스토리 범위')) throw new Error('history range explanation missing');
   if (!html.includes('없는 날짜만 채우는 수동 업데이트')) throw new Error('manual update section missing');
@@ -232,10 +262,14 @@ try {
   if (!html.includes('marker-entry') || !html.includes('＋ 편입')) throw new Error('chart marker UX legend missing');
   if (!html.includes('etf-signal-tables') || !html.includes('ETF별 TOP10 신호·비중 변화 표')) throw new Error('ETF signal table shell missing');
   if (!app.includes('renderSignalTables') || !app.includes('buildEtfSignalTableRows') || !app.includes('filterSignalTableRows')) throw new Error('ETF signal table renderer missing');
+  if (!app.includes('setupSignalTableLazyLoad') || !app.includes('data-load-etf-history')) throw new Error('ETF histories should load lazily for signal tables');
+  if (app.includes('preloadRemainingEtfHistories')) throw new Error('ETF histories should not be eagerly preloaded after first paint');
   if (!app.includes('data-signal-filter') || !app.includes('data-signal-bucket')) throw new Error('ETF signal table filter controls missing');
   if (!styles.includes('signal-table-card') || !styles.includes('signal-count-strip') || !styles.includes('signal-filter-grid')) throw new Error('ETF signal table styles missing');
   if (!app.includes('copyManualUpdateCommand')) throw new Error('manual update copy helper missing');
   if (!data.etfs || data.etfs.length !== 3) throw new Error('dashboard JSON ETF count invalid');
+  if (data.etfs.some((etf) => Array.isArray(etf.history))) throw new Error('dashboard JSON should not embed ETF history arrays');
+  if (!firstHistory?.history?.length) throw new Error('per-ETF history JSON should be served by the static server');
   if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');
   console.log('PASS static server smoke served ETF tracker shell and data');
 } finally {

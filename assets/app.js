@@ -35,6 +35,7 @@
     startDate: '',
     endDate: '',
     signalTableFilters: {},
+    signalTablesLazyObserver: null,
   };
 
   const FALLBACK_DASHBOARD = {
@@ -60,6 +61,7 @@
         sourceUrl: 'https://timeetf.co.kr/m11_view.php?idx=2&cate=001',
         latest: null,
         history: [],
+        historyUrl: 'data/history/time-nasdaq100-active.json',
         signals: [],
         metrics: { top10Count: 0, signalCount: 0, returnCoverageStatus: 'fallback' },
       },
@@ -72,6 +74,7 @@
         sourceUrl: 'https://timeetf.co.kr/m11_view.php?idx=6&cate=001',
         latest: null,
         history: [],
+        historyUrl: 'data/history/time-global-ai-active.json',
         signals: [],
         metrics: { top10Count: 0, signalCount: 0, returnCoverageStatus: 'fallback' },
       },
@@ -84,6 +87,7 @@
         sourceUrl: 'https://www.samsungactive.co.kr/etf/view.do?id=2ETFQ1',
         latest: null,
         history: [],
+        historyUrl: 'data/history/koact-nasdaq-growth-active.json',
         signals: [],
         metrics: { top10Count: 0, signalCount: 0, returnCoverageStatus: 'fallback' },
       },
@@ -114,12 +118,15 @@
       state.dashboard = dashboard;
       initializeSelection(dashboard);
       renderAll();
+      ensureSelectedEtfHistory({ forceDateSync: true, rerender: true });
+      setupSignalTableLazyLoad();
     } catch (error) {
       state.dashboard = parseDashboard(FALLBACK_DASHBOARD);
       state.dashboard.loadMode = 'fallback';
       state.dashboard.loadError = error instanceof Error ? error.message : String(error);
       initializeSelection(state.dashboard);
       renderAll();
+      ensureSelectedEtfHistory({ forceDateSync: true, rerender: true });
     }
     if (target && state.dashboard?.loadError) {
       target.innerHTML = `<span class="error-text">공개 JSON fallback 표시 중: ${escapeHtml(state.dashboard.loadError)}</span>`;
@@ -140,6 +147,84 @@
     }
   }
 
+  async function ensureSelectedEtfHistory(options = {}) {
+    const etf = selectedEtf();
+    if (!etf) return null;
+    return ensureEtfHistory(etf.id, options);
+  }
+
+  async function ensureEtfHistory(etfId, options = {}) {
+    const etf = state.dashboard?.etfs.find((item) => item.id === etfId);
+    if (!etf || etf.historyLoaded || etf.historyLoading) return etf || null;
+    const url = safeDataPath(etf.historyUrl);
+    if (!url) {
+      etf.historyError = '히스토리 파일 경로가 없습니다.';
+      return etf;
+    }
+    etf.historyLoading = true;
+    if (options.rerender) renderSelectionDependentViews();
+    const result = await getJsonBestEffort(url, 20000);
+    etf.historyLoading = false;
+    if (result.ok) {
+      applyHistoryPayload(etf, result.data);
+      etf.historyError = '';
+      if (options.forceDateSync) syncDateInputsForSelected(true);
+    } else {
+      etf.historyError = result.error || '히스토리 파일 로드 실패';
+    }
+    if (options.rerender) renderAll();
+    return etf;
+  }
+
+  function applyHistoryPayload(etf, payload) {
+    const history = parseHistoryPayload(payload, etf.id);
+    etf.history = history;
+    etf.historyLoaded = true;
+    etf.historyCount = numberOr(payload?.historyCount, history.length);
+    etf.availableStartDate = stringOr(payload?.availableStartDate, history[0]?.date, etf.availableStartDate, '');
+    etf.availableEndDate = stringOr(payload?.availableEndDate, history.at(-1)?.date, etf.availableEndDate, '');
+    if (isRecord(payload?.sourceAvailability)) etf.sourceAvailability = payload.sourceAvailability;
+    etf.latest = normalizeSnapshot(payload?.latest) || history.at(-1) || etf.latest;
+    etf.signals = asRecords(payload?.signals).map(normalizeSignal);
+    if (!etf.signals.length) etf.signals = asArray(etf.latest?.signals).map(normalizeSignal);
+    return etf;
+  }
+
+  function parseHistoryPayload(payload, etfId = '') {
+    let rows = [];
+    if (Array.isArray(payload)) rows = payload;
+    else if (isRecord(payload)) {
+      if (Array.isArray(payload.history)) rows = payload.history;
+      else if (isRecord(payload.etfs) && Array.isArray(payload.etfs[etfId])) rows = payload.etfs[etfId];
+    }
+    return asRecords(rows).map(normalizeSnapshot).filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  function setupSignalTableLazyLoad() {
+    if (typeof window === 'undefined' || typeof document === 'undefined' || state.signalTablesLazyObserver) return;
+    const target = $('#signal-tables') || $('#etf-signal-tables');
+    if (!target || typeof window.IntersectionObserver !== 'function') return;
+    state.signalTablesLazyObserver = new window.IntersectionObserver((entries) => {
+      if (!entries.some((entry) => entry.isIntersecting)) return;
+      state.signalTablesLazyObserver?.disconnect();
+      state.signalTablesLazyObserver = null;
+      loadAllEtfHistoriesForTables();
+    }, { rootMargin: '320px 0px' });
+    state.signalTablesLazyObserver.observe(target);
+  }
+
+  async function loadAllEtfHistoriesForTables() {
+    if (!state.dashboard) return;
+    await Promise.all(state.dashboard.etfs.map((etf) => ensureEtfHistory(etf.id, { rerender: false })));
+    renderSignalTables();
+  }
+
+  function safeDataPath(value) {
+    const path = stringOr(value, '');
+    if (/^data\/history\/[a-z0-9-]+\.json$/i.test(path)) return path;
+    return '';
+  }
+
   function parseDashboard(payload) {
     const etfs = asRecords(payload?.etfs).map((etf) => {
       const history = asRecords(etf.history).map(normalizeSnapshot).filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
@@ -156,6 +241,10 @@
         availableStartDate: stringOr(etf.availableStartDate, history[0]?.date, ''),
         availableEndDate: stringOr(etf.availableEndDate, history.at(-1)?.date, ''),
         historyCount: numberOr(etf.historyCount, history.length),
+        historyUrl: stringOr(etf.historyUrl, ''),
+        historyLoaded: Boolean(history.length),
+        historyLoading: false,
+        historyError: '',
         sourceAvailability: isRecord(etf.sourceAvailability) ? etf.sourceAvailability : {},
         latest,
         history,
@@ -318,8 +407,10 @@
 
   function handleEtfSelectionChange(etfId) {
     state.selectedEtfId = stringOr(etfId, state.selectedEtfId, '');
+    syncEtfSelect(state.dashboard);
     syncDateInputsForSelected(false);
     renderSelectionDependentViews();
+    ensureSelectedEtfHistory({ forceDateSync: true, rerender: true });
   }
 
   function handleDateRangeChange(field, value) {
@@ -351,6 +442,11 @@
     const bucketButton = event.target?.closest?.('[data-signal-bucket]');
     if (bucketButton) {
       updateSignalTableFilter(bucketButton.dataset.etfId, { bucket: bucketButton.dataset.signalBucket });
+      return;
+    }
+    const historyButton = event.target?.closest?.('[data-load-etf-history]');
+    if (historyButton) {
+      ensureEtfHistory(historyButton.dataset.etfId, { rerender: true });
       return;
     }
     const loadButton = event.target?.closest?.('[data-signal-load-more]');
@@ -430,8 +526,8 @@
     const etf = selectedEtf();
     if (!etf) return;
     const dates = etf.history.map((row) => row.date).filter(Boolean);
-    const first = dates[0] || '';
-    const last = dates.at(-1) || '';
+    const first = dates[0] || etf.availableStartDate || '';
+    const last = dates.at(-1) || etf.availableEndDate || '';
     if (forceAll || !state.startDate || state.startDate < first || state.startDate > last) state.startDate = first;
     if (forceAll || !state.endDate || state.endDate > last || state.endDate < first) state.endDate = last;
     const start = $('#start-date');
@@ -520,7 +616,15 @@
     if (!etf) return;
     const filtered = filterHistory(etf.history, state.startDate, state.endDate);
     const latest = filtered.at(-1) || etf.latest;
-    renderWeightChart('#weight-chart', filtered, latest?.top10 || []);
+    if (etf.historyLoading && !filtered.length) {
+      const target = $('#weight-chart');
+      if (target) target.innerHTML = '<div class="skeleton-line">선택 ETF 상세 히스토리를 불러오는 중입니다…</div>';
+    } else if (etf.historyError && !filtered.length) {
+      const target = $('#weight-chart');
+      if (target) target.innerHTML = `<div class="skeleton-line error-text">상세 히스토리 로드 실패: ${escapeHtml(etf.historyError)}</div>`;
+    } else {
+      renderWeightChart('#weight-chart', filtered, latest?.top10 || []);
+    }
     renderTop10(etf, latest);
     renderDecomposition(latest);
     renderSource(etf, latest, filtered);
@@ -884,7 +988,7 @@
     const availability = formatSourceAvailability(etf.sourceAvailability);
     target.innerHTML = `
       <div class="source-item"><strong>${escapeHtml(etf.name)}</strong><span>${escapeHtml(etf.provider)} · ${escapeHtml(etf.code)}</span></div>
-      <div class="source-item"><strong>기준일</strong><span>${escapeHtml(formatMaybeDate(latest?.date))} · 선택 범위 ${filteredHistory.length.toLocaleString('ko-KR')}개 스냅샷</span></div>
+      <div class="source-item"><strong>기준일</strong><span>${escapeHtml(formatMaybeDate(latest?.date))} · 선택 범위 ${filteredHistory.length.toLocaleString('ko-KR')}개 스냅샷 · ${escapeHtml(historyLoadLabel(etf))}</span></div>
       <div class="source-item"><strong>히스토리 범위</strong><span>선택 ${escapeHtml(formatMaybeDate(selectedStart))} → ${escapeHtml(formatMaybeDate(selectedEnd))} · 저장 전체 ${escapeHtml(formatMaybeDate(etf.availableStartDate))} → ${escapeHtml(formatMaybeDate(etf.availableEndDate))}</span><small>${escapeHtml(historyPolicy.startDateExplanation || '예약 업데이트는 최근 구간을 갱신하고, 수동 백필로 더 과거 구간을 확장할 수 있습니다.')}</small></div>
       <div class="source-item"><strong>상장일 백필</strong><span>${escapeHtml(availability.summary)}</span><small>${escapeHtml(availability.detail)}</small></div>
       <div class="source-item"><strong>전일대비 분해 기준</strong><span>ETF 비중 ${escapeHtml(formatMaybeDate(dateBasis.previousSnapshotDate))} → ${escapeHtml(formatMaybeDate(dateBasis.currentSnapshotDate || latest?.date))} · 가격 기준 ${escapeHtml(formatMaybeDate(priceBasis.previous))} → ${escapeHtml(formatMaybeDate(priceBasis.current || latest?.priceBasisDate))}</span></div>
@@ -949,6 +1053,9 @@
   function renderEtfSignalTableCard(etf, rows, history) {
     const article = document.createElement('article');
     article.className = 'panel signal-table-card';
+    if (!etf.historyLoaded || etf.historyLoading || etf.historyError) {
+      return renderHistoryPlaceholderCard(article, etf, history);
+    }
     const counts = signalTableCounts(rows);
     const filter = signalTableFilterFor(etf.id);
     const filteredRows = filterSignalTableRows(rows, filter);
@@ -1067,6 +1174,30 @@
       });
       return tr;
     }));
+    return article;
+  }
+
+  function renderHistoryPlaceholderCard(article, etf, history) {
+    const periodStart = history[0]?.date || etf.availableStartDate || state.startDate;
+    const periodEnd = history.at(-1)?.date || etf.availableEndDate || state.endDate;
+    const message = etf.historyLoading
+      ? '상세 히스토리 파일을 불러오는 중입니다…'
+      : etf.historyError
+        ? `히스토리 로드 실패: ${etf.historyError}`
+        : '이 ETF의 상세 히스토리는 표가 화면에 가까워지거나 버튼을 누를 때 불러옵니다.';
+    article.innerHTML = `
+      <div class="signal-table-header">
+        <div>
+          <p class="eyebrow">${escapeHtml(etf.provider || 'ETF')}</p>
+          <h4>${escapeHtml(etf.shortName || etf.name || 'ETF')}</h4>
+          <p>${escapeHtml(formatMaybeDate(periodStart))} → ${escapeHtml(formatMaybeDate(periodEnd))} · 총 ${numberOr(etf.historyCount, 0).toLocaleString('ko-KR')}개 스냅샷</p>
+        </div>
+      </div>
+      <div class="signal-table-toolbar">
+        <div class="skeleton-line ${etf.historyError ? 'error-text' : ''}">${escapeHtml(message)}</div>
+        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-load-etf-history ${etf.historyLoading ? 'disabled' : ''}>상세 히스토리 불러오기</button>
+      </div>
+    `;
     return article;
   }
 
@@ -1662,12 +1793,27 @@
     const coverage = finiteOrNull(value.coverageRatioThroughLatest);
     const stored = numberOr(value.storedWeekdayCount, 0).toLocaleString('ko-KR');
     const possible = numberOr(value.possibleWeekdayCountThroughLatest, 0).toLocaleString('ko-KR');
-    const status = value.storedFromListingDate ? '상장일부터 저장' : '상장일 이후 일부부터 저장';
+    const label = stringOr(value.continuityLabel, '');
+    let status = '상장일 이후 일부부터 저장';
+    if (label === 'listing_date_near_continuous' || (value.storedFromListingDate && coverage !== null && coverage >= 0.9)) {
+      status = '상장일부터 대부분 연속 저장';
+    } else if (label === 'listing_date_partial' || (value.storedFromListingDate && coverage !== null && coverage >= 0.5)) {
+      status = '상장일 스냅샷 포함 · 일부 공백';
+    } else if (label === 'listing_date_sparse' || value.storedFromListingDate) {
+      status = '상장일 스냅샷 포함 · 희소 백필';
+    }
     const coverageText = coverage === null ? '커버리지 계산 불가' : `거래일 커버리지 ${(coverage * 100).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}%`;
     return {
       summary: `${status} · ${oldest} → ${latest}`,
-      detail: `상장일 ${listing} · 저장 ${stored}/${possible}개 weekday · ${coverageText}`,
+      detail: `상장일 ${listing} · 저장 ${stored}/${possible}개 weekday · ${coverageText}. 상장일 값이 있어도 커버리지가 낮으면 연속 시계열로 해석하지 않습니다.`,
     };
+  }
+
+  function historyLoadLabel(etf) {
+    if (etf?.historyLoading) return '상세 히스토리 로딩 중';
+    if (etf?.historyError) return `히스토리 오류: ${etf.historyError}`;
+    if (etf?.historyLoaded) return '상세 히스토리 로드 완료';
+    return '요약만 로드됨';
   }
 
   function formatFreshness(value) {
@@ -1763,6 +1909,11 @@
   if (typeof globalThis !== 'undefined') {
     globalThis.__ETF_TRACKING_TESTS__ = {
       parseDashboard,
+      parseHistoryPayload,
+      applyHistoryPayload,
+      ensureEtfHistory,
+      setupSignalTableLazyLoad,
+      loadAllEtfHistoriesForTables,
       normalizeSnapshot,
       normalizeHolding,
       normalizeDecomposition,
@@ -1805,6 +1956,7 @@
       formatFxCoverage,
       formatAutomationStatus,
       formatSourceAvailability,
+      historyLoadLabel,
       FALLBACK_DASHBOARD,
       AUTOMATION_STATUS_URL,
       QUANT_DASHBOARD_URL,

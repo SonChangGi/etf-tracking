@@ -30,7 +30,7 @@ from zoneinfo import ZoneInfo
 
 KST = dt.timezone(dt.timedelta(hours=9), name="KST")
 USER_AGENT = "Mozilla/5.0 (compatible; ETFTrackingBot/0.1; +https://sonchanggi.github.io/etf-tracking/)"
-SCHEMA_VERSION = "1.2.1"
+SCHEMA_VERSION = "1.3.0"
 DEFAULT_SCHEDULED_BACKFILL_DAYS = 10
 PRICE_ALIGNED_TOLERANCE_PP = 0.10
 PRICE_ALIGNED_TOLERANCE_RATIO = 0.03
@@ -64,6 +64,8 @@ PUBLIC_DECOMPOSITION_DROP_FIELDS = {"priceMeta"}
 PUBLIC_HOLDING_DROP_FIELDS = {"sourceFields"}
 PUBLIC_HISTORY_HOLDING_FIELDS = ("rank", "codeRaw", "ticker", "name", "shares", "marketValueKrw", "weightPercent")
 PUBLIC_SNAPSHOT_DROP_FIELDS = {"queryDate", "navAsOfDate", "sourceConfidence", "sourceWarning", "totalHoldings", "fetchedAt"}
+HISTORY_DIR_NAME = "history"
+
 
 FX_PAIR_CONFIG: dict[str, dict[str, Any]] = {
     "USDKRW": {
@@ -590,21 +592,117 @@ def public_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
     return sanitized
 
 
+def stored_holding(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        key: value
+        for key, value in row.items()
+        if key not in PUBLIC_HOLDING_DROP_FIELDS and value is not None
+    }
+
+
+def stored_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
+    """Return the replay-safe public history record.
+
+    Dashboard/latest payloads stay intentionally slim, but future updater runs use
+    committed history as their source of truth.  Therefore per-ETF history keeps
+    provider/date provenance and holding identifiers while still stripping heavy
+    diagnostics and raw source fields that are only useful during a single run.
+    """
+    date = str(snapshot.get("date") or snapshot.get("asOfDate") or "")
+    sanitized = {
+        key: value
+        for key, value in snapshot.items()
+        if key not in {"holdings", "top10", "decomposition", "signals", "analysisSummary"}
+        and value is not None
+    }
+    if date:
+        sanitized["date"] = date
+        sanitized.setdefault("queryDate", date)
+        sanitized.setdefault("priceBasisDate", previous_weekday(date))
+    sanitized["holdings"] = [stored_holding(row) for row in as_records(snapshot.get("holdings"))]
+    sanitized["top10"] = [stored_holding(row) for row in as_records(snapshot.get("top10"))]
+    sanitized["decomposition"] = [public_decomposition_row(row) for row in as_records(snapshot.get("decomposition"))]
+    sanitized["signals"] = [dict(row) for row in as_records(snapshot.get("signals"))]
+    sanitized["analysisSummary"] = public_analysis_summary(snapshot.get("analysisSummary"))
+    return sanitized
+
+
 def public_history(history: dict[str, list[dict[str, Any]]]) -> dict[str, list[dict[str, Any]]]:
     return {config.id: [public_snapshot(snapshot) for snapshot in history.get(config.id, [])] for config in ETFS}
+
+
+def stored_history(history: dict[str, list[dict[str, Any]]]) -> dict[str, list[dict[str, Any]]]:
+    return {config.id: [stored_snapshot(snapshot) for snapshot in history.get(config.id, [])] for config in ETFS}
 
 
 def as_records(value: Any) -> list[dict[str, Any]]:
     return [row for row in value if isinstance(row, dict)] if isinstance(value, list) else []
 
 
+def history_url_for(config: EtfConfig) -> str:
+    return f"data/{HISTORY_DIR_NAME}/{config.id}.json"
+
+
+def history_path_for(output_dir: Path, config: EtfConfig) -> Path:
+    return output_dir / HISTORY_DIR_NAME / f"{config.id}.json"
+
+
+def coerce_loaded_snapshot(snapshot: dict[str, Any]) -> dict[str, Any]:
+    row = dict(snapshot)
+    date = row.get("date") or row.get("asOfDate")
+    if date:
+        row["date"] = str(date)
+        row.setdefault("queryDate", str(date))
+        row.setdefault("priceBasisDate", previous_weekday(str(date)))
+    return row
+
+
+def history_rows_from_payload(payload: Any, config: EtfConfig) -> list[dict[str, Any]]:
+    if isinstance(payload, list):
+        rows = payload
+    elif isinstance(payload, dict):
+        if isinstance(payload.get("history"), list):
+            rows = payload["history"]
+        elif isinstance(payload.get("etfs"), dict):
+            rows = payload["etfs"].get(config.id, [])
+        else:
+            rows = []
+    else:
+        rows = []
+    return [coerce_loaded_snapshot(row) for row in rows if isinstance(row, dict)]
+
+
 def load_history(output_dir: Path) -> dict[str, list[dict[str, Any]]]:
+    history: dict[str, list[dict[str, Any]]] = {config.id: [] for config in ETFS}
+    loaded_per_etf = False
+    for config in ETFS:
+        path = history_path_for(output_dir, config)
+        if path.exists():
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            history[config.id] = history_rows_from_payload(payload, config)
+            loaded_per_etf = True
+    if loaded_per_etf:
+        return history
+
     path = output_dir / "history.json"
     if not path.exists():
-        return {config.id: [] for config in ETFS}
+        return history
     payload = json.loads(path.read_text(encoding="utf-8"))
-    raw = payload.get("etfs", {}) if isinstance(payload, dict) else {}
-    return {config.id: list(raw.get(config.id, [])) for config in ETFS}
+    if isinstance(payload, dict) and isinstance(payload.get("etfs"), list):
+        for item in payload["etfs"]:
+            if not isinstance(item, dict):
+                continue
+            config = next((cfg for cfg in ETFS if cfg.id == item.get("id")), None)
+            history_url = str(item.get("historyUrl") or "")
+            if config and history_url.startswith(f"data/{HISTORY_DIR_NAME}/"):
+                candidate = output_dir / history_url.removeprefix("data/")
+                if candidate.exists():
+                    history[config.id] = history_rows_from_payload(json.loads(candidate.read_text(encoding="utf-8")), config)
+        return history
+    if isinstance(payload, dict) and isinstance(payload.get("etfs"), dict):
+        raw = payload.get("etfs", {})
+        return {config.id: history_rows_from_payload(raw.get(config.id, []), config) for config in ETFS}
+    return history
 
 
 def merge_history(existing: dict[str, list[dict[str, Any]]], snapshots: dict[str, list[dict[str, Any]]]) -> dict[str, list[dict[str, Any]]]:
@@ -1603,6 +1701,101 @@ def enrich_history(history: dict[str, list[dict[str, Any]]], price_provider: Pri
     return history, summaries
 
 
+def source_availability(config: EtfConfig, rows: list[dict[str, Any]], generated_at: str) -> dict[str, Any]:
+    dates = [str(row.get("date")) for row in rows if row.get("date")]
+    available_start = min(dates) if dates else None
+    available_end = max(dates) if dates else None
+    possible_weekdays = dates_to_fetch(
+        config,
+        str(available_end or generated_at[:10]),
+        backfill_all=True,
+        backfill_days=1,
+    ) if available_end else []
+    stored_date_set = {str(date) for date in dates if date}
+    coverage_ratio = (len(stored_date_set) / len(possible_weekdays)) if possible_weekdays else None
+    continuity_label = "none"
+    if available_start == config.listing_date:
+        if coverage_ratio is not None and coverage_ratio >= 0.9:
+            continuity_label = "listing_date_near_continuous"
+        elif coverage_ratio is not None and coverage_ratio >= 0.5:
+            continuity_label = "listing_date_partial"
+        else:
+            continuity_label = "listing_date_sparse"
+    elif available_start:
+        continuity_label = "partial_after_listing"
+    return {
+        "listingDate": config.listing_date,
+        "oldestStoredDate": available_start,
+        "latestStoredDate": available_end,
+        "storedFromListingDate": available_start == config.listing_date,
+        "continuityLabel": continuity_label,
+        "storedWeekdayCount": len(stored_date_set),
+        "possibleWeekdayCountThroughLatest": len(possible_weekdays),
+        "coverageRatioThroughLatest": coverage_ratio,
+        "note": "공급자 public holdings endpoint가 반환한 live 스냅샷만 저장합니다. 휴장일, 공급자 공백, rate limit 날짜는 다음 missing-only 백필에서 이어서 채웁니다.",
+    }
+
+
+def history_manifest(history: dict[str, list[dict[str, Any]]], generated_at: str) -> dict[str, Any]:
+    etfs = []
+    all_dates: list[str] = []
+    for config in ETFS:
+        rows = history.get(config.id, [])
+        dates = [str(row.get("date")) for row in rows if row.get("date")]
+        all_dates.extend(dates)
+        availability = source_availability(config, rows, generated_at)
+        etfs.append({
+            "id": config.id,
+            "name": config.name,
+            "shortName": config.short_name,
+            "code": config.code,
+            "provider": config.provider,
+            "listingDate": config.listing_date,
+            "historyUrl": history_url_for(config),
+            "historyCount": len(rows),
+            "availableStartDate": min(dates) if dates else None,
+            "availableEndDate": max(dates) if dates else None,
+            "sourceAvailability": availability,
+        })
+    return {
+        "schemaVersion": SCHEMA_VERSION,
+        "generatedAt": generated_at,
+        "timezone": "Asia/Seoul",
+        "description": "Manifest only. Full replay-safe histories are split into per-ETF files under data/history/ to keep GitHub Pages payloads below large-file limits.",
+        "availableStartDate": min(all_dates) if all_dates else None,
+        "availableEndDate": max(all_dates) if all_dates else None,
+        "etfs": etfs,
+    }
+
+
+def write_history_outputs(output_dir: Path, history: dict[str, list[dict[str, Any]]], generated_at: str) -> dict[str, Any]:
+    manifest = history_manifest(history, generated_at)
+    history_dir = output_dir / HISTORY_DIR_NAME
+    history_dir.mkdir(parents=True, exist_ok=True)
+    for config in ETFS:
+        rows = history.get(config.id, [])
+        payload = {
+            "schemaVersion": SCHEMA_VERSION,
+            "generatedAt": generated_at,
+            "id": config.id,
+            "name": config.name,
+            "shortName": config.short_name,
+            "code": config.code,
+            "provider": config.provider,
+            "sourceUrl": config.source_url,
+            "listingDate": config.listing_date,
+            "historyCount": len(rows),
+            "availableStartDate": rows[0].get("date") if rows else None,
+            "availableEndDate": rows[-1].get("date") if rows else None,
+            "sourceAvailability": source_availability(config, rows, generated_at),
+            "latest": rows[-1] if rows else None,
+            "history": rows,
+        }
+        write_json(history_path_for(output_dir, config), payload, compact=True)
+    write_json(output_dir / "history.json", manifest, compact=False)
+    return manifest
+
+
 def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[str, dict[str, Any]], generated_at: str) -> dict[str, Any]:
     etf_payloads = []
     all_signals: list[dict[str, Any]] = []
@@ -1613,17 +1806,11 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         latest = rows[-1] if rows else None
         signals = latest.get("signals", []) if latest else []
         all_signals.extend({**signal, "etfId": config.id, "etfName": config.name} for signal in signals)
-        dates = [row.get("date") for row in rows if row.get("date")]
-        all_dates.extend(str(date) for date in dates if date)
+        dates = [str(row.get("date")) for row in rows if row.get("date")]
+        all_dates.extend(dates)
         available_start = min(dates) if dates else None
         available_end = max(dates) if dates else None
-        possible_weekdays = dates_to_fetch(
-            config,
-            str(available_end or generated_at[:10]),
-            backfill_all=True,
-            backfill_days=1,
-        ) if available_end else []
-        stored_date_set = {str(date) for date in dates if date}
+        availability = source_availability(config, rows, generated_at)
         source_earliest_dates[config.id] = str(available_start) if available_start else None
         entry_exit_count = sum(1 for signal in signals if signal.get("type") in {"top10_entry", "top10_exit"})
         etf_payloads.append({
@@ -1637,18 +1824,9 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "availableStartDate": available_start,
             "availableEndDate": available_end,
             "historyCount": len(rows),
-            "sourceAvailability": {
-                "listingDate": config.listing_date,
-                "oldestStoredDate": available_start,
-                "latestStoredDate": available_end,
-                "storedFromListingDate": available_start == config.listing_date,
-                "storedWeekdayCount": len(stored_date_set),
-                "possibleWeekdayCountThroughLatest": len(possible_weekdays),
-                "coverageRatioThroughLatest": (len(stored_date_set) / len(possible_weekdays)) if possible_weekdays else None,
-                "note": "공급자 public holdings endpoint가 반환한 live 스냅샷만 저장합니다. 휴장일, 공급자 공백, rate limit 날짜는 다음 missing-only 백필에서 이어서 채웁니다.",
-            },
+            "historyUrl": history_url_for(config),
+            "sourceAvailability": availability,
             "latest": latest,
-            "history": rows,
             "signals": signals,
             "metrics": {
                 "top10Count": len(latest.get("top10", [])) if latest else 0,
@@ -1671,7 +1849,7 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         "disclaimer": "가격 수익률 분해는 추정이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.",
         "sourcePolicy": {
             "holdings": "ETF provider public pages/APIs",
-            "holdingsHistory": "Full provider holdings are persisted; TOP10 is a derived dashboard view.",
+            "holdingsHistory": "Full provider holdings are persisted in per-ETF history files; TOP10 is a derived dashboard view.",
             "prices": "For attribution, ETF provider valuation-per-share KRW is preferred when available because ETF weights are KRW NAV weights; otherwise the updater falls back to local fixtures, Yahoo Chart query1/query2 adjusted closes, Stooq CSV, and optional FinanceDataReader.",
             "fx": "External USD/JPY/HKD closes are converted to KRW returns with direct FX series where available: Yahoo Chart FX first, then Stooq FX CSV. Google Finance is not used in automation because it lacks a stable historical HTTP API.",
             "googleFinance": "Google Finance has no stable public historical HTTP API in this updater; use it only as manual cross-check outside scheduled automation.",
@@ -1691,12 +1869,14 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "sourceEarliestStoredDates": source_earliest_dates,
             "scheduledLookbackDays": DEFAULT_SCHEDULED_BACKFILL_DAYS,
             "missingOnlyDefault": True,
-            "startDateExplanation": "2026-04-01은 공급자 한계가 아니라 이전 커밋의 백필 범위였습니다. 현재는 공급자 public holdings endpoint가 live로 반환한 상장일 이후 usable 스냅샷을 저장하며, 공급자 공백·휴장일·rate limit 날짜는 missing-only 백필에서 이어서 채웁니다.",
+            "historyManifestUrl": "data/history.json",
+            "historyStorage": "per_etf_lazy_files",
+            "startDateExplanation": "2026-04-01은 공급자 한계가 아니라 이전 커밋의 백필 범위였습니다. 현재는 공급자 public holdings endpoint가 live로 반환한 상장일 이후 usable 스냅샷을 저장하며, 공급자 공백·휴장일·rate limit 날짜는 missing-only 백필에서 이어서 채웁니다. 다만 상장일 스냅샷이 있어도 coverage가 낮으면 연속 시계열이 아니라 희소 백필로 표시합니다.",
             "manualBackfillStartDate": "--backfill-start-date YYYY-MM-DD",
             "manualBackfillAll": "--backfill-all",
             "manualRefreshExisting": "--refresh-existing",
             "fetchOrder": "공급자 throttling이 최신 스냅샷을 가리지 않도록 목표일을 먼저 확인하고, 이미 저장된 usable 스냅샷은 재요청하지 않은 뒤 없는 날짜만 채웁니다.",
-            "payloadTradeoff": "상장일 이후 전체 백필 명령은 지원하지만, 예약 자동화는 정적 JSON 용량과 공급자 요청 제한을 피하기 위해 작은 rolling window만 갱신합니다.",
+            "payloadTradeoff": "상장일 이후 전체 백필 명령은 지원하지만, 예약 자동화는 정적 JSON 용량과 공급자 요청 제한을 피하기 위해 작은 rolling window만 갱신합니다. 상세 히스토리는 ETF 선택 시 별도 파일로 불러옵니다.",
         },
         "manualUpdatePolicy": {
             "workflowUrl": "https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml",
@@ -1726,6 +1906,11 @@ def build_latest(history: dict[str, list[dict[str, Any]]], generated_at: str) ->
     }
 
 
+def diagnostic_requested_date(item: dict[str, Any]) -> str | None:
+    value = item.get("targetDate", item.get("queryDate", item.get("date")))
+    return str(value) if value else None
+
+
 def build_status(
     history: dict[str, list[dict[str, Any]]],
     generated_at: str,
@@ -1744,18 +1929,20 @@ def build_status(
         analysis = latest.get("analysisSummary", {}) if latest else {}
         if isinstance(analysis.get("priceErrors"), dict):
             latest_price_errors.update({f"{config.id}:{ticker}": error for ticker, error in analysis["priceErrors"].items()})
-        target_diagnostics = [item for item in diagnostics.get(config.id, []) if item.get("targetDate", item.get("queryDate", item.get("date"))) == target_date]
+        config_diagnostics = diagnostics.get(config.id, [])
+        target_diagnostics = [item for item in config_diagnostics if diagnostic_requested_date(item) == target_date]
+        historical_diagnostics = [item for item in config_diagnostics if diagnostic_requested_date(item) != target_date]
         target_diag = target_diagnostics[-1] if target_diagnostics else None
         latest_date = latest.get("date") if latest else None
         target_status = target_diag.get("sourceStatus") if target_diag else "not_attempted"
         target_has_top10 = bool(target_diag.get("hasTop10")) if target_diag else False
         target_warning = target_diag.get("sourceWarning") if target_diag else "No target-date fetch diagnostic available"
-        skipped_fetch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("skippedFetch"))
-        fetched_count = sum(1 for item in diagnostics.get(config.id, []) if not item.get("skippedFetch") and item.get("sourceStatus") == "live")
-        historical_error_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "error")
-        historical_rate_limited_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "rate_limited")
-        historical_stale_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("sourceStatus") == "stale")
-        historical_mismatch_count = sum(1 for item in diagnostics.get(config.id, []) if item.get("dateMismatch"))
+        skipped_fetch_count = sum(1 for item in config_diagnostics if item.get("skippedFetch"))
+        fetched_count = sum(1 for item in config_diagnostics if not item.get("skippedFetch") and item.get("sourceStatus") == "live")
+        historical_error_count = sum(1 for item in historical_diagnostics if item.get("sourceStatus") == "error")
+        historical_rate_limited_count = sum(1 for item in historical_diagnostics if item.get("sourceStatus") == "rate_limited")
+        historical_stale_count = sum(1 for item in historical_diagnostics if item.get("sourceStatus") == "stale")
+        historical_mismatch_count = sum(1 for item in historical_diagnostics if item.get("dateMismatch"))
         target_error_count = sum(1 for item in target_diagnostics if item.get("sourceStatus") == "error")
         target_rate_limited_count = sum(1 for item in target_diagnostics if item.get("sourceStatus") == "rate_limited")
         target_stale_count = sum(1 for item in target_diagnostics if item.get("sourceStatus") == "stale")
@@ -2060,14 +2247,14 @@ def run_update(args: argparse.Namespace) -> dict[str, Any]:
     price_provider = PriceProvider(args.fixture_dir, no_live=args.no_live_prices)
     enriched, summaries = enrich_history(merged, price_provider)
     public_enriched = public_history(enriched)
+    replay_history = stored_history(enriched)
     dashboard = build_dashboard(public_enriched, summaries, generated_at)
     latest = build_latest(public_enriched, generated_at)
-    history_payload = {"schemaVersion": SCHEMA_VERSION, "generatedAt": generated_at, "etfs": public_enriched}
     status = build_status(enriched, generated_at, price_provider, args.target_date, diagnostics)
 
     automation_status = build_automation_status(status, generated_at, args.target_date)
 
-    write_json(output_dir / "history.json", history_payload, compact=True)
+    write_history_outputs(output_dir, replay_history, generated_at)
     write_json(output_dir / "latest.json", latest)
     write_json(output_dir / "dashboard.json", dashboard, compact=True)
     write_json(output_dir / "status.json", status)

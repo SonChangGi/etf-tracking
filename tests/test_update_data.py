@@ -699,6 +699,87 @@ class UpdateDataTests(unittest.TestCase):
         self.assertNotIn("priceDiagnostics", public["analysisSummary"])
         self.assertNotIn("priceErrors", public["analysisSummary"])
 
+    def test_stored_snapshot_preserves_replay_metadata_without_heavy_internals(self):
+        snap = {
+            "date": "2026-06-17",
+            "queryDate": "2026-06-17",
+            "navAsOfDate": "2026-06-16",
+            "sourceConfidence": "high",
+            "sourceWarning": "",
+            "totalHoldings": 20,
+            "fetchedAt": "2026-06-17T00:00:00+00:00",
+            "holdings": [{
+                "rank": 11,
+                "ticker": "AAA",
+                "name": "Alpha",
+                "codeRaw": "AAA US EQUITY",
+                "sourceFields": {"raw": "large"},
+                "shares": 10,
+                "marketValueKrw": 1000,
+                "weightPercent": 1.0,
+                "priceTrackingMethod": "external_ticker",
+            }],
+            "top10": [{
+                "rank": 1,
+                "ticker": "AAA",
+                "name": "Alpha",
+                "codeRaw": "AAA US EQUITY",
+                "sourceFields": {"raw": "large"},
+                "weightPercent": 1.0,
+                "priceTrackingMethod": "external_ticker",
+            }],
+            "decomposition": [{
+                "ticker": "AAA",
+                "deltaResidualPercentPoint": 0.1,
+                "priceSource": "provider_valuation_krw",
+                "priceMeta": {"attempts": [{"large": True}]},
+            }],
+            "analysisSummary": {
+                "returnCoverage": 1.0,
+                "returnCoverageStatus": "ok",
+                "priceErrors": {"AAA": "missing_close"},
+                "priceDiagnostics": {"AAA": [{"huge": True}]},
+            },
+        }
+        stored = update_data.stored_snapshot(snap)
+        self.assertEqual(stored["queryDate"], "2026-06-17")
+        self.assertEqual(stored["navAsOfDate"], "2026-06-16")
+        self.assertEqual(stored["sourceConfidence"], "high")
+        self.assertEqual(stored["totalHoldings"], 20)
+        self.assertEqual(stored["holdings"][0]["name"], "Alpha")
+        self.assertEqual(stored["holdings"][0]["codeRaw"], "AAA US EQUITY")
+        self.assertEqual(stored["holdings"][0]["priceTrackingMethod"], "external_ticker")
+        self.assertNotIn("sourceFields", stored["holdings"][0])
+        self.assertNotIn("priceMeta", stored["decomposition"][0])
+        self.assertNotIn("priceDiagnostics", stored["analysisSummary"])
+        self.assertNotIn("priceErrors", stored["analysisSummary"])
+
+    def test_history_outputs_are_manifest_plus_per_etf_files(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output_dir = Path(temp)
+            history = {cfg.id: [] for cfg in update_data.ETFS}
+            history[update_data.ETFS[0].id] = [{
+                "date": update_data.ETFS[0].listing_date,
+                "queryDate": update_data.ETFS[0].listing_date,
+                "sourceStatus": "live",
+                "sourceConfidence": "high",
+                "top10": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 1.0}],
+                "holdings": [{"rank": 1, "ticker": "AAA", "name": "Alpha", "weightPercent": 1.0}],
+                "decomposition": [],
+                "signals": [],
+                "analysisSummary": {"returnCoverage": 1.0, "returnCoverageStatus": "ok"},
+            }]
+            manifest = update_data.write_history_outputs(output_dir, history, "2026-06-17T00:00:00+00:00")
+            manifest_on_disk = json.loads((output_dir / "history.json").read_text(encoding="utf-8"))
+            per_etf = json.loads((output_dir / "history" / f"{update_data.ETFS[0].id}.json").read_text(encoding="utf-8"))
+            loaded = update_data.load_history(output_dir)
+        self.assertIsInstance(manifest["etfs"], list)
+        self.assertIsInstance(manifest_on_disk["etfs"], list)
+        self.assertEqual(manifest_on_disk["etfs"][0]["historyUrl"], f"data/history/{update_data.ETFS[0].id}.json")
+        self.assertNotIn("history", manifest_on_disk["etfs"][0])
+        self.assertEqual(per_etf["history"][0]["queryDate"], update_data.ETFS[0].listing_date)
+        self.assertEqual(loaded[update_data.ETFS[0].id][0]["queryDate"], update_data.ETFS[0].listing_date)
+
     def test_write_json_can_compact_large_public_payloads(self):
         with tempfile.TemporaryDirectory() as temp:
             path = Path(temp) / "payload.json"
@@ -758,6 +839,26 @@ class UpdateDataTests(unittest.TestCase):
         self.assertEqual(update_data.automation_warnings(status), [])
         self.assertEqual(status["etfs"][0]["fetchStats"]["historicalErrors"], 1)
         self.assertEqual(status["etfs"][0]["fetchStats"]["historicalRateLimited"], 1)
+
+    def test_status_splits_target_diagnostics_from_historical_counts(self):
+        target = "2026-06-17"
+        history = {cfg.id: [] for cfg in update_data.ETFS}
+        history[update_data.ETFS[0].id] = [{
+            "date": "2026-06-16",
+            "sourceStatus": "live",
+            "sourceWarning": "",
+            "analysisSummary": {"returnCoverageStatus": "ok", "returnCoverage": 1.0},
+            "top10": [{"ticker": "AAA", "weightPercent": 1}],
+        }]
+        diagnostics = {cfg.id: [] for cfg in update_data.ETFS}
+        diagnostics[update_data.ETFS[0].id] = [
+            {"targetDate": target, "date": target, "sourceStatus": "error", "hasTop10": False},
+            {"targetDate": "2026-06-10", "date": "2026-06-10", "sourceStatus": "error", "hasTop10": False},
+        ]
+        status = update_data.build_status(history, "2026-06-17T00:00:00+00:00", update_data.PriceProvider(no_live=True), target, diagnostics)
+        stats = status["etfs"][0]["fetchStats"]
+        self.assertEqual(stats["targetErrors"], 1)
+        self.assertEqual(stats["historicalErrors"], 1)
 
     def test_committed_dashboard_latest_decomposition_matches_formula_and_policy(self):
         dashboard = json.loads((ROOT / "data" / "dashboard.json").read_text(encoding="utf-8"))

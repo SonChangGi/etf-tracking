@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "1.2.1",
-  "generatedAt": "2026-06-18T16:00:55+00:00",
-  "targetDate": "2026-06-18",
+  "schemaVersion": "1.3.0",
+  "generatedAt": "2026-06-19T14:55:24+00:00",
+  "targetDate": "2026-06-19",
   "runStatus": "ok",
   "overallStatus": "ok",
   "priceErrorCount": 0,
