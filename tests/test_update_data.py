@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import re
 import sys
 import tempfile
 import unittest
@@ -984,6 +985,23 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("Automatic provider refresh schedules are suspended", workflow)
         self.assertFalse((ROOT / ".github" / "workflows" / "deploy-pages.yml").exists())
 
+
+
+class WorkflowStrictValidationTests(unittest.TestCase):
+    def test_manual_strict_validation_defaults_to_true(self):
+        workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
+        strict_block = re.search(r"strict_validation:\n(?P<body>(?:        .+\n)+)", workflow)
+        self.assertIsNotNone(strict_block, "strict_validation input should exist")
+        self.assertIn("default: 'true'", strict_block.group("body"))
+        self.assertIn("set false only for diagnostics", strict_block.group("body"))
+
+    def test_strict_manual_gate_covers_update_verify_assess_and_commit(self):
+        workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
+        self.assertIn("inputs.strict_validation == 'true'", workflow)
+        self.assertIn("steps.update.outcome != 'success'", workflow)
+        self.assertIn("steps.verify.outcome != 'success'", workflow)
+        self.assertIn("steps.assess.outputs.safe_to_commit != 'true'", workflow)
+        self.assertIn("steps.commit-data.outcome == 'failure'", workflow)
 
 
 if __name__ == "__main__":
