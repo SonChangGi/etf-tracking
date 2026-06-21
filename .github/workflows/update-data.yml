@@ -1,14 +1,9 @@
 name: Update ETF tracking data
 
 on:
-  schedule:
-    # 08:05 KST primary run after Korean provider morning refresh window starts.
-    - cron: '5 23 * * 0-5'
-    # Retry slots if prior US close or provider PDF rows are not available yet.
-    - cron: '30 0 * * 1-6'
-    - cron: '0 2 * * 1-6'
-    - cron: '0 4 * * 1-6'
   workflow_dispatch:
+    # Automatic provider refresh is suspended after the multi-repo rollback.
+    # Manual runs keep the existing soft-fail, npm test, and safe_to_commit gates.
     inputs:
       backfill_all:
         description: 'Fetch all weekdays since each ETF listing date'
@@ -39,7 +34,7 @@ permissions:
 
 env:
   # GitHub warned that Node 20 JavaScript actions are being deprecated. Opt in now
-  # so scheduled runs do not start warning/failing only because the runner default changes.
+  # so manual validation does not warn/fail only because the runner default changes.
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
@@ -142,10 +137,10 @@ jobs:
           cat > /tmp/etf-tracking-data-commit-message <<'MSG'
           Keep ETF tracking data fresh
 
-          Constraint: Scheduled runs start after 08:00 KST with retry slots for delayed prior closes.
+          Constraint: Automatic provider refresh schedules are suspended; only reviewed manual dispatches should refresh data.
           Confidence: high
           Scope-risk: narrow
-          Directive: Expected provider/price delays must be recorded in data/automation-status.json instead of failing scheduled runs.
+          Directive: Expected provider/price delays must be recorded in data/automation-status.json instead of silently publishing partial data.
           Tested: npm test
           Not-tested: Manual investment interpretation.
           MSG

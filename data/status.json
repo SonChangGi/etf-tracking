@@ -3,7 +3,7 @@
   "generatedAt": "2026-06-19T14:55:24+00:00",
   "targetDate": "2026-06-19",
   "overallStatus": "ok",
-  "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
+  "message": "If prior closes or provider rows are missing, use a reviewed manual workflow_dispatch run to refresh this file.",
   "priceErrorCount": 0,
   "priceErrors": {},
   "etfs": [

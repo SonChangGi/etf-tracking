@@ -596,7 +596,7 @@ class UpdateDataTests(unittest.TestCase):
         )
         self.assertEqual(automation["runStatus"], "soft_failed")
         self.assertGreaterEqual(automation["warningCount"], 3)
-        self.assertIn("Expected provider/price delays", automation["notificationPolicy"]["scheduledWorkflow"])
+        self.assertIn("Expected provider/price delays", automation["notificationPolicy"]["workflowDispatch"])
         self.assertEqual(automation["error"], "provider timeout")
 
     def test_stale_same_close_does_not_count_as_return_coverage(self):
@@ -966,10 +966,12 @@ class UpdateDataTests(unittest.TestCase):
         self.assertTrue(status["etfs"][0]["reusedExistingTargetSnapshot"])
         self.assertEqual(update_data.automation_warnings(status), [])
 
-    def test_workflow_contains_exact_retry_crons(self):
+    def test_workflow_is_manual_only_after_rollback_with_safe_commit_gates(self):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
-        for cron in ["5 23 * * 0-5", "30 0 * * 1-6", "0 2 * * 1-6", "0 4 * * 1-6"]:
-            self.assertIn(cron, workflow)
+        self.assertIn("workflow_dispatch:", workflow)
+        self.assertIn("Automatic provider refresh is suspended", workflow)
+        self.assertNotIn("schedule:", workflow)
+        self.assertNotIn("cron:", workflow)
         self.assertIn("--soft-fail", workflow)
         self.assertIn("strict_validation", workflow)
         self.assertIn("backfill_start_date", workflow)
@@ -979,7 +981,9 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("continue-on-error", workflow)
         self.assertIn("safe_to_commit", workflow)
         self.assertIn('run_status == "ok"', workflow)
+        self.assertIn("Automatic provider refresh schedules are suspended", workflow)
         self.assertFalse((ROOT / ".github" / "workflows" / "deploy-pages.yml").exists())
+
 
 
 if __name__ == "__main__":

@@ -31,6 +31,9 @@ if (summaryPayload.contract !== 'quant-research-summary' || summaryPayload.proje
 if (!Array.isArray(summaryPayload.primaryEntities) || !summaryPayload.primaryEntities.length) {
   throw new Error('summary.json should expose ticker/entity entries for the dashboard dossier');
 }
+if (summaryPayload.primaryEntities.length < 10) {
+  throw new Error(`summary.json should keep a useful publication floor, got ${summaryPayload.primaryEntities.length} entities`);
+}
 if (!summaryPayload.limitations?.some((text) => String(text).includes('가능성 신호'))) {
   throw new Error('summary.json should preserve residual signal limitation language');
 }

@@ -1852,16 +1852,16 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "holdingsHistory": "Full provider holdings are persisted in per-ETF history files; TOP10 is a derived dashboard view.",
             "prices": "For attribution, ETF provider valuation-per-share KRW is preferred when available because ETF weights are KRW NAV weights; otherwise the updater falls back to local fixtures, Yahoo Chart query1/query2 adjusted closes, Stooq CSV, and optional FinanceDataReader.",
             "fx": "External USD/JPY/HKD closes are converted to KRW returns with direct FX series where available: Yahoo Chart FX first, then Stooq FX CSV. Google Finance is not used in automation because it lacks a stable historical HTTP API.",
-            "googleFinance": "Google Finance has no stable public historical HTTP API in this updater; use it only as manual cross-check outside scheduled automation.",
+            "googleFinance": "Google Finance has no stable public historical HTTP API in this updater; use it only as manual cross-check outside GitHub Actions automation.",
             "dateBasis": "ETF disclosed weight date is Korean-calendar based; return intervals use previous/current priceBasisDate valuation dates recorded on each decomposition row.",
             "attribution": "No-trade predicted weight = previous weight × (1 + KRW-adjusted security return) / (1 + priced benchmark return). The benchmark is the previous-weighted priced holdings universe, not an observed ETF NAV return; residual is actual weight change minus this model price effect.",
             "confidenceRule": "Price-aligned means the residual is small, not fully proven no-trade. Residuals between the aligned threshold and directional threshold are marked residual_watch; only residuals at or beyond the directional threshold become likely_buy/likely_sell possibility signals.",
         },
         "updatePolicy": {
             "timezone": "Asia/Seoul",
-            "primary": "08:05 KST",
-            "retries": ["09:30 KST", "11:00 KST", "13:00 KST"],
-            "cronUtc": ["5 23 * * 0-5", "30 0 * * 1-6", "0 2 * * 1-6", "0 4 * * 1-6"],
+            "primary": "manual workflow_dispatch",
+            "retries": [],
+            "cronUtc": [],
         },
         "historyPolicy": {
             "availableStartDate": min(all_dates) if all_dates else None,
@@ -1876,7 +1876,7 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
             "manualBackfillAll": "--backfill-all",
             "manualRefreshExisting": "--refresh-existing",
             "fetchOrder": "공급자 throttling이 최신 스냅샷을 가리지 않도록 목표일을 먼저 확인하고, 이미 저장된 usable 스냅샷은 재요청하지 않은 뒤 없는 날짜만 채웁니다.",
-            "payloadTradeoff": "상장일 이후 전체 백필 명령은 지원하지만, 예약 자동화는 정적 JSON 용량과 공급자 요청 제한을 피하기 위해 작은 rolling window만 갱신합니다. 상세 히스토리는 ETF 선택 시 별도 파일로 불러옵니다.",
+            "payloadTradeoff": "상장일 이후 전체 백필 명령은 지원하지만, 기본 수동 실행은 정적 JSON 용량과 공급자 요청 제한을 피하기 위해 작은 rolling window만 갱신합니다. 상세 히스토리는 ETF 선택 시 별도 파일로 불러옵니다.",
         },
         "manualUpdatePolicy": {
             "workflowUrl": "https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml",
@@ -1962,7 +1962,7 @@ def build_public_summary(dashboard: dict[str, Any]) -> dict[str, Any]:
         "status": {
             "state": "degraded" if low_coverage else ("ok" if etfs else "degraded"),
             "label": f"{len(etfs)}개 ETF · {len(signals)}개 최근 신호",
-            "cadence": "08:05 KST with intraday retries on provider delays",
+            "cadence": "manual workflow_dispatch after review",
             "expectedFreshnessDays": 3,
             "degradedReasons": [f"low return coverage: {name}" for name in low_coverage],
         },
@@ -2103,7 +2103,7 @@ def build_status(
         "generatedAt": generated_at,
         "targetDate": target_date,
         "overallStatus": "waiting_for_prior_close" if waiting_for_target else ("degraded" if degraded else "ok"),
-        "message": "If prior closes or provider rows are missing, scheduled retry slots after 08:00 KST will refresh this file.",
+        "message": "If prior closes or provider rows are missing, use a reviewed manual workflow_dispatch run to refresh this file.",
         "priceErrorCount": len(latest_price_errors),
         "priceErrors": latest_price_errors,
         "etfs": etf_status,
@@ -2173,7 +2173,7 @@ def build_automation_status(
         "warningCount": len(warnings),
         "warnings": warnings[:40],
         "notificationPolicy": {
-            "scheduledWorkflow": "Expected provider/price delays are recorded as data status instead of exiting non-zero.",
+            "workflowDispatch": "Expected provider/price delays are recorded as data status instead of silently publishing partial data.",
             "manualStrictMode": "workflow_dispatch strict_validation=true still fails for debugging.",
         },
     }
@@ -2323,7 +2323,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--include-empty", action="store_true", help="Persist empty/error snapshots for diagnostics.")
     parser.add_argument("--no-live-prices", action="store_true", help="Skip live Yahoo price calls.")
     parser.add_argument("--provider-delay", type=float, default=0.12, help="Delay between provider requests outside fixture mode.")
-    parser.add_argument("--soft-fail", action="store_true", help="Record automation failure status and return success for scheduled workflows.")
+    parser.add_argument("--soft-fail", action="store_true", help="Record automation failure status and return success for soft-gated workflow runs.")
     return parser.parse_args()
 
 

@@ -58,16 +58,16 @@
         <p class="eyebrow">Manual Update</p>
         <h2 id="manual-update-title">없는 날짜만 채우는 수동 업데이트</h2>
         <p>
-          자동화는 이미 저장된 usable 스냅샷을 다시 요청하지 않고, 최신 기준일과 선택한 백필 범위 안에서
+          수동 워크플로는 이미 저장된 usable 스냅샷을 다시 요청하지 않고, 최신 기준일과 선택한 백필 범위 안에서
           아직 없는 날짜만 채웁니다. 공급자 throttling을 줄이면서 기존 히스토리는 보존합니다.
         </p>
         <p class="manual-update-note">
           보안상 공개 정적 페이지에는 GitHub 토큰을 저장하지 않습니다. 버튼은 인증된 GitHub Actions
           실행 화면으로 연결하며, 저장소 쓰기 권한이 있는 계정으로 로그인한 뒤 <strong>Run workflow</strong>를 누르면 됩니다.
         </p>
-        <ul class="schedule-list" aria-label="자동 업데이트 일정">
-          <li><strong>08:05 KST</strong><span>기본 자동 업데이트</span></li>
-          <li><strong>09:30·11:00·13:00 KST</strong><span>공급자/전일 종가 지연 대비 재시도</span></li>
+        <ul class="schedule-list" aria-label="수동 업데이트 정책">
+          <li><strong>자동 스케줄 중지</strong><span>멀티 repo 롤백 이후 예약 실행은 비활성화되어 있습니다.</span></li>
+          <li><strong>검토 후 수동 실행</strong><span>공급자/전일 종가 지연을 확인한 뒤 <code>workflow_dispatch</code>로 실행합니다.</span></li>
           <li><strong>수동 실행</strong><span><code>backfill_start_date</code>로 과거 누락 구간을 채우고, 필요할 때만 <code>refresh_existing</code>을 사용합니다.</span></li>
         </ul>
       </div>
@@ -226,7 +226,7 @@
         </article>
         <article>
           <h3>히스토리 범위</h3>
-          <p>예약 자동화는 최신 데이터를 먼저 가져온 뒤 최근 구간을 갱신합니다. 더 과거 분석은 수동 백필로 확장할 수 있으며, 정적 JSON 용량과 공급자 throttling을 함께 고려합니다.</p>
+          <p>검토된 수동 실행은 최신 데이터를 먼저 가져온 뒤 최근 구간을 갱신합니다. 더 과거 분석은 수동 백필로 확장할 수 있으며, 정적 JSON 용량과 공급자 throttling을 함께 고려합니다.</p>
         </article>
       </div>
     </section>

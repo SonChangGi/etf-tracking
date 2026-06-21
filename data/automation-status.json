@@ -8,7 +8,7 @@
   "warningCount": 0,
   "warnings": [],
   "notificationPolicy": {
-    "scheduledWorkflow": "Expected provider/price delays are recorded as data status instead of exiting non-zero.",
-    "manualStrictMode": "workflow_dispatch strict_validation=true still fails for debugging."
+    "manualStrictMode": "workflow_dispatch strict_validation=true still fails for debugging.",
+    "workflowDispatch": "Expected provider/price delays are recorded as data status instead of silently publishing partial data."
   }
 }
