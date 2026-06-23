@@ -106,12 +106,11 @@ if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_bu
 if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_sell' && point.direction === 'sell')) {
   throw new Error('hover chart should include selected-period sell markers, not just residual watches');
 }
-const spacexSeries = series.find((item) => /Space Exploration Technologies/i.test(item.fullLabel));
-if (!spacexSeries?.signalPoints.some((point) => point.kind === 'entry' && point.actionEstimate === 'top10_entry' && point.glyph === '＋')) {
-  throw new Error('hover chart should show TOP10 entry markers for SpaceX-like recent entrants');
-}
 const koact = parsed.etfs.find((etf) => etf.id === 'koact-nasdaq-growth-active');
 const allSeries = parsed.etfs.flatMap((etf) => api.buildWeightSeries(etf.history, etf.latest?.top10 || []));
+if (!allSeries.some((item) => item.signalPoints.some((point) => point.kind === 'entry' && point.actionEstimate === 'top10_entry' && point.glyph === '＋'))) {
+  throw new Error('hover chart should show TOP10 entry markers for current provider data, without depending on a specific holding name');
+}
 if (!allSeries.some((item) => item.signalPoints.some((point) => point.kind === 'entry' && point.actionEstimate === 'new_entry'))) {
   throw new Error('hover chart should show 신규 편입 markers when no residual buy estimate exists for visible current TOP10 holdings');
 }
@@ -153,9 +152,11 @@ const selectedSignalCounts = api.signalTableCounts(selectedSignalRows);
 if (!selectedSignalRows.length || selectedSignalCounts.entry < 1 || selectedSignalCounts.exit < 1) {
   throw new Error('ETF signal table should include selected-period TOP10 entry/exit rows');
 }
-if (!selectedSignalRows.some((row) => /Space Exploration Technologies/i.test(row.name) && api.signalBucket(row) === 'entry')) {
-  throw new Error('ETF signal table should show SpaceX-like TOP10 entry rows');
+const selectedEntryRow = selectedSignalRows.find((row) => api.signalBucket(row) === 'entry' && (row.name || row.ticker));
+if (!selectedEntryRow) {
+  throw new Error('ETF signal table should expose at least one named current TOP10 entry row');
 }
+const selectedEntryQuery = String(selectedEntryRow.name || selectedEntryRow.ticker).split(/\s+/)[0];
 const defaultSignalFilter = api.signalTableDefaultFilter();
 if (defaultSignalFilter.bucket !== 'signal' || defaultSignalFilter.limit !== 30) {
   throw new Error('ETF signal table should default to a compact core-signal view');
@@ -168,9 +169,9 @@ const entryFilteredRows = api.filterSignalTableRows(selectedSignalRows, { ...def
 if (!entryFilteredRows.length || entryFilteredRows.some((row) => api.signalBucket(row) !== 'entry')) {
   throw new Error('ETF signal table event filter should isolate entry rows');
 }
-const queryFilteredRows = api.filterSignalTableRows(selectedSignalRows, { ...defaultSignalFilter, bucket: 'all', query: 'Space' });
-if (!queryFilteredRows.some((row) => /Space Exploration Technologies/i.test(row.name))) {
-  throw new Error('ETF signal table query filter should match holdings by name/ticker');
+const queryFilteredRows = api.filterSignalTableRows(selectedSignalRows, { ...defaultSignalFilter, bucket: 'all', query: selectedEntryQuery });
+if (!queryFilteredRows.some((row) => row.name === selectedEntryRow.name || row.ticker === selectedEntryRow.ticker)) {
+  throw new Error('ETF signal table query filter should match current entry holdings by name/ticker');
 }
 const residualFilteredRows = api.filterSignalTableRows(selectedSignalRows, { ...defaultSignalFilter, bucket: 'all', magnitude: 'residual_010' });
 if (!residualFilteredRows.length || residualFilteredRows.some((row) => Math.abs(row.deltaResidualPercentPoint || 0) < 0.1)) {

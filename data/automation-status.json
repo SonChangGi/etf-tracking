@@ -1,14 +1,14 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-06-19T14:55:24+00:00",
-  "targetDate": "2026-06-19",
+  "generatedAt": "2026-06-23T02:01:00+00:00",
+  "targetDate": "2026-06-23",
   "runStatus": "ok",
   "overallStatus": "ok",
   "priceErrorCount": 0,
   "warningCount": 0,
   "warnings": [],
   "notificationPolicy": {
-    "manualStrictMode": "workflow_dispatch strict_validation=true still fails for debugging.",
-    "workflowDispatch": "Expected provider/price delays are recorded as data status instead of silently publishing partial data."
+    "workflowDispatch": "Expected provider/price delays are recorded as data status instead of silently publishing partial data.",
+    "manualStrictMode": "workflow_dispatch strict_validation=true still fails for debugging."
   }
 }
