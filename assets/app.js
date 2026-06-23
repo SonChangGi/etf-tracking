@@ -6,7 +6,7 @@
   const AUTOMATION_STATUS_URL = 'data/automation-status.json';
   const QUANT_DASHBOARD_URL = 'https://sonchanggi.github.io/quant-dashboard/';
   const WORKFLOW_URL = 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml';
-  const MANUAL_UPDATE_COMMAND = 'gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false';
+  const MANUAL_UPDATE_COMMAND = 'gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true';
   const SUPPORTED_SCHEMA_MAJOR = 1;
   const ALLOWED_LINK_HOSTS = new Set(['github.com', 'sonchanggi.github.io', 'timeetf.co.kr', 'www.samsungactive.co.kr', 'samsungactive.co.kr']);
   const CHART_COLORS = [

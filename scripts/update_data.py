@@ -1881,7 +1881,7 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         "manualUpdatePolicy": {
             "workflowUrl": "https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml",
             "workflowFile": "update-data.yml",
-            "cliCommand": "gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false",
+            "cliCommand": "gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true",
             "security": "Public static pages do not store GitHub tokens; the button opens GitHub's authenticated workflow_dispatch screen.",
             "defaultMode": "missing_only",
         },

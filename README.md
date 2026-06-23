@@ -75,7 +75,7 @@ npm test
 - 자동 예약 workflow는 09:00 KST Tue-Sat 1차 갱신과 12:00/18:00 KST Tue-Sat 재시도를 실행합니다. 예약 workflow는 예상 가능한 데이터 지연/공급자 오류를 soft-fail로 기록하고, 검토된 수동 workflow는 기본적으로 strict validation으로 실패를 드러냅니다.
 - 수동 workflow 기본값은 최신 기준일을 먼저 확인한 뒤 최근 10일 구간에서 저장되지 않은 날짜만 보강합니다. 더 오래된 분석은 `backfill_start_date` 또는 `backfill_all`로 확장합니다.
 - 웹페이지의 수동 업데이트 버튼은 공개 정적 페이지에 토큰을 저장하지 않고 GitHub의 인증된 Actions 실행 화면으로 이동합니다.
-- CLI로 수동 실행하려면 `gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=true -f strict_validation=true`를 사용합니다.
+- CLI로 수동 실행하려면 `gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true`를 사용합니다.
 - 업데이트 결과는 `data/status.json`과 `data/automation-status.json`에 남깁니다.
 - `npm test`까지 통과하고 `automation-status.json`의 `runStatus`가 정확히 `ok`일 때만 새 데이터를 커밋합니다. `waiting_for_data`나 `degraded`는 실패 메일을 만들지는 않지만 데이터 커밋은 차단합니다.
 - 디버깅이 필요할 때는 수동 workflow 실행에서 `strict_validation=true`를 선택하면 일반 CI처럼 실패 종료합니다.

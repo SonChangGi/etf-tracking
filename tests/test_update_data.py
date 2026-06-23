@@ -996,6 +996,15 @@ class WorkflowStrictValidationTests(unittest.TestCase):
         self.assertIn("default: 'true'", strict_block.group("body"))
         self.assertIn("set false only for diagnostics", strict_block.group("body"))
 
+
+    def test_generated_manual_policy_matches_workflow_defaults(self):
+        dashboard = json.loads((ROOT / "data" / "dashboard.json").read_text(encoding="utf-8"))
+        command = dashboard["manualUpdatePolicy"]["cliCommand"]
+        self.assertIn("refresh_existing=false", command)
+        self.assertIn("strict_validation=true", command)
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn(command, readme)
+
     def test_strict_manual_gate_covers_update_verify_assess_and_commit(self):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
         self.assertIn("inputs.strict_validation == 'true'", workflow)

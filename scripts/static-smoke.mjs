@@ -219,6 +219,7 @@ if (api.QUANT_DASHBOARD_URL !== 'https://sonchanggi.github.io/quant-dashboard/')
 if (api.AUTOMATION_STATUS_URL !== 'data/automation-status.json') throw new Error('automation status URL changed');
 if (api.WORKFLOW_URL !== 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml') throw new Error('workflow URL changed');
 if (!api.MANUAL_UPDATE_COMMAND?.includes('refresh_existing=false')) throw new Error('manual update command changed');
+if (!api.MANUAL_UPDATE_COMMAND?.includes('strict_validation=true')) throw new Error('manual update command should default to strict validation');
 if (api.formatPriceSource('provider_valuation_krw') !== 'ETF KRW 평가단가') throw new Error('KRW valuation source label changed');
 if (api.formatPriceSource('fx_adjusted_external_close') !== '외부 종가+환율') throw new Error('FX-adjusted source label changed');
 if (api.formatCoverageUniverse('priced_subset_of_full_holdings') !== '전체 보유종목 중 가격확보분') throw new Error('coverage universe label changed');
@@ -285,6 +286,7 @@ try {
   if (data.etfs.some((etf) => Array.isArray(etf.history))) throw new Error('dashboard JSON should not embed ETF history arrays');
   if (!firstHistory?.history?.length) throw new Error('per-ETF history JSON should be served by the static server');
   if (!data.manualUpdatePolicy?.cliCommand?.includes('workflow run update-data.yml')) throw new Error('dashboard manual update policy invalid');
+  if (!data.manualUpdatePolicy?.cliCommand?.includes('strict_validation=true')) throw new Error('dashboard manual update policy should default to strict validation');
   console.log('PASS static server smoke served ETF tracker shell and data');
 } finally {
   await new Promise((resolve) => server.close(resolve));
