@@ -647,9 +647,9 @@
     const points = series.flatMap((item) => item.points);
     const dates = points.map((point) => Date.parse(point.date)).filter(Number.isFinite);
     const values = points.map((point) => point.value).filter(Number.isFinite);
-    const width = 1080;
-    const height = 460;
-    const margin = { top: 42, right: 172, bottom: 92, left: 82 };
+    const width = 1120;
+    const height = 500;
+    const margin = { top: 46, right: 228, bottom: 96, left: 82 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const minDate = Math.min(...dates);
@@ -721,7 +721,10 @@
   function renderEndLabels(labels, colorByKey) {
     return asArray(labels).map((item) => {
       const color = colorByKey.get(item.key) || '#9aa4b2';
-      return `<g class="line-end-label"><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><text x="${item.x2 + 6}" y="${(item.y2 + 4).toFixed(1)}" fill="${color}">${escapeHtml(item.text)}</text></g>`;
+      const labelX = item.x2 + 7;
+      const labelY = item.y2 - 11;
+      const labelWidth = item.width || Math.min(170, 36 + item.text.length * 6.4);
+      return `<g class="line-end-label"><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><rect x="${labelX - 5}" y="${labelY}" width="${labelWidth.toFixed(1)}" height="19" rx="8"/><text x="${labelX}" y="${(item.y2 + 3.7).toFixed(1)}" fill="${color}">${escapeHtml(item.text)}</text></g>`;
     }).join('');
   }
 
@@ -902,32 +905,40 @@
   }
 
   function buildEndLabels(series, x, y, topY, bottomY) {
-    const labels = asArray(series)
+    const labelSeries = asArray(series).length > 6
+      ? asArray(series).filter((item) => !item.rank || item.rank <= 6)
+      : asArray(series);
+    const labels = labelSeries
       .map((item) => {
         const point = item.validPoints.at(-1);
         if (!point) return null;
+        const text = `${item.rank}. ${truncateLabel(item.label, 10)} · ${formatWeight(point.value)}`;
         return {
           key: item.key,
           y1: y(point.value),
           y2: y(point.value),
           x1: x(point.date),
-          x2: x(point.date) + 26,
-          text: `${item.rank}. ${item.label} ${formatWeight(point.value)}`,
+          x2: x(point.date) + 34,
+          text,
+          width: Math.min(176, 38 + text.length * 6.4),
         };
       })
       .filter(Boolean)
       .sort((a, b) => a.y2 - b.y2);
+    const minGap = 24;
     let previousY = -Infinity;
     labels.forEach((label) => {
-      if (label.y2 - previousY < 18) label.y2 = previousY + 18;
+      if (label.y2 - previousY < minGap) label.y2 = previousY + minGap;
       previousY = label.y2;
     });
-    const overflow = labels.length ? labels.at(-1).y2 - (bottomY - 4) : 0;
+    const overflow = labels.length ? labels.at(-1).y2 - (bottomY - 10) : 0;
     if (overflow > 0) labels.forEach((label) => { label.y2 -= overflow; });
     for (let index = labels.length - 2; index >= 0; index -= 1) {
-      if (labels[index + 1].y2 - labels[index].y2 < 18) labels[index].y2 = labels[index + 1].y2 - 18;
+      if (labels[index + 1].y2 - labels[index].y2 < minGap) labels[index].y2 = labels[index + 1].y2 - minGap;
     }
-    labels.forEach((label) => { label.y2 = Math.max(topY + 8, Math.min(label.y2, bottomY - 4)); });
+    const topOverflow = labels.length ? (topY + 12) - labels[0].y2 : 0;
+    if (topOverflow > 0) labels.forEach((label) => { label.y2 += topOverflow; });
+    labels.forEach((label) => { label.y2 = Math.max(topY + 12, Math.min(label.y2, bottomY - 10)); });
     return labels;
   }
 
