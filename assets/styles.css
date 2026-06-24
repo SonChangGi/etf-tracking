@@ -785,3 +785,667 @@ tbody tr:hover { background: #f3f7ff; }
   .signal-table-actions { justify-content: flex-start; }
   th, td { padding: 13px 12px; }
 }
+
+/* Visual Ralph dark-neutral luxury refresh — design-only, 2026-06-24.
+   Preserve analysis logic, JSON/data contracts, and result semantics. */
+:root {
+  color-scheme: dark;
+  --bg: #080a0f;
+  --panel: rgba(18, 22, 30, 0.94);
+  --card: rgba(18, 22, 30, 0.94);
+  --surface: rgba(18, 22, 30, 0.94);
+  --surface-soft: rgba(31, 36, 48, 0.86);
+  --ink: #f4f4f5;
+  --muted: #9aa4b2;
+  --line: rgba(226, 232, 240, 0.14);
+  --accent: #7dd3fc;
+  --accent-2: #c4b5fd;
+  --accent-soft: rgba(125, 211, 252, 0.12);
+  --primary: #d8dee8;
+  --primary-dark: #f4f4f5;
+  --good: #86efac;
+  --success: #86efac;
+  --warn: #fbbf24;
+  --warning: #fbbf24;
+  --danger: #fb7185;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+}
+
+html { background: #080a0f; }
+
+body {
+  color: var(--ink) !important;
+  background:
+    radial-gradient(circle at 12% -4%, rgba(216, 222, 232, 0.13), transparent 32rem),
+    radial-gradient(circle at 82% 8%, rgba(125, 211, 252, 0.08), transparent 30rem),
+    linear-gradient(180deg, #0d1016 0%, #080a0f 46%, #090b10 100%) !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,.8), transparent 82%);
+}
+
+a { color: inherit; }
+a:hover { color: #f4f4f5; }
+code {
+  color: #d8dee8 !important;
+  background: rgba(216, 222, 232, 0.09) !important;
+  border: 1px solid rgba(216, 222, 232, 0.12);
+}
+
+.eyebrow,
+.hero .eyebrow {
+  color: #d8dee8 !important;
+  letter-spacing: .12em;
+}
+
+.hero,
+.hero-main {
+  color: #f4f4f5 !important;
+  background:
+    radial-gradient(circle at 78% 0%, rgba(125, 211, 252, 0.12), transparent 28rem),
+    linear-gradient(135deg, rgba(23, 28, 38, 0.96) 0%, rgba(12, 15, 21, 0.98) 100%) !important;
+  border-color: rgba(226, 232, 240, 0.14) !important;
+}
+
+.hero::after,
+.hero-main::after {
+  background: rgba(216, 222, 232, 0.05) !important;
+}
+
+.hero-copy,
+.hero-main .hero-copy,
+.section-heading p,
+.panel-heading p,
+.notice,
+.disclaimer,
+.explain,
+.hero-note p,
+.site-footer,
+.helper,
+.manual-update p,
+.analysis-card p,
+.diagnostic-note,
+.control-hint,
+.chart-meta,
+.chart-help,
+.axis-note,
+.scale-legend,
+.scale-foot,
+.card small,
+.project-card p,
+.metric-card small,
+.status-value,
+.lookup-status,
+.company-summary p,
+.methodology-section p {
+  color: var(--muted) !important;
+}
+
+.top-nav {
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(12, 15, 21, 0.74);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.top-nav a,
+.panel-link,
+.hero-actions a,
+.project-card a,
+.hero-link,
+.primary-button,
+.secondary-button,
+.button,
+button,
+.text-button,
+.ticker-form button,
+.ticker-filters button,
+.sample-tickers button,
+.control-card button,
+.hero-dashboard-button {
+  color: #f4f4f5 !important;
+  background: rgba(244, 244, 245, 0.075) !important;
+  border-color: rgba(226, 232, 240, 0.18) !important;
+  box-shadow: none !important;
+}
+
+.hero-actions a:first-child,
+.hero-main .primary-button,
+.button.primary,
+button.primary,
+.ticker-form button[type="submit"] {
+  color: #0a0d12 !important;
+  background: linear-gradient(135deg, #f4f4f5, #b9c0cb) !important;
+  border-color: transparent !important;
+}
+
+.top-nav a:hover,
+.panel-link:hover,
+.hero-actions a:hover,
+.project-card a:hover,
+.button:hover,
+button:hover,
+.text-button:hover,
+.hero-dashboard-button:hover {
+  transform: translateY(-1px);
+  border-color: rgba(244, 244, 245, 0.36) !important;
+  background: rgba(244, 244, 245, 0.12) !important;
+}
+
+.hero-grid > div,
+.hero-note,
+.panel,
+.project-card,
+.metric-card,
+.chart-card,
+.notice-card,
+.lookup-status,
+.company-section,
+.methodology-section,
+.control-card,
+.manual-update,
+.feature-grid article,
+.signal-card,
+.notice,
+.disclaimer,
+.controls,
+.card,
+.viz-card,
+.diagnostic-card,
+.analysis-card,
+.metric-tile,
+.command-card,
+.status-card,
+.update-panel,
+.economic-panel,
+.visual-panel,
+.forecast-chart,
+.valuation-band,
+.valuation-scale,
+.assumption-form,
+.radar-grid,
+.company-card,
+.summary-card,
+.state-card {
+  color: var(--ink) !important;
+  background: linear-gradient(180deg, rgba(23, 28, 38, 0.94), rgba(14, 17, 23, 0.96)) !important;
+  border-color: var(--line) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.hero-grid > div,
+.hero-note,
+.panel,
+.project-card,
+.metric-card,
+.chart-card,
+.notice-card,
+.lookup-status,
+.company-section,
+.methodology-section,
+.control-card,
+.manual-update,
+.feature-grid article,
+.signal-card,
+.notice,
+.disclaimer,
+.controls,
+.card,
+.viz-card,
+.diagnostic-card,
+.analysis-card,
+.metric-tile,
+.command-card,
+.status-card,
+.update-panel,
+.economic-panel,
+.visual-panel,
+.forecast-chart,
+.valuation-band,
+.valuation-scale,
+.assumption-form,
+.radar-grid {
+  position: relative;
+}
+
+.hero-grid > div::after,
+.hero-note::after,
+.panel::after,
+.project-card::after,
+.metric-card::after,
+.chart-card::after,
+.card::after,
+.status-card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07);
+}
+
+h1, h2, h3,
+.panel-heading h2,
+.metric-card strong,
+.card strong,
+.project-card h3,
+.status-card strong,
+.metric-tile-header strong,
+.analysis-card h3,
+.diagnostic-card h3,
+.forecast-chart h3 {
+  color: var(--ink) !important;
+}
+
+.metric-card,
+.metric-tile,
+.project-card,
+.card,
+.diagnostic-card,
+.analysis-card,
+.chart-summary-item,
+.state,
+.gate-item,
+.mini-item,
+.schedule-list li,
+.command-card,
+.value-card {
+  background: rgba(255, 255, 255, 0.035) !important;
+  border-color: rgba(226, 232, 240, 0.11) !important;
+}
+
+select,
+input,
+textarea {
+  color: #f4f4f5 !important;
+  background: rgba(8, 10, 15, 0.72) !important;
+  border-color: rgba(226, 232, 240, 0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid rgba(125, 211, 252, 0.55) !important;
+  outline-offset: 3px;
+}
+
+input[readonly],
+input:disabled,
+select:disabled,
+button:disabled {
+  color: #8e96a3 !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: rgba(226, 232, 240, 0.10) !important;
+}
+
+.table-wrap,
+.table-scroll,
+.data-table-wrap {
+  border-color: var(--line) !important;
+  background: rgba(8, 10, 15, 0.44) !important;
+}
+
+table,
+thead,
+tbody {
+  color: #d8dee8 !important;
+  background: rgba(8, 10, 15, 0.32) !important;
+}
+
+th,
+td {
+  color: #d8dee8 !important;
+  border-bottom-color: rgba(226, 232, 240, 0.10) !important;
+}
+
+th {
+  color: #aab3c2 !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+}
+
+tbody tr:nth-child(even),
+tbody tr:hover {
+  background: rgba(125, 211, 252, 0.055) !important;
+}
+
+.badge,
+.status-pill,
+.selected-chip,
+.chip,
+.card-badge,
+.tag,
+.pill {
+  color: #d8dee8 !important;
+  background: rgba(216, 222, 232, 0.09) !important;
+  border: 1px solid rgba(216, 222, 232, 0.16) !important;
+}
+
+.badge.good,
+.status-pill.success,
+.status-pill.secondary,
+.gate-item.pass,
+.positive {
+  color: var(--good) !important;
+}
+
+.badge.warn,
+.status-pill.warning,
+.gate-item.block,
+.valuation-scale.neutral .scale-fill {
+  color: var(--warning) !important;
+}
+
+.badge.error,
+.status-pill.danger,
+.status-card.error,
+.negative {
+  color: var(--danger) !important;
+}
+
+.line-chart,
+.chart,
+.chart-card,
+.forecast-chart {
+  background:
+    linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px) 0 0 / 100% 25%,
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px) 0 0 / 12.5% 100%,
+    rgba(4, 6, 10, 0.28) !important;
+  border-color: rgba(226, 232, 240, 0.12) !important;
+}
+
+svg text,
+.chart-card svg text,
+.line-chart svg text,
+.chart svg text {
+  fill: #aab3c2 !important;
+}
+
+svg line,
+.axis-line,
+.axis,
+.chart-card .axis-row line,
+.chart-card .axis-column line,
+.line-chart .axis-line {
+  stroke: rgba(226, 232, 240, 0.20) !important;
+}
+
+.axis-label,
+.axis-title,
+.chart-card .axis-row text,
+.chart-card .axis-column text,
+.chart-card .axis-title,
+.chart-card .axis-range,
+.line-end-label text {
+  fill: #aab3c2 !important;
+  color: #aab3c2 !important;
+}
+
+.bar-track,
+.scale-track {
+  background: rgba(226, 232, 240, 0.12) !important;
+  border: 1px solid rgba(226, 232, 240, 0.09);
+}
+
+.bar-fill,
+.trend-fill,
+.scale-fill,
+.forecast-bar.fcf {
+  background: linear-gradient(90deg, #7dd3fc, #c4b5fd) !important;
+}
+
+.bar-fill.negative,
+.trend-fill.negative,
+.valuation-scale.negative .scale-fill {
+  background: linear-gradient(90deg, #fb7185, #fca5a5) !important;
+}
+
+.valuation-scale.positive .scale-fill,
+.forecast-bar.pv {
+  background: linear-gradient(90deg, #86efac, #7dd3fc) !important;
+}
+
+.sensitivity-cell.positive,
+.value-cell.positive {
+  background: rgba(134, 239, 172, 0.10) !important;
+}
+.sensitivity-cell.negative,
+.value-cell.negative {
+  background: rgba(251, 113, 133, 0.10) !important;
+}
+.sensitivity-cell.neutral,
+.value-cell.neutral {
+  background: rgba(251, 191, 36, 0.10) !important;
+}
+
+.legend,
+.line-legend,
+.chart-legend {
+  color: #aab3c2 !important;
+}
+
+.comparison-line.best { stroke: #7dd3fc !important; }
+.comparison-line.selected { stroke: #fbbf24 !important; }
+.comparison-line.benchmark { stroke: #86efac !important; }
+.legend-dot.best { background: #7dd3fc !important; }
+.legend-dot.selected { background: #fbbf24 !important; }
+.legend-dot.benchmark { background: #86efac !important; }
+.series-name.selected { color: #fbbf24 !important; }
+.series-name.best { color: #7dd3fc !important; }
+.series-name.benchmark { color: #86efac !important; }
+
+.noscript-warning,
+.notice.warning {
+  color: #fee9a8 !important;
+  background: rgba(251, 191, 36, 0.11) !important;
+  border-color: rgba(251, 191, 36, 0.28) !important;
+}
+
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: #080a0f; }
+::-webkit-scrollbar-thumb { background: rgba(216, 222, 232, 0.22); border-radius: 999px; border: 3px solid #080a0f; }
+::-webkit-scrollbar-thumb:hover { background: rgba(216, 222, 232, 0.34); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+
+/* ETF dark chart readability. */
+.chart-card .series-signal.signal-entry circle { fill: #11151d !important; stroke: var(--accent) !important; }
+.chart-card .series-signal.signal-exit circle { fill: #11151d !important; stroke: var(--warning) !important; }
+.chart-card .series-signal.signal-buy circle { stroke: var(--success) !important; }
+.chart-card .series-signal.signal-sell circle { stroke: var(--danger) !important; }
+.chart-summary-item strong,
+.chart-summary-item em { color: #f4f4f5 !important; }
+
+/* Visual Ralph iteration-2 premium spacing refinement. */
+.hero {
+  width: min(1320px, calc(100% - 48px));
+  margin: 28px auto 0;
+  border: 1px solid rgba(226, 232, 240, 0.14) !important;
+  border-radius: 30px;
+  box-shadow: 0 28px 90px rgba(0,0,0,.38);
+}
+
+.hero h1 {
+  letter-spacing: -0.065em;
+  line-height: .98;
+}
+
+main {
+  width: min(1320px, calc(100% - 48px));
+  margin-inline: auto;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.section,
+.site-footer {
+  width: min(1320px, calc(100% - 48px)) !important;
+}
+
+.notice,
+.manual-update,
+.controls,
+.cards,
+.panel,
+.dashboard-grid,
+.metric-row,
+.project-grid,
+.feature-grid,
+.company-section,
+.methodology-section,
+.lookup-status,
+.notice-section,
+.dashboard-section {
+  margin-bottom: 24px !important;
+}
+
+.controls,
+.control-card,
+.manual-update,
+.notice,
+.panel,
+.card,
+.metric-card,
+.project-card,
+.hero-note,
+.status-card,
+.notice-card,
+.lookup-status,
+.company-section,
+.methodology-section,
+.feature-grid article,
+.signal-card {
+  border-radius: 24px !important;
+}
+
+.panel,
+.manual-update,
+.controls,
+.control-card,
+.notice-card,
+.lookup-status,
+.company-section,
+.methodology-section {
+  padding: clamp(22px, 2.4vw, 34px) !important;
+}
+
+.cards,
+.metric-row,
+.project-grid,
+.feature-grid,
+.dashboard-grid,
+.analysis-grid,
+.diagnostic-grid,
+.viz-grid,
+.two-col,
+.update-grid {
+  gap: 18px !important;
+}
+
+.card,
+.metric-card,
+.project-card,
+.diagnostic-card,
+.analysis-card,
+.metric-tile,
+.chart-summary-item {
+  padding: 20px !important;
+  min-height: 142px;
+}
+
+.card strong,
+.metric-card strong,
+.project-card h3 {
+  font-size: clamp(1.2rem, 2vw, 1.65rem) !important;
+}
+
+.panel-heading {
+  margin-bottom: 20px !important;
+}
+
+.panel-heading h2,
+.section-heading h2,
+.manual-update h2 {
+  font-size: clamp(1.7rem, 3.1vw, 2.85rem) !important;
+}
+
+.line-chart,
+.chart-card,
+.chart,
+.forecast-chart {
+  border-radius: 22px !important;
+}
+
+.top-nav,
+.hero-actions,
+.panel-actions,
+.compare-actions,
+.manual-update-actions,
+.ticker-filters,
+.sample-tickers {
+  gap: 10px !important;
+}
+
+.top-nav a,
+.panel-link,
+.hero-actions a,
+.project-card a,
+.hero-link,
+.primary-button,
+.secondary-button,
+.button,
+button,
+.text-button,
+.ticker-form button,
+.ticker-filters button,
+.sample-tickers button,
+.control-card button,
+.hero-dashboard-button {
+  min-height: 44px;
+  padding-inline: 18px !important;
+}
+
+.status-card {
+  background: rgba(8,10,15,.36) !important;
+}
+
+@media (max-width: 720px) {
+  .hero,
+  main,
+  .section,
+  .site-footer {
+    width: min(100% - 28px, 1320px) !important;
+  }
+  .hero { margin-top: 14px; border-radius: 24px; }
+  .panel,
+  .manual-update,
+  .controls,
+  .control-card,
+  .notice-card,
+  .lookup-status,
+  .company-section,
+  .methodology-section { padding: 18px !important; }
+}
