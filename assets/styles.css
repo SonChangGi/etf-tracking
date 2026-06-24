@@ -1655,3 +1655,59 @@ td:not(:first-child),
 .chart-card { overflow-x: auto !important; }
 .signal-filter-grid input,
 .signal-filter-grid select { color: var(--text-strong) !important; background: rgba(255,255,255,0.06) !important; border-color: rgba(226,232,240,0.16) !important; }
+
+/* Visual Ralph follow-up: chart-below chips and event marker contrast, 2026-06-25. */
+.marker-entry,
+.marker-exit,
+.marker-buy,
+.marker-sell,
+.classification,
+.classification.top10_entry,
+.classification.top10_exit,
+.classification.new_entry,
+.classification.exit,
+.classification.fund_exit,
+.classification.likely_buy,
+.classification.likely_sell,
+.signal-badge,
+.signal-filter-chip,
+.signal-count-strip span,
+.chart-summary-item .legend-key {
+  color: var(--text-readable) !important;
+  background: rgba(15,23,42,0.80) !important;
+  border-color: rgba(226,232,240,0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.065), 0 10px 24px rgba(0,0,0,0.20) !important;
+}
+.marker-entry,
+.marker-buy,
+.classification.top10_entry,
+.classification.new_entry,
+.classification.likely_buy {
+  color: #a7f3d0 !important;
+  background: linear-gradient(135deg, rgba(20,184,166,0.22), rgba(15,23,42,0.86)) !important;
+  border-color: rgba(94,234,212,0.28) !important;
+}
+.marker-exit,
+.marker-sell,
+.classification.top10_exit,
+.classification.exit,
+.classification.fund_exit,
+.classification.likely_sell {
+  color: #fecdd3 !important;
+  background: linear-gradient(135deg, rgba(244,63,94,0.18), rgba(15,23,42,0.86)) !important;
+  border-color: rgba(253,164,175,0.28) !important;
+}
+.classification.mixed,
+.classification.residual_watch,
+.classification.insufficient_data {
+  color: #fde68a !important;
+  background: linear-gradient(135deg, rgba(245,158,11,0.18), rgba(15,23,42,0.86)) !important;
+  border-color: rgba(251,191,36,0.28) !important;
+}
+.chart-summary-item .legend-key,
+.line-legend .legend-dot,
+.legend-key {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.24), 0 0 16px currentColor !important;
+}
+.signal-table td,
+.signal-table th { color: var(--text-readable) !important; }
