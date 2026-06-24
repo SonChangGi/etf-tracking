@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-06-24T02:48:42+00:00",
+  "generatedAt": "2026-06-24T06:42:13+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -1665,7 +1665,6 @@
           {
             "rank": 8,
             "codeRaw": "",
-            "ticker": null,
             "name": "현금",
             "shares": 51909505.0,
             "marketValueKrw": 51909505.0,
