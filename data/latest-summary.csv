@@ -1,31 +1,31 @@
 etf_id,date,rank,ticker,name,weight_percent,classification,residual_pp
-time-nasdaq100-active,2026-06-25,1,SNDK,Sandisk Corp,6.47,residual_watch,-0.24769518043842176
-time-nasdaq100-active,2026-06-25,2,INTC,Intel Corp,5.56,price_aligned,-0.12169481407599214
-time-nasdaq100-active,2026-06-25,3,MU,Micron Technology Inc,5.13,price_aligned,0.004201670669913504
-time-nasdaq100-active,2026-06-25,4,NVDA,NVIDIA Corp,4.74,price_aligned,-0.10852890576610985
-time-nasdaq100-active,2026-06-25,5,DELL,Dell Technologies Inc,4.73,likely_buy,0.8987126585056608
-time-nasdaq100-active,2026-06-25,6,AMD,Advanced Micro Devices Inc,3.63,residual_watch,-0.13624472231049634
-time-nasdaq100-active,2026-06-25,7,LRCX,Lam Research Corp,3.57,price_aligned,-0.09247438183708612
-time-nasdaq100-active,2026-06-25,8,MRVL,Marvell Technology Inc,3.53,price_aligned,-0.03409111316881752
-time-nasdaq100-active,2026-06-25,9,CRDO,Credo Technology Group Holding Ltd,3.51,price_aligned,-0.10263099879556492
-time-nasdaq100-active,2026-06-25,10,STX,Seagate Technology Holdings PLC,3.28,price_aligned,-0.005360196486184687
-time-global-ai-active,2026-06-25,1,285A.T,Kioxia Holdings Corp,8.62,price_aligned,-0.05453260883568767
-time-global-ai-active,2026-06-25,2,INTC,Intel Corp,7.56,price_aligned,-0.009441578028644315
-time-global-ai-active,2026-06-25,3,AMD,Advanced Micro Devices Inc,6.56,price_aligned,0.0028277154395617288
-time-global-ai-active,2026-06-25,4,STX,Seagate Technology Holdings PLC,6.38,price_aligned,-0.0051940833684662735
-time-global-ai-active,2026-06-25,5,WDC,Western Digital Corp,5.42,price_aligned,-0.004512472332796946
-time-global-ai-active,2026-06-25,6,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.84,insufficient_data,
-time-global-ai-active,2026-06-25,7,2513.HK,Knowledge Atlas Technology JSC Ltd,3.82,likely_buy,0.6878304123352272
-time-global-ai-active,2026-06-25,8,ARM,ARM Holdings PLC,3.67,price_aligned,-0.005833283433821723
-time-global-ai-active,2026-06-25,9,SNOW,Snowflake Inc,3.58,price_aligned,-0.021988656286155983
-time-global-ai-active,2026-06-25,10,SNDK,Sandisk Corp,3.39,price_aligned,0.0031219828654118764
-koact-nasdaq-growth-active,2026-06-25,1,MU,MICRON TECH,6.95,price_aligned,-0.11989097941434856
-koact-nasdaq-growth-active,2026-06-25,2,AMD,ADVANCED MICRO DEVICES,6.73,price_aligned,-0.11000252442492542
-koact-nasdaq-growth-active,2026-06-25,3,INTC,INTEL Corp,6.4,price_aligned,-0.11208244851841531
-koact-nasdaq-growth-active,2026-06-25,4,SNDK,Sandisk Corp/DE,6.23,price_aligned,-0.11179690699276534
-koact-nasdaq-growth-active,2026-06-25,5,ARM,ARM Holdings PLC,5.69,residual_watch,-0.6121170659466948
-koact-nasdaq-growth-active,2026-06-25,6,BE,BLOOM ENERGY CORPORATION,5.65,likely_buy,0.8872110907884956
-koact-nasdaq-growth-active,2026-06-25,7,NVDA,NVIDIA Corp,4.4,price_aligned,-0.07560287176710823
-koact-nasdaq-growth-active,2026-06-25,8,GOOGL,ALPHABET INC-CL A,4.19,price_aligned,-0.07215061905485864
-koact-nasdaq-growth-active,2026-06-25,9,LRCX,LAM RESEARCH,4.01,likely_buy,1.3524870640956062
-koact-nasdaq-growth-active,2026-06-25,10,WDC,WESTERN DIGITAL,3.8,price_aligned,-0.06416866588163872
+time-nasdaq100-active,2026-06-26,1,SNDK,Sandisk Corp,6.38,price_aligned,-0.0003377185435029517
+time-nasdaq100-active,2026-06-26,2,INTC,Intel Corp,5.6,price_aligned,0.0030994820128524836
+time-nasdaq100-active,2026-06-26,3,MU,Micron Technology Inc,5.17,price_aligned,-0.002675955752573067
+time-nasdaq100-active,2026-06-26,4,DELL,Dell Technologies Inc,4.86,price_aligned,0.005589014878206733
+time-nasdaq100-active,2026-06-26,5,NVDA,NVIDIA Corp,4.77,price_aligned,0.000633542701912404
+time-nasdaq100-active,2026-06-26,6,AMD,Advanced Micro Devices Inc,3.67,price_aligned,-0.0008009302486207126
+time-nasdaq100-active,2026-06-26,7,LRCX,Lam Research Corp,3.65,price_aligned,0.005366380364828061
+time-nasdaq100-active,2026-06-26,8,MRVL,Marvell Technology Inc,3.54,price_aligned,-0.0004911673792484805
+time-nasdaq100-active,2026-06-26,9,CRDO,Credo Technology Group Holding Ltd,3.51,price_aligned,-0.000851614124124378
+time-nasdaq100-active,2026-06-26,10,STX,Seagate Technology Holdings PLC,3.18,price_aligned,0.007260668427954364
+time-global-ai-active,2026-06-26,1,285A.T,Kioxia Holdings Corp,8.72,price_aligned,-0.0006040430323945856
+time-global-ai-active,2026-06-26,2,INTC,Intel Corp,7.61,price_aligned,0.007532975105330131
+time-global-ai-active,2026-06-26,3,AMD,Advanced Micro Devices Inc,6.63,price_aligned,0.0029841810100652566
+time-global-ai-active,2026-06-26,4,STX,Seagate Technology Holdings PLC,6.17,price_aligned,0.004884887991954301
+time-global-ai-active,2026-06-26,5,WDC,Western Digital Corp,5.26,price_aligned,0.003267409772242935
+time-global-ai-active,2026-06-26,6,2513.HK,Knowledge Atlas Technology JSC Ltd,3.87,price_aligned,0.002548176598506924
+time-global-ai-active,2026-06-26,7,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.86,insufficient_data,
+time-global-ai-active,2026-06-26,8,ARM,ARM Holdings PLC,3.64,price_aligned,0.005708649133275401
+time-global-ai-active,2026-06-26,9,SNOW,Snowflake Inc,3.55,price_aligned,0.0026819790509873265
+time-global-ai-active,2026-06-26,10,SNDK,Sandisk Corp,3.34,price_aligned,0.0003646490749646958
+koact-nasdaq-growth-active,2026-06-26,1,MU,MICRON TECH,7.0,price_aligned,0.0019993853864974653
+koact-nasdaq-growth-active,2026-06-26,2,AMD,ADVANCED MICRO DEVICES,6.79,price_aligned,-0.006112036169052537
+koact-nasdaq-growth-active,2026-06-26,3,INTC,INTEL Corp,6.43,price_aligned,-0.00345130340518196
+koact-nasdaq-growth-active,2026-06-26,4,SNDK,Sandisk Corp/DE,6.14,price_aligned,0.004941712060644754
+koact-nasdaq-growth-active,2026-06-26,5,BE,BLOOM ENERGY CORPORATION,5.78,price_aligned,-0.0013273986898605372
+koact-nasdaq-growth-active,2026-06-26,6,ARM,ARM Holdings PLC,5.63,price_aligned,-0.0024486867906823306
+koact-nasdaq-growth-active,2026-06-26,7,NVDA,NVIDIA Corp,4.42,price_aligned,-0.0010586848957059303
+koact-nasdaq-growth-active,2026-06-26,8,GOOGL,ALPHABET INC-CL A,4.22,price_aligned,-0.0017853701821772816
+koact-nasdaq-growth-active,2026-06-26,9,LRCX,LAM RESEARCH,4.09,price_aligned,0.0019020449485074309
+koact-nasdaq-growth-active,2026-06-26,10,DELL,Dell Technologies Inc,3.73,price_aligned,-0.0005085827874324877
