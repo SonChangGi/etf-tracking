@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-06-26T06:51:10+00:00",
+  "generatedAt": "2026-06-26T11:44:28+00:00",
   "targetDate": "2026-06-26",
   "overallStatus": "ok",
   "message": "Scheduled refresh runs Tue-Sat in KST; if prior closes or provider rows are missing, use a reviewed workflow_dispatch run to refresh this file.",
