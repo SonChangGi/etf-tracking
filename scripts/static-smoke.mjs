@@ -94,6 +94,23 @@ if (Number.isFinite(selectedCoverage) && selectedCoverage < 0.9 && sourceAvailab
 if (selected.sourceAvailability?.storedFromListingDate && Number.isFinite(selectedCoverage) && selectedCoverage < 0.5 && !sourceAvailabilityText.summary.includes('희소')) {
   throw new Error('sparse listing-date coverage should be labeled as 희소 백필');
 }
+const defaultRangeSnapshot = api.setDashboardForTests(parsed);
+const defaultStartTime = Date.parse(defaultRangeSnapshot.startDate);
+const defaultEndTime = Date.parse(defaultRangeSnapshot.endDate);
+if (defaultRangeSnapshot.startDate === selected.availableStartDate) {
+  throw new Error('web dashboard should default to a recent one-month range, not the maximum stored range');
+}
+if (!Number.isFinite(defaultStartTime) || !Number.isFinite(defaultEndTime) || defaultStartTime > defaultEndTime) {
+  throw new Error('default recent range should produce valid start/end dates');
+}
+if ((defaultEndTime - defaultStartTime) / 86_400_000 > 35) {
+  throw new Error(`default recent range should stay near one month, got ${defaultRangeSnapshot.startDate} to ${defaultRangeSnapshot.endDate}`);
+}
+api.handleDateRangeFull();
+const fullRangeSnapshot = api.stateSnapshotForTests();
+if (fullRangeSnapshot.startDate !== selected.availableStartDate || fullRangeSnapshot.endDate !== selected.availableEndDate) {
+  throw new Error('full-range control should remain available after changing the default to recent one month');
+}
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
 const sndkSeries = series.find((item) => item.key === 'SNDK');
@@ -189,7 +206,9 @@ if (!koactSignalRows.some((row) => /Space Exploration Technologies/i.test(row.na
 if (koactSignalCounts.buy < 1 || koactSignalCounts.sell < 1) {
   throw new Error('ETF signal table should count buy and sell observations');
 }
-const fullSignalSnapshot = api.setDashboardForTests(parsed);
+api.setDashboardForTests(parsed);
+api.handleDateRangeFull();
+const fullSignalSnapshot = api.stateSnapshotForTests();
 const selectedFullRows = fullSignalSnapshot.signalTableRows.find((item) => item.etfId === selected.id)?.rows || 0;
 const selectedFullTable = fullSignalSnapshot.signalTableRows.find((item) => item.etfId === selected.id);
 if (!(selectedFullTable?.filteredRows < selectedFullTable?.rows && selectedFullTable?.visibleRows <= 30)) {

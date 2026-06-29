@@ -19,6 +19,7 @@
   const SIGNAL_TABLE_LOAD_STEP = 30;
   const SIGNAL_TABLE_WEIGHT_THRESHOLD = 0.25;
   const SIGNAL_TABLE_RESIDUAL_THRESHOLD = 0.1;
+  const DEFAULT_VISIBLE_RANGE_DAYS = 31;
   const SIGNAL_TABLE_DEFAULT_FILTER = Object.freeze({
     bucket: 'signal',
     query: '',
@@ -396,6 +397,9 @@
     $('#reset-range')?.addEventListener('click', () => {
       handleDateRangeReset();
     });
+    $('#all-range')?.addEventListener('click', () => {
+      handleDateRangeFull();
+    });
     $('#copy-update-command')?.addEventListener('click', () => {
       copyManualUpdateCommand();
     });
@@ -421,6 +425,11 @@
 
   function handleDateRangeReset() {
     syncDateInputsForSelected(true);
+    renderSelectionDependentViews();
+  }
+
+  function handleDateRangeFull() {
+    syncDateInputsForSelected('all');
     renderSelectionDependentViews();
   }
 
@@ -528,8 +537,14 @@
     const dates = etf.history.map((row) => row.date).filter(Boolean);
     const first = dates[0] || etf.availableStartDate || '';
     const last = dates.at(-1) || etf.availableEndDate || '';
-    if (forceAll || !state.startDate || state.startDate < first || state.startDate > last) state.startDate = first;
-    if (forceAll || !state.endDate || state.endDate > last || state.endDate < first) state.endDate = last;
+    const defaultStart = recentRangeStartDate(dates, first, last, DEFAULT_VISIBLE_RANGE_DAYS);
+    if (forceAll === 'all') {
+      state.startDate = first;
+      state.endDate = last;
+    } else {
+      if (forceAll || !state.startDate || state.startDate < first || state.startDate > last) state.startDate = defaultStart;
+      if (forceAll || !state.endDate || state.endDate > last || state.endDate < first) state.endDate = last;
+    }
     const start = $('#start-date');
     const end = $('#end-date');
     if (start) {
@@ -542,6 +557,16 @@
       end.max = last;
       end.value = state.endDate;
     }
+  }
+
+  function recentRangeStartDate(dates, first, last, days = DEFAULT_VISIBLE_RANGE_DAYS) {
+    if (!last) return first || '';
+    const lastTime = Date.parse(last);
+    if (!Number.isFinite(lastTime)) return first || '';
+    const cutoff = new Date(lastTime);
+    cutoff.setUTCDate(cutoff.getUTCDate() - Math.max(1, days - 1));
+    const cutoffKey = cutoff.toISOString().slice(0, 10);
+    return asArray(dates).find((date) => date >= cutoffKey) || first || last;
   }
 
   function renderAll() {
@@ -647,9 +672,9 @@
     const points = series.flatMap((item) => item.points);
     const dates = points.map((point) => Date.parse(point.date)).filter(Number.isFinite);
     const values = points.map((point) => point.value).filter(Number.isFinite);
-    const width = 1120;
-    const height = 500;
-    const margin = { top: 46, right: 228, bottom: 96, left: 82 };
+    const width = 1080;
+    const height = 470;
+    const margin = { top: 48, right: 96, bottom: 78, left: 78 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const minDate = Math.min(...dates);
@@ -663,7 +688,7 @@
     const yMin = yTicks[0] ?? 0;
     const yMax = yTicks.at(-1) ?? Math.max(...values, 1);
     const targetWidth = Number(target.clientWidth || width);
-    const maxTicks = targetWidth < 520 ? 5 : targetWidth < 820 ? 8 : 12;
+    const maxTicks = targetWidth < 520 ? 4 : targetWidth < 820 ? 6 : 8;
     const xTicks = buildDateTicks(points.map((point) => point.date).filter(Boolean), maxTicks, innerWidth);
     const xTickYears = new Set(xTicks.map((date) => date.slice(0, 4)));
     const showYearOnTicks = xTickYears.size > 1;
@@ -677,7 +702,8 @@
     }).join('');
     const paths = series.map((item, index) => {
       const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
-      const widthByRank = item.rank && item.rank <= 3 ? 3.7 : 2.5;
+      const widthByRank = item.rank && item.rank <= 5 ? 3.6 : 2.2;
+      const tierClass = item.rank && item.rank <= 5 ? 'rank-tier-top' : 'rank-tier-tail';
       const dash = item.isSparse ? ' stroke-dasharray="7 5"' : '';
       const segments = splitPointSegments(item.points);
       const segmentPathData = segments.map((segment) => segment
@@ -690,14 +716,14 @@
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
-      return `<g class="chart-series" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
+      return `<g class="chart-series ${tierClass}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const summaryCards = renderChartSummaryCards(series, colorByKey);
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
-    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 편입·편출 이벤트와 매수·매도 방향 신호가 마커로 표시됩니다.`;
+    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 숫자는 최신 순위이며, 아래 카드는 종목명·최신 비중·기간 변화폭을 같은 색으로 연결합니다. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 편입·편출 이벤트와 매수·매도 방향 신호가 마커로 표시됩니다.`;
     target.innerHTML = `
       <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
       <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
@@ -710,7 +736,7 @@
         <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="#3b4556"/>
         <text class="axis-title" x="${margin.left}" y="20">TOP10 비중(%)</text>
         <text class="axis-note" x="${width - margin.right}" y="22" text-anchor="end">${escapeHtml(axisNote)}</text>
-        <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)}</text>
+        <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)} · 기본 보기 최근 1개월</text>
         ${paths}
         ${endLabels}
       </svg>
@@ -721,10 +747,8 @@
   function renderEndLabels(labels, colorByKey) {
     return asArray(labels).map((item) => {
       const color = colorByKey.get(item.key) || '#9aa4b2';
-      const labelX = item.x2 + 7;
-      const labelY = item.y2 - 11;
-      const labelWidth = item.width || Math.min(170, 36 + item.text.length * 6.4);
-      return `<g class="line-end-label"><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><rect x="${labelX - 5}" y="${labelY}" width="${labelWidth.toFixed(1)}" height="19" rx="8"/><text x="${labelX}" y="${(item.y2 + 3.7).toFixed(1)}" fill="${color}">${escapeHtml(item.text)}</text></g>`;
+      const labelX = item.x2 + 15;
+      return `<g class="line-end-label"><title>${escapeHtml(item.title || item.text)}</title><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><circle cx="${labelX.toFixed(1)}" cy="${item.y2.toFixed(1)}" r="10.5" fill="${color}"/><text x="${labelX.toFixed(1)}" y="${(item.y2 + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${escapeHtml(item.text)}</text></g>`;
     }).join('');
   }
 
@@ -905,27 +929,24 @@
   }
 
   function buildEndLabels(series, x, y, topY, bottomY) {
-    const labelSeries = asArray(series).length > 6
-      ? asArray(series).filter((item) => !item.rank || item.rank <= 6)
-      : asArray(series);
-    const labels = labelSeries
+    const labels = asArray(series)
       .map((item) => {
         const point = item.validPoints.at(-1);
         if (!point) return null;
-        const text = `${item.rank}. ${truncateLabel(item.label, 10)} · ${formatWeight(point.value)}`;
+        const rankText = item.rank ? String(item.rank) : truncateLabel(item.label, 2);
         return {
           key: item.key,
           y1: y(point.value),
           y2: y(point.value),
           x1: x(point.date),
-          x2: x(point.date) + 34,
-          text,
-          width: Math.min(176, 38 + text.length * 6.4),
+          x2: x(point.date) + 20,
+          text: rankText,
+          title: `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel} · ${formatWeight(point.value)}`,
         };
       })
       .filter(Boolean)
       .sort((a, b) => a.y2 - b.y2);
-    const minGap = 24;
+    const minGap = 20;
     let previousY = -Infinity;
     labels.forEach((label) => {
       if (label.y2 - previousY < minGap) label.y2 = previousY + minGap;
@@ -1949,9 +1970,11 @@
       filterSignalTableRows,
       signalBucket,
       signalTableCounts,
+      recentRangeStartDate,
       handleEtfSelectionChange,
       handleDateRangeChange,
       handleDateRangeReset,
+      handleDateRangeFull,
       stateSnapshotForTests,
       setDashboardForTests,
       setSignalTableFilterForTests,

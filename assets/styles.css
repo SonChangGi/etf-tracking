@@ -218,7 +218,7 @@ h3 { font-size: clamp(1.25rem, 2vw, 1.65rem); }
 
 .control-card {
   display: grid;
-  grid-template-columns: minmax(240px, 1fr) repeat(2, minmax(160px, 0.4fr)) auto;
+  grid-template-columns: minmax(240px, 1fr) repeat(2, minmax(160px, 0.4fr)) repeat(2, auto);
   gap: 12px;
   align-items: end;
   padding: 18px;
@@ -1793,3 +1793,81 @@ td:not(:first-child),
   }
 }
 
+/* ETF TOP10 chart readability refresh — UI-only, 2026-06-29. */
+.control-card {
+  grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(150px, 0.42fr)) repeat(2, max-content) !important;
+}
+.control-card #reset-range {
+  color: #f8fafc !important;
+  background: linear-gradient(135deg, #2457d6, #0ea5e9) !important;
+  border-color: rgba(125, 211, 252, 0.55) !important;
+}
+.chart-card {
+  padding: 14px !important;
+  overflow-x: auto !important;
+}
+.chart-card svg {
+  min-width: 960px !important;
+}
+.chart-card .chart-series.rank-tier-top .series-line {
+  filter: drop-shadow(0 7px 13px rgba(0, 0, 0, 0.24));
+}
+.chart-card .chart-series.rank-tier-tail {
+  opacity: 0.78;
+}
+.chart-card .chart-series.rank-tier-tail .series-line {
+  stroke-width: 2px;
+}
+.chart-card .chart-series.rank-tier-tail .series-point {
+  r: 2.7;
+}
+.chart-card svg:has(.chart-series:hover) .chart-series:not(:hover),
+.chart-card svg:has(.chart-series:focus-visible) .chart-series:not(:focus-visible) {
+  opacity: 0.14;
+}
+.line-end-label line {
+  opacity: 0.72;
+}
+.line-end-label circle {
+  stroke: rgba(248, 250, 252, 0.78);
+  stroke-width: 2.2;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.38));
+}
+.chart-card .line-end-label text {
+  fill: #08111f !important;
+  stroke: transparent !important;
+  font-size: 10px !important;
+  font-weight: 950 !important;
+  letter-spacing: -0.02em;
+}
+.chart-summary-grid {
+  gap: 10px !important;
+}
+.chart-summary-item {
+  min-height: 104px !important;
+  padding: 13px 14px !important;
+  align-content: center;
+}
+.chart-summary-item strong {
+  white-space: normal !important;
+  line-height: 1.25;
+}
+.chart-summary-item small {
+  line-height: 1.42;
+}
+@media (max-width: 980px) {
+  .control-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .control-card label:first-child {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 560px) {
+  .control-card {
+    grid-template-columns: 1fr !important;
+  }
+  .chart-card svg {
+    min-width: 820px !important;
+  }
+}
