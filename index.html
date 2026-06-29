@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="assets/styles.css" />
   <script src="assets/app.js" defer></script>
 </head>
-<body>
+<body id="top">
   <header class="hero" aria-labelledby="page-title">
     <nav class="top-nav" aria-label="프로젝트 이동">
       <a class="ghost-link" href="https://sonchanggi.github.io/quant-dashboard/">← Quant Dashboard로 돌아가기</a>
@@ -53,32 +53,6 @@
       </div>
     </section>
 
-    <section class="section manual-update" id="manual-update" aria-labelledby="manual-update-title">
-      <div>
-        <p class="eyebrow">Manual Update</p>
-        <h2 id="manual-update-title">없는 날짜만 채우는 수동 업데이트</h2>
-        <p>
-          수동 워크플로는 이미 저장된 usable 스냅샷을 다시 요청하지 않고, 최신 기준일과 선택한 백필 범위 안에서
-          아직 없는 날짜만 채웁니다. 공급자 throttling을 줄이면서 기존 히스토리는 보존합니다.
-        </p>
-        <p class="manual-update-note">
-          보안상 공개 정적 페이지에는 GitHub 토큰을 저장하지 않습니다. 버튼은 인증된 GitHub Actions
-          실행 화면으로 연결하며, 저장소 쓰기 권한이 있는 계정으로 로그인한 뒤 <strong>Run workflow</strong>를 누르면 됩니다.
-        </p>
-        <ul class="schedule-list" aria-label="수동 업데이트 정책">
-          <li><strong>자동 스케줄 중지</strong><span>멀티 repo 롤백 이후 예약 실행은 비활성화되어 있습니다.</span></li>
-          <li><strong>검토 후 수동 실행</strong><span>공급자/전일 종가 지연을 확인한 뒤 <code>workflow_dispatch</code>로 실행합니다.</span></li>
-          <li><strong>수동 실행</strong><span><code>backfill_start_date</code>로 과거 누락 구간을 채우고, 필요할 때만 <code>refresh_existing</code>을 사용합니다.</span></li>
-        </ul>
-      </div>
-      <div class="manual-update-actions">
-        <a id="manual-update-link" class="primary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer" role="button">GitHub Actions에서 수동 업데이트 열기</a>
-        <a id="workflow-status-link" class="secondary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer">워크플로 상태 보기</a>
-        <button id="copy-update-command" class="secondary-button" type="button">CLI 명령 복사</button>
-        <code id="manual-update-command" class="code-pill">gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false</code>
-        <small id="manual-update-status" role="status" aria-live="polite">기본값은 missing-only입니다. 실행 후 Actions 상태와 대시보드 생성 시각을 확인하세요.</small>
-      </div>
-    </section>
 
     <section class="section dashboard-section" id="etf-dashboard" aria-labelledby="dashboard-title">
       <div class="section-heading">
@@ -230,6 +204,33 @@
         </article>
       </div>
     </section>
+    <section class="section manual-update" id="manual-update" aria-labelledby="manual-update-title">
+      <div>
+        <p class="eyebrow">Manual Update</p>
+        <h2 id="manual-update-title">없는 날짜만 채우는 수동 업데이트</h2>
+        <p>
+          수동 워크플로는 이미 저장된 usable 스냅샷을 다시 요청하지 않고, 최신 기준일과 선택한 백필 범위 안에서
+          아직 없는 날짜만 채웁니다. 공급자 throttling을 줄이면서 기존 히스토리는 보존합니다.
+        </p>
+        <p class="manual-update-note">
+          보안상 공개 정적 페이지에는 GitHub 토큰을 저장하지 않습니다. 버튼은 인증된 GitHub Actions
+          실행 화면으로 연결하며, 저장소 쓰기 권한이 있는 계정으로 로그인한 뒤 <strong>Run workflow</strong>를 누르면 됩니다.
+        </p>
+        <ul class="schedule-list" aria-label="수동 업데이트 정책">
+          <li><strong>자동 스케줄 중지</strong><span>멀티 repo 롤백 이후 예약 실행은 비활성화되어 있습니다.</span></li>
+          <li><strong>검토 후 수동 실행</strong><span>공급자/전일 종가 지연을 확인한 뒤 <code>workflow_dispatch</code>로 실행합니다.</span></li>
+          <li><strong>수동 실행</strong><span><code>backfill_start_date</code>로 과거 누락 구간을 채우고, 필요할 때만 <code>refresh_existing</code>을 사용합니다.</span></li>
+        </ul>
+      </div>
+      <div class="manual-update-actions">
+        <a id="manual-update-link" class="primary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer" role="button">GitHub Actions에서 수동 업데이트 열기</a>
+        <a id="workflow-status-link" class="secondary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer">워크플로 상태 보기</a>
+        <button id="copy-update-command" class="secondary-button" type="button">CLI 명령 복사</button>
+        <code id="manual-update-command" class="code-pill">gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false</code>
+        <small id="manual-update-status" role="status" aria-live="polite">기본값은 missing-only입니다. 실행 후 Actions 상태와 대시보드 생성 시각을 확인하세요.</small>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
@@ -238,5 +239,10 @@
       · 본 페이지는 개인 리서치 대시보드이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.
     </p>
   </footer>
+  <nav class="page-jump-nav" aria-label="페이지 빠른 이동">
+    <a href="#top" aria-label="맨 위로 이동">↑ 위</a>
+    <a href="#page-bottom" aria-label="맨 아래로 이동">↓ 아래</a>
+  </nav>
+  <div id="page-bottom" tabindex="-1" aria-hidden="true"></div>
 </body>
 </html>
