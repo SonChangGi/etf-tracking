@@ -674,7 +674,7 @@
     const values = points.map((point) => point.value).filter(Number.isFinite);
     const width = 1080;
     const height = 470;
-    const margin = { top: 48, right: 96, bottom: 78, left: 78 };
+    const margin = { top: 48, right: 118, bottom: 78, left: 78 };
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
     const minDate = Math.min(...dates);
@@ -723,7 +723,7 @@
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
-    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 숫자는 최신 순위이며, 아래 카드는 종목명·최신 비중·기간 변화폭을 같은 색으로 연결합니다. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 편입·편출 이벤트와 매수·매도 방향 신호가 마커로 표시됩니다.`;
+    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 라벨은 최신 순위와 티커이며, 아래 카드는 종목명·최신 비중·기간 변화폭을 같은 색으로 연결합니다. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 편입·편출 이벤트와 매수·매도 방향 신호가 마커로 표시됩니다.`;
     target.innerHTML = `
       <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
       <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
@@ -747,8 +747,11 @@
   function renderEndLabels(labels, colorByKey) {
     return asArray(labels).map((item) => {
       const color = colorByKey.get(item.key) || '#9aa4b2';
-      const labelX = item.x2 + 15;
-      return `<g class="line-end-label"><title>${escapeHtml(item.title || item.text)}</title><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><circle cx="${labelX.toFixed(1)}" cy="${item.y2.toFixed(1)}" r="10.5" fill="${color}"/><text x="${labelX.toFixed(1)}" y="${(item.y2 + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${escapeHtml(item.text)}</text></g>`;
+      const labelX = item.x2 + 8;
+      const labelY = item.y2 - 11;
+      const labelWidth = item.width || Math.max(48, Math.min(82, 18 + item.text.length * 6.6));
+      const textX = labelX + labelWidth / 2;
+      return `<g class="line-end-label" style="--end-label-color:${color}"><title>${escapeHtml(item.title || item.text)}</title><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><rect class="rank-ticker-pill" x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" width="${labelWidth.toFixed(1)}" height="22" rx="11"/><text x="${textX.toFixed(1)}" y="${(item.y2 + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${escapeHtml(item.text)}</text></g>`;
     }).join('');
   }
 
@@ -785,6 +788,7 @@
     return keys.map((key, orderIndex) => {
       const latest = latestTop10.find((row) => holdingKey(row) === key) || {};
       const label = latest.ticker || latest.name || key;
+      const tickerLabel = latest.ticker || latest.codeRaw || key;
       const points = history.map((snapshot) => {
         const hasFullHoldings = Boolean(snapshot.holdings?.length);
         const universe = hasFullHoldings ? snapshot.holdings : snapshot.top10;
@@ -801,6 +805,7 @@
         key,
         label: truncateLabel(label, 18),
         fullLabel: label,
+        tickerLabel: truncateTickerLabel(tickerLabel),
         rank,
         latestWeight: finiteOrNull(latest.weightPercent),
         periodDelta,
@@ -933,34 +938,43 @@
       .map((item) => {
         const point = item.validPoints.at(-1);
         if (!point) return null;
-        const rankText = item.rank ? String(item.rank) : truncateLabel(item.label, 2);
+        const rankText = item.rank ? String(item.rank) : '';
+        const tickerText = truncateTickerLabel(item.tickerLabel || item.key || item.label);
+        const labelText = rankText ? `${rankText} ${tickerText}` : tickerText;
         return {
           key: item.key,
           y1: y(point.value),
           y2: y(point.value),
           x1: x(point.date),
-          x2: x(point.date) + 20,
-          text: rankText,
-          title: `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel} · ${formatWeight(point.value)}`,
+          x2: x(point.date) + 18,
+          text: labelText,
+          width: Math.max(48, Math.min(82, 18 + labelText.length * 6.6)),
+          title: `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel} (${tickerText}) · ${formatWeight(point.value)}`,
         };
       })
       .filter(Boolean)
       .sort((a, b) => a.y2 - b.y2);
-    const minGap = 20;
+    const minGap = 24;
     let previousY = -Infinity;
     labels.forEach((label) => {
       if (label.y2 - previousY < minGap) label.y2 = previousY + minGap;
       previousY = label.y2;
     });
-    const overflow = labels.length ? labels.at(-1).y2 - (bottomY - 10) : 0;
+    const overflow = labels.length ? labels.at(-1).y2 - (bottomY - 13) : 0;
     if (overflow > 0) labels.forEach((label) => { label.y2 -= overflow; });
     for (let index = labels.length - 2; index >= 0; index -= 1) {
       if (labels[index + 1].y2 - labels[index].y2 < minGap) labels[index].y2 = labels[index + 1].y2 - minGap;
     }
-    const topOverflow = labels.length ? (topY + 12) - labels[0].y2 : 0;
+    const topOverflow = labels.length ? (topY + 13) - labels[0].y2 : 0;
     if (topOverflow > 0) labels.forEach((label) => { label.y2 += topOverflow; });
-    labels.forEach((label) => { label.y2 = Math.max(topY + 12, Math.min(label.y2, bottomY - 10)); });
+    labels.forEach((label) => { label.y2 = Math.max(topY + 13, Math.min(label.y2, bottomY - 13)); });
     return labels;
+  }
+
+  function truncateTickerLabel(value) {
+    const ticker = stringOr(value, '').replace(/\s+/g, '').toUpperCase();
+    if (!ticker) return '-';
+    return ticker.length > 7 ? `${ticker.slice(0, 6)}…` : ticker;
   }
 
   function buildSeriesColorMap(series) {
@@ -1959,6 +1973,8 @@
       lifecycleDirection,
       residualDirection,
       splitPointSegments,
+      buildEndLabels,
+      truncateTickerLabel,
       buildNiceTicks,
       buildDateTicks,
       formatAxisWeight,

@@ -1828,17 +1828,18 @@ td:not(:first-child),
 .line-end-label line {
   opacity: 0.72;
 }
-.line-end-label circle {
+.line-end-label .rank-ticker-pill {
+  fill: var(--end-label-color) !important;
   stroke: rgba(248, 250, 252, 0.78);
-  stroke-width: 2.2;
+  stroke-width: 2;
   filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.38));
 }
 .chart-card .line-end-label text {
   fill: #08111f !important;
   stroke: transparent !important;
-  font-size: 10px !important;
+  font-size: 9.6px !important;
   font-weight: 950 !important;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 .chart-summary-grid {
   gap: 10px !important;

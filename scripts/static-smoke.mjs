@@ -114,6 +114,14 @@ if (fullRangeSnapshot.startDate !== selected.availableStartDate || fullRangeSnap
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
 const sndkSeries = series.find((item) => item.key === 'SNDK');
+const endLabels = api.buildEndLabels(series, () => 100, (value) => value * 10, 0, 500);
+const sndkEndLabel = endLabels.find((item) => item.key === 'SNDK');
+if (!sndkEndLabel || !/^1\s+SNDK$/.test(sndkEndLabel.text)) {
+  throw new Error(`chart end labels should show rank next to ticker, got ${sndkEndLabel?.text || 'missing'}`);
+}
+if (!endLabels.every((item) => /^\d+\s+[A-Z0-9.\-]+(?:…)?$/.test(item.text))) {
+  throw new Error('chart end labels should use compact rank + ticker pills');
+}
 if (!sndkSeries?.signalPoints.some((point) => point.actionEstimate === 'weak_sell_watch' && point.direction === 'sell')) {
   throw new Error('hover chart should carry selected-period residual sell-watch markers for SNDK');
 }
