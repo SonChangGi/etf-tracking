@@ -1859,9 +1859,9 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         },
         "updatePolicy": {
             "timezone": "Asia/Seoul",
-            "primary": "09:00 KST Tue-Sat scheduled refresh plus reviewed workflow_dispatch",
-            "retries": ["12:00 KST Tue-Sat", "18:00 KST Tue-Sat"],
-            "cronUtc": ["0 0 * * 2-6", "0 3 * * 2-6", "0 9 * * 2-6"],
+            "primary": "08:15 KST Tue-Sat scheduled refresh plus reviewed workflow_dispatch",
+            "retries": ["10:15 KST Tue-Sat", "12:15 KST Tue-Sat"],
+            "cronUtc": ["15 23 * * 1-5", "15 1 * * 2-6", "15 3 * * 2-6"],
         },
         "historyPolicy": {
             "availableStartDate": min(all_dates) if all_dates else None,
@@ -1962,7 +1962,7 @@ def build_public_summary(dashboard: dict[str, Any]) -> dict[str, Any]:
         "status": {
             "state": "degraded" if low_coverage else ("ok" if etfs else "degraded"),
             "label": f"{len(etfs)}개 ETF · {len(signals)}개 최근 신호",
-            "cadence": "scheduled 09:00/12:00/18:00 KST Tue-Sat plus reviewed workflow_dispatch",
+            "cadence": "scheduled 08:15/10:15/12:15 KST Tue-Sat plus reviewed workflow_dispatch",
             "expectedFreshnessDays": 3,
             "degradedReasons": [f"low return coverage: {name}" for name in low_coverage],
         },

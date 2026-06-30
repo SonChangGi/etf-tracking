@@ -971,9 +971,9 @@ class UpdateDataTests(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
         self.assertIn("workflow_dispatch:", workflow)
         self.assertIn("schedule:", workflow)
-        for cron in ['cron: "0 0 * * 2-6"', 'cron: "0 3 * * 2-6"', 'cron: "0 9 * * 2-6"']:
+        for cron in ['cron: "15 23 * * 1-5"', 'cron: "15 1 * * 2-6"', 'cron: "15 3 * * 2-6"']:
             self.assertIn(cron, workflow)
-        self.assertIn("09:00 KST Tue-Sat", workflow)
+        self.assertIn("08:15 KST Tue-Sat", workflow)
         self.assertIn("--soft-fail", workflow)
         self.assertIn("strict_validation", workflow)
         self.assertIn("backfill_start_date", workflow)

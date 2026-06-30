@@ -17,7 +17,7 @@
 - 편입·편출, 비중 급변, 가격 수익률로 설명되지 않는 잔차 신호 표시
 - 전체 보유종목 기준의 전일 종가/평가단가·환율 기여분과 ETF 매수/매도 가능성 분해
 - 공급자 데이터 지연/누락과 종가 누락을 명시적으로 표시하는 상태 파일
-- GitHub Actions 자동 스케줄은 09:00/12:00/18:00 KST Tue-Sat에 실행되며, 검토 후 수동 `workflow_dispatch`도 지원
+- GitHub Actions 자동 스케줄은 08:15/10:15/12:15 KST Tue-Sat에 실행되며, 검토 후 수동 `workflow_dispatch`도 지원
 - 수동 자동화는 일시적 공급자/종가 지연을 실패 종료하지 않고 `data/automation-status.json`에 기록
 - 이미 저장된 usable 스냅샷은 재요청하지 않고 없는 날짜만 채우는 missing-only 업데이트
 - 공개 페이지의 수동 업데이트 버튼으로 GitHub Actions `workflow_dispatch` 실행 화면 연결
@@ -72,7 +72,7 @@ npm test
 
 ## 자동화 운영 정책
 
-- 자동 예약 workflow는 09:00 KST Tue-Sat 1차 갱신과 12:00/18:00 KST Tue-Sat 재시도를 실행합니다. 예약 workflow는 예상 가능한 데이터 지연/공급자 오류를 soft-fail로 기록하고, 검토된 수동 workflow는 기본적으로 strict validation으로 실패를 드러냅니다.
+- 자동 예약 workflow는 08:15 KST Tue-Sat 1차 갱신과 10:15/12:15 KST Tue-Sat 재시도를 실행합니다. 예약 workflow는 예상 가능한 데이터 지연/공급자 오류를 soft-fail로 기록하고, 검토된 수동 workflow는 기본적으로 strict validation으로 실패를 드러냅니다.
 - 수동 workflow 기본값은 최신 기준일을 먼저 확인한 뒤 최근 10일 구간에서 저장되지 않은 날짜만 보강합니다. 더 오래된 분석은 `backfill_start_date` 또는 `backfill_all`로 확장합니다.
 - 웹페이지의 수동 업데이트 버튼은 공개 정적 페이지에 토큰을 저장하지 않고 GitHub의 인증된 Actions 실행 화면으로 이동합니다.
 - CLI로 수동 실행하려면 `gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true`를 사용합니다.

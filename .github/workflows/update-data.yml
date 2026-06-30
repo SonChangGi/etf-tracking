@@ -29,11 +29,11 @@ on:
         type: choice
         options: ['false', 'true']
   schedule:
-    # 09:00 KST Tue-Sat: primary provider refresh after prior local publication windows.
-    - cron: "0 0 * * 2-6"
-    # 12:00/18:00 KST Tue-Sat: retry if provider files arrive late.
-    - cron: "0 3 * * 2-6"
-    - cron: "0 9 * * 2-6"
+    # 08:15 KST Tue-Sat: earlier staggered primary provider refresh after the U.S. close; later retries handle Korean ETF/provider publication lag.
+    - cron: "15 23 * * 1-5"
+    # 10:15/12:15 KST Tue-Sat: 2-hour retries if provider files arrive late.
+    - cron: "15 1 * * 2-6"
+    - cron: "15 3 * * 2-6"
 
 permissions:
   contents: write
