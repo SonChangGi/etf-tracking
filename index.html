@@ -1,16 +1,18 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-project-id="etf">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="한국 상장 액티브 ETF 3종의 TOP10 편입 종목과 비중 변화를 추적하는 정적 대시보드" />
   <title>ETF TOP10 Tracking</title>
   <link rel="stylesheet" href="assets/styles.css" />
+  <link rel="stylesheet" href="assets/common-ui.css" />
   <script src="assets/app.js" defer></script>
+  <script src="assets/common-ui.js" defer></script>
 </head>
 <body id="top">
   <header class="hero" aria-labelledby="page-title">
-    <nav class="top-nav" aria-label="프로젝트 이동">
+    <nav class="top-nav" data-common-nav data-keep-local-nav aria-label="프로젝트 이동">
       <a class="ghost-link" href="https://sonchanggi.github.io/quant-dashboard/">← Quant Dashboard로 돌아가기</a>
       <a href="#etf-dashboard">ETF 대시보드</a>
       <a href="#manual-update">수동 업데이트</a>
