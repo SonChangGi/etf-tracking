@@ -1319,3 +1319,783 @@ th {
     padding-inline: 18px !important;
   }
 }
+
+/* Visual Ralph v3 theme-balance — light/dark contrast alignment, UI-only. */
+:root,
+:root[data-theme="light"] {
+  --qc-semantic-blue-bg: #edf6ff;
+  --qc-semantic-blue-border: rgba(37, 99, 235, 0.22);
+  --qc-semantic-blue-text: #174ea6;
+  --qc-semantic-success-bg: #ecfdf5;
+  --qc-semantic-success-border: rgba(5, 150, 105, 0.26);
+  --qc-semantic-success-text: #047857;
+  --qc-semantic-warn-bg: #fff7ed;
+  --qc-semantic-warn-border: rgba(234, 88, 12, 0.24);
+  --qc-semantic-warn-text: #9a3412;
+  --qc-semantic-danger-bg: #fef2f2;
+  --qc-semantic-danger-border: rgba(220, 38, 38, 0.22);
+  --qc-semantic-danger-text: #b91c1c;
+}
+
+:root[data-theme="dark"] {
+  --qc-semantic-blue-bg: rgba(59, 130, 246, 0.18);
+  --qc-semantic-blue-border: rgba(147, 197, 253, 0.32);
+  --qc-semantic-blue-text: #bfdbfe;
+  --qc-semantic-success-bg: rgba(16, 185, 129, 0.16);
+  --qc-semantic-success-border: rgba(110, 231, 183, 0.30);
+  --qc-semantic-success-text: #a7f3d0;
+  --qc-semantic-warn-bg: rgba(251, 146, 60, 0.16);
+  --qc-semantic-warn-border: rgba(253, 186, 116, 0.30);
+  --qc-semantic-warn-text: #fed7aa;
+  --qc-semantic-danger-bg: rgba(248, 113, 113, 0.15);
+  --qc-semantic-danger-border: rgba(252, 165, 165, 0.30);
+  --qc-semantic-danger-text: #fecaca;
+}
+
+/* Non-grid hero pages were keeping the light glass panel in dark mode. */
+:root[data-theme="dark"] header.hero > div:not(.quant-common-nav):not(.hero-grid):not(.status-card),
+:root[data-theme="dark"] header.hero > .hero-copy {
+  background: rgba(15, 23, 42, 0.76) !important;
+  border-color: rgba(147, 197, 253, 0.24) !important;
+  color: var(--qc-text) !important;
+  box-shadow: 0 20px 58px rgba(0, 0, 0, 0.28) !important;
+}
+
+:root[data-theme="dark"] header.hero .hero-actions a,
+:root[data-theme="dark"] header.hero .hero-link,
+:root[data-theme="dark"] header.hero .hero-dashboard-button,
+:root[data-theme="dark"] header.hero .secondary-button,
+:root[data-theme="dark"] header.hero .button:not(.primary):not(.primary-button) {
+  color: #dbeafe !important;
+  -webkit-text-fill-color: #dbeafe !important;
+  background: rgba(15, 23, 42, 0.88) !important;
+  border-color: rgba(147, 197, 253, 0.32) !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24) !important;
+}
+
+:root[data-theme="dark"] header.hero .hero-actions a:first-child,
+:root[data-theme="dark"] header.hero .primary-button,
+:root[data-theme="dark"] header.hero button[type="submit"] {
+  color: #07111f !important;
+  -webkit-text-fill-color: #07111f !important;
+  background: linear-gradient(135deg, #e0f2fe 0%, #93c5fd 54%, #67e8f9 100%) !important;
+  border-color: transparent !important;
+}
+
+/* Buttons and form controls: keep text/background pairs valid in both themes. */
+.secondary-button,
+.text-button,
+.confirm-button,
+.action-button,
+.panel-link,
+.compact-button,
+button:not([type="submit"]),
+.button.secondary,
+.button:not(.primary) {
+  color: var(--qc-primary-strong) !important;
+  -webkit-text-fill-color: var(--qc-primary-strong) !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(49, 130, 246, 0.28) !important;
+}
+
+:root[data-theme="dark"] .secondary-button,
+:root[data-theme="dark"] .text-button,
+:root[data-theme="dark"] .confirm-button,
+:root[data-theme="dark"] .action-button,
+:root[data-theme="dark"] .panel-link,
+:root[data-theme="dark"] .compact-button,
+:root[data-theme="dark"] button:not([type="submit"]),
+:root[data-theme="dark"] .button.secondary,
+:root[data-theme="dark"] .button:not(.primary) {
+  color: #dbeafe !important;
+  -webkit-text-fill-color: #dbeafe !important;
+  background: rgba(15, 23, 42, 0.88) !important;
+  border-color: rgba(147, 197, 253, 0.30) !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22) !important;
+}
+
+.primary-button,
+.button.primary,
+button[type="submit"],
+input[type="submit"] {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: linear-gradient(135deg, #3182f6 0%, #2563eb 60%, #0ea5e9 100%) !important;
+  border-color: transparent !important;
+}
+
+:root[data-theme="dark"] .primary-button,
+:root[data-theme="dark"] .button.primary,
+:root[data-theme="dark"] button[type="submit"],
+:root[data-theme="dark"] input[type="submit"] {
+  color: #07111f !important;
+  -webkit-text-fill-color: #07111f !important;
+  background: linear-gradient(135deg, #e0f2fe 0%, #93c5fd 58%, #67e8f9 100%) !important;
+  border-color: transparent !important;
+}
+
+input,
+select,
+textarea {
+  caret-color: var(--qc-primary-strong) !important;
+}
+
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea {
+  background: rgba(15, 23, 42, 0.92) !important;
+  color: #e8eef8 !important;
+  -webkit-text-fill-color: #e8eef8 !important;
+  border-color: rgba(147, 197, 253, 0.28) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+
+::placeholder { color: #738195 !important; opacity: 1 !important; }
+:root[data-theme="dark"] ::placeholder { color: #94a3b8 !important; opacity: 1 !important; }
+
+/* Soft cards that previously mixed gray glass with low-contrast copy. */
+.controls,
+.control-group,
+.control-card,
+.filter-card,
+.basis-date-card,
+.import-panel,
+.portfolio-editor,
+.assumptions-panel,
+.methodology-card,
+.methodology-card.highlight,
+.notice-card,
+.command-card,
+.diagnostic-card,
+.factor-method-card,
+.factor-method-row,
+.factor-family-card,
+.factor-family-grid > *,
+.leader-item,
+.workflow-step,
+.method-card,
+.method-item,
+.rank-card,
+.output-card,
+.action-card,
+.lookup-status,
+.empty-state,
+.visual-card,
+.viz-card,
+.quadrant,
+.valuation-scale,
+.source-list > *,
+.source-status,
+.compare-actions,
+.method-grid > *,
+.selected-factor-chips > *,
+.analysis-date-controls,
+.chip-row > *,
+.hero-note .status-stack > *,
+.status-stack > *,
+.manual-update > *,
+.relative-review-status {
+  background: rgba(255, 255, 255, 0.92) !important;
+  color: var(--qc-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  border-color: rgba(147, 197, 253, 0.28) !important;
+  box-shadow: 0 14px 38px rgba(36, 83, 150, 0.08) !important;
+}
+
+:root[data-theme="dark"] .controls,
+:root[data-theme="dark"] .control-group,
+:root[data-theme="dark"] .control-card,
+:root[data-theme="dark"] .filter-card,
+:root[data-theme="dark"] .basis-date-card,
+:root[data-theme="dark"] .import-panel,
+:root[data-theme="dark"] .portfolio-editor,
+:root[data-theme="dark"] .assumptions-panel,
+:root[data-theme="dark"] .methodology-card,
+:root[data-theme="dark"] .methodology-card.highlight,
+:root[data-theme="dark"] .notice-card,
+:root[data-theme="dark"] .command-card,
+:root[data-theme="dark"] .diagnostic-card,
+:root[data-theme="dark"] .factor-method-card,
+:root[data-theme="dark"] .factor-method-row,
+:root[data-theme="dark"] .factor-family-card,
+:root[data-theme="dark"] .factor-family-grid > *,
+:root[data-theme="dark"] .leader-item,
+:root[data-theme="dark"] .workflow-step,
+:root[data-theme="dark"] .method-card,
+:root[data-theme="dark"] .method-item,
+:root[data-theme="dark"] .rank-card,
+:root[data-theme="dark"] .output-card,
+:root[data-theme="dark"] .action-card,
+:root[data-theme="dark"] .lookup-status,
+:root[data-theme="dark"] .empty-state,
+:root[data-theme="dark"] .visual-card,
+:root[data-theme="dark"] .viz-card,
+:root[data-theme="dark"] .quadrant,
+:root[data-theme="dark"] .valuation-scale,
+:root[data-theme="dark"] .source-list > *,
+:root[data-theme="dark"] .source-status,
+:root[data-theme="dark"] .compare-actions,
+:root[data-theme="dark"] .method-grid > *,
+:root[data-theme="dark"] .selected-factor-chips > *,
+:root[data-theme="dark"] .analysis-date-controls,
+:root[data-theme="dark"] .chip-row > *,
+:root[data-theme="dark"] .hero-note .status-stack > *,
+:root[data-theme="dark"] .status-stack > *,
+:root[data-theme="dark"] .manual-update > *,
+:root[data-theme="dark"] .relative-review-status {
+  background: rgba(15, 23, 42, 0.86) !important;
+  color: var(--qc-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  border-color: rgba(147, 197, 253, 0.22) !important;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.24) !important;
+}
+
+/* Text hierarchy: stop pale gray labels from disappearing on either background. */
+p,
+li,
+dd,
+figcaption,
+.panel-note,
+.method-summary,
+.method-glossary,
+.scenario-note,
+.control-hint,
+.date-status,
+.status-line,
+.lookup-status,
+.source-list,
+.source-list li,
+.scale-labels,
+.scale-foot,
+.factor-family-meta,
+.period-delta,
+.metric-caption,
+.metric-subtitle,
+.empty-state,
+.empty-state *,
+.chart-help,
+.chart-meta,
+.small-note,
+.data-note,
+.quad-axis,
+.source-note,
+small,
+.muted {
+  color: var(--qc-muted) !important;
+  -webkit-text-fill-color: var(--qc-muted) !important;
+  opacity: 1 !important;
+}
+
+:root[data-theme="dark"] p,
+:root[data-theme="dark"] li,
+:root[data-theme="dark"] dd,
+:root[data-theme="dark"] figcaption,
+:root[data-theme="dark"] .panel-note,
+:root[data-theme="dark"] .method-summary,
+:root[data-theme="dark"] .method-glossary,
+:root[data-theme="dark"] .scenario-note,
+:root[data-theme="dark"] .control-hint,
+:root[data-theme="dark"] .date-status,
+:root[data-theme="dark"] .status-line,
+:root[data-theme="dark"] .lookup-status,
+:root[data-theme="dark"] .source-list,
+:root[data-theme="dark"] .source-list li,
+:root[data-theme="dark"] .scale-labels,
+:root[data-theme="dark"] .scale-foot,
+:root[data-theme="dark"] .factor-family-meta,
+:root[data-theme="dark"] .period-delta,
+:root[data-theme="dark"] .metric-caption,
+:root[data-theme="dark"] .metric-subtitle,
+:root[data-theme="dark"] .empty-state,
+:root[data-theme="dark"] .empty-state *,
+:root[data-theme="dark"] .chart-help,
+:root[data-theme="dark"] .chart-meta,
+:root[data-theme="dark"] .small-note,
+:root[data-theme="dark"] .data-note,
+:root[data-theme="dark"] .quad-axis,
+:root[data-theme="dark"] .source-note,
+:root[data-theme="dark"] small,
+:root[data-theme="dark"] .muted {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+h1, h2, h3, h4, h5, h6,
+strong,
+.metric-value,
+.status-value,
+.card strong,
+.panel strong,
+.viz-card strong,
+.metric-card strong,
+.leader-name,
+.factor-name,
+.ticker-symbol,
+.company-name,
+.rank-title,
+.output-title,
+.workflow-step h3,
+.methodology-card h3,
+.methodology-card h4 {
+  color: var(--qc-text-strong) !important;
+  -webkit-text-fill-color: var(--qc-text-strong) !important;
+  opacity: 1 !important;
+}
+
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4,
+:root[data-theme="dark"] h5,
+:root[data-theme="dark"] h6,
+:root[data-theme="dark"] strong,
+:root[data-theme="dark"] .metric-value,
+:root[data-theme="dark"] .status-value,
+:root[data-theme="dark"] .card strong,
+:root[data-theme="dark"] .panel strong,
+:root[data-theme="dark"] .viz-card strong,
+:root[data-theme="dark"] .metric-card strong,
+:root[data-theme="dark"] .leader-name,
+:root[data-theme="dark"] .factor-name,
+:root[data-theme="dark"] .ticker-symbol,
+:root[data-theme="dark"] .company-name,
+:root[data-theme="dark"] .rank-title,
+:root[data-theme="dark"] .output-title,
+:root[data-theme="dark"] .workflow-step h3,
+:root[data-theme="dark"] .methodology-card h3,
+:root[data-theme="dark"] .methodology-card h4 {
+  color: #f8fbff !important;
+  -webkit-text-fill-color: #f8fbff !important;
+}
+
+/* Pills/badges/chips: readable semantic surfaces instead of pale-on-pale. */
+.status-chip,
+.status-pill,
+.badge,
+.pill,
+.tag,
+.chip,
+.code-pill,
+.signal-pill,
+.unit,
+.quad-point,
+.ticker-filters button,
+.sample-tickers button,
+.chip-row button,
+.chip-row > span,
+.selected-factor-chips > *,
+.factor-chip,
+.gate-pill,
+.coverage-pill {
+  background: var(--qc-semantic-blue-bg) !important;
+  color: var(--qc-semantic-blue-text) !important;
+  -webkit-text-fill-color: var(--qc-semantic-blue-text) !important;
+  border: 1px solid var(--qc-semantic-blue-border) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+
+:root[data-theme="dark"] .status-chip,
+:root[data-theme="dark"] .status-pill,
+:root[data-theme="dark"] .badge,
+:root[data-theme="dark"] .pill,
+:root[data-theme="dark"] .tag,
+:root[data-theme="dark"] .chip,
+:root[data-theme="dark"] .code-pill,
+:root[data-theme="dark"] .signal-pill,
+:root[data-theme="dark"] .unit,
+:root[data-theme="dark"] .quad-point,
+:root[data-theme="dark"] .ticker-filters button,
+:root[data-theme="dark"] .sample-tickers button,
+:root[data-theme="dark"] .chip-row button,
+:root[data-theme="dark"] .chip-row > span,
+:root[data-theme="dark"] .selected-factor-chips > *,
+:root[data-theme="dark"] .factor-chip,
+:root[data-theme="dark"] .gate-pill,
+:root[data-theme="dark"] .coverage-pill {
+  background: var(--qc-semantic-blue-bg) !important;
+  color: var(--qc-semantic-blue-text) !important;
+  -webkit-text-fill-color: var(--qc-semantic-blue-text) !important;
+  border-color: var(--qc-semantic-blue-border) !important;
+}
+
+.status-chip.pass,
+.status-chip.good,
+.status-chip.success,
+.status-chip.positive,
+.status-pill.pass,
+.status-pill.good,
+.status-pill.success,
+.status-pill.positive,
+.badge.pass,
+.badge.good,
+.badge.success,
+.badge.positive,
+.gate-item.pass,
+.signal-pill.on,
+.positive,
+.up {
+  background: var(--qc-semantic-success-bg) !important;
+  color: var(--qc-semantic-success-text) !important;
+  -webkit-text-fill-color: var(--qc-semantic-success-text) !important;
+  border-color: var(--qc-semantic-success-border) !important;
+}
+
+.status-chip.warn,
+.status-chip.warning,
+.status-chip.neutral,
+.status-pill.warn,
+.status-pill.warning,
+.status-pill.secondary,
+.badge.warn,
+.badge.warning,
+.badge.secondary,
+.gate-item.warn,
+.warning,
+.neutral {
+  background: var(--qc-semantic-warn-bg) !important;
+  color: var(--qc-semantic-warn-text) !important;
+  -webkit-text-fill-color: var(--qc-semantic-warn-text) !important;
+  border-color: var(--qc-semantic-warn-border) !important;
+}
+
+.status-chip.fail,
+.status-chip.error,
+.status-chip.danger,
+.status-pill.fail,
+.status-pill.error,
+.status-pill.danger,
+.badge.fail,
+.badge.error,
+.badge.danger,
+.gate-item.fail,
+.signal-pill.off,
+.negative,
+.down {
+  background: var(--qc-semantic-danger-bg) !important;
+  color: var(--qc-semantic-danger-text) !important;
+  -webkit-text-fill-color: var(--qc-semantic-danger-text) !important;
+  border-color: var(--qc-semantic-danger-border) !important;
+}
+
+/* Tables: preserve numbers while making row/chip backgrounds theme-safe. */
+.table-wrap,
+.table-scroll,
+.data-table-wrap,
+.performance-table-wrap,
+.signal-table-wrap,
+.heatmap-wrap,
+table {
+  background: var(--qc-surface-solid) !important;
+  border-color: var(--qc-line) !important;
+  color: var(--qc-text) !important;
+}
+
+:root[data-theme="dark"] .table-wrap,
+:root[data-theme="dark"] .table-scroll,
+:root[data-theme="dark"] .data-table-wrap,
+:root[data-theme="dark"] .performance-table-wrap,
+:root[data-theme="dark"] .signal-table-wrap,
+:root[data-theme="dark"] .heatmap-wrap,
+:root[data-theme="dark"] table {
+  background: rgba(15, 23, 42, 0.92) !important;
+  border-color: rgba(147, 197, 253, 0.20) !important;
+}
+
+th,
+td,
+td *,
+th * {
+  -webkit-text-fill-color: currentColor !important;
+  opacity: 1 !important;
+}
+
+:root[data-theme="dark"] td,
+:root[data-theme="dark"] tbody,
+:root[data-theme="dark"] tr {
+  color: #e5edf8 !important;
+  background-color: transparent !important;
+  border-color: rgba(148, 163, 184, 0.20) !important;
+}
+
+:root[data-theme="dark"] tbody tr:nth-child(even) { background: rgba(59, 130, 246, 0.055) !important; }
+:root[data-theme="dark"] tbody tr:hover { background: rgba(96, 165, 250, 0.11) !important; }
+
+/* Charts/SVG: theme labels, grids and legends without changing series data. */
+.chart,
+.chart-card,
+.viz-card,
+.chart-panel,
+.quadrant,
+svg {
+  color: var(--qc-chart-label) !important;
+}
+
+svg text,
+svg tspan,
+.chart svg text,
+.chart-card svg text,
+.viz-card svg text,
+.legend text,
+.axis text,
+.axis-row text,
+.axis-column text,
+.tick text {
+  fill: var(--qc-chart-label) !important;
+  stroke: none !important;
+  opacity: 1 !important;
+  font-weight: 700 !important;
+}
+
+svg line,
+svg path.domain,
+svg .grid line,
+.axis-row line,
+.axis-column line,
+.grid line,
+.tick line {
+  stroke: var(--qc-chart-grid) !important;
+  opacity: 1 !important;
+}
+
+svg .domain,
+svg path.domain,
+svg .axis-baseline {
+  stroke: var(--qc-chart-axis) !important;
+}
+
+.legend,
+.line-legend,
+.chart-legend,
+.chart-summary-item,
+.tooltip,
+.chart-tooltip,
+.recharts-tooltip-wrapper,
+.tooltip-card {
+  color: var(--qc-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(147, 197, 253, 0.26) !important;
+}
+
+:root[data-theme="dark"] .legend,
+:root[data-theme="dark"] .line-legend,
+:root[data-theme="dark"] .chart-legend,
+:root[data-theme="dark"] .chart-summary-item,
+:root[data-theme="dark"] .tooltip,
+:root[data-theme="dark"] .chart-tooltip,
+:root[data-theme="dark"] .recharts-tooltip-wrapper,
+:root[data-theme="dark"] .tooltip-card {
+  color: #e8eef8 !important;
+  background: rgba(15, 23, 42, 0.94) !important;
+  border-color: rgba(147, 197, 253, 0.24) !important;
+}
+
+
+/* Visual Ralph v3.1 — neutralize legacy unscoped dark-card rules in light mode. */
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .cards > *,
+:root[data-theme="light"] .metric-card,
+:root[data-theme="light"] .metric-row > *,
+:root[data-theme="light"] .method-card,
+:root[data-theme="light"] .method-card:nth-child(3n+2),
+:root[data-theme="light"] .method-card:nth-child(3n),
+:root[data-theme="light"] .cockpit-card,
+:root[data-theme="light"] .cockpit-card:nth-child(3n+2),
+:root[data-theme="light"] .cockpit-card:nth-child(3n),
+:root[data-theme="light"] .diagnostic-card,
+:root[data-theme="light"] .diagnostic-card:nth-child(3n+2),
+:root[data-theme="light"] .diagnostic-card:nth-child(3n),
+:root[data-theme="light"] .reverse-card,
+:root[data-theme="light"] .quality-gate,
+:root[data-theme="light"] .workflow-step,
+:root[data-theme="light"] .workflow-step:nth-child(2n),
+:root[data-theme="light"] .forecast-chart,
+:root[data-theme="light"] .explain-box,
+:root[data-theme="light"] .assumption-form,
+:root[data-theme="light"] .assumption-form fieldset,
+:root[data-theme="light"] .relative-review-status,
+:root[data-theme="light"] .valuation-scale,
+:root[data-theme="light"] .decision-cockpit,
+:root[data-theme="light"] .company-section,
+:root[data-theme="light"] .notice-card,
+:root[data-theme="light"] .lookup-status,
+:root[data-theme="light"] .hero-note,
+:root[data-theme="light"] .source-status,
+:root[data-theme="light"] .manual-update,
+:root[data-theme="light"] .filter-card {
+  color: var(--qc-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(147, 197, 253, 0.26) !important;
+  box-shadow: 0 14px 40px rgba(36, 83, 150, 0.08) !important;
+}
+
+:root[data-theme="light"] .method-card.positive,
+:root[data-theme="light"] .cockpit-card.positive,
+:root[data-theme="light"] .quality-gate.usable,
+:root[data-theme="light"] .gate-item.pass {
+  background: var(--qc-semantic-success-bg) !important;
+  border-color: var(--qc-semantic-success-border) !important;
+}
+
+:root[data-theme="light"] .method-card.negative,
+:root[data-theme="light"] .cockpit-card.negative,
+:root[data-theme="light"] .quality-gate.limited,
+:root[data-theme="light"] .gate-item.fail {
+  background: var(--qc-semantic-danger-bg) !important;
+  border-color: var(--qc-semantic-danger-border) !important;
+}
+
+:root[data-theme="light"] .method-card.warning,
+:root[data-theme="light"] .cockpit-card.warning,
+:root[data-theme="light"] .quality-gate.usable_with_caution,
+:root[data-theme="light"] .quality-gate.needs_user_review,
+:root[data-theme="light"] .gate-item.block,
+:root[data-theme="light"] .warning-list p {
+  background: var(--qc-semantic-warn-bg) !important;
+  border-color: var(--qc-semantic-warn-border) !important;
+}
+
+:root[data-theme="light"] .card::after,
+:root[data-theme="light"] .metric-card::after,
+:root[data-theme="light"] .project-card::after,
+:root[data-theme="light"] .diagnostic-card::after,
+:root[data-theme="light"] .method-card::after,
+:root[data-theme="light"] .cockpit-card::after,
+:root[data-theme="light"] .status-card::after,
+:root[data-theme="light"] .hero-note::after,
+:root[data-theme="light"] .panel::after {
+  opacity: 0 !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="light"] .assumption-form label,
+:root[data-theme="light"] .assumption-form label span,
+:root[data-theme="light"] .assumption-form legend,
+:root[data-theme="light"] .method-card small,
+:root[data-theme="light"] .cockpit-card small,
+:root[data-theme="light"] .diagnostic-card small,
+:root[data-theme="light"] .reverse-card small,
+:root[data-theme="light"] .quality-gate p,
+:root[data-theme="light"] .explain-box,
+:root[data-theme="light"] .forecast-row > span,
+:root[data-theme="light"] .scale-legend,
+:root[data-theme="light"] .scale-foot,
+:root[data-theme="light"] .judgment-copy,
+:root[data-theme="light"] .panel-note,
+:root[data-theme="light"] .assumption-help {
+  color: #536273 !important;
+  -webkit-text-fill-color: #536273 !important;
+  opacity: 1 !important;
+}
+
+:root[data-theme="light"] .assumption-form input[type="number"],
+:root[data-theme="light"] .assumption-form input[type="range"],
+:root[data-theme="light"] input[readonly],
+:root[data-theme="light"] input:disabled,
+:root[data-theme="light"] select:disabled,
+:root[data-theme="light"] button:disabled,
+:root[data-theme="light"] fieldset:disabled,
+:root[data-theme="light"] fieldset:disabled * {
+  opacity: 1 !important;
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
+}
+
+:root[data-theme="light"] input:disabled,
+:root[data-theme="light"] select:disabled,
+:root[data-theme="light"] .assumption-form input[type="number"]:disabled {
+  background: #f8fafc !important;
+  border-color: rgba(100, 116, 139, 0.28) !important;
+}
+
+:root[data-theme="dark"] input[readonly],
+:root[data-theme="dark"] input:disabled,
+:root[data-theme="dark"] select:disabled,
+:root[data-theme="dark"] button:disabled,
+:root[data-theme="dark"] fieldset:disabled,
+:root[data-theme="dark"] fieldset:disabled * {
+  opacity: 1 !important;
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+:root[data-theme="dark"] input:disabled,
+:root[data-theme="dark"] select:disabled {
+  background: rgba(15, 23, 42, 0.82) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+}
+
+:root[data-theme="light"] .forecast-bar.fcf,
+:root[data-theme="light"] .forecast-bar.pv {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+
+/* Visual Ralph v3.2 — table and valuation-scale readable surfaces. */
+:root[data-theme="light"] .table-wrap,
+:root[data-theme="light"] .table-scroll,
+:root[data-theme="light"] .data-table-wrap,
+:root[data-theme="light"] .performance-table-wrap,
+:root[data-theme="light"] .signal-table-wrap,
+:root[data-theme="light"] table,
+:root[data-theme="light"] thead,
+:root[data-theme="light"] tbody {
+  background: #ffffff !important;
+  color: var(--qc-text) !important;
+  border-color: rgba(147, 197, 253, 0.22) !important;
+}
+
+:root[data-theme="light"] th,
+:root[data-theme="light"] th * {
+  color: #174ea6 !important;
+  -webkit-text-fill-color: #174ea6 !important;
+  background: #edf6ff !important;
+}
+
+:root[data-theme="light"] td,
+:root[data-theme="light"] td * {
+  color: var(--qc-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background-color: transparent !important;
+}
+
+:root[data-theme="light"] tbody tr {
+  background: #ffffff !important;
+}
+
+:root[data-theme="light"] tbody tr:nth-child(even) {
+  background: #f8fbff !important;
+}
+
+:root[data-theme="light"] tbody tr:hover {
+  background: #eef6ff !important;
+}
+
+:root[data-theme="light"] .scale-track {
+  background: #e2e8f0 !important;
+  box-shadow: inset 0 0 0 1px rgba(100, 116, 139, 0.14) !important;
+}
+
+:root[data-theme="light"] .scale-marker {
+  background: #0f172a !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.9) !important;
+}
+
+:root[data-theme="light"] .valuation-scale.positive .scale-fill { background: #059669 !important; }
+:root[data-theme="light"] .valuation-scale.negative .scale-fill { background: #dc2626 !important; }
+:root[data-theme="light"] .valuation-scale.neutral .scale-fill { background: #d97706 !important; }
+:root[data-theme="light"] .valuation-scale.muted .scale-fill { background: #64748b !important; }
+
+:root[data-theme="dark"] .scale-track {
+  background: rgba(148, 163, 184, 0.24) !important;
+  box-shadow: inset 0 0 0 1px rgba(203, 213, 225, 0.10) !important;
+}
+
+:root[data-theme="dark"] .scale-marker {
+  background: #f8fafc !important;
+  border-color: #0f172a !important;
+}
