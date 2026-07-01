@@ -2099,3 +2099,506 @@ svg .axis-baseline {
   background: #f8fafc !important;
   border-color: #0f172a !important;
 }
+
+/* Visual Ralph v4 — full-page light-mode completion and Toss-inspired calm surfaces.
+   This block intentionally overrides older dark-first page CSS only when the active
+   document theme is light. It preserves data, routing and chart semantics. */
+:root[data-theme="light"] {
+  color-scheme: light !important;
+  --bg: #f7faff !important;
+  --panel: #ffffff !important;
+  --card: #ffffff !important;
+  --surface: #ffffff !important;
+  --surface-strong: #f8fbff !important;
+  --surface-soft: #eef6ff !important;
+  --ink: #0b1220 !important;
+  --text-strong: #0b1220 !important;
+  --muted: #536273 !important;
+  --line: rgba(147, 197, 253, 0.24) !important;
+  --accent: #3182f6 !important;
+  --accent-2: #0b6bcb !important;
+  --accent-soft: rgba(49, 130, 246, 0.10) !important;
+  --good: #047857 !important;
+  --warn: #b45309 !important;
+  --danger: #b91c1c !important;
+  --shadow: 0 24px 60px rgba(15, 23, 42, 0.08) !important;
+}
+
+:root[data-theme="light"] html,
+:root[data-theme="light"] body {
+  color: var(--qc-text) !important;
+  background:
+    radial-gradient(circle at 10% -10%, rgba(49, 130, 246, 0.10), transparent 34rem),
+    radial-gradient(circle at 90% 0%, rgba(14, 165, 233, 0.08), transparent 32rem),
+    linear-gradient(180deg, #f8fbff 0%, #ffffff 38%, #f5f8fc 100%) !important;
+}
+
+:root[data-theme="light"] body::before {
+  opacity: 0.16 !important;
+}
+
+:root[data-theme="light"] .notice,
+:root[data-theme="light"] .manual-update,
+:root[data-theme="light"] .controls,
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .disclaimer,
+:root[data-theme="light"] .viz-card,
+:root[data-theme="light"] .diagnostic-card,
+:root[data-theme="light"] .performance-period-card,
+:root[data-theme="light"] .window-chip,
+:root[data-theme="light"] .explain,
+:root[data-theme="light"] .status-card,
+:root[data-theme="light"] .control-group,
+:root[data-theme="light"] .manual-update,
+:root[data-theme="light"] .visual-panel,
+:root[data-theme="light"] .control-group-backtest,
+:root[data-theme="light"] .project-card,
+:root[data-theme="light"] .rank-card,
+:root[data-theme="light"] .output-card,
+:root[data-theme="light"] .flow-card,
+:root[data-theme="light"] .workflow-step,
+:root[data-theme="light"] .methodology-card,
+:root[data-theme="light"] .factor-method-card,
+:root[data-theme="light"] .method-item,
+:root[data-theme="light"] .company-card,
+:root[data-theme="light"] .valuation-card,
+:root[data-theme="light"] .research-card,
+:root[data-theme="light"] .quality-gate,
+:root[data-theme="light"] .explain-box,
+:root[data-theme="light"] .empty-state,
+:root[data-theme="light"] .gate-item,
+:root[data-theme="light"] .mini-item {
+  color: var(--qc-text) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,251,255,0.96)) !important;
+  border-color: rgba(147, 197, 253, 0.24) !important;
+  box-shadow: 0 20px 52px rgba(15, 23, 42, 0.07) !important;
+}
+
+:root[data-theme="light"] .controls-enhanced {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="light"] h1,
+:root[data-theme="light"] h2,
+:root[data-theme="light"] h3,
+:root[data-theme="light"] h4,
+:root[data-theme="light"] h5,
+:root[data-theme="light"] h6,
+:root[data-theme="light"] .card strong,
+:root[data-theme="light"] .panel-heading h2,
+:root[data-theme="light"] .viz-card h3,
+:root[data-theme="light"] .diagnostic-card h3,
+:root[data-theme="light"] .performance-period-card h5,
+:root[data-theme="light"] .metric-name,
+:root[data-theme="light"] .window-chip strong,
+:root[data-theme="light"] .bar-label,
+:root[data-theme="light"] .bar-value,
+:root[data-theme="light"] .leader-name,
+:root[data-theme="light"] .project-title,
+:root[data-theme="light"] .company-name {
+  color: #0b1220 !important;
+  -webkit-text-fill-color: #0b1220 !important;
+}
+
+:root[data-theme="light"] p,
+:root[data-theme="light"] li,
+:root[data-theme="light"] small,
+:root[data-theme="light"] .hero-copy,
+:root[data-theme="light"] .panel-heading p,
+:root[data-theme="light"] .notice,
+:root[data-theme="light"] .manual-update p,
+:root[data-theme="light"] .card small,
+:root[data-theme="light"] .control-hint,
+:root[data-theme="light"] .chart-meta,
+:root[data-theme="light"] .chart-help,
+:root[data-theme="light"] #manual-update-status,
+:root[data-theme="light"] .line-legend,
+:root[data-theme="light"] .scenario-note,
+:root[data-theme="light"] .diagnostic-note,
+:root[data-theme="light"] .disclaimer,
+:root[data-theme="light"] footer,
+:root[data-theme="light"] .gate-item small,
+:root[data-theme="light"] .mini-item small,
+:root[data-theme="light"] .window-chip small,
+:root[data-theme="light"] .performance-metrics-heading p,
+:root[data-theme="light"] .panel-detail,
+:root[data-theme="light"] .etf-detail-grid,
+:root[data-theme="light"] .judgment-copy,
+:root[data-theme="light"] .panel-note,
+:root[data-theme="light"] .assumption-help {
+  color: #536273 !important;
+  -webkit-text-fill-color: #536273 !important;
+  opacity: 1 !important;
+}
+
+:root[data-theme="light"] label,
+:root[data-theme="light"] .unit {
+  color: #334155 !important;
+  -webkit-text-fill-color: #334155 !important;
+}
+
+:root[data-theme="light"] select,
+:root[data-theme="light"] input,
+:root[data-theme="light"] textarea {
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+  background: #ffffff !important;
+  border-color: rgba(100, 116, 139, 0.22) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75), 0 1px 2px rgba(15,23,42,.04) !important;
+}
+
+:root[data-theme="light"] .line-chart,
+:root[data-theme="light"] .chart,
+:root[data-theme="light"] .chart-card,
+:root[data-theme="light"] .chart-panel,
+:root[data-theme="light"] .trend-bars,
+:root[data-theme="light"] .forecast-chart,
+:root[data-theme="light"] #factor-return-chart,
+:root[data-theme="light"] #backtest-chart,
+:root[data-theme="light"] #window-comparison-chart,
+:root[data-theme="light"] #leader-trend-chart,
+:root[data-theme="light"] #weight-chart,
+:root[data-theme="light"] #ensemble-weight-chart,
+:root[data-theme="light"] #price-chart,
+:root[data-theme="light"] #earnings-chart,
+:root[data-theme="light"] #quadrant-chart,
+:root[data-theme="light"] #score-chart,
+:root[data-theme="light"] #relative-chart,
+:root[data-theme="light"] #vix-chart,
+:root[data-theme="light"] #risk-chart,
+:root[data-theme="light"] #comparison-chart,
+:root[data-theme="light"] #weight-chart-container {
+  color: #1f2a3a !important;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(49,130,246,0.08), transparent 22rem),
+    linear-gradient(180deg, #ffffff, #f8fbff) !important;
+  border-color: rgba(147, 197, 253, 0.25) !important;
+  box-shadow: 0 16px 44px rgba(15, 23, 42, 0.06) !important;
+}
+
+:root[data-theme="light"] .bar-row,
+:root[data-theme="light"] .compact-bars .bar-row,
+:root[data-theme="light"] .chart-summary-item,
+:root[data-theme="light"] .legend span,
+:root[data-theme="light"] .line-legend span,
+:root[data-theme="light"] .chart-legend span {
+  color: #1f2a3a !important;
+  background: rgba(248, 251, 255, 0.92) !important;
+  border-color: rgba(147, 197, 253, 0.24) !important;
+}
+
+:root[data-theme="light"] .bar-row:nth-child(3n+1),
+:root[data-theme="light"] .chart-summary-item:nth-child(3n+1) {
+  background: #eef6ff !important;
+}
+
+:root[data-theme="light"] .bar-row:nth-child(3n+2),
+:root[data-theme="light"] .chart-summary-item:nth-child(3n+2) {
+  background: #f4f8ff !important;
+}
+
+:root[data-theme="light"] .bar-row.is-selected {
+  background: #e8f2ff !important;
+  border-color: rgba(49, 130, 246, 0.46) !important;
+}
+
+:root[data-theme="light"] .bar-row.is-best:not(.is-selected),
+:root[data-theme="light"] .gate-item.pass {
+  background: #ecfdf5 !important;
+  border-color: rgba(5, 150, 105, 0.28) !important;
+}
+
+:root[data-theme="light"] .gate-item.block {
+  background: #fffbeb !important;
+  border-color: rgba(217, 119, 6, 0.28) !important;
+}
+
+:root[data-theme="light"] .bar-row strong,
+:root[data-theme="light"] .bar-row small,
+:root[data-theme="light"] .chart-summary-item strong,
+:root[data-theme="light"] .chart-summary-item small,
+:root[data-theme="light"] .bar-label,
+:root[data-theme="light"] .bar-value,
+:root[data-theme="light"] .performance-period-card small {
+  color: #334155 !important;
+  -webkit-text-fill-color: #334155 !important;
+}
+
+:root[data-theme="light"] .bar-track {
+  background: #dbe7f5 !important;
+  border-color: rgba(100, 116, 139, 0.18) !important;
+}
+
+:root[data-theme="light"] .bar-fill,
+:root[data-theme="light"] .trend-fill {
+  background: linear-gradient(90deg, #3182f6, #38bdf8) !important;
+}
+
+:root[data-theme="light"] .bar-fill.negative {
+  background: linear-gradient(90deg, #ef4444, #fb7185) !important;
+}
+
+:root[data-theme="light"] .line-grid,
+:root[data-theme="light"] .chart-grid,
+:root[data-theme="light"] .grid-line,
+:root[data-theme="light"] .axis-row line,
+:root[data-theme="light"] .axis-column line {
+  stroke: rgba(100, 116, 139, 0.20) !important;
+}
+
+:root[data-theme="light"] .axis-line,
+:root[data-theme="light"] .domain,
+:root[data-theme="light"] .tick line {
+  stroke: rgba(51, 65, 85, 0.42) !important;
+}
+
+:root[data-theme="light"] .axis-label,
+:root[data-theme="light"] .axis-range,
+:root[data-theme="light"] .chart svg text,
+:root[data-theme="light"] .chart-card svg text,
+:root[data-theme="light"] .line-chart svg text,
+:root[data-theme="light"] svg text {
+  fill: #526173 !important;
+  color: #526173 !important;
+}
+
+:root[data-theme="light"] .axis-title {
+  fill: #0b1220 !important;
+}
+
+:root[data-theme="light"] .line-path.selected { stroke: #3182f6 !important; }
+:root[data-theme="light"] .line-path.best { stroke: #059669 !important; }
+:root[data-theme="light"] .line-path.benchmark { stroke: #7c3aed !important; }
+:root[data-theme="light"] .legend-dot { background: #3182f6 !important; }
+:root[data-theme="light"] .legend-dot.best { background: #059669 !important; }
+:root[data-theme="light"] .legend-dot.benchmark { background: #7c3aed !important; }
+
+:root[data-theme="light"] .factor-pill,
+:root[data-theme="light"] .classification,
+:root[data-theme="light"] .badge,
+:root[data-theme="light"] .pill,
+:root[data-theme="light"] .tag,
+:root[data-theme="light"] .code-pill {
+  color: #174ea6 !important;
+  -webkit-text-fill-color: #174ea6 !important;
+  background: #eef6ff !important;
+  border-color: rgba(49, 130, 246, 0.24) !important;
+}
+
+:root[data-theme="light"] .classification.likely_buy,
+:root[data-theme="light"] .classification.buy,
+:root[data-theme="light"] .positive,
+:root[data-theme="light"] .passed,
+:root[data-theme="light"] li.passed {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  background: #ecfdf5 !important;
+  border-color: rgba(5, 150, 105, 0.24) !important;
+}
+
+:root[data-theme="light"] .classification.likely_sell,
+:root[data-theme="light"] .classification.sell,
+:root[data-theme="light"] .negative,
+:root[data-theme="light"] .failed,
+:root[data-theme="light"] li.failed {
+  color: #b91c1c !important;
+  -webkit-text-fill-color: #b91c1c !important;
+  background: #fff1f2 !important;
+  border-color: rgba(225, 29, 72, 0.22) !important;
+}
+
+:root[data-theme="light"] .project-icon,
+:root[data-theme="light"] .etf-rank,
+:root[data-theme="light"] .rank-number {
+  color: #0b6bcb !important;
+  -webkit-text-fill-color: #0b6bcb !important;
+  background: linear-gradient(180deg, #eef6ff, #dbeafe) !important;
+  border-color: rgba(49, 130, 246, 0.22) !important;
+}
+
+:root[data-theme="light"] .project-card em,
+:root[data-theme="light"] .project-card small,
+:root[data-theme="light"] .etf-card small,
+:root[data-theme="light"] .company-card small,
+:root[data-theme="light"] .factor-card small {
+  color: #536273 !important;
+  -webkit-text-fill-color: #536273 !important;
+}
+
+:root[data-theme="light"] .forecast-row,
+:root[data-theme="light"] .forecast-bars {
+  color: #334155 !important;
+  -webkit-text-fill-color: #334155 !important;
+  background: #f8fbff !important;
+}
+
+:root[data-theme="light"] .forecast-bar.fcf,
+:root[data-theme="light"] .forecast-bar.pv {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: 0 1px 1px rgba(15,23,42,0.22) !important;
+}
+
+:root[data-theme="dark"] li.passed,
+:root[data-theme="dark"] li.failed {
+  background: rgba(15, 23, 42, 0.72) !important;
+  border-color: rgba(148, 163, 184, 0.18) !important;
+}
+
+:root[data-theme="dark"] li.passed {
+  color: #86efac !important;
+  -webkit-text-fill-color: #86efac !important;
+}
+
+:root[data-theme="dark"] li.failed {
+  color: #fda4af !important;
+  -webkit-text-fill-color: #fda4af !important;
+}
+
+/* Visual Ralph v4.1 — project-specific auxiliary components in light mode. */
+:root[data-theme="light"] .scenario-note,
+:root[data-theme="light"] p.scenario-note,
+:root[data-theme="light"] div.scenario-note,
+:root[data-theme="light"] .diagnostic-note,
+:root[data-theme="light"] p.diagnostic-note,
+:root[data-theme="light"] .method-glossary,
+:root[data-theme="light"] .code-pill,
+:root[data-theme="light"] .method-summary,
+:root[data-theme="light"] .factor-method-summary {
+  color: #475569 !important;
+  -webkit-text-fill-color: #475569 !important;
+  background: #f4f8ff !important;
+  border: 1px solid rgba(147, 197, 253, 0.25) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.85), 0 10px 26px rgba(15,23,42,.04) !important;
+}
+
+:root[data-theme="light"] .scenario-note strong,
+:root[data-theme="light"] .diagnostic-note strong,
+:root[data-theme="light"] .method-glossary strong {
+  color: #0b1220 !important;
+  -webkit-text-fill-color: #0b1220 !important;
+}
+
+:root[data-theme="light"] .metric-tile,
+:root[data-theme="light"] .summary-card,
+:root[data-theme="light"] .source-card,
+:root[data-theme="light"] .signal-card,
+:root[data-theme="light"] .factor-card,
+:root[data-theme="light"] .rank-tile,
+:root[data-theme="light"] .metric-row > *,
+:root[data-theme="light"] .workflow-rail a,
+:root[data-theme="light"] .result-switchboard a,
+:root[data-theme="light"] .basis-date-card,
+:root[data-theme="light"] .flow-grid > *,
+:root[data-theme="light"] .update-grid > * {
+  color: #1f2a3a !important;
+  background: linear-gradient(180deg, #ffffff, #f8fbff) !important;
+  border-color: rgba(147, 197, 253, 0.24) !important;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06) !important;
+}
+
+:root[data-theme="light"] .metric-tile:nth-child(3n+1),
+:root[data-theme="light"] .summary-card:nth-child(3n+1),
+:root[data-theme="light"] .workflow-rail a:nth-child(3n+1) {
+  background: linear-gradient(180deg, #eef6ff, #ffffff) !important;
+}
+
+:root[data-theme="light"] .metric-tile:nth-child(3n+2),
+:root[data-theme="light"] .summary-card:nth-child(3n+2),
+:root[data-theme="light"] .workflow-rail a:nth-child(3n+2) {
+  background: linear-gradient(180deg, #f7f4ff, #ffffff) !important;
+}
+
+:root[data-theme="light"] .metric-tile:nth-child(3n),
+:root[data-theme="light"] .summary-card:nth-child(3n),
+:root[data-theme="light"] .workflow-rail a:nth-child(3n) {
+  background: linear-gradient(180deg, #f0fdfa, #ffffff) !important;
+}
+
+:root[data-theme="light"] .metric-tile-header,
+:root[data-theme="light"] .metric-row,
+:root[data-theme="light"] .rank-detail,
+:root[data-theme="light"] .mini-list,
+:root[data-theme="light"] .workflow-rail small,
+:root[data-theme="light"] .signal-card small,
+:root[data-theme="light"] .company-summary p,
+:root[data-theme="light"] .source-card p {
+  color: #536273 !important;
+  -webkit-text-fill-color: #536273 !important;
+  background: transparent !important;
+}
+
+:root[data-theme="light"] .metric-tile-header strong,
+:root[data-theme="light"] .metric-tile strong,
+:root[data-theme="light"] .summary-card strong,
+:root[data-theme="light"] .workflow-rail strong,
+:root[data-theme="light"] .signal-card strong,
+:root[data-theme="light"] .rank-detail strong,
+:root[data-theme="light"] .mini-list strong {
+  color: #0b1220 !important;
+  -webkit-text-fill-color: #0b1220 !important;
+}
+
+:root[data-theme="light"] .metric-tile-header span,
+:root[data-theme="light"] .metric-row span,
+:root[data-theme="light"] .rank-detail,
+:root[data-theme="light"] .rank-detail small,
+:root[data-theme="light"] .mini-list span,
+:root[data-theme="light"] .mini-list small {
+  color: #536273 !important;
+  -webkit-text-fill-color: #536273 !important;
+}
+
+:root[data-theme="light"] .rank-badge,
+:root[data-theme="light"] .marker-help,
+:root[data-theme="light"] .legend-key,
+:root[data-theme="light"] .score-pill {
+  color: #174ea6 !important;
+  -webkit-text-fill-color: #174ea6 !important;
+  background: #eef6ff !important;
+  border-color: rgba(49, 130, 246, 0.24) !important;
+}
+
+:root[data-theme="light"] .marker-help.marker-entry,
+:root[data-theme="light"] .marker-help.marker-buy,
+:root[data-theme="light"] .score-pill.good {
+  color: #047857 !important;
+  -webkit-text-fill-color: #047857 !important;
+  background: #ecfdf5 !important;
+  border-color: rgba(5, 150, 105, 0.24) !important;
+}
+
+:root[data-theme="light"] .marker-help.marker-exit,
+:root[data-theme="light"] .marker-help.marker-sell,
+:root[data-theme="light"] .score-pill.bad {
+  color: #b91c1c !important;
+  -webkit-text-fill-color: #b91c1c !important;
+  background: #fff1f2 !important;
+  border-color: rgba(225, 29, 72, 0.22) !important;
+}
+
+:root[data-theme="light"] .score-pill.watch {
+  color: #b45309 !important;
+  -webkit-text-fill-color: #b45309 !important;
+  background: #fffbeb !important;
+  border-color: rgba(217, 119, 6, 0.24) !important;
+}
+
+:root[data-theme="light"] .chart-summary-item em,
+:root[data-theme="light"] .chart-summary-item strong,
+:root[data-theme="light"] .chart-summary-item small,
+:root[data-theme="light"] .source-card span,
+:root[data-theme="light"] .company-summary span {
+  color: #334155 !important;
+  -webkit-text-fill-color: #334155 !important;
+}
+
+:root[data-theme="light"] .top-nav .quant-nav-link.is-active,
+:root[data-theme="light"] .quant-common-nav .quant-nav-link.is-active {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: linear-gradient(135deg, #3182f6, #0b6bcb) !important;
+}
