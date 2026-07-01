@@ -14,6 +14,16 @@
     { id: 'valuation', label: 'Valuation', href: 'https://sonchanggi.github.io/valuation/' },
   ];
 
+  function queryTheme() {
+    try {
+      const value = new URLSearchParams(window.location.search).get('theme');
+      if (value === 'light' || value === 'dark') return value;
+    } catch (_) {
+      // Ignore malformed preview URLs; fall back to stored/system preference.
+    }
+    return null;
+  }
+
   function getStoredTheme() {
     try {
       return localStorage.getItem(STORAGE_KEY);
@@ -31,6 +41,8 @@
   }
 
   function preferredTheme() {
+    const requested = queryTheme();
+    if (requested) return requested;
     const stored = getStoredTheme();
     if (stored === 'light' || stored === 'dark') return stored;
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
