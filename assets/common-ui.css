@@ -2602,3 +2602,458 @@ svg .axis-baseline {
   -webkit-text-fill-color: #ffffff !important;
   background: linear-gradient(135deg, #3182f6, #0b6bcb) !important;
 }
+
+/* Ralph v5 — light/dark contrast completion + dense table readability.
+   UI-only: theme-safe cards, readable detail text, bounded table scrollers,
+   and the Momentum daily-weight matrix no-wrap structure. */
+:root[data-theme="light"] {
+  --qc-primary: #0b63ce;
+  --qc-primary-strong: #0a4fb3;
+  --primary: var(--qc-primary);
+  --primary-dark: var(--qc-primary-strong);
+  --accent: #0f7ea8;
+}
+
+:root[data-theme="light"] .leader-card,
+:root[data-theme="light"] .leader-item,
+:root[data-theme="light"] .factor-family-card,
+:root[data-theme="light"] .source-item,
+:root[data-theme="light"] .analysis-card,
+:root[data-theme="light"] .compare-card,
+:root[data-theme="light"] .table-card,
+:root[data-theme="light"] .summary-tile,
+:root[data-theme="light"] .source-status,
+:root[data-theme="light"] .signal-table-status,
+:root[data-theme="light"] .valuation-scale,
+:root[data-theme="light"] .forecast-bars,
+:root[data-theme="light"] .forecast-row {
+  color: #182235 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  border-color: rgba(147, 197, 253, 0.26) !important;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.065) !important;
+}
+
+:root[data-theme="light"] .leader-card:nth-child(3n+1),
+:root[data-theme="light"] .factor-family-card:nth-child(3n+1),
+:root[data-theme="light"] .source-item:nth-child(3n+1) {
+  background: linear-gradient(180deg, #f1f7ff 0%, #ffffff 100%) !important;
+}
+
+:root[data-theme="light"] .leader-card:nth-child(3n+2),
+:root[data-theme="light"] .factor-family-card:nth-child(3n+2),
+:root[data-theme="light"] .source-item:nth-child(3n+2) {
+  background: linear-gradient(180deg, #f7f4ff 0%, #ffffff 100%) !important;
+}
+
+:root[data-theme="light"] .leader-card:nth-child(3n),
+:root[data-theme="light"] .factor-family-card:nth-child(3n),
+:root[data-theme="light"] .source-item:nth-child(3n) {
+  background: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%) !important;
+}
+
+:root[data-theme="light"] .leader-card h3,
+:root[data-theme="light"] .leader-item strong,
+:root[data-theme="light"] .leader-item span,
+:root[data-theme="light"] .factor-family-card strong,
+:root[data-theme="light"] .source-item strong,
+:root[data-theme="light"] .signal-table-status strong,
+:root[data-theme="light"] .valuation-scale strong,
+:root[data-theme="light"] .forecast-row strong {
+  color: #0b1220 !important;
+  -webkit-text-fill-color: #0b1220 !important;
+}
+
+:root[data-theme="light"] .leader-item small,
+:root[data-theme="light"] .factor-family-card small,
+:root[data-theme="light"] .factor-family-meta,
+:root[data-theme="light"] .factor-family-meta span,
+:root[data-theme="light"] .source-item span,
+:root[data-theme="light"] .source-item small,
+:root[data-theme="light"] .signal-table-status span,
+:root[data-theme="light"] .valuation-scale span,
+:root[data-theme="light"] .valuation-scale small,
+:root[data-theme="light"] .forecast-row span {
+  color: #4f5f73 !important;
+  -webkit-text-fill-color: #4f5f73 !important;
+  opacity: 1 !important;
+  background: transparent !important;
+}
+
+:root[data-theme="light"] .factor-family-meta span {
+  display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  border-radius: 999px;
+  padding: 0.32rem 0.58rem;
+  background: #edf6ff !important;
+  border: 1px solid rgba(49, 130, 246, 0.18) !important;
+  color: #334155 !important;
+  -webkit-text-fill-color: #334155 !important;
+  line-height: 1.25;
+}
+
+:root[data-theme="light"] .source-item span,
+:root[data-theme="light"] .source-item small {
+  color: #526173 !important;
+  -webkit-text-fill-color: #526173 !important;
+}
+
+:root[data-theme="light"] .source-item .warning,
+:root[data-theme="light"] .source-item span.warning {
+  color: #a15c00 !important;
+  -webkit-text-fill-color: #a15c00 !important;
+}
+
+:root[data-theme="light"] .valuation-scale {
+  overflow: hidden;
+}
+
+:root[data-theme="light"] .scale-track {
+  background: #dbe7f5 !important;
+  border: 1px solid rgba(100, 116, 139, 0.16) !important;
+  box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06) !important;
+}
+
+:root[data-theme="light"] .scale-fill {
+  background: linear-gradient(90deg, #3182f6, #38bdf8) !important;
+}
+
+:root[data-theme="light"] .valuation-scale.positive .scale-fill { background: linear-gradient(90deg, #059669, #22c55e) !important; }
+:root[data-theme="light"] .valuation-scale.negative .scale-fill { background: linear-gradient(90deg, #dc2626, #fb7185) !important; }
+:root[data-theme="light"] .valuation-scale.neutral .scale-fill { background: linear-gradient(90deg, #d97706, #fbbf24) !important; }
+:root[data-theme="light"] .valuation-scale.muted .scale-fill { background: linear-gradient(90deg, #64748b, #94a3b8) !important; }
+
+:root[data-theme="light"] .scale-marker {
+  background: #0b1220 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08) !important;
+}
+
+:root[data-theme="light"] .forecast-bar.fcf,
+:root[data-theme="light"] .forecast-bar.pv {
+  color: #0b1220 !important;
+  -webkit-text-fill-color: #0b1220 !important;
+  text-shadow: none !important;
+  border: 1px solid rgba(49, 130, 246, 0.18) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.65) !important;
+}
+
+:root[data-theme="light"] .forecast-bar.fcf { background: linear-gradient(90deg, #bfdbfe, #7dd3fc) !important; }
+:root[data-theme="light"] .forecast-bar.pv { background: linear-gradient(90deg, #bbf7d0, #99f6e4) !important; }
+
+.table-wrap:has(table),
+.table-scroll:has(table),
+.data-table-wrap:has(table),
+.performance-table-wrap:has(table),
+.signal-table-wrap:has(table) {
+  max-height: clamp(360px, 64vh, 720px);
+  overflow: auto !important;
+  scrollbar-gutter: stable both-edges;
+  overscroll-behavior: contain;
+}
+
+.table-wrap.compact:has(table),
+.performance-table-wrap:has(table) {
+  max-height: clamp(320px, 52vh, 560px);
+}
+
+.table-wrap:has(table) th,
+.table-scroll:has(table) th,
+.data-table-wrap:has(table) th,
+.performance-table-wrap:has(table) th,
+.signal-table-wrap:has(table) th {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  box-shadow: 0 1px 0 rgba(147, 197, 253, 0.20);
+}
+
+.table-wrap table,
+.table-scroll table,
+.data-table-wrap table,
+.performance-table-wrap table,
+.signal-table-wrap table {
+  width: max-content;
+  min-width: 100%;
+}
+
+.table-wrap td,
+.table-wrap th,
+.table-scroll td,
+.table-scroll th,
+.data-table-wrap td,
+.data-table-wrap th,
+.signal-table-wrap td,
+.signal-table-wrap th {
+  white-space: nowrap;
+}
+
+#daily-weight-analysis-panel .table-wrap {
+  max-height: clamp(420px, 62vh, 680px) !important;
+}
+
+#daily-weights-table {
+  width: max-content !important;
+  min-width: 2400px !important;
+  table-layout: auto !important;
+}
+
+#daily-weights-table th,
+#daily-weights-table td {
+  min-width: 118px;
+  white-space: nowrap !important;
+  vertical-align: top;
+}
+
+#daily-weights-table th:nth-child(1),
+#daily-weights-table td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  min-width: 118px;
+  box-shadow: 1px 0 0 rgba(147, 197, 253, 0.22);
+}
+
+#daily-weights-table th:nth-child(2),
+#daily-weights-table td:nth-child(2) {
+  position: sticky;
+  left: 118px;
+  z-index: 5;
+  min-width: 130px;
+  box-shadow: 1px 0 0 rgba(147, 197, 253, 0.18);
+}
+
+#daily-weights-table th:nth-child(1),
+#daily-weights-table th:nth-child(2) {
+  z-index: 7;
+}
+
+:root[data-theme="light"] #daily-weights-table th:nth-child(1),
+:root[data-theme="light"] #daily-weights-table th:nth-child(2) {
+  background: #edf6ff !important;
+}
+
+:root[data-theme="light"] #daily-weights-table td:nth-child(1),
+:root[data-theme="light"] #daily-weights-table td:nth-child(2) {
+  background: #ffffff !important;
+}
+
+:root[data-theme="light"] #daily-weights-table tr:nth-child(even) td:nth-child(1),
+:root[data-theme="light"] #daily-weights-table tr:nth-child(even) td:nth-child(2) {
+  background: #f8fbff !important;
+}
+
+:root[data-theme="dark"] #daily-weights-table th:nth-child(1),
+:root[data-theme="dark"] #daily-weights-table th:nth-child(2) {
+  background: #172033 !important;
+}
+
+:root[data-theme="dark"] #daily-weights-table td:nth-child(1),
+:root[data-theme="dark"] #daily-weights-table td:nth-child(2) {
+  background: #111827 !important;
+}
+
+#daily-weights-table .weight-matrix-cell {
+  min-width: 142px !important;
+  white-space: nowrap !important;
+  line-height: 1.42;
+}
+
+#daily-weights-table .weight-matrix-cell strong,
+#daily-weights-table .weight-matrix-cell small {
+  display: block;
+  white-space: nowrap !important;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+#daily-weights-table .weight-matrix-cell strong {
+  color: var(--qc-text-strong) !important;
+  -webkit-text-fill-color: var(--qc-text-strong) !important;
+}
+
+#daily-weights-table .weight-matrix-cell small {
+  color: var(--qc-muted) !important;
+  -webkit-text-fill-color: var(--qc-muted) !important;
+}
+
+@media (max-width: 760px) {
+  .table-wrap:has(table),
+  .table-scroll:has(table),
+  .data-table-wrap:has(table),
+  .performance-table-wrap:has(table),
+  .signal-table-wrap:has(table) {
+    max-height: min(620px, 70vh);
+  }
+
+  #daily-weights-table { min-width: 1900px !important; }
+  #daily-weights-table th,
+  #daily-weights-table td { min-width: 104px; }
+  #daily-weights-table th:nth-child(1),
+  #daily-weights-table td:nth-child(1) { min-width: 104px; }
+  #daily-weights-table th:nth-child(2),
+  #daily-weights-table td:nth-child(2) { left: 104px; min-width: 116px; }
+}
+
+/* Ralph v5b — clear valuation comparison rails left by dark-first screen rules. */
+:root[data-theme="light"] .valuation-band,
+:root[data-theme="light"] .method-compare {
+  color: #182235 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="light"] .method-card,
+:root[data-theme="light"] .method-card:nth-child(3n+1),
+:root[data-theme="light"] .method-card:nth-child(3n+2),
+:root[data-theme="light"] .method-card:nth-child(3n) {
+  color: #182235 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%) !important;
+  border-color: rgba(147, 197, 253, 0.26) !important;
+  box-shadow: 0 16px 38px rgba(15, 23, 42, 0.055) !important;
+}
+
+:root[data-theme="light"] .method-card.positive {
+  background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%) !important;
+  border-color: rgba(5, 150, 105, 0.22) !important;
+}
+
+:root[data-theme="light"] .method-card.negative {
+  background: linear-gradient(180deg, #ffffff 0%, #fff1f2 100%) !important;
+  border-color: rgba(225, 29, 72, 0.22) !important;
+}
+
+:root[data-theme="light"] .method-card.warning {
+  background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%) !important;
+  border-color: rgba(217, 119, 6, 0.24) !important;
+}
+
+:root[data-theme="light"] .method-card > span,
+:root[data-theme="light"] .scale-labels,
+:root[data-theme="light"] .scale-foot,
+:root[data-theme="light"] .chart-legend span,
+:root[data-theme="light"] .valuation-scale .scale-labels,
+:root[data-theme="light"] .valuation-scale .scale-foot {
+  color: #4f5f73 !important;
+  -webkit-text-fill-color: #4f5f73 !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="light"] .method-card strong,
+:root[data-theme="light"] .scale-labels strong {
+  color: #0b1220 !important;
+  -webkit-text-fill-color: #0b1220 !important;
+}
+
+:root[data-theme="light"] .method-card small,
+:root[data-theme="light"] .scale-foot span {
+  color: #536273 !important;
+  -webkit-text-fill-color: #536273 !important;
+}
+
+/* Ralph v5c — finish contrast residue in light/dark audits without touching data.
+   Gives gradient buttons a real background-color for contrast checks and fixes
+   Momentum period-card headers/trend labels that inherited dark-first rules. */
+.quant-nav-link.is-active,
+.top-nav .quant-nav-link.is-active,
+.quant-common-nav .quant-nav-link.is-active,
+.button.primary,
+button.primary,
+a.primary-button,
+a.hero-link,
+.hero-link,
+a.hero-dashboard-button,
+.hero-dashboard-button,
+header.hero .hero-link {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: #0b63ce !important;
+  background-image: linear-gradient(135deg, #3182f6, #0b63ce) !important;
+  border-color: rgba(49, 130, 246, 0.38) !important;
+}
+
+:root[data-theme="dark"] .quant-nav-link.is-active,
+:root[data-theme="dark"] .top-nav .quant-nav-link.is-active,
+:root[data-theme="dark"] .quant-common-nav .quant-nav-link.is-active,
+:root[data-theme="dark"] .button.primary,
+:root[data-theme="dark"] button.primary,
+:root[data-theme="dark"] a.primary-button,
+:root[data-theme="dark"] a.hero-link,
+:root[data-theme="dark"] .hero-link,
+:root[data-theme="dark"] a.hero-dashboard-button,
+:root[data-theme="dark"] .hero-dashboard-button,
+:root[data-theme="dark"] header.hero .hero-link {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: #2563eb !important;
+  background-image: linear-gradient(135deg, #60a5fa, #2563eb) !important;
+  border-color: rgba(125, 211, 252, 0.36) !important;
+}
+
+:root[data-theme="light"] .performance-period-card h5 {
+  color: #0b1220 !important;
+  -webkit-text-fill-color: #0b1220 !important;
+  background-color: #edf6ff !important;
+  background-image: linear-gradient(180deg, #f6fbff, #eaf4ff) !important;
+  border-color: rgba(147, 197, 253, 0.30) !important;
+}
+
+:root[data-theme="light"] .trend-label,
+:root[data-theme="light"] .line-chart .trend-label,
+:root[data-theme="light"] .trend-bars .trend-label {
+  color: #526173 !important;
+  -webkit-text-fill-color: #526173 !important;
+}
+
+:root[data-theme="light"] .project-card em,
+:root[data-theme="light"] .data-health-card em,
+:root[data-theme="light"] .metric-card em,
+:root[data-theme="light"] .research-card em,
+:root[data-theme="light"] .manual-update span,
+:root[data-theme="light"] .source-detail span,
+:root[data-theme="light"] .schedule-card span {
+  color: #4f5f73 !important;
+  -webkit-text-fill-color: #4f5f73 !important;
+}
+
+:root[data-theme="dark"] .manual-update span,
+:root[data-theme="dark"] .source-detail span,
+:root[data-theme="dark"] .schedule-card span {
+  color: #cbd5e1 !important;
+  -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+:root[data-theme="light"] .step-badge,
+:root[data-theme="light"] .flow-step span:first-child,
+:root[data-theme="light"] .result-switchboard span,
+:root[data-theme="light"] .source-link,
+:root[data-theme="light"] a[href^="#"] {
+  color: #0a4fb3 !important;
+  -webkit-text-fill-color: #0a4fb3 !important;
+}
+
+:root[data-theme="dark"] .step-badge,
+:root[data-theme="dark"] .flow-step span:first-child,
+:root[data-theme="dark"] .result-switchboard span {
+  color: #bfdbfe !important;
+  -webkit-text-fill-color: #bfdbfe !important;
+}
+
+
+/* Ralph v5d — keep numbered workflow badges readable after muted-span cleanup. */
+:root[data-theme="light"] .workflow-step > span:first-child,
+:root[data-theme="light"] .workflow-step span:first-child,
+:root[data-theme="dark"] .workflow-step > span:first-child,
+:root[data-theme="dark"] .workflow-step span:first-child {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background-color: #0b63ce !important;
+  background-image: linear-gradient(135deg, #3182f6, #0b63ce) !important;
+  border: 1px solid rgba(255, 255, 255, 0.34) !important;
+}
