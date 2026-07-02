@@ -12,6 +12,7 @@
   --qc-subtle: #64748b;
   --qc-line: #e2e8f0;
   --qc-line-strong: #cbd5e1;
+  --qc-border: var(--qc-line);
   --qc-primary: #2563eb;
   --qc-primary-soft: #eff6ff;
   --qc-primary-strong: #1d4ed8;
@@ -69,6 +70,7 @@
   --qc-subtle: #94a3b8;
   --qc-line: rgba(148, 163, 184, 0.24);
   --qc-line-strong: rgba(203, 213, 225, 0.34);
+  --qc-border: var(--qc-line);
   --qc-primary: #93c5fd;
   --qc-primary-soft: rgba(147, 197, 253, 0.14);
   --qc-primary-strong: #dbeafe;
@@ -1284,4 +1286,325 @@ details > :not(summary):not(.details-body) {
   color: var(--qc-primary) !important;
   background: rgba(37, 99, 235, 0.22) !important;
   border-color: color-mix(in srgb, var(--qc-primary) 34%, var(--qc-line)) !important;
+}
+
+/* Light-first completion pass: neutralize legacy dark page-level cards without touching data. */
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .project-card,
+:root[data-theme="light"] .feature-grid article,
+:root[data-theme="light"] .metric-card,
+:root[data-theme="light"] .metric-tile,
+:root[data-theme="light"] .mini-card,
+:root[data-theme="light"] .summary-card,
+:root[data-theme="light"] .state-card,
+:root[data-theme="light"] .notice,
+:root[data-theme="light"] .notice-card,
+:root[data-theme="light"] .status-card,
+:root[data-theme="light"] .source-card,
+:root[data-theme="light"] .references-card,
+:root[data-theme="light"] .method-card,
+:root[data-theme="light"] .method-item,
+:root[data-theme="light"] .control-card,
+:root[data-theme="light"] .controls,
+:root[data-theme="light"] .input-card,
+:root[data-theme="light"] .result-card,
+:root[data-theme="light"] .exposure-card,
+:root[data-theme="light"] .correlation-card,
+:root[data-theme="light"] .data-card,
+:root[data-theme="light"] .viz-card,
+:root[data-theme="light"] .chart-card,
+:root[data-theme="light"] .chart-panel,
+:root[data-theme="light"] .visual-card,
+:root[data-theme="light"] .visual-panel,
+:root[data-theme="light"] .forecast-chart,
+:root[data-theme="light"] .economic-panel,
+:root[data-theme="light"] .update-panel,
+:root[data-theme="light"] .action-card,
+:root[data-theme="light"] .asset-picker,
+:root[data-theme="light"] .workflow-step,
+:root[data-theme="light"] .rank-card,
+:root[data-theme="light"] .output-card,
+:root[data-theme="light"] .diagnostic-card,
+:root[data-theme="light"] .analysis-card,
+:root[data-theme="light"] .factor-method-card,
+:root[data-theme="light"] .factor-family-card,
+:root[data-theme="light"] .quality-gate,
+:root[data-theme="light"] .empty-state,
+:root[data-theme="light"] .lookup-status,
+:root[data-theme="light"] .source-status,
+:root[data-theme="light"] .manual-update,
+:root[data-theme="light"] .decision-cockpit,
+:root[data-theme="light"] .company-section,
+:root[data-theme="light"] .company-card,
+:root[data-theme="light"] .valuation-card,
+:root[data-theme="light"] .research-card,
+:root[data-theme="light"] .flow-card,
+:root[data-theme="light"] .command-card,
+:root[data-theme="light"] .performance-period-card,
+:root[data-theme="light"] .window-chip,
+:root[data-theme="light"] .value-card,
+:root[data-theme="light"] .cockpit-card,
+:root[data-theme="light"] .valuation-band,
+:root[data-theme="light"] .valuation-scale,
+:root[data-theme="light"] .assumption-form,
+:root[data-theme="light"] .radar-grid,
+:root[data-theme="light"] .trend-bars,
+:root[data-theme="light"] .source-list > *,
+:root[data-theme="light"] .method-grid > *,
+:root[data-theme="light"] .metric-grid > *,
+:root[data-theme="light"] .metric-row > *,
+:root[data-theme="light"] .cards > *,
+:root[data-theme="light"] .diagnostic-grid > * {
+  color: var(--qc-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: var(--qc-surface) !important;
+  border-color: var(--qc-line) !important;
+  box-shadow: var(--qc-shadow-soft) !important;
+}
+
+:root[data-theme="light"] .briefing-item,
+:root[data-theme="light"] .health-item,
+:root[data-theme="light"] .watch-match,
+:root[data-theme="light"] .bar-row,
+:root[data-theme="light"] .compact-bars .bar-row,
+:root[data-theme="light"] .gate-item,
+:root[data-theme="light"] .mini-item,
+:root[data-theme="light"] .scenario-note,
+:root[data-theme="light"] .diagnostic-note,
+:root[data-theme="light"] .method-summary,
+:root[data-theme="light"] .method-glossary,
+:root[data-theme="light"] .factor-method-summary,
+:root[data-theme="light"] .chart-legend span,
+:root[data-theme="light"] .line-legend span,
+:root[data-theme="light"] .legend span,
+:root[data-theme="light"] .code-pill {
+  color: var(--qc-text) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: var(--qc-surface-soft) !important;
+  border-color: var(--qc-line) !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="light"] .positive,
+:root[data-theme="light"] .passed,
+:root[data-theme="light"] .gate-item.pass,
+:root[data-theme="light"] .status-chip.good,
+:root[data-theme="light"] .signal-pill.good,
+:root[data-theme="light"] .health-item.ok {
+  color: var(--qc-success) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: var(--qc-success-soft) !important;
+  border-color: color-mix(in srgb, var(--qc-success) 26%, var(--qc-line)) !important;
+}
+
+:root[data-theme="light"] .warning,
+:root[data-theme="light"] .watch,
+:root[data-theme="light"] .gate-item.block,
+:root[data-theme="light"] .status-chip.watch,
+:root[data-theme="light"] .status-chip.high-risk,
+:root[data-theme="light"] .signal-pill.watch,
+:root[data-theme="light"] .signal-pill.high-risk,
+:root[data-theme="light"] .health-item.warn,
+:root[data-theme="light"] .briefing-item.warning,
+:root[data-theme="light"] .watch-match.warning {
+  color: var(--qc-warning) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: var(--qc-warning-soft) !important;
+  border-color: color-mix(in srgb, var(--qc-warning) 26%, var(--qc-line)) !important;
+}
+
+:root[data-theme="light"] .negative,
+:root[data-theme="light"] .failed,
+:root[data-theme="light"] .status-chip.bad,
+:root[data-theme="light"] .signal-pill.bad {
+  color: var(--qc-danger) !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: var(--qc-danger-soft) !important;
+  border-color: color-mix(in srgb, var(--qc-danger) 26%, var(--qc-line)) !important;
+}
+
+:root[data-theme="light"] .bar-row strong,
+:root[data-theme="light"] .compact-bars strong,
+:root[data-theme="light"] .chart-summary-item strong,
+:root[data-theme="light"] .chart-summary-item em,
+:root[data-theme="light"] .gate-item strong,
+:root[data-theme="light"] .mini-item strong,
+:root[data-theme="light"] .window-chip strong,
+:root[data-theme="light"] .performance-period-card h5,
+:root[data-theme="light"] .metric-name,
+:root[data-theme="light"] .bar-label,
+:root[data-theme="light"] .bar-value,
+:root[data-theme="light"] .series-name,
+:root[data-theme="light"] .window-chip strong {
+  color: var(--qc-text-strong) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+:root[data-theme="light"] .bar-row small,
+:root[data-theme="light"] .compact-bars small,
+:root[data-theme="light"] .chart-summary-item small,
+:root[data-theme="light"] .gate-item small,
+:root[data-theme="light"] .mini-item small,
+:root[data-theme="light"] .window-chip small,
+:root[data-theme="light"] .performance-period-card small,
+:root[data-theme="light"] .chart-legend,
+:root[data-theme="light"] .line-legend,
+:root[data-theme="light"] .legend,
+:root[data-theme="light"] .chart-meta,
+:root[data-theme="light"] .chart-help {
+  color: var(--qc-muted) !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+:root[data-theme="light"] .table-wrap,
+:root[data-theme="light"] .table-scroll,
+:root[data-theme="light"] .data-table-wrap,
+:root[data-theme="light"] .performance-table-wrap,
+:root[data-theme="light"] .signal-table-wrap,
+:root[data-theme="light"] .heatmap-wrap {
+  max-height: min(720px, 72vh);
+  overflow: auto !important;
+  background: var(--qc-surface) !important;
+  border-color: var(--qc-line) !important;
+  box-shadow: none !important;
+}
+
+:root[data-theme="dark"] .table-wrap,
+:root[data-theme="dark"] .table-scroll,
+:root[data-theme="dark"] .data-table-wrap,
+:root[data-theme="dark"] .performance-table-wrap,
+:root[data-theme="dark"] .signal-table-wrap,
+:root[data-theme="dark"] .heatmap-wrap {
+  max-height: min(720px, 72vh);
+  overflow: auto !important;
+}
+
+:root[data-theme="light"] table {
+  background: var(--qc-surface) !important;
+  color: var(--qc-text) !important;
+}
+
+:root[data-theme="light"] th {
+  background: #f8fafc !important;
+  color: var(--qc-text-strong) !important;
+  border-color: var(--qc-line) !important;
+}
+
+:root[data-theme="light"] td {
+  background: transparent !important;
+  color: var(--qc-text) !important;
+  border-color: var(--qc-line) !important;
+}
+
+:root[data-theme="light"] .chart,
+:root[data-theme="light"] .line-chart,
+:root[data-theme="light"] .chart-card,
+:root[data-theme="light"] .chart-panel,
+:root[data-theme="light"] .viz-card,
+:root[data-theme="light"] .visual-card,
+:root[data-theme="light"] .forecast-chart,
+:root[data-theme="light"] #weight-chart,
+:root[data-theme="light"] #price-chart,
+:root[data-theme="light"] #earnings-chart,
+:root[data-theme="light"] #quadrant-chart,
+:root[data-theme="light"] #score-chart,
+:root[data-theme="light"] #relative-chart,
+:root[data-theme="light"] #vix-chart,
+:root[data-theme="light"] #factor-return-chart,
+:root[data-theme="light"] #risk-chart,
+:root[data-theme="light"] #comparison-chart,
+:root[data-theme="light"] #weight-chart-container {
+  background: var(--qc-surface) !important;
+  color: var(--qc-text) !important;
+  border-color: var(--qc-line) !important;
+}
+
+:root[data-theme="light"] svg text,
+:root[data-theme="light"] .chart svg text,
+:root[data-theme="light"] .line-chart svg text,
+:root[data-theme="light"] .chart-card svg text,
+:root[data-theme="light"] .axis-label,
+:root[data-theme="light"] .axis-title,
+:root[data-theme="light"] .axis-range,
+:root[data-theme="light"] .axis-note {
+  fill: var(--qc-chart-label) !important;
+  color: var(--qc-chart-label) !important;
+}
+
+@media (max-width: 760px) {
+  .table-wrap,
+  .table-scroll,
+  .data-table-wrap,
+  .performance-table-wrap,
+  .signal-table-wrap,
+  .heatmap-wrap {
+    max-height: min(640px, 68vh);
+  }
+
+  .chart-card,
+  .chart-panel,
+  .viz-card,
+  .visual-card {
+    min-height: 260px;
+  }
+
+  .chart-card svg,
+  .line-chart svg,
+  .chart svg {
+    min-height: 220px;
+  }
+}
+
+/* Chart rhythm: keep dense research visuals readable without making the whole page sprawl. */
+#factor-return-chart,
+#weight-chart.bar-chart,
+#ensemble-weight-chart,
+.compact-bars,
+.performance-metrics {
+  max-height: min(680px, 76vh);
+  overflow: auto !important;
+  padding-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--qc-line-strong) transparent;
+}
+
+#weight-chart.chart-card {
+  max-height: min(880px, 84vh);
+  overflow: auto !important;
+}
+
+#weight-chart.chart-card .chart-summary-grid {
+  max-height: 360px;
+  overflow: auto !important;
+  padding-right: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--qc-line-strong) transparent;
+}
+
+.viz-card.wide {
+  max-height: min(960px, 88vh);
+  overflow: auto !important;
+}
+
+@media (max-width: 760px) {
+  #factor-return-chart,
+  #weight-chart.bar-chart,
+  #ensemble-weight-chart,
+  .compact-bars,
+  .performance-metrics {
+    max-height: min(520px, 62vh);
+  }
+
+  #weight-chart.chart-card {
+    max-height: min(720px, 78vh);
+  }
+
+  #weight-chart.chart-card .chart-summary-grid {
+    max-height: 300px;
+  }
+
+  .viz-card.wide {
+    max-height: min(760px, 82vh);
+  }
 }
