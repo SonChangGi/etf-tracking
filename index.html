@@ -6,9 +6,9 @@
   <meta name="description" content="한국 상장 액티브 ETF 3종의 TOP10 편입 종목과 비중 변화를 추적하는 정적 대시보드" />
   <title>ETF TOP10 Tracking</title>
   <link rel="stylesheet" href="assets/styles.css" />
-  <link rel="stylesheet" href="assets/common-ui.css?v=20260701-ralph-table-v5d" />
+  <link rel="stylesheet" href="assets/common-ui.css?v=20260702-light-system-v6" />
   <script src="assets/app.js" defer></script>
-  <script src="assets/common-ui.js?v=20260701-fullpage-v4" defer></script>
+  <script src="assets/common-ui.js?v=20260702-light-system-v6" defer></script>
 </head>
 <body id="top">
   <header class="hero" aria-labelledby="page-title">
@@ -24,8 +24,8 @@
         <p class="eyebrow">ETF Tracking</p>
         <h1 id="page-title">ETF TOP10 투자 비중 추적</h1>
         <p class="hero-copy">
-          주요 액티브 ETF의 일별 TOP10 구성과 비중 변화를 추적합니다.
-          가격 수익률만으로 설명되지 않는 매수·매도 가능성 신호도 함께 봅니다.
+          주요 액티브 ETF의 TOP10 비중 변화와 잔차 신호를 먼저 정리합니다.
+          세부 표와 방법론은 아래에서 좁혀 확인합니다.
         </p>
         <div class="hero-actions">
           <a class="primary-button" href="#etf-dashboard">대시보드 보기</a>
@@ -183,7 +183,9 @@
       </div>
     </section>
 
-    <section class="section methodology-section" id="methodology" aria-labelledby="method-title">
+    <details class="section methodology-section" id="methodology" aria-labelledby="method-title">
+      <summary>계산 방법과 한계</summary>
+      <div class="details-body">
       <div class="section-heading">
         <p class="eyebrow">Methodology</p>
         <h2 id="method-title">계산 방법과 한계</h2>
@@ -206,8 +208,11 @@
           <p>검토된 수동 실행은 최신 데이터를 먼저 가져온 뒤 최근 구간을 갱신합니다. 더 과거 분석은 수동 백필로 확장할 수 있으며, 정적 JSON 용량과 공급자 throttling을 함께 고려합니다.</p>
         </article>
       </div>
-    </section>
-    <section class="section manual-update" id="manual-update" aria-labelledby="manual-update-title">
+          </div>
+    </details>
+    <details class="section manual-update" id="manual-update" aria-labelledby="manual-update-title">
+      <summary>수동 업데이트 정책</summary>
+      <div class="details-body">
       <div>
         <p class="eyebrow">Manual Update</p>
         <h2 id="manual-update-title">없는 날짜만 채우는 수동 업데이트</h2>
@@ -232,7 +237,8 @@
         <code id="manual-update-command" class="code-pill">gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false</code>
         <small id="manual-update-status" role="status" aria-live="polite">기본값은 missing-only입니다. 실행 후 Actions 상태와 대시보드 생성 시각을 확인하세요.</small>
       </div>
-    </section>
+          </div>
+    </details>
 
   </main>
 
