@@ -492,6 +492,10 @@ button:focus-visible,
 .chart-card .chart-series .series-point {
   transition: stroke-width 160ms ease, filter 160ms ease, transform 160ms ease;
 }
+.chart-card .chart-series .series-point {
+  transform-box: fill-box;
+  transform-origin: center;
+}
 .chart-card .chart-series.rank-tier-tail { opacity: .72; }
 .chart-card svg:has(.chart-series:hover) .chart-series:not(:hover),
 .chart-card svg:has(.chart-series:focus-visible) .chart-series:not(:focus-visible) {
@@ -510,14 +514,27 @@ button:focus-visible,
 .chart-card .chart-series:focus-visible .series-point {
   transform: scale(1.35);
 }
-.chart-card .series-signal-layer {
+.chart-card .series-signal-layer,
+.chart-card .series-value-layer {
   opacity: 0;
   pointer-events: none;
   transition: opacity 140ms ease;
 }
 .chart-card .chart-series:hover .series-signal-layer,
-.chart-card .chart-series:focus-visible .series-signal-layer {
+.chart-card .chart-series:focus-visible .series-signal-layer,
+.chart-card .chart-series:hover .series-value-layer,
+.chart-card .chart-series:focus-visible .series-value-layer {
   opacity: 1;
+}
+.chart-card .series-value-label text {
+  fill: var(--series-color, var(--ink-strong));
+  stroke: var(--panel-elevated);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  font-size: 10.5px;
+  font-weight: 950;
+  letter-spacing: 0;
 }
 .chart-card .series-signal circle {
   fill: var(--panel-elevated);

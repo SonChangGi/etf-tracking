@@ -768,17 +768,18 @@
       const segmentPaths = segmentPathData.map((path) => `<path class="series-line" d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`).join('');
       const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? 'var(--chart-sparse-point)' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
       const signalMarkers = renderSeriesSignalMarkers(item.signalPoints, x, y);
+      const valueLabels = renderSeriesValueLabels(item.validPoints, x, y, margin.top, height - margin.bottom);
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
-      return `<g class="chart-series ${tierClass}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
+      return `<g class="chart-series ${tierClass}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${valueLabels}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const summaryCards = renderChartSummaryCards(series, colorByKey);
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
-    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 라벨은 최신 순위와 티커이며, 아래 카드는 종목명·최신 비중·기간 변화폭을 같은 색으로 연결합니다. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 기간 내 편입·편출 이벤트와 매수·매도 방향 신호가 마커로 표시됩니다.`;
+    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 라벨은 최신 순위와 티커이며, 아래 카드는 종목명·최신 비중·기간 변화폭을 같은 색으로 연결합니다. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 각 점 비중값과 기간 내 편입·편출 이벤트, 매수·매도 방향 신호가 표시됩니다.`;
     target.innerHTML = `
       <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
       <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
@@ -808,6 +809,18 @@
       const textX = labelX + labelWidth / 2;
       return `<g class="line-end-label" style="--end-label-color:${color}"><title>${escapeHtml(item.title || item.text)}</title><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><rect class="rank-ticker-pill" x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" width="${labelWidth.toFixed(1)}" height="22" rx="11"/><text x="${textX.toFixed(1)}" y="${(item.y2 + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${escapeHtml(item.text)}</text></g>`;
     }).join('');
+  }
+
+  function renderSeriesValueLabels(points, x, y, topY, bottomY) {
+    const labels = asArray(points).filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
+    if (!labels.length) return '';
+    return `<g class="series-value-layer">${labels.map((point, index) => {
+      const pointX = x(point.date);
+      const pointY = y(point.value);
+      const labelY = pointY < topY + 28 ? pointY + 18 + (index % 2) * 9 : pointY - 12 - (index % 2) * 9;
+      const clampedY = Math.max(topY + 12, Math.min(labelY, bottomY - 8));
+      return `<g class="series-value-label" transform="translate(${pointX.toFixed(1)} ${clampedY.toFixed(1)})"><text text-anchor="middle">${escapeHtml(formatWeight(point.value))}</text></g>`;
+    }).join('')}</g>`;
   }
 
   function renderSeriesSignalMarkers(signalPoints, x, y) {
