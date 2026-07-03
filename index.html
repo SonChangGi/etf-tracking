@@ -1,18 +1,16 @@
 <!doctype html>
-<html lang="ko" data-project-id="etf">
+<html lang="ko">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="description" content="한국 상장 액티브 ETF 3종의 TOP10 편입 종목과 비중 변화를 추적하는 정적 대시보드" />
   <title>ETF TOP10 Tracking</title>
   <link rel="stylesheet" href="assets/styles.css" />
-  <link rel="stylesheet" href="assets/common-ui.css?v=20260703-light-polish-v7" />
   <script src="assets/app.js" defer></script>
-  <script src="assets/common-ui.js?v=20260703-light-polish-v7" defer></script>
 </head>
 <body id="top">
   <header class="hero" aria-labelledby="page-title">
-    <nav class="top-nav" data-common-nav data-keep-local-nav aria-label="프로젝트 이동">
+    <nav class="top-nav" aria-label="프로젝트 이동">
       <a class="ghost-link" href="https://sonchanggi.github.io/quant-dashboard/">← Quant Dashboard로 돌아가기</a>
       <a href="#etf-dashboard">ETF 대시보드</a>
       <a href="#manual-update">수동 업데이트</a>
@@ -24,8 +22,8 @@
         <p class="eyebrow">ETF Tracking</p>
         <h1 id="page-title">ETF TOP10 투자 비중 추적</h1>
         <p class="hero-copy">
-          주요 액티브 ETF의 TOP10 비중 변화와 잔차 신호를 먼저 정리합니다.
-          세부 표와 방법론은 아래에서 좁혀 확인합니다.
+          TIME ETF 2종과 KoAct 미국나스닥성장기업액티브의 일별 TOP10 구성 종목,
+          비중 변화, 가격 수익률로 설명되지 않는 매수·매도 가능성 신호를 한 화면에서 확인합니다.
         </p>
         <div class="hero-actions">
           <a class="primary-button" href="#etf-dashboard">대시보드 보기</a>
@@ -36,8 +34,8 @@
       <aside class="hero-note" aria-label="데이터 정책">
         <strong>데이터/해석 경계</strong>
         <p>
-          공개 보유종목과 종가를 이용한 추정 도구입니다.
-          운용사 주문 확정이나 투자·세무·법률 조언이 아닙니다.
+          공급자 공개 데이터와 공개 종가를 이용한 추정 도구입니다. 시작일은 커밋된 백필 범위에 따라
+          확장되며, 실제 운용사 주문 확정이나 투자·세무·법률 또는 매매 조언이 아닙니다.
         </p>
       </aside>
     </div>
@@ -183,9 +181,7 @@
       </div>
     </section>
 
-    <details class="section methodology-section" id="methodology" aria-labelledby="method-title">
-      <summary>계산 방법과 한계</summary>
-      <div class="details-body">
+    <section class="section methodology-section" id="methodology" aria-labelledby="method-title">
       <div class="section-heading">
         <p class="eyebrow">Methodology</p>
         <h2 id="method-title">계산 방법과 한계</h2>
@@ -208,11 +204,8 @@
           <p>검토된 수동 실행은 최신 데이터를 먼저 가져온 뒤 최근 구간을 갱신합니다. 더 과거 분석은 수동 백필로 확장할 수 있으며, 정적 JSON 용량과 공급자 throttling을 함께 고려합니다.</p>
         </article>
       </div>
-          </div>
-    </details>
-    <details class="section manual-update" id="manual-update" aria-labelledby="manual-update-title">
-      <summary>수동 업데이트 정책</summary>
-      <div class="details-body">
+    </section>
+    <section class="section manual-update" id="manual-update" aria-labelledby="manual-update-title">
       <div>
         <p class="eyebrow">Manual Update</p>
         <h2 id="manual-update-title">없는 날짜만 채우는 수동 업데이트</h2>
@@ -237,8 +230,7 @@
         <code id="manual-update-command" class="code-pill">gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false</code>
         <small id="manual-update-status" role="status" aria-live="polite">기본값은 missing-only입니다. 실행 후 Actions 상태와 대시보드 생성 시각을 확인하세요.</small>
       </div>
-          </div>
-    </details>
+    </section>
 
   </main>
 
