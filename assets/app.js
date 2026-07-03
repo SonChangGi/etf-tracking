@@ -768,7 +768,7 @@
       const segmentPaths = segmentPathData.map((path) => `<path class="series-line" d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`).join('');
       const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? 'var(--chart-sparse-point)' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
       const signalMarkers = renderSeriesSignalMarkers(item.signalPoints, x, y);
-      const valueLabels = renderSeriesValueLabels(item.validPoints, x, y, margin.top, height - margin.bottom);
+      const valueLabels = renderSeriesValueLabels(item.validPoints, item.signalPoints, x, y, margin.top, height - margin.bottom, width - margin.right);
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
@@ -811,15 +811,43 @@
     }).join('');
   }
 
-  function renderSeriesValueLabels(points, x, y, topY, bottomY) {
+  function renderSeriesValueLabels(points, signalPoints, x, y, topY, bottomY, rightX) {
     const labels = asArray(points).filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
     if (!labels.length) return '';
+    const signalsByDate = asArray(signalPoints).reduce((map, signal) => {
+      const date = stringOr(signal.date, '');
+      if (!date) return map;
+      if (!map.has(date)) map.set(date, []);
+      map.get(date).push(signal);
+      return map;
+    }, new Map());
     return `<g class="series-value-layer">${labels.map((point, index) => {
+      const valueText = formatWeight(point.value);
       const pointX = x(point.date);
       const pointY = y(point.value);
-      const labelY = pointY < topY + 28 ? pointY + 18 + (index % 2) * 9 : pointY - 12 - (index % 2) * 9;
+      const nearbySignals = signalsByDate.get(point.date) || [];
+      const hasSignalAbove = nearbySignals.some((signal) => !(signal.direction === 'sell' || signal.kind === 'exit'));
+      const hasSignalBelow = nearbySignals.some((signal) => signal.direction === 'sell' || signal.kind === 'exit');
+      const hasSignalsOnBothSides = hasSignalAbove && hasSignalBelow;
+      const labelWidth = Math.max(34, Math.min(54, 12 + valueText.length * 6.4));
+      const offset = 28 + (index % 2) * 7;
+      let textAnchor = 'middle';
+      let labelX = pointX;
+      let labelY;
+      if (hasSignalsOnBothSides) {
+        textAnchor = 'start';
+        labelX = Math.min(pointX + 18, rightX - labelWidth - 4);
+        labelY = Math.max(topY + 12, Math.min(pointY + 4, bottomY - 8));
+      } else if (hasSignalAbove) {
+        labelY = pointY + offset;
+      } else if (hasSignalBelow) {
+        labelY = pointY - offset;
+      } else {
+        labelY = pointY < topY + 34 ? pointY + 18 + (index % 2) * 8 : pointY - 12 - (index % 2) * 8;
+      }
       const clampedY = Math.max(topY + 12, Math.min(labelY, bottomY - 8));
-      return `<g class="series-value-label" transform="translate(${pointX.toFixed(1)} ${clampedY.toFixed(1)})"><text text-anchor="middle">${escapeHtml(formatWeight(point.value))}</text></g>`;
+      const rectX = textAnchor === 'start' ? -5 : -labelWidth / 2;
+      return `<g class="series-value-label" transform="translate(${labelX.toFixed(1)} ${clampedY.toFixed(1)})"><rect class="series-value-pill" x="${rectX.toFixed(1)}" y="-10" width="${labelWidth.toFixed(1)}" height="18" rx="9"/><text text-anchor="${textAnchor}" dominant-baseline="central">${escapeHtml(valueText)}</text></g>`;
     }).join('')}</g>`;
   }
 

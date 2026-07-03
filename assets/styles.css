@@ -526,10 +526,15 @@ button:focus-visible,
 .chart-card .chart-series:focus-visible .series-value-layer {
   opacity: 1;
 }
+.chart-card .series-value-pill {
+  fill: color-mix(in srgb, var(--panel-elevated), transparent 8%);
+  stroke: color-mix(in srgb, var(--series-color, var(--accent)), transparent 44%);
+  stroke-width: 1px;
+}
 .chart-card .series-value-label text {
   fill: var(--series-color, var(--ink-strong));
   stroke: var(--panel-elevated);
-  stroke-width: 4px;
+  stroke-width: 2.6px;
   stroke-linejoin: round;
   paint-order: stroke;
   font-size: 10.5px;
