@@ -7,13 +7,14 @@
   const QUANT_DASHBOARD_URL = 'https://sonchanggi.github.io/quant-dashboard/';
   const WORKFLOW_URL = 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml';
   const MANUAL_UPDATE_COMMAND = 'gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true';
+  const THEME_STORAGE_KEY = 'etf-tracking-theme';
   const SUPPORTED_SCHEMA_MAJOR = 1;
   const ALLOWED_LINK_HOSTS = new Set(['github.com', 'sonchanggi.github.io', 'timeetf.co.kr', 'www.samsungactive.co.kr', 'samsungactive.co.kr']);
   const CHART_COLORS = [
-    '#7dd3fc', '#fb7185', '#86efac', '#fbbf24', '#c4b5fd',
-    '#67e8f9', '#f9a8d4', '#bef264', '#fdba74', '#d8dee8',
-    '#5eead4', '#fda4af', '#a5b4fc', '#93c5fd', '#fde68a',
-    '#bbf7d0', '#fed7aa', '#fecdd3', '#ddd6fe', '#99f6e4',
+    '#3182f6', '#00a384', '#f59f00', '#e03131', '#7c3aed',
+    '#0891b2', '#db2777', '#65a30d', '#ea580c', '#4b5563',
+    '#0f766e', '#b45309', '#2563eb', '#64748b', '#16a34a',
+    '#dc2626', '#9333ea', '#0284c7', '#ca8a04', '#475569',
   ];
   const SIGNAL_TABLE_INITIAL_LIMIT = 30;
   const SIGNAL_TABLE_LOAD_STEP = 30;
@@ -98,8 +99,62 @@
 
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
+      bindThemeToggle();
       wireControls();
       loadAndRender();
+    });
+  }
+
+  function storedTheme() {
+    try {
+      return window.localStorage?.getItem(THEME_STORAGE_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  function saveTheme(theme) {
+    try {
+      window.localStorage?.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // Theme persistence is optional; the dashboard still works without localStorage.
+    }
+  }
+
+  function themeRoot() {
+    return document.documentElement || document.querySelector?.('html') || null;
+  }
+
+  function currentTheme() {
+    const root = themeRoot();
+    return root?.dataset?.theme || root?.getAttribute?.('data-theme') || 'light';
+  }
+
+  function applyTheme(theme) {
+    const normalized = theme === 'dark' ? 'dark' : 'light';
+    const root = themeRoot();
+    if (root?.dataset) {
+      root.dataset.theme = normalized;
+    } else if (root?.setAttribute) {
+      root.setAttribute('data-theme', normalized);
+    }
+    const button = document.querySelector('#theme-toggle');
+    if (!button) return;
+    const isDark = normalized === 'dark';
+    button.setAttribute('aria-pressed', String(isDark));
+    button.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
+    const label = typeof button.querySelector === 'function' ? button.querySelector('.theme-toggle-text') : null;
+    if (label) label.textContent = isDark ? '라이트 모드' : '다크 모드';
+  }
+
+  function bindThemeToggle() {
+    applyTheme(storedTheme() || 'light');
+    const button = document.querySelector('#theme-toggle');
+    if (!button || typeof button.addEventListener !== 'function') return;
+    button.addEventListener('click', () => {
+      const nextTheme = currentTheme() === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      saveTheme(nextTheme);
     });
   }
 
@@ -695,10 +750,10 @@
     const colorByKey = buildSeriesColorMap(series);
     const x = (date) => margin.left + ((Date.parse(date) - minDate) / Math.max(maxDate - minDate, 1)) * innerWidth;
     const y = (value) => margin.top + (1 - (value - yMin) / Math.max(yMax - yMin, 1)) * innerHeight;
-    const yGrid = yTicks.map((tick) => `<g class="axis-row"><line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick).toFixed(1)}" y2="${y(tick).toFixed(1)}" stroke="#283040"/><text x="${margin.left - 14}" y="${(y(tick) + 4).toFixed(1)}" text-anchor="end">${formatAxisWeight(tick)}</text></g>`).join('');
+    const yGrid = yTicks.map((tick) => `<g class="axis-row"><line x1="${margin.left}" x2="${width - margin.right}" y1="${y(tick).toFixed(1)}" y2="${y(tick).toFixed(1)}" stroke="var(--chart-grid)"/><text x="${margin.left - 14}" y="${(y(tick) + 4).toFixed(1)}" text-anchor="end">${formatAxisWeight(tick)}</text></g>`).join('');
     const xGrid = xTicks.map((tick) => {
       const xPos = x(tick);
-      return `<g class="axis-column"><line x1="${xPos.toFixed(1)}" x2="${xPos.toFixed(1)}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="#202734"/><text x="${xPos.toFixed(1)}" y="${height - margin.bottom + 24}" text-anchor="middle">${escapeHtml(formatAxisDate(tick, showYearOnTicks))}</text></g>`;
+      return `<g class="axis-column"><line x1="${xPos.toFixed(1)}" x2="${xPos.toFixed(1)}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="var(--chart-grid)"/><text x="${xPos.toFixed(1)}" y="${height - margin.bottom + 24}" text-anchor="middle">${escapeHtml(formatAxisDate(tick, showYearOnTicks))}</text></g>`;
     }).join('');
     const paths = series.map((item, index) => {
       const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
@@ -711,7 +766,7 @@
         .join(' '));
       const hitPaths = segmentPathData.map((path) => `<path class="series-hit" d="${path}" fill="none" stroke="transparent" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
       const segmentPaths = segmentPathData.map((path) => `<path class="series-line" d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`).join('');
-      const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? '#11151d' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
+      const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? 'var(--chart-sparse-point)' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
       const signalMarkers = renderSeriesSignalMarkers(item.signalPoints, x, y);
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
@@ -732,8 +787,8 @@
         <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
         ${yGrid}
         ${xGrid}
-        <line x1="${margin.left}" x2="${width - margin.right}" y1="${height - margin.bottom}" y2="${height - margin.bottom}" stroke="#3b4556"/>
-        <line x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="#3b4556"/>
+        <line class="axis-line" x1="${margin.left}" x2="${width - margin.right}" y1="${height - margin.bottom}" y2="${height - margin.bottom}" stroke="var(--chart-axis)"/>
+        <line class="axis-line" x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="var(--chart-axis)"/>
         <text class="axis-title" x="${margin.left}" y="20">TOP10 비중(%)</text>
         <text class="axis-note" x="${width - margin.right}" y="22" text-anchor="end">${escapeHtml(axisNote)}</text>
         <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)} · 기본 보기 최근 1개월</text>

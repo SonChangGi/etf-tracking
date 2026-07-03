@@ -1,22 +1,35 @@
 <!doctype html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
   <meta name="description" content="한국 상장 액티브 ETF 3종의 TOP10 편입 종목과 비중 변화를 추적하는 정적 대시보드" />
   <title>ETF TOP10 Tracking</title>
-  <link rel="stylesheet" href="assets/styles.css" />
-  <script src="assets/app.js" defer></script>
+  <link rel="stylesheet" href="assets/styles.css?v=20260703-light-theme-nav" />
+  <script src="assets/app.js?v=20260703-light-theme-nav" defer></script>
 </head>
 <body id="top">
+  <nav class="site-nav" aria-label="연결 프로젝트 바로가기">
+    <a class="site-nav-brand" href="https://sonchanggi.github.io/quant-dashboard/" aria-label="Quant Research Hub로 이동">Quant Research Hub</a>
+    <div class="site-nav-links" aria-label="프로젝트 목록">
+      <a href="https://sonchanggi.github.io/quant-dashboard/">Hub</a>
+      <a href="https://sonchanggi.github.io/momentum-factor-lab/">Momentum</a>
+      <a href="https://sonchanggi.github.io/dram-price/">DRAM</a>
+      <a href="https://sonchanggi.github.io/best-factor/">Best Factor</a>
+      <a class="is-active" href="https://sonchanggi.github.io/etf-tracking/" aria-current="page">ETF</a>
+      <a href="https://sonchanggi.github.io/sox/">SOX</a>
+      <a href="https://sonchanggi.github.io/port/">Port</a>
+      <a href="https://sonchanggi.github.io/valuation/">Valuation</a>
+      <a href="https://sonchanggi.github.io/quant-dashboard/risk-score/">Risk Score</a>
+    </div>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드로 전환">
+      <span class="theme-toggle-icon" aria-hidden="true"></span>
+      <span class="theme-toggle-text">다크 모드</span>
+    </button>
+  </nav>
+
   <header class="hero" aria-labelledby="page-title">
-    <nav class="top-nav" aria-label="프로젝트 이동">
-      <a class="ghost-link" href="https://sonchanggi.github.io/quant-dashboard/">← Quant Dashboard로 돌아가기</a>
-      <a href="#etf-dashboard">ETF 대시보드</a>
-      <a href="#manual-update">수동 업데이트</a>
-      <a href="#signals">신호</a>
-      <a href="#methodology">해석 방법</a>
-    </nav>
     <div class="hero-grid">
       <div class="hero-main">
         <p class="eyebrow">ETF Tracking</p>
@@ -27,6 +40,7 @@
         </p>
         <div class="hero-actions">
           <a class="primary-button" href="#etf-dashboard">대시보드 보기</a>
+          <a class="secondary-button" href="#signals">신호 보기</a>
           <a class="secondary-button" href="#manual-update">수동 업데이트</a>
           <a class="secondary-button" href="data/dashboard.json">원천 JSON 보기</a>
         </div>
