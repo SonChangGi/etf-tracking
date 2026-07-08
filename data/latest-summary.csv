@@ -1,31 +1,31 @@
 etf_id,date,rank,ticker,name,weight_percent,classification,residual_pp
-time-nasdaq100-active,2026-07-07,1,SNDK,Sandisk Corp,7.37,likely_buy,1.4794929851579717
-time-nasdaq100-active,2026-07-07,2,MU,Micron Technology Inc,6.45,likely_buy,1.6395859503256736
-time-nasdaq100-active,2026-07-07,3,AMD,Advanced Micro Devices Inc,5.83,likely_buy,1.5996359118054748
-time-nasdaq100-active,2026-07-07,4,INTC,Intel Corp,4.73,residual_watch,-0.4504458875288133
-time-nasdaq100-active,2026-07-07,5,NVDA,NVIDIA Corp,4.31,residual_watch,-0.4104062626533862
-time-nasdaq100-active,2026-07-07,6,DELL,Dell Technologies Inc,4.05,residual_watch,-0.3903821900336366
-time-nasdaq100-active,2026-07-07,7,LRCX,Lam Research Corp,4.01,residual_watch,-0.3903787480155323
-time-nasdaq100-active,2026-07-07,8,WDC,Western Digital Corp,3.87,likely_buy,0.6797253820156572
-time-nasdaq100-active,2026-07-07,9,STX,Seagate Technology Holdings PLC,3.35,likely_buy,0.6897710495961222
-time-nasdaq100-active,2026-07-07,10,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.33,insufficient_data,
-time-global-ai-active,2026-07-07,1,285A.T,Kioxia Holdings Corp,9.2,likely_buy,1.044647168178054
-time-global-ai-active,2026-07-07,2,AMD,Advanced Micro Devices Inc,6.87,price_aligned,0.06456402112122017
-time-global-ai-active,2026-07-07,3,STX,Seagate Technology Holdings PLC,6.32,likely_buy,1.0246753453383484
-time-global-ai-active,2026-07-07,4,WDC,Western Digital Corp,5.62,likely_buy,1.0399912649754226
-time-global-ai-active,2026-07-07,5,INTC,Intel Corp,5.28,likely_sell,-1.9526386068740065
-time-global-ai-active,2026-07-07,6,SNDK,Sandisk Corp,4.75,likely_buy,1.5807531579736747
-time-global-ai-active,2026-07-07,7,,NASDAQ 100 E-MINI INDEX SEPT 2026,4.02,insufficient_data,
-time-global-ai-active,2026-07-07,8,ASML,ASML Holding NV,3.61,price_aligned,0.003615623301585824
-time-global-ai-active,2026-07-07,9,6981.T,Murata Manufacturing Co Ltd,3.41,price_aligned,0.02806124267469512
-time-global-ai-active,2026-07-07,10,2513.HK,Knowledge Atlas Technology JSC Ltd,3.34,price_aligned,0.01885590856256103
-koact-nasdaq-growth-active,2026-07-07,1,AMD,ADVANCED MICRO DEVICES,7.54,price_aligned,-2.9208134577629608e-08
-koact-nasdaq-growth-active,2026-07-07,2,INTC,INTEL Corp,6.68,price_aligned,6.122050777435106e-08
-koact-nasdaq-growth-active,2026-07-07,3,SNDK,Sandisk Corp/DE,5.93,price_aligned,4.452684354561143e-08
-koact-nasdaq-growth-active,2026-07-07,4,MU,MICRON TECH,5.72,price_aligned,1.9768435777223203e-08
-koact-nasdaq-growth-active,2026-07-07,5,GOOGL,ALPHABET INC-CL A,4.31,price_aligned,-4.1414087270652544e-08
-koact-nasdaq-growth-active,2026-07-07,6,NVDA,NVIDIA Corp,4.24,price_aligned,4.590516233804465e-08
-koact-nasdaq-growth-active,2026-07-07,7,SNOW,Snowflake Inc - CL A,4.06,price_aligned,-4.6172419665424513e-08
-koact-nasdaq-growth-active,2026-07-07,8,BE,BLOOM ENERGY CORPORATION,4.03,price_aligned,-3.237365220343236e-08
-koact-nasdaq-growth-active,2026-07-07,9,ARM,ARM Holdings PLC,3.8,price_aligned,2.6774634509507678e-08
-koact-nasdaq-growth-active,2026-07-07,10,LRCX,LAM RESEARCH,3.76,price_aligned,-4.391604768727575e-08
+time-nasdaq100-active,2026-07-08,1,SNDK,Sandisk Corp,6.98,price_aligned,-0.20950371970132675
+time-nasdaq100-active,2026-07-08,2,MU,Micron Technology Inc,5.98,residual_watch,-0.3733829629622756
+time-nasdaq100-active,2026-07-08,3,AMD,Advanced Micro Devices Inc,5.79,residual_watch,-0.2751488475814936
+time-nasdaq100-active,2026-07-08,4,INTC,Intel Corp,4.43,residual_watch,-0.2566181300075838
+time-nasdaq100-active,2026-07-08,5,LRCX,Lam Research Corp,4.11,residual_watch,0.2104031196053966
+time-nasdaq100-active,2026-07-08,6,NVDA,NVIDIA Corp,3.96,residual_watch,-0.26136176092153107
+time-nasdaq100-active,2026-07-08,7,DELL,Dell Technologies Inc,3.81,residual_watch,-0.3172983987601463
+time-nasdaq100-active,2026-07-08,8,WDC,Western Digital Corp,3.74,residual_watch,-0.30592122402175725
+time-nasdaq100-active,2026-07-08,9,STX,Seagate Technology Holdings PLC,3.59,residual_watch,0.12925717538213588
+time-nasdaq100-active,2026-07-08,10,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.3,insufficient_data,
+time-global-ai-active,2026-07-08,1,285A.T,Kioxia Holdings Corp,9.07,price_aligned,0.16946448716890927
+time-global-ai-active,2026-07-08,2,AMD,Advanced Micro Devices Inc,7.35,price_aligned,0.1206361059122587
+time-global-ai-active,2026-07-08,3,STX,Seagate Technology Holdings PLC,6.22,residual_watch,-0.38407567455428815
+time-global-ai-active,2026-07-08,4,WDC,Western Digital Corp,5.49,residual_watch,-0.45310234126761895
+time-global-ai-active,2026-07-08,5,INTC,Intel Corp,4.88,residual_watch,-0.411792253105709
+time-global-ai-active,2026-07-08,6,SNDK,Sandisk Corp,4.68,price_aligned,-0.007005649985543094
+time-global-ai-active,2026-07-08,7,,NASDAQ 100 E-MINI INDEX SEPT 2026,4.02,insufficient_data,
+time-global-ai-active,2026-07-08,8,ASML,ASML Holding NV,3.68,price_aligned,0.004435134917866179
+time-global-ai-active,2026-07-08,9,SNOW,Snowflake Inc,3.31,price_aligned,0.058242714595366785
+time-global-ai-active,2026-07-08,10,NVDA,NVIDIA Corp,3.28,price_aligned,0.040384282522727855
+koact-nasdaq-growth-active,2026-07-08,1,AMD,ADVANCED MICRO DEVICES,7.87,price_aligned,-0.002539640033570656
+koact-nasdaq-growth-active,2026-07-08,2,INTC,INTEL Corp,6.65,price_aligned,0.007287046063090941
+koact-nasdaq-growth-active,2026-07-08,3,SNDK,Sandisk Corp/DE,5.8,price_aligned,-0.005728512604100899
+koact-nasdaq-growth-active,2026-07-08,4,MU,MICRON TECH,5.66,price_aligned,0.005269046668079369
+koact-nasdaq-growth-active,2026-07-08,5,BE,BLOOM ENERGY CORPORATION,4.3,price_aligned,0.0011568250280697967
+koact-nasdaq-growth-active,2026-07-08,6,GOOGL,ALPHABET INC-CL A,4.3,price_aligned,0.002124338665201897
+koact-nasdaq-growth-active,2026-07-08,7,NVDA,NVIDIA Corp,4.17,price_aligned,0.002153048896795795
+koact-nasdaq-growth-active,2026-07-08,8,SNOW,Snowflake Inc - CL A,4.0,price_aligned,-0.0058673613666302415
+koact-nasdaq-growth-active,2026-07-08,9,ARM,ARM Holdings PLC,3.8,price_aligned,-0.0037375150436034232
+koact-nasdaq-growth-active,2026-07-08,10,LRCX,LAM RESEARCH,3.67,price_aligned,0.00027277963148586437
