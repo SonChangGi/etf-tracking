@@ -1000,15 +1000,14 @@ tbody tr:hover { background: var(--accent-soft); }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 64px;
-  min-height: 40px;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 9px 12px;
+  border-radius: var(--radius-sm);
   color: var(--ink-strong);
   background: color-mix(in srgb, var(--panel), transparent 6%);
   box-shadow: var(--shadow-soft);
-  font-size: .82rem;
+  font-size: 1rem;
   font-weight: 900;
   backdrop-filter: blur(14px);
 }
@@ -1103,9 +1102,8 @@ tbody tr:hover { background: var(--accent-soft); }
   th, td { padding: 12px; }
   .page-jump-nav { right: 10px; bottom: 10px; gap: 6px; }
   .page-jump-nav a {
-    min-width: 54px;
-    min-height: 36px;
-    padding: 8px 10px;
-    font-size: .76rem;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
   }
 }
