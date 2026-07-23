@@ -25,6 +25,21 @@ if (!api) throw new Error('ETF tracking test API missing');
 if (!htmlSource.includes('id="chart-date"') || !htmlSource.includes('id="chart-selection-summary"')) {
   throw new Error('common-design chart observation controls missing');
 }
+for (const text of [
+  'Python이 생성한 편입·편출 및 잔차 신호를 그대로 표시합니다.',
+  '표시 설정은 저장된 분석 결과를 다시 계산하지 않습니다.',
+]) {
+  if (htmlSource.includes(text)) throw new Error(`redundant implementation copy should not be public: ${text}`);
+}
+if (source.includes('chart-active-readout') || source.includes('renderSeriesValueLabels')) {
+  throw new Error('chart values should stay outside the plot instead of using overlay or all-point labels');
+}
+if (source.includes('<title id="weight-chart-svg-title"')) {
+  throw new Error('native SVG title tooltip should not cover the chart');
+}
+if (!source.includes('aria-labelledby="chart-title weight-chart-svg-desc"')) {
+  throw new Error('chart should retain an accessible external title and SVG description');
+}
 if (!htmlSource.includes('class="skip-link"') || !htmlSource.includes('id="main-content"')) {
   throw new Error('common-design skip navigation missing');
 }

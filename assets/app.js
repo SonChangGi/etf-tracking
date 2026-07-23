@@ -739,17 +739,20 @@
     const analysis = latest.analysisSummary || {};
     const sourceWarning = latest.sourceStatus && latest.sourceStatus !== 'live';
     renderMetricCards('#overview-metrics', [
-      ['선택 ETF', `${etf?.shortName || etf?.name || '-'}${etf?.code ? ` · ${etf.code}` : ''}`, '현재 화면 기준', true],
-      ['최근 기준일', formatMaybeDate(latest.date), `생성 ${formatFreshness(dashboard.generatedAt)}`],
-      ['1위 종목', `${leader.ticker || leader.name || '-'}${leader.weightPercent === null || leader.weightPercent === undefined ? '' : ` · ${formatWeight(leader.weightPercent)}`}`, '최근 TOP10 순위'],
-      ['TOP10 합계', formatWeight(top10Weight), `${top10.length}개 종목`],
-      ['가격 커버리지', formatCoverage(analysis.returnCoverage), `${signals.length}건 신호 · ${sourceWarning ? '소스 확인 필요' : '소스 정상'}`],
+      ['선택 ETF', `${etf?.shortName || etf?.name || '-'}${etf?.code ? ` · ${etf.code}` : ''}`, '', true],
+      ['최근 기준일', formatMaybeDate(latest.date), ''],
+      ['1위 종목', `${leader.ticker || leader.name || '-'}${leader.weightPercent === null || leader.weightPercent === undefined ? '' : ` · ${formatWeight(leader.weightPercent)}`}`, ''],
+      ['TOP10 합계', formatWeight(top10Weight), ''],
+      ['가격 커버리지', formatCoverage(analysis.returnCoverage), sourceWarning ? '소스 확인 필요' : ''],
     ]);
     const status = $('#data-status');
     if (status) {
-      const mode = dashboard.loadMode === 'fallback' ? 'fallback 표시 중' : '공개 JSON 로드 완료';
-      const schema = dashboard.schemaWarning ? ` · ${dashboard.schemaWarning}` : '';
-      status.textContent = `${mode} · 기준일 ${formatMaybeDate(latest.date)} · 자동화 ${formatAutomationStatus(dashboard.automationStatusPayload)}${schema}`;
+      const warnings = [];
+      if (dashboard.loadMode === 'fallback') warnings.push('fallback 표시 중');
+      if (dashboard.schemaWarning) warnings.push(dashboard.schemaWarning);
+      const automation = formatAutomationStatus(dashboard.automationStatusPayload);
+      if (automation !== '정상') warnings.push(`자동화 ${automation}`);
+      status.textContent = warnings.join(' · ');
     }
     const heroEtf = $('#hero-etf-name');
     const heroDate = $('#hero-data-date');
@@ -873,13 +876,12 @@
         .join(' '));
       const hitPaths = segmentPathData.map((path) => `<path class="series-hit" d="${path}" fill="none" stroke="transparent" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
       const segmentPaths = segmentPathData.map((path) => `<path class="series-line" d="${path}" fill="none" stroke="${color}" stroke-width="${widthByRank}"${dash} stroke-linecap="round" stroke-linejoin="round"/>`).join('');
-      const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? 'var(--chart-sparse-point)' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"><title>${escapeHtml(item.label)} ${point.date}: ${formatWeight(point.value)}</title></circle>`).join('');
+      const circles = item.validPoints.map((point) => `<circle class="series-point" cx="${x(point.date).toFixed(1)}" cy="${y(point.value).toFixed(1)}" r="${item.isSparse ? 4 : 3.2}" fill="${item.isSparse ? 'var(--chart-sparse-point)' : color}" stroke="${color}" stroke-width="${item.isSparse ? 2.2 : 0}"/>`).join('');
       const signalMarkers = renderSeriesSignalMarkers(item.signalPoints, x, y);
-      const valueLabels = renderSeriesValueLabels(item.validPoints, item.signalPoints, x, y, margin.top, height - margin.bottom, width - margin.right);
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
-      return `<g class="chart-series ${tierClass}" data-series-key="${escapeAttribute(item.key)}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${valueLabels}${signalMarkers}</g>`;
+      return `<g class="chart-series ${tierClass}" data-series-key="${escapeAttribute(item.key)}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}">${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const summaryCards = renderChartSummaryCards(series, colorByKey);
@@ -896,8 +898,7 @@
     target.innerHTML = `
       <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
       <div class="chart-svg-scroll" data-chart-scroll>
-        <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
-          <title id="weight-chart-svg-title">TOP10 비중 변화 그래프</title>
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="chart-title weight-chart-svg-desc">
           <desc id="weight-chart-svg-desc">${escapeHtml(summaryText)}</desc>
           <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
           ${yGrid}
@@ -913,22 +914,16 @@
           <circle class="chart-active-point" cx="${margin.left}" cy="${height - margin.bottom}" r="6"/>
         </svg>
       </div>
-      <div class="chart-active-readout" id="chart-active-readout" aria-live="polite">
-        <span class="chart-readout-date">—</span>
-        <span class="chart-readout-series">—</span>
-        <strong>—</strong>
-        <small>선택일 비중</small>
-      </div>
       <div class="chart-summary-grid">${summaryCards}</div>
     `;
 
     const svg = target.querySelector('svg');
     const scrollRoot = target.querySelector('[data-chart-scroll]');
     const groups = [...target.querySelectorAll('.chart-series')];
+    const endLabelGroups = [...target.querySelectorAll('.line-end-label')];
     const summaryButtons = [...target.querySelectorAll('.chart-summary-item')];
     const dateGuide = target.querySelector('.chart-date-guide');
     const activePoint = target.querySelector('.chart-active-point');
-    const readout = target.querySelector('#chart-active-readout');
     const dateInput = $('#chart-date');
     if (dateInput) {
       dateInput.min = observationDates[0] || '';
@@ -970,6 +965,11 @@
         group.classList.toggle('is-active', isActive);
         group.classList.toggle('is-muted', !isActive);
       });
+      endLabelGroups.forEach((group) => {
+        const isActive = group.dataset.seriesKey === activeSeries.key;
+        group.classList.toggle('is-active', isActive);
+        group.classList.toggle('is-muted', !isActive);
+      });
       summaryButtons.forEach((button) => {
         const item = series.find((candidate) => candidate.key === button.dataset.seriesKey);
         const itemPoint = chartPointAtDate(item?.points, date);
@@ -994,22 +994,13 @@
       } else if (activePoint) {
         activePoint.setAttribute('hidden', '');
       }
-      if (readout) {
-        const dateNode = readout.querySelector('.chart-readout-date');
-        const seriesNode = readout.querySelector('.chart-readout-series');
-        const valueNode = readout.querySelector('strong');
-        const detailNode = readout.querySelector('small');
-        if (dateNode) dateNode.textContent = date || '—';
-        if (seriesNode) seriesNode.textContent = `${activeSeries.rank ? `${activeSeries.rank}위 · ` : ''}${activeSeries.fullLabel}`;
-        if (valueNode) valueNode.textContent = point && Number.isFinite(point.value) ? formatWeight(point.value) : '미편입';
-        if (detailNode) detailNode.textContent = `${signalCount ? `해당일 신호 ${signalCount}건 · ` : ''}기간 변화 ${activeSeries.periodDelta === null ? '-' : formatPercentPoint(activeSeries.periodDelta)}`;
-      }
       const summary = $('#chart-selection-summary');
       if (summary) {
         const label = summary.querySelector('strong');
         const detail = summary.querySelector('small');
-        if (label) label.textContent = activeSeries.fullLabel;
-        if (detail) detail.textContent = `${date} · ${point && Number.isFinite(point.value) ? formatWeight(point.value) : '미편입'}`;
+        const valueText = point && Number.isFinite(point.value) ? formatWeight(point.value) : '미편입';
+        if (label) label.textContent = `${activeSeries.fullLabel} · ${valueText}`;
+        if (detail) detail.textContent = `${date} · ${activeSeries.rank ? `${activeSeries.rank}위 · ` : ''}기간 변화 ${activeSeries.periodDelta === null ? '-' : formatPercentPoint(activeSeries.periodDelta)}${signalCount ? ` · 신호 ${signalCount}건` : ''}`;
       }
       target.setAttribute('aria-label', `${date} ${activeSeries.fullLabel} ${point && Number.isFinite(point.value) ? formatWeight(point.value) : '미편입'}`);
     }
@@ -1091,48 +1082,8 @@
       const labelY = item.y2 - 11;
       const labelWidth = item.width || Math.max(48, Math.min(82, 18 + item.text.length * 6.6));
       const textX = labelX + labelWidth / 2;
-      return `<g class="line-end-label" style="--end-label-color:${color}"><title>${escapeHtml(item.title || item.text)}</title><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><rect class="rank-ticker-pill" x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" width="${labelWidth.toFixed(1)}" height="22" rx="11"/><text x="${textX.toFixed(1)}" y="${(item.y2 + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${escapeHtml(item.text)}</text></g>`;
+      return `<g class="line-end-label" data-series-key="${escapeAttribute(item.key)}" aria-label="${escapeAttribute(item.title || item.text)}" style="--end-label-color:${color}"><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><rect class="rank-ticker-pill" x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" width="${labelWidth.toFixed(1)}" height="22" rx="11"/><text x="${textX.toFixed(1)}" y="${(item.y2 + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${escapeHtml(item.text)}</text></g>`;
     }).join('');
-  }
-
-  function renderSeriesValueLabels(points, signalPoints, x, y, topY, bottomY, rightX) {
-    const labels = asArray(points).filter((point) => Number.isFinite(point.value) && Number.isFinite(Date.parse(point.date)));
-    if (!labels.length) return '';
-    const signalsByDate = asArray(signalPoints).reduce((map, signal) => {
-      const date = stringOr(signal.date, '');
-      if (!date) return map;
-      if (!map.has(date)) map.set(date, []);
-      map.get(date).push(signal);
-      return map;
-    }, new Map());
-    return `<g class="series-value-layer">${labels.map((point, index) => {
-      const valueText = formatWeight(point.value);
-      const pointX = x(point.date);
-      const pointY = y(point.value);
-      const nearbySignals = signalsByDate.get(point.date) || [];
-      const hasSignalAbove = nearbySignals.some((signal) => !(signal.direction === 'sell' || signal.kind === 'exit'));
-      const hasSignalBelow = nearbySignals.some((signal) => signal.direction === 'sell' || signal.kind === 'exit');
-      const hasSignalsOnBothSides = hasSignalAbove && hasSignalBelow;
-      const labelWidth = Math.max(34, Math.min(54, 12 + valueText.length * 6.4));
-      const offset = 28 + (index % 2) * 7;
-      let textAnchor = 'middle';
-      let labelX = pointX;
-      let labelY;
-      if (hasSignalsOnBothSides) {
-        textAnchor = 'start';
-        labelX = Math.min(pointX + 18, rightX - labelWidth - 4);
-        labelY = Math.max(topY + 12, Math.min(pointY + 4, bottomY - 8));
-      } else if (hasSignalAbove) {
-        labelY = pointY + offset;
-      } else if (hasSignalBelow) {
-        labelY = pointY - offset;
-      } else {
-        labelY = pointY < topY + 34 ? pointY + 18 + (index % 2) * 8 : pointY - 12 - (index % 2) * 8;
-      }
-      const clampedY = Math.max(topY + 12, Math.min(labelY, bottomY - 8));
-      const rectX = textAnchor === 'start' ? -5 : -labelWidth / 2;
-      return `<g class="series-value-label" transform="translate(${labelX.toFixed(1)} ${clampedY.toFixed(1)})"><rect class="series-value-pill" x="${rectX.toFixed(1)}" y="-10" width="${labelWidth.toFixed(1)}" height="18" rx="9"/><text text-anchor="${textAnchor}" dominant-baseline="central">${escapeHtml(valueText)}</text></g>`;
-    }).join('')}</g>`;
   }
 
   function renderSeriesSignalMarkers(signalPoints, x, y) {
@@ -1146,11 +1097,11 @@
       const markerY = y(point.value) + (isSellLike ? 20 + slot * 14 : -18 - slot * 14);
       const label = point.actionLabel || (point.direction === 'buy' ? '매수 관찰' : point.direction === 'sell' ? '매도 관찰' : '편입 이벤트');
       const residualText = point.residual === null ? '' : ` · 잔차 ${formatPercentPoint(point.residual)}`;
-      const title = `${point.date} ${label}${residualText} · 비중 ${formatWeight(point.value)}`;
       const strengthClass = point.strength === 'watch' ? 'signal-watch' : 'signal-strong';
       const classes = `series-signal signal-${kind} ${strengthClass}`;
       const glyph = stringOr(point.glyph, point.direction === 'buy' ? '↑' : point.direction === 'sell' ? '↓' : '•');
-      return `<g class="${escapeAttribute(classes)}" transform="translate(${markerX.toFixed(1)} ${markerY.toFixed(1)})"><title>${escapeHtml(title)}</title><circle r="${point.strength === 'watch' ? 7 : 8}"/><text text-anchor="middle" dominant-baseline="central">${escapeHtml(glyph)}</text></g>`;
+      const ariaLabel = `${point.date} ${label}${residualText} · 비중 ${formatWeight(point.value)}`;
+      return `<g class="${escapeAttribute(classes)}" transform="translate(${markerX.toFixed(1)} ${markerY.toFixed(1)})" aria-label="${escapeAttribute(ariaLabel)}"><circle r="${point.strength === 'watch' ? 7 : 8}"/><text text-anchor="middle" dominant-baseline="central">${escapeHtml(glyph)}</text></g>`;
     }).join('')}</g>`;
   }
 
@@ -1421,7 +1372,6 @@
       <div class="source-item"><strong>소스 상태</strong><span class="${latest?.sourceStatus === 'live' ? '' : 'warning'}">${escapeHtml(latest?.sourceStatus || 'unknown')} · ${escapeHtml(latest?.sourceWarning || '정상')}</span></div>
       <div class="source-item"><strong>수익률 커버리지</strong><span>${formatCoverage(summary.returnCoverage)} · ${escapeHtml(summary.returnCoverageStatus || 'insufficient')} · ${escapeHtml(formatCoverageUniverse(summary.returnCoverageUniverse))}</span><small>가격 반영 비중 ${escapeHtml(formatWeight(summary.validReturnWeightPercent))} / 전체 ${escapeHtml(formatWeight(summary.totalReturnWeightPercent))} · 미가격 ${escapeHtml(formatWeight(summary.unpricedReturnWeightPercent))}</small></div>
       <div class="source-item"><strong>벤치마크·환율</strong><span>벤치마크 ${escapeHtml(formatReturn(summary.benchmarkReturn))} · ${escapeHtml(formatFxCoverage(latest?.decomposition || []))}</span><small>벤치마크는 가격 확보 종목의 전일비중 가중 수익률이며 실제 ETF NAV 수익률이 아닙니다. 외부 USD/JPY/HKD 종가는 가능한 경우 환율 수익률을 곱해 KRW 기준으로 환산합니다.</small></div>
-      <div class="source-item"><strong>잔차 판정</strong><span>가격 우세는 no-trade 가격 효과가 우세하다는 뜻이며 완전 설명/무거래 확정이 아닙니다.</span><small>중간 잔차도 방향에 따라 ‘약한 매수 관찰’ 또는 ‘약한 매도·축소 관찰’을 설명하고, 임계치 이상 방향성 잔차만 ‘매수·매도 가능성’으로 표시합니다.</small></div>
     `;
     const pill = $('#coverage-pill');
     if (pill) {
@@ -1438,18 +1388,17 @@
     const selectedSignals = asArray(selected?.latest?.signals).map((signal) => ({ ...signal, etfName: selected?.shortName || selected?.name || '' }));
     const signals = selectedSignals.slice(0, 9);
     if (!signals.length) {
-      target.innerHTML = `<div class="skeleton-line">${escapeHtml(selected?.shortName || selected?.name || '선택 ETF')}의 최근 기준일에는 특별 신호가 없습니다.</div>`;
+      target.innerHTML = '<div class="skeleton-line">특별 신호 없음</div>';
       return;
     }
     target.replaceChildren(...signals.map((signal) => {
       const article = document.createElement('article');
       article.className = `signal-card ${escapeAttribute(signal.severity || '')}`;
-      const action = signal.actionLabel ? `${signal.actionLabel} · ` : '';
-      const signalMessage = signal.actionExplanation || signal.message || signal.type;
+      const action = signal.actionLabel || classLabel(signal.type || 'signal');
       article.innerHTML = `
         ${classificationBadge(signal.type || 'signal').outerHTML}
         <strong>${escapeHtml(signal.etfName || '')} ${escapeHtml(signal.name || signal.ticker || '신호')}</strong>
-        <p>${escapeHtml(formatMaybeDate(signal.date))} · ${escapeHtml(action)}${escapeHtml(signalMessage)} · ${formatWeight(signal.previousWeightPercent)} → ${formatWeight(signal.weightPercent)}</p>
+        <p>${escapeHtml(formatMaybeDate(signal.date))} · ${escapeHtml(action)} · ${formatWeight(signal.previousWeightPercent)} → ${formatWeight(signal.weightPercent)}</p>
       `;
       return article;
     }));
@@ -1563,7 +1512,6 @@
               <th scope="col">순위</th>
               <th scope="col">비중 변화</th>
               <th scope="col">가격·잔차</th>
-              <th scope="col">해석</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -1577,7 +1525,7 @@
     `;
     const tbody = article.querySelector('tbody');
     if (!visibleRows.length) {
-      tbody.innerHTML = '<tr><td colspan="7">필터 조건에 맞는 행이 없습니다. 이벤트·검색·변화 크기 조건을 완화해 보세요.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6">필터 조건에 맞는 행이 없습니다. 이벤트·검색·변화 크기 조건을 완화해 보세요.</td></tr>';
       return article;
     }
     tbody.replaceChildren(...visibleRows.map((row) => {
@@ -1590,7 +1538,6 @@
         rankMoveCell(row),
         weightMoveCell(row),
         priceResidualCell(row),
-        interpretationCell(row),
       ].forEach((value) => {
         const td = document.createElement('td');
         if (isDomNode(value)) td.appendChild(value);
@@ -1852,17 +1799,6 @@
     return div;
   }
 
-  function interpretationCell(row) {
-    const div = document.createElement('div');
-    div.className = 'interpretation-cell';
-    const action = actionHint(row);
-    const headline = action.label || classLabel(row.classification || row.membershipChange || 'signal');
-    const detail = action.explanation || row.message || '';
-    const confidence = row.confidence ? ` · ${row.confidence}` : '';
-    div.innerHTML = `<strong>${escapeHtml(headline)}</strong><span>${escapeHtml(detail || '추가 해석 없음')}${escapeHtml(confidence)}</span>`;
-    return div;
-  }
-
   function deltaClass(value) {
     const num = finiteOrNull(value);
     if (num === null || Math.abs(num) < 0.000001) return 'delta-flat';
@@ -1948,12 +1884,6 @@
       actionText.className = `action-hint-text ${escapeAttribute(action.kind)}`;
       actionText.textContent = action.label;
       div.appendChild(actionText);
-    }
-    if (action.explanation) {
-      const explanation = document.createElement('small');
-      explanation.className = 'action-explanation';
-      explanation.textContent = action.explanation;
-      div.appendChild(explanation);
     }
     return div;
   }

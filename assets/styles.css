@@ -514,32 +514,14 @@ button:focus-visible,
 .chart-card .chart-series:focus-visible .series-point {
   transform: scale(1.35);
 }
-.chart-card .series-signal-layer,
-.chart-card .series-value-layer {
+.chart-card .series-signal-layer {
   opacity: 0;
   pointer-events: none;
   transition: opacity 140ms ease;
 }
 .chart-card .chart-series:hover .series-signal-layer,
-.chart-card .chart-series:focus-visible .series-signal-layer,
-.chart-card .chart-series:hover .series-value-layer,
-.chart-card .chart-series:focus-visible .series-value-layer {
+.chart-card .chart-series:focus-visible .series-signal-layer {
   opacity: 1;
-}
-.chart-card .series-value-pill {
-  fill: color-mix(in srgb, var(--panel-elevated), transparent 8%);
-  stroke: color-mix(in srgb, var(--series-color, var(--accent)), transparent 44%);
-  stroke-width: 1px;
-}
-.chart-card .series-value-label text {
-  fill: var(--series-color, var(--ink-strong));
-  stroke: var(--panel-elevated);
-  stroke-width: 2.6px;
-  stroke-linejoin: round;
-  paint-order: stroke;
-  font-size: 10.5px;
-  font-weight: 950;
-  letter-spacing: 0;
 }
 .chart-card .series-signal circle {
   fill: var(--panel-elevated);
@@ -562,6 +544,12 @@ button:focus-visible,
 .chart-card .series-signal.signal-exit circle { stroke: var(--warn); }
 .chart-card .series-signal.signal-exit text { fill: var(--warn); }
 .chart-card .series-signal.signal-watch circle { stroke-dasharray: 2.5 2.5; }
+.line-end-label {
+  opacity: 1;
+  transition: opacity 140ms ease;
+}
+.line-end-label.is-muted { opacity: .3; }
+.line-end-label.is-active { opacity: 1; }
 .line-end-label line { opacity: .72; }
 .line-end-label .rank-ticker-pill {
   fill: var(--end-label-color);
@@ -717,8 +705,7 @@ tbody tr:hover { background: var(--accent-soft); }
 .date-cell strong,
 .rank-move-cell strong,
 .weight-move-cell strong,
-.price-residual-cell strong,
-.interpretation-cell strong {
+.price-residual-cell strong {
   display: block;
   color: var(--ink-strong);
 }
@@ -728,9 +715,7 @@ tbody tr:hover { background: var(--accent-soft); }
 .date-cell span,
 .rank-move-cell span,
 .weight-move-cell span,
-.price-residual-cell span,
-.interpretation-cell span,
-.action-explanation {
+.price-residual-cell span {
   display: block;
   color: var(--muted);
   font-size: .8rem;
@@ -906,7 +891,6 @@ tbody tr:hover { background: var(--accent-soft); }
 .delta-up { color: var(--good) !important; font-weight: 900; }
 .delta-down { color: var(--danger) !important; font-weight: 900; }
 .delta-flat { color: var(--muted) !important; }
-.interpretation-cell { max-width: 320px; }
 .signal-table-actions {
   justify-content: flex-end;
   margin-top: 12px;
@@ -1208,6 +1192,7 @@ input[type="search"],
   text-align: right;
   font-size: .9rem;
 }
+#data-status:empty { display: none; }
 .result-metrics {
   grid-template-columns: minmax(240px, 1.45fr) repeat(4, minmax(150px, 1fr));
 }
@@ -1364,26 +1349,6 @@ input[type="search"],
   stroke-width: 3px;
   pointer-events: none;
 }
-.chart-active-readout {
-  position: absolute;
-  top: 34px;
-  right: 34px;
-  z-index: 3;
-  display: grid;
-  width: min(270px, calc(100% - 68px));
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--panel-elevated), transparent 4%);
-  box-shadow: var(--shadow-soft);
-  pointer-events: none;
-}
-.chart-readout-date,
-.chart-readout-series,
-.chart-active-readout small { color: var(--muted-strong); font-size: max(.72rem, 12px); }
-.chart-readout-series { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.chart-active-readout strong { color: var(--ink-strong); font-size: 1.35rem; font-variant-numeric: tabular-nums; }
-
 .chart-summary-item {
   appearance: none;
   width: 100%;
@@ -1489,7 +1454,6 @@ input[type="search"],
   .chart-panel-header { align-items: flex-start; }
   .chart-date-controls { grid-template-columns: minmax(0, 1fr) auto; width: 100%; }
   .chart-card { padding: 8px; }
-  .chart-active-readout { top: 24px; left: 24px; right: auto; width: min(250px, calc(100% - 48px)); }
   .chart-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
   .chart-summary-item { grid-template-columns: auto minmax(0, 1fr); min-height: 88px; padding: 10px; }
   .chart-summary-item em { grid-column: 2; }
