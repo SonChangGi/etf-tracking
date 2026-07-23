@@ -1009,7 +1009,7 @@
       if (!scrollRoot || !svg || scrollRoot.scrollWidth <= scrollRoot.clientWidth) return;
       const renderedWidth = svg.getBoundingClientRect().width || width;
       const targetX = (x(date) / width) * renderedWidth;
-      const padding = 56;
+      const padding = Math.max(56, margin.right);
       if (targetX >= scrollRoot.scrollLeft + padding && targetX <= scrollRoot.scrollLeft + scrollRoot.clientWidth - padding) return;
       scrollRoot.scrollLeft = Math.max(0, targetX - scrollRoot.clientWidth + padding);
     }
