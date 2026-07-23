@@ -25,8 +25,8 @@
       document.documentElement.dataset.theme = 'light';
     }
   </script>
-  <link rel="stylesheet" href="assets/styles.css?v=20260723-common-v1" />
-  <script src="assets/app.js?v=20260723-common-v1" defer></script>
+  <link rel="stylesheet" href="assets/styles.css?v=20260723-common-v1-1" />
+  <script src="assets/app.js?v=20260723-common-v1-1" defer></script>
 </head>
 <body id="top">
   <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
@@ -91,7 +91,6 @@
           <p class="eyebrow">Latest Signals</p>
           <h2 id="signals-title">선택 ETF 최신 신호</h2>
         </div>
-        <p>Python이 생성한 편입·편출 및 잔차 신호를 그대로 표시합니다.</p>
       </div>
       <div class="signal-grid signal-summary-grid" id="signal-grid"></div>
     </section>
@@ -102,7 +101,6 @@
           <p class="eyebrow">Primary Result</p>
           <h2 id="dashboard-title">TOP10 비중 변화와 현재 구성</h2>
         </div>
-        <p>표시 설정은 저장된 분석 결과를 다시 계산하지 않습니다.</p>
       </div>
 
       <div class="etf-switcher">
@@ -110,7 +108,6 @@
           ETF 선택
           <select id="etf-select"></select>
         </label>
-        <small>ETF를 바꾸면 해당 ETF의 저장된 최신 결과와 히스토리를 표시합니다.</small>
       </div>
 
       <details class="control-card control-disclosure">
@@ -137,7 +134,7 @@
           <div>
             <p class="eyebrow">Weight Trend</p>
             <h3 id="chart-title">TOP10 비중 변화 그래프</h3>
-            <p class="panel-subtitle">종목을 눌러 강조를 고정하고, 관찰일을 바꾸면 해당 날짜의 정확한 비중을 확인할 수 있습니다.</p>
+            <p class="panel-subtitle">종목과 날짜를 선택해 정확한 비중을 확인합니다.</p>
           </div>
           <span class="status-pill" id="coverage-pill">커버리지 확인 중</span>
         </div>
@@ -154,7 +151,7 @@
           </div>
         </div>
         <div class="chart-card interactive-chart" id="weight-chart" tabindex="0" aria-label="선택 ETF의 TOP10 비중 추이"></div>
-        <p class="chart-help"><span class="marker-help marker-entry">＋ 편입</span> <span class="marker-help marker-exit">－ 편출</span> <span class="marker-help marker-buy">↑ 매수 관찰</span> <span class="marker-help marker-sell">↓ 매도 관찰</span>은 기존 분석 신호입니다. 키보드에서는 좌우 화살표·Home·End로 날짜를 이동합니다.</p>
+        <p class="chart-help"><span class="marker-help marker-entry">＋ 편입</span> <span class="marker-help marker-exit">－ 편출</span> <span class="marker-help marker-buy">↑ 매수 관찰</span> <span class="marker-help marker-sell">↓ 매도 관찰</span><span>키보드: ← → Home End</span></p>
       </article>
 
       <article class="panel panel-wide top10-panel" aria-labelledby="top10-title">
@@ -199,7 +196,6 @@
           <div class="section-heading compact">
             <p class="eyebrow">ETF Signal Tables</p>
             <h3 id="signal-tables-title">ETF별 TOP10 신호·비중 변화 표</h3>
-            <p>선택 기간의 편입·편출과 기존 잔차 판정값을 검색·정렬해 봅니다.</p>
           </div>
           <div class="etf-signal-table-grid" id="etf-signal-tables"><div class="skeleton-line">상세 영역을 열면 ETF별 신호 표를 준비합니다.</div></div>
         </section>
