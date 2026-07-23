@@ -748,7 +748,7 @@
     const status = $('#data-status');
     if (status) {
       const warnings = [];
-      if (dashboard.loadMode === 'fallback') warnings.push('fallback 표시 중');
+      if (dashboard.loadMode === 'fallback') warnings.push('일부 데이터를 불러오지 못했습니다');
       if (dashboard.schemaWarning) warnings.push(dashboard.schemaWarning);
       const automation = formatAutomationStatus(dashboard.automationStatusPayload);
       if (automation !== '정상') warnings.push(`자동화 ${automation}`);
@@ -779,7 +779,7 @@
     if (commandTarget) commandTarget.textContent = command;
     if (status) {
       const mode = policy.defaultMode === 'missing_only' ? 'missing-only' : stringOr(policy.defaultMode, 'missing-only');
-      status.textContent = `기본값은 ${mode}입니다. 이미 저장된 날짜는 건너뛰고, 필요할 때만 refresh_existing=true로 재수집하세요.`;
+      status.textContent = mode === 'missing-only' ? '누락 날짜만 업데이트합니다.' : `업데이트 방식: ${mode}`;
     }
   }
 
@@ -881,14 +881,14 @@
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
-      return `<g class="chart-series ${tierClass}" data-series-key="${escapeAttribute(item.key)}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}">${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
+      return `<g class="chart-series ${tierClass}" data-series-key="${escapeAttribute(item.key)}" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}">${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const summaryCards = renderChartSummaryCards(series, colorByKey);
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
-    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 라벨은 최신 순위와 티커이며, 아래 카드는 종목명·최신 비중·기간 변화폭을 같은 색으로 연결합니다. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 각 점 비중값과 기간 내 편입·편출 이벤트, 매수·매도 방향 신호가 표시됩니다.`;
+    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 라벨은 최신 순위와 티커이며, 아래 종목 버튼에서 계열을 선택하면 날짜별 비중과 기간 내 신호를 확인할 수 있습니다.`;
     const seriesKeys = series.map((item) => item.key);
     if (!seriesKeys.includes(state.chartSelection.pinnedSeriesKey)) state.chartSelection.pinnedSeriesKey = seriesKeys[0];
     state.chartSelection.previewSeriesKey = seriesKeys.includes(state.chartSelection.previewSeriesKey) ? state.chartSelection.previewSeriesKey : '';
@@ -907,7 +907,7 @@
           <line class="axis-line" x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="var(--chart-axis)"/>
           <text class="axis-title" x="${margin.left}" y="20">TOP10 비중(%)</text>
           <text class="axis-note" x="${width - margin.right}" y="22" text-anchor="end">${escapeHtml(axisNote)}</text>
-          <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)} · 기본 보기 최근 1개월</text>
+          <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)}</text>
           ${paths}
           ${endLabels}
           <line class="chart-date-guide" x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}"/>
@@ -1080,7 +1080,7 @@
       const color = colorByKey.get(item.key) || '#9aa4b2';
       const labelX = item.x2 + 8;
       const labelY = item.y2 - 11;
-      const labelWidth = item.width || Math.max(48, Math.min(82, 18 + item.text.length * 6.6));
+      const labelWidth = item.width || Math.max(52, Math.min(88, 18 + item.text.length * 7.2));
       const textX = labelX + labelWidth / 2;
       return `<g class="line-end-label" data-series-key="${escapeAttribute(item.key)}" aria-label="${escapeAttribute(item.title || item.text)}" style="--end-label-color:${color}"><line x1="${item.x1.toFixed(1)}" x2="${item.x2.toFixed(1)}" y1="${item.y1.toFixed(1)}" y2="${item.y2.toFixed(1)}" stroke="${color}" stroke-width="1.2"/><rect class="rank-ticker-pill" x="${labelX.toFixed(1)}" y="${labelY.toFixed(1)}" width="${labelWidth.toFixed(1)}" height="22" rx="11"/><text x="${textX.toFixed(1)}" y="${(item.y2 + 0.5).toFixed(1)}" text-anchor="middle" dominant-baseline="central">${escapeHtml(item.text)}</text></g>`;
     }).join('');
@@ -1279,7 +1279,7 @@
           x1: x(point.date),
           x2: x(point.date) + 18,
           text: labelText,
-          width: Math.max(48, Math.min(82, 18 + labelText.length * 6.6)),
+          width: Math.max(52, Math.min(88, 18 + labelText.length * 7.2)),
           title: `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel} (${tickerText}) · ${formatWeight(point.value)}`,
         };
       })
@@ -1386,9 +1386,9 @@
     if (!target || !state.dashboard) return;
     const selected = selectedEtf();
     const selectedSignals = asArray(selected?.latest?.signals).map((signal) => ({ ...signal, etfName: selected?.shortName || selected?.name || '' }));
-    const signals = selectedSignals.slice(0, 9);
+    const signals = selectedSignals.slice(0, 3);
     if (!signals.length) {
-      target.innerHTML = '<div class="skeleton-line">특별 신호 없음</div>';
+      target.innerHTML = '<div class="skeleton-line">관찰 신호 없음</div>';
       return;
     }
     target.replaceChildren(...signals.map((signal) => {
@@ -1757,7 +1757,7 @@
     if (membership) div.appendChild(classificationBadge(membership));
     if (!membership || membership !== classification) div.appendChild(classificationBadge(classification));
     const action = actionHint(row);
-    if (action.label) {
+    if (action.label && ['buy', 'sell'].includes(signalBucket(row))) {
       const actionText = document.createElement('span');
       actionText.className = `action-hint-text ${escapeAttribute(action.kind)}`;
       actionText.textContent = action.label;
@@ -1879,7 +1879,7 @@
       div.appendChild(confidence);
     }
     const action = actionHint(row);
-    if (action.label) {
+    if (action.label && ['buy', 'sell'].includes(signalBucket(row))) {
       const actionText = document.createElement('span');
       actionText.className = `action-hint-text ${escapeAttribute(action.kind)}`;
       actionText.textContent = action.label;

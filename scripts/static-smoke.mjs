@@ -319,9 +319,10 @@ try {
   const firstHistoryUrl = data.etfs?.[0]?.historyUrl;
   const firstHistory = firstHistoryUrl ? await fetch(`http://127.0.0.1:${port}/${firstHistoryUrl}`).then((response) => response.json()) : null;
   if (!html.includes('ETF TOP10 투자 비중 추적')) throw new Error('index hero missing');
-  if (!html.includes('히스토리 범위')) throw new Error('history range explanation missing');
-  if (!html.includes('없는 날짜만 채우는 수동 업데이트')) throw new Error('manual update section missing');
-  if (!html.includes('GitHub Actions에서 수동 업데이트 열기')) throw new Error('manual update CTA missing');
+  if (!html.includes('데이터 · 출처 · 운영 상세')) throw new Error('combined operations disclosure missing');
+  if (!html.includes('<h4>히스토리</h4>')) throw new Error('history method summary missing');
+  if (!html.includes('업데이트 실행')) throw new Error('manual update section missing');
+  if (!html.includes('수동 업데이트 열기')) throw new Error('manual update CTA missing');
   if (!html.includes('https://sonchanggi.github.io/quant-dashboard/')) throw new Error('quant dashboard return link missing');
   if (!app.includes('buildWeightSeries')) throw new Error('chart series builder missing');
   if (!app.includes('buildSeriesColorMap')) throw new Error('chart color collision guard missing');
