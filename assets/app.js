@@ -7,14 +7,20 @@
   const QUANT_DASHBOARD_URL = 'https://sonchanggi.github.io/quant-dashboard/';
   const WORKFLOW_URL = 'https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml';
   const MANUAL_UPDATE_COMMAND = 'gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true';
-  const THEME_STORAGE_KEY = 'etf-tracking-theme';
+  const THEME_STORAGE_KEY = 'quant-research-theme';
+  const LEGACY_THEME_STORAGE_KEYS = [
+    'etf-tracking-theme',
+    'quant-dashboard-theme',
+    'quant-calm-theme',
+    'dram-price-theme',
+    'momentum-factor-theme',
+    'best-factor-theme',
+  ];
   const SUPPORTED_SCHEMA_MAJOR = 1;
   const ALLOWED_LINK_HOSTS = new Set(['github.com', 'sonchanggi.github.io', 'timeetf.co.kr', 'www.samsungactive.co.kr', 'samsungactive.co.kr']);
   const CHART_COLORS = [
-    '#3182f6', '#00a384', '#f59f00', '#e03131', '#7c3aed',
-    '#0891b2', '#db2777', '#65a30d', '#ea580c', '#4b5563',
-    '#0f766e', '#b45309', '#2563eb', '#64748b', '#16a34a',
-    '#dc2626', '#9333ea', '#0284c7', '#ca8a04', '#475569',
+    '#3182f6', '#1b64da', '#7c3aed', '#5b21b6', '#d97706',
+    '#92400e', '#0f766e', '#115e59', '#db2777', '#9d174d',
   ];
   const SIGNAL_TABLE_INITIAL_LIMIT = 30;
   const SIGNAL_TABLE_LOAD_STEP = 30;
@@ -38,6 +44,13 @@
     endDate: '',
     signalTableFilters: {},
     signalTablesLazyObserver: null,
+    chartSelection: {
+      pinnedSeriesKey: '',
+      previewSeriesKey: '',
+      pinnedDate: '',
+      previewDate: '',
+    },
+    chartRuntime: null,
   };
 
   const FALLBACK_DASHBOARD = {
@@ -107,9 +120,34 @@
 
   function storedTheme() {
     try {
-      return window.localStorage?.getItem(THEME_STORAGE_KEY);
+      const canonical = window.localStorage?.getItem(THEME_STORAGE_KEY);
+      if (canonical === 'light' || canonical === 'dark') return canonical;
+      for (const key of LEGACY_THEME_STORAGE_KEYS) {
+        const legacy = window.localStorage?.getItem(key);
+        if (legacy !== 'light' && legacy !== 'dark') continue;
+        window.localStorage?.setItem(THEME_STORAGE_KEY, legacy);
+        return legacy;
+      }
+      return null;
     } catch {
       return null;
+    }
+  }
+
+  function requestedTheme() {
+    try {
+      const theme = new URLSearchParams(window.location?.search || '').get('theme');
+      return theme === 'light' || theme === 'dark' ? theme : null;
+    } catch {
+      return null;
+    }
+  }
+
+  function systemTheme() {
+    try {
+      return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } catch {
+      return 'light';
     }
   }
 
@@ -138,6 +176,7 @@
     } else if (root?.setAttribute) {
       root.setAttribute('data-theme', normalized);
     }
+    if (root?.style) root.style.colorScheme = normalized;
     const button = document.querySelector('#theme-toggle');
     if (!button) return;
     const isDark = normalized === 'dark';
@@ -148,7 +187,7 @@
   }
 
   function bindThemeToggle() {
-    applyTheme(storedTheme() || 'light');
+    applyTheme(requestedTheme() || storedTheme() || systemTheme());
     const button = document.querySelector('#theme-toggle');
     if (!button || typeof button.addEventListener !== 'function') return;
     button.addEventListener('click', () => {
@@ -258,7 +297,7 @@
 
   function setupSignalTableLazyLoad() {
     if (typeof window === 'undefined' || typeof document === 'undefined' || state.signalTablesLazyObserver) return;
-    const target = $('#signal-tables') || $('#etf-signal-tables');
+    const target = $('#etf-signal-tables');
     if (!target || typeof window.IntersectionObserver !== 'function') return;
     state.signalTablesLazyObserver = new window.IntersectionObserver((entries) => {
       if (!entries.some((entry) => entry.isIntersecting)) return;
@@ -458,6 +497,22 @@
     $('#copy-update-command')?.addEventListener('click', () => {
       copyManualUpdateCommand();
     });
+    $('#chart-date')?.addEventListener('input', (event) => {
+      previewChartDate(event.target.value);
+    });
+    $('#chart-date')?.addEventListener('change', (event) => {
+      commitChartDate(event.target.value);
+    });
+    $('#chart-date')?.addEventListener('blur', () => {
+      state.chartSelection.previewDate = '';
+      state.chartRuntime?.update?.();
+    });
+    $('#chart-latest-date')?.addEventListener('click', () => {
+      commitChartDate(state.chartRuntime?.dates?.at(-1) || '');
+    });
+    $('#signal-tables')?.addEventListener('toggle', (event) => {
+      if (event.currentTarget.open) loadAllEtfHistoriesForTables();
+    });
     const signalTables = $('#etf-signal-tables');
     signalTables?.addEventListener('input', handleSignalTableControlInput);
     signalTables?.addEventListener('change', handleSignalTableControlChange);
@@ -466,6 +521,7 @@
 
   function handleEtfSelectionChange(etfId) {
     state.selectedEtfId = stringOr(etfId, state.selectedEtfId, '');
+    state.chartSelection = { pinnedSeriesKey: '', previewSeriesKey: '', pinnedDate: '', previewDate: '' };
     syncEtfSelect(state.dashboard);
     syncDateInputsForSelected(false);
     renderSelectionDependentViews();
@@ -475,17 +531,52 @@
   function handleDateRangeChange(field, value) {
     if (field !== 'startDate' && field !== 'endDate') return;
     state[field] = stringOr(value, '');
+    state.chartSelection.previewDate = '';
     renderSelectionDependentViews();
   }
 
   function handleDateRangeReset() {
     syncDateInputsForSelected(true);
+    state.chartSelection.previewDate = '';
     renderSelectionDependentViews();
   }
 
   function handleDateRangeFull() {
     syncDateInputsForSelected('all');
+    state.chartSelection.previewDate = '';
     renderSelectionDependentViews();
+  }
+
+  function previewChartDate(value) {
+    const dates = state.chartRuntime?.dates || [];
+    state.chartSelection.previewDate = nearestChartDate(dates, value);
+    state.chartRuntime?.update?.();
+  }
+
+  function commitChartDate(value) {
+    const dates = state.chartRuntime?.dates || [];
+    const next = nearestChartDate(dates, value);
+    if (!next) return;
+    state.chartSelection.pinnedDate = next;
+    state.chartSelection.previewDate = '';
+    const input = $('#chart-date');
+    if (input) input.value = next;
+    state.chartRuntime?.update?.();
+    state.chartRuntime?.ensureVisible?.(next);
+  }
+
+  function nearestChartDate(dates, target) {
+    const available = asArray(dates).filter(Boolean).slice().sort();
+    if (!available.length) return '';
+    if (!target) return available.at(-1);
+    const exact = available.find((date) => date === target);
+    if (exact) return exact;
+    const prior = available.filter((date) => date <= target).at(-1);
+    return prior || available[0];
+  }
+
+  function chartPointAtDate(points, date) {
+    return asArray(points).find((point) => point.date === date) || null;
   }
 
   function handleSignalTableControlInput(event) {
@@ -625,12 +716,12 @@
   }
 
   function renderAll() {
-    renderOverview();
     renderManualUpdate();
     renderSelectionDependentViews();
   }
 
   function renderSelectionDependentViews() {
+    renderOverview();
     renderSelectedEtf();
     renderSignals();
     renderSignalTables();
@@ -639,23 +730,37 @@
   function renderOverview() {
     const dashboard = state.dashboard;
     if (!dashboard) return;
-    const latestDates = dashboard.etfs.map((etf) => etf.latest?.date).filter(Boolean).sort();
-    const historyStarts = dashboard.etfs.map((etf) => etf.availableStartDate).filter(Boolean).sort();
-    const sourceWarnings = dashboard.etfs.filter((etf) => etf.latest?.sourceStatus && etf.latest.sourceStatus !== 'live').length;
-    const totalSignals = dashboard.etfs.reduce((sum, etf) => sum + asArray(etf.latest?.signals).length, 0);
+    const etf = selectedEtf();
+    const latest = etf?.latest || {};
+    const top10 = asArray(latest.top10).slice(0, 10);
+    const leader = top10[0] || {};
+    const top10Weight = top10.reduce((sum, row) => sum + numberOr(row.weightPercent, 0), 0);
+    const signals = asArray(latest.signals);
+    const analysis = latest.analysisSummary || {};
+    const sourceWarning = latest.sourceStatus && latest.sourceStatus !== 'live';
     renderMetricCards('#overview-metrics', [
-      ['추적 ETF', `${dashboard.etfs.length}개`],
-      ['히스토리 시작', formatMaybeDate(historyStarts[0] || dashboard.historyPolicy?.availableStartDate)],
-      ['최근 기준일', formatMaybeDate(latestDates.at(-1))],
-      ['최근 특별 신호', `${totalSignals.toLocaleString('ko-KR')}건`],
-      ['소스 경고', sourceWarnings ? `${sourceWarnings}개 ETF 확인 필요` : '정상'],
+      ['선택 ETF', `${etf?.shortName || etf?.name || '-'}${etf?.code ? ` · ${etf.code}` : ''}`, '현재 화면 기준', true],
+      ['최근 기준일', formatMaybeDate(latest.date), `생성 ${formatFreshness(dashboard.generatedAt)}`],
+      ['1위 종목', `${leader.ticker || leader.name || '-'}${leader.weightPercent === null || leader.weightPercent === undefined ? '' : ` · ${formatWeight(leader.weightPercent)}`}`, '최근 TOP10 순위'],
+      ['TOP10 합계', formatWeight(top10Weight), `${top10.length}개 종목`],
+      ['가격 커버리지', formatCoverage(analysis.returnCoverage), `${signals.length}건 신호 · ${sourceWarning ? '소스 확인 필요' : '소스 정상'}`],
     ]);
     const status = $('#data-status');
     if (status) {
       const mode = dashboard.loadMode === 'fallback' ? 'fallback 표시 중' : '공개 JSON 로드 완료';
       const schema = dashboard.schemaWarning ? ` · ${dashboard.schemaWarning}` : '';
-      status.textContent = `${mode} · 생성 ${formatFreshness(dashboard.generatedAt)} · 자동화 ${formatAutomationStatus(dashboard.automationStatusPayload)}${schema} · ${dashboard.disclaimer || '투자 조언이 아닙니다.'}`;
+      status.textContent = `${mode} · 기준일 ${formatMaybeDate(latest.date)} · 자동화 ${formatAutomationStatus(dashboard.automationStatusPayload)}${schema}`;
     }
+    const heroEtf = $('#hero-etf-name');
+    const heroDate = $('#hero-data-date');
+    const heroSignals = $('#hero-signal-count');
+    const heroGenerated = $('#hero-generated-at');
+    const controlSummary = $('#control-summary-text');
+    if (heroEtf) heroEtf.textContent = etf?.shortName || etf?.name || '—';
+    if (heroDate) heroDate.textContent = formatMaybeDate(latest.date);
+    if (heroSignals) heroSignals.textContent = `${signals.length.toLocaleString('ko-KR')}건`;
+    if (heroGenerated) heroGenerated.textContent = formatFreshness(dashboard.generatedAt);
+    if (controlSummary) controlSummary.textContent = `${etf?.shortName || etf?.name || 'ETF'} · ${formatMaybeDate(state.startDate)} → ${formatMaybeDate(state.endDate)}`;
   }
 
   function renderManualUpdate() {
@@ -721,10 +826,12 @@
     if (!target) return;
     const series = buildWeightSeries(history, latestTop10);
     if (!series.length) {
+      state.chartRuntime = null;
       target.innerHTML = '<div class="skeleton-line">아직 표시할 히스토리가 없습니다. 다음 업데이트 후 누적됩니다.</div>';
       return;
     }
     const points = series.flatMap((item) => item.points);
+    const observationDates = [...new Set(asArray(history).map((row) => row.date).filter(Boolean))].sort();
     const dates = points.map((point) => Date.parse(point.date)).filter(Number.isFinite);
     const values = points.map((point) => point.value).filter(Number.isFinite);
     const width = 1080;
@@ -772,7 +879,7 @@
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
-      return `<g class="chart-series ${tierClass}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${valueLabels}${signalMarkers}</g>`;
+      return `<g class="chart-series ${tierClass}" data-series-key="${escapeAttribute(item.key)}" tabindex="0" focusable="true" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}"><title>${escapeHtml(ariaLabel)}</title>${hitPaths}${segmentPaths}${circles}${valueLabels}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const summaryCards = renderChartSummaryCards(series, colorByKey);
@@ -780,24 +887,201 @@
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
     const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 라벨은 최신 순위와 티커이며, 아래 카드는 종목명·최신 비중·기간 변화폭을 같은 색으로 연결합니다. 라인에 마우스를 올리거나 키보드 포커스하면 해당 종목의 각 점 비중값과 기간 내 편입·편출 이벤트, 매수·매도 방향 신호가 표시됩니다.`;
+    const seriesKeys = series.map((item) => item.key);
+    if (!seriesKeys.includes(state.chartSelection.pinnedSeriesKey)) state.chartSelection.pinnedSeriesKey = seriesKeys[0];
+    state.chartSelection.previewSeriesKey = seriesKeys.includes(state.chartSelection.previewSeriesKey) ? state.chartSelection.previewSeriesKey : '';
+    state.chartSelection.pinnedDate = nearestChartDate(observationDates, state.chartSelection.pinnedDate || observationDates.at(-1));
+    state.chartSelection.previewDate = state.chartSelection.previewDate ? nearestChartDate(observationDates, state.chartSelection.previewDate) : '';
+
     target.innerHTML = `
       <p class="sr-only" id="weight-chart-summary">${escapeHtml(summaryText)}</p>
-      <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
-        <title id="weight-chart-svg-title">TOP10 비중 변화 그래프</title>
-        <desc id="weight-chart-svg-desc">${escapeHtml(summaryText)}</desc>
-        <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
-        ${yGrid}
-        ${xGrid}
-        <line class="axis-line" x1="${margin.left}" x2="${width - margin.right}" y1="${height - margin.bottom}" y2="${height - margin.bottom}" stroke="var(--chart-axis)"/>
-        <line class="axis-line" x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="var(--chart-axis)"/>
-        <text class="axis-title" x="${margin.left}" y="20">TOP10 비중(%)</text>
-        <text class="axis-note" x="${width - margin.right}" y="22" text-anchor="end">${escapeHtml(axisNote)}</text>
-        <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)} · 기본 보기 최근 1개월</text>
-        ${paths}
-        ${endLabels}
-      </svg>
+      <div class="chart-svg-scroll" data-chart-scroll>
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="weight-chart-svg-title weight-chart-svg-desc">
+          <title id="weight-chart-svg-title">TOP10 비중 변화 그래프</title>
+          <desc id="weight-chart-svg-desc">${escapeHtml(summaryText)}</desc>
+          <rect x="0" y="0" width="${width}" height="${height}" fill="transparent"/>
+          ${yGrid}
+          ${xGrid}
+          <line class="axis-line" x1="${margin.left}" x2="${width - margin.right}" y1="${height - margin.bottom}" y2="${height - margin.bottom}" stroke="var(--chart-axis)"/>
+          <line class="axis-line" x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}" stroke="var(--chart-axis)"/>
+          <text class="axis-title" x="${margin.left}" y="20">TOP10 비중(%)</text>
+          <text class="axis-note" x="${width - margin.right}" y="22" text-anchor="end">${escapeHtml(axisNote)}</text>
+          <text class="axis-range" x="${margin.left + innerWidth / 2}" y="${height - 22}" text-anchor="middle">기간 ${escapeHtml(firstDate)} → ${escapeHtml(lastDate)} · 기본 보기 최근 1개월</text>
+          ${paths}
+          ${endLabels}
+          <line class="chart-date-guide" x1="${margin.left}" x2="${margin.left}" y1="${margin.top}" y2="${height - margin.bottom}"/>
+          <circle class="chart-active-point" cx="${margin.left}" cy="${height - margin.bottom}" r="6"/>
+        </svg>
+      </div>
+      <div class="chart-active-readout" id="chart-active-readout" aria-live="polite">
+        <span class="chart-readout-date">—</span>
+        <span class="chart-readout-series">—</span>
+        <strong>—</strong>
+        <small>선택일 비중</small>
+      </div>
       <div class="chart-summary-grid">${summaryCards}</div>
     `;
+
+    const svg = target.querySelector('svg');
+    const scrollRoot = target.querySelector('[data-chart-scroll]');
+    const groups = [...target.querySelectorAll('.chart-series')];
+    const summaryButtons = [...target.querySelectorAll('.chart-summary-item')];
+    const dateGuide = target.querySelector('.chart-date-guide');
+    const activePoint = target.querySelector('.chart-active-point');
+    const readout = target.querySelector('#chart-active-readout');
+    const dateInput = $('#chart-date');
+    if (dateInput) {
+      dateInput.min = observationDates[0] || '';
+      dateInput.max = observationDates.at(-1) || '';
+      dateInput.value = state.chartSelection.pinnedDate || '';
+    }
+
+    function activeSeriesKey() {
+      return seriesKeys.includes(state.chartSelection.previewSeriesKey)
+        ? state.chartSelection.previewSeriesKey
+        : state.chartSelection.pinnedSeriesKey;
+    }
+
+    function activeChartDate() {
+      return nearestChartDate(observationDates, state.chartSelection.previewDate || state.chartSelection.pinnedDate);
+    }
+
+    function setSeriesPreview(key) {
+      state.chartSelection.previewSeriesKey = seriesKeys.includes(key) ? key : '';
+      updateInteraction();
+    }
+
+    function pinSeries(key) {
+      if (!seriesKeys.includes(key)) return;
+      state.chartSelection.pinnedSeriesKey = key;
+      state.chartSelection.previewSeriesKey = '';
+      updateInteraction();
+    }
+
+    function updateInteraction() {
+      const key = activeSeriesKey();
+      const date = activeChartDate();
+      const activeSeries = series.find((item) => item.key === key) || series[0];
+      const point = chartPointAtDate(activeSeries.points, date);
+      const signalCount = activeSeries.signalPoints.filter((signal) => signal.date === date).length;
+      const guideX = x(date);
+      groups.forEach((group) => {
+        const isActive = group.dataset.seriesKey === activeSeries.key;
+        group.classList.toggle('is-active', isActive);
+        group.classList.toggle('is-muted', !isActive);
+      });
+      summaryButtons.forEach((button) => {
+        const item = series.find((candidate) => candidate.key === button.dataset.seriesKey);
+        const itemPoint = chartPointAtDate(item?.points, date);
+        const isActive = button.dataset.seriesKey === activeSeries.key;
+        button.setAttribute('aria-pressed', String(button.dataset.seriesKey === state.chartSelection.pinnedSeriesKey));
+        button.classList.toggle('is-active', isActive);
+        button.classList.toggle('is-preview', button.dataset.seriesKey === state.chartSelection.previewSeriesKey);
+        const value = button.querySelector('em');
+        const detail = button.querySelector('small');
+        if (value) value.textContent = itemPoint && Number.isFinite(itemPoint.value) ? formatWeight(itemPoint.value) : '미편입';
+        if (detail) detail.textContent = `${date} · 기간 Δ ${item?.periodDelta === null ? '-' : formatPercentPoint(item?.periodDelta)}`;
+      });
+      if (dateGuide) {
+        dateGuide.setAttribute('x1', String(guideX));
+        dateGuide.setAttribute('x2', String(guideX));
+      }
+      if (activePoint && point && Number.isFinite(point.value)) {
+        activePoint.removeAttribute('hidden');
+        activePoint.setAttribute('cx', String(x(point.date)));
+        activePoint.setAttribute('cy', String(y(point.value)));
+        activePoint.style.setProperty('--active-series-color', colorByKey.get(activeSeries.key) || CHART_COLORS[0]);
+      } else if (activePoint) {
+        activePoint.setAttribute('hidden', '');
+      }
+      if (readout) {
+        const dateNode = readout.querySelector('.chart-readout-date');
+        const seriesNode = readout.querySelector('.chart-readout-series');
+        const valueNode = readout.querySelector('strong');
+        const detailNode = readout.querySelector('small');
+        if (dateNode) dateNode.textContent = date || '—';
+        if (seriesNode) seriesNode.textContent = `${activeSeries.rank ? `${activeSeries.rank}위 · ` : ''}${activeSeries.fullLabel}`;
+        if (valueNode) valueNode.textContent = point && Number.isFinite(point.value) ? formatWeight(point.value) : '미편입';
+        if (detailNode) detailNode.textContent = `${signalCount ? `해당일 신호 ${signalCount}건 · ` : ''}기간 변화 ${activeSeries.periodDelta === null ? '-' : formatPercentPoint(activeSeries.periodDelta)}`;
+      }
+      const summary = $('#chart-selection-summary');
+      if (summary) {
+        const label = summary.querySelector('strong');
+        const detail = summary.querySelector('small');
+        if (label) label.textContent = activeSeries.fullLabel;
+        if (detail) detail.textContent = `${date} · ${point && Number.isFinite(point.value) ? formatWeight(point.value) : '미편입'}`;
+      }
+      target.setAttribute('aria-label', `${date} ${activeSeries.fullLabel} ${point && Number.isFinite(point.value) ? formatWeight(point.value) : '미편입'}`);
+    }
+
+    function ensureVisible(date) {
+      if (!scrollRoot || !svg || scrollRoot.scrollWidth <= scrollRoot.clientWidth) return;
+      const renderedWidth = svg.getBoundingClientRect().width || width;
+      const targetX = (x(date) / width) * renderedWidth;
+      const padding = 56;
+      if (targetX >= scrollRoot.scrollLeft + padding && targetX <= scrollRoot.scrollLeft + scrollRoot.clientWidth - padding) return;
+      scrollRoot.scrollLeft = Math.max(0, targetX - scrollRoot.clientWidth + padding);
+    }
+
+    groups.forEach((group) => {
+      const key = group.dataset.seriesKey;
+      group.addEventListener('pointerenter', () => setSeriesPreview(key));
+      group.addEventListener('pointerleave', () => setSeriesPreview(''));
+      group.addEventListener('focus', () => setSeriesPreview(key));
+      group.addEventListener('blur', () => setSeriesPreview(''));
+      group.addEventListener('click', () => pinSeries(key));
+      group.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        pinSeries(key);
+      });
+    });
+    summaryButtons.forEach((button) => {
+      const key = button.dataset.seriesKey;
+      button.addEventListener('pointerenter', () => setSeriesPreview(key));
+      button.addEventListener('pointerleave', () => setSeriesPreview(''));
+      button.addEventListener('focus', () => setSeriesPreview(key));
+      button.addEventListener('blur', () => setSeriesPreview(''));
+      button.addEventListener('click', () => pinSeries(key));
+    });
+    if (svg) {
+      svg.addEventListener('pointermove', (event) => {
+        const rect = svg.getBoundingClientRect();
+        const svgX = rect.width > 0 ? (event.clientX - rect.left) * (width / rect.width) : margin.left;
+        const ratio = Math.max(0, Math.min(1, (svgX - margin.left) / innerWidth));
+        const dateIndex = Math.round(ratio * Math.max(0, observationDates.length - 1));
+        state.chartSelection.previewDate = observationDates[dateIndex] || '';
+        updateInteraction();
+      });
+      svg.addEventListener('pointerleave', () => {
+        state.chartSelection.previewDate = '';
+        updateInteraction();
+      });
+      svg.addEventListener('click', () => {
+        const preview = state.chartSelection.previewDate;
+        if (preview) commitChartDate(preview);
+      });
+    }
+    target.onkeydown = (event) => {
+      const current = observationDates.indexOf(state.chartSelection.pinnedDate);
+      let next = current < 0 ? observationDates.length - 1 : current;
+      if (event.key === 'ArrowLeft') next = Math.max(0, next - 1);
+      else if (event.key === 'ArrowRight') next = Math.min(observationDates.length - 1, next + 1);
+      else if (event.key === 'Home') next = 0;
+      else if (event.key === 'End') next = observationDates.length - 1;
+      else if (event.key === 'Escape') {
+        state.chartSelection.previewDate = '';
+        state.chartSelection.previewSeriesKey = '';
+        updateInteraction();
+        return;
+      } else return;
+      event.preventDefault();
+      commitChartDate(observationDates[next]);
+    };
+
+    state.chartRuntime = { dates: observationDates, update: updateInteraction, ensureVisible };
+    updateInteraction();
+    if (typeof window !== 'undefined') window.requestAnimationFrame(() => ensureVisible(state.chartSelection.pinnedDate));
   }
 
   function renderEndLabels(labels, colorByKey) {
@@ -875,7 +1159,7 @@
       const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
       const label = item.rank ? `${item.rank}. ${item.label}` : item.label;
       const delta = item.periodDelta === null ? '-' : formatPercentPoint(item.periodDelta);
-      return `<div class="chart-summary-item"><span class="legend-key" style="background:${color}"></span><strong>${escapeHtml(label)}</strong><em>${escapeHtml(formatWeight(item.latestWeight))}</em><small>기간 Δ ${escapeHtml(delta)} · 데이터 ${item.validPoints.length}/${item.points.length}일</small></div>`;
+      return `<button type="button" class="chart-summary-item" data-series-key="${escapeAttribute(item.key)}" aria-pressed="false"><span class="legend-key" style="--legend-color:${color}"></span><strong>${escapeHtml(label)}</strong><em>${escapeHtml(formatWeight(item.latestWeight))}</em><small>기간 Δ ${escapeHtml(delta)} · 데이터 ${item.validPoints.length}/${item.points.length}일</small></button>`;
     }).join('');
   }
 
@@ -1152,10 +1436,9 @@
     if (!target || !state.dashboard) return;
     const selected = selectedEtf();
     const selectedSignals = asArray(selected?.latest?.signals).map((signal) => ({ ...signal, etfName: selected?.shortName || selected?.name || '' }));
-    const globalSignals = state.dashboard.signals.length ? state.dashboard.signals : selectedSignals;
-    const signals = (selectedSignals.length ? selectedSignals : globalSignals).slice(0, 9);
+    const signals = selectedSignals.slice(0, 9);
     if (!signals.length) {
-      target.innerHTML = '<div class="skeleton-line">아직 특별 신호가 없습니다. 최초 스냅샷 이후 다음 업데이트부터 편입·편출과 잔차가 표시됩니다.</div>';
+      target.innerHTML = `<div class="skeleton-line">${escapeHtml(selected?.shortName || selected?.name || '선택 ETF')}의 최근 기준일에는 특별 신호가 없습니다.</div>`;
       return;
     }
     target.replaceChildren(...signals.map((signal) => {
@@ -1589,10 +1872,10 @@
   function renderMetricCards(selector, entries) {
     const target = $(selector);
     if (!target) return;
-    target.replaceChildren(...entries.map(([label, value]) => {
+    target.replaceChildren(...entries.map(([label, value, help, primary]) => {
       const card = document.createElement('div');
-      card.className = 'metric-card';
-      card.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value || '-')}</strong>`;
+      card.className = `metric-card${primary ? ' metric-card-primary' : ''}`;
+      card.innerHTML = `<span>${escapeHtml(label)}</span><strong>${escapeHtml(value || '-')}</strong>${help ? `<small>${escapeHtml(help)}</small>` : ''}`;
       return card;
     }));
   }
@@ -2073,6 +2356,8 @@
       truncateTickerLabel,
       buildNiceTicks,
       buildDateTicks,
+      nearestChartDate,
+      chartPointAtDate,
       formatAxisWeight,
       formatAxisDate,
       sortAttributionRows,

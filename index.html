@@ -6,10 +6,31 @@
   <meta name="color-scheme" content="light dark" />
   <meta name="description" content="한국 상장 액티브 ETF 3종의 TOP10 편입 종목과 비중 변화를 추적하는 정적 대시보드" />
   <title>ETF TOP10 Tracking</title>
-  <link rel="stylesheet" href="assets/styles.css?v=20260710-unified-nav" />
-  <script src="assets/app.js?v=20260703-hover-label-spacing" defer></script>
+  <script>
+    try {
+      const queryTheme = new URLSearchParams(window.location.search).get('theme');
+      const canonicalTheme = window.localStorage.getItem('quant-research-theme');
+      const legacyTheme = window.localStorage.getItem('etf-tracking-theme');
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = ['light', 'dark'].includes(queryTheme)
+        ? queryTheme
+        : ['light', 'dark'].includes(canonicalTheme)
+          ? canonicalTheme
+          : ['light', 'dark'].includes(legacyTheme)
+            ? legacyTheme
+            : systemTheme;
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    } catch (_) {
+      document.documentElement.dataset.theme = 'light';
+    }
+  </script>
+  <link rel="stylesheet" href="assets/styles.css?v=20260723-common-v1" />
+  <script src="assets/app.js?v=20260723-common-v1" defer></script>
 </head>
 <body id="top">
+  <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+
   <nav class="site-nav" aria-label="연결 프로젝트 바로가기">
     <a class="site-nav-brand" href="https://sonchanggi.github.io/quant-dashboard/" aria-label="Quant Research Hub로 이동">Quant Research Hub</a>
     <div class="site-nav-links" aria-label="프로젝트 목록">
@@ -31,93 +52,112 @@
   </nav>
 
   <header class="hero" aria-labelledby="page-title">
-    <div class="hero-grid">
-      <div class="hero-main">
-        <p class="eyebrow">ETF Tracking</p>
-        <h1 id="page-title">ETF TOP10 투자 비중 추적</h1>
-        <p class="hero-copy">
-          TIME ETF 2종과 KoAct 미국나스닥성장기업액티브의 일별 TOP10 구성 종목,
-          비중 변화, 가격 수익률로 설명되지 않는 매수·매도 가능성 신호를 한 화면에서 확인합니다.
-        </p>
-        <div class="hero-actions">
-          <a class="primary-button" href="#etf-dashboard">대시보드 보기</a>
-          <a class="secondary-button" href="#signals">신호 보기</a>
-          <a class="secondary-button" href="#manual-update">수동 업데이트</a>
-          <a class="secondary-button" href="data/dashboard.json">원천 JSON 보기</a>
-        </div>
+    <div class="hero-main">
+      <p class="eyebrow">ETF Tracking · Common Design v1</p>
+      <h1 id="page-title">ETF TOP10 투자 비중 추적</h1>
+      <p class="hero-copy">선택 ETF의 최신 구성, 비중 변화와 가격으로 설명되지 않는 관찰 신호를 먼저 보여줍니다.</p>
+      <div class="hero-actions">
+        <a class="primary-button" href="#primary-chart">비중 추이 보기</a>
+        <a class="secondary-button" href="#top10-title">최근 TOP10 보기</a>
+        <a class="secondary-button" href="https://sonchanggi.github.io/quant-dashboard/">통합 대시보드</a>
       </div>
-      <aside class="hero-note" aria-label="데이터 정책">
-        <strong>데이터/해석 경계</strong>
-        <p>
-          공급자 공개 데이터와 공개 종가를 이용한 추정 도구입니다. 시작일은 커밋된 백필 범위에 따라
-          확장되며, 실제 운용사 주문 확정이나 투자·세무·법률 또는 매매 조언이 아닙니다.
-        </p>
-      </aside>
     </div>
+    <aside class="hero-status" aria-label="현재 ETF 상태">
+      <p class="eyebrow">Current view</p>
+      <div class="hero-status-line hero-status-primary"><span>선택 ETF</span><strong id="hero-etf-name">불러오는 중</strong></div>
+      <div class="hero-status-line"><span>데이터 기준</span><strong id="hero-data-date">—</strong></div>
+      <div class="hero-status-line"><span>특별 신호</span><strong id="hero-signal-count">—</strong></div>
+      <div class="hero-status-line"><span>생성</span><strong id="hero-generated-at">—</strong></div>
+    </aside>
   </header>
 
-  <main>
-    <section class="section" aria-labelledby="summary-title">
-      <div class="section-heading centered">
-        <p class="eyebrow">Daily Summary</p>
-        <h2 id="summary-title">최근 업데이트 요약</h2>
-        <p id="data-status">데이터를 불러오는 중...</p>
+  <main id="main-content" tabindex="-1">
+    <section class="section result-section" aria-labelledby="summary-title">
+      <div class="section-heading result-heading">
+        <div>
+          <p class="eyebrow">Selected ETF</p>
+          <h2 id="summary-title">선택 ETF 핵심 결과</h2>
+        </div>
+        <p id="data-status" role="status" aria-live="polite">데이터를 불러오는 중...</p>
       </div>
-      <div class="metric-row" id="overview-metrics" aria-live="polite">
+      <div class="metric-row result-metrics" id="overview-metrics" aria-live="polite">
         <div class="skeleton-line">요약 지표를 준비하는 중...</div>
       </div>
     </section>
 
+    <section class="section signal-summary-section" id="signals" aria-labelledby="signals-title">
+      <div class="section-heading compact-heading">
+        <div>
+          <p class="eyebrow">Latest Signals</p>
+          <h2 id="signals-title">선택 ETF 최신 신호</h2>
+        </div>
+        <p>Python이 생성한 편입·편출 및 잔차 신호를 그대로 표시합니다.</p>
+      </div>
+      <div class="signal-grid signal-summary-grid" id="signal-grid"></div>
+    </section>
 
     <section class="section dashboard-section" id="etf-dashboard" aria-labelledby="dashboard-title">
-      <div class="section-heading">
-        <p class="eyebrow">Holdings Monitor</p>
-        <h2 id="dashboard-title">ETF별 TOP10 비중 추이</h2>
-        <p>ETF와 날짜 범위를 선택해 편입 종목의 비중 추이를 비교합니다.</p>
+      <div class="section-heading compact-heading">
+        <div>
+          <p class="eyebrow">Primary Result</p>
+          <h2 id="dashboard-title">TOP10 비중 변화와 현재 구성</h2>
+        </div>
+        <p>표시 설정은 저장된 분석 결과를 다시 계산하지 않습니다.</p>
       </div>
 
-      <div class="control-card" aria-label="ETF 및 기간 선택">
+      <div class="etf-switcher">
         <label>
           ETF 선택
           <select id="etf-select"></select>
         </label>
-        <label>
-          시작일
-          <input type="date" id="start-date" />
-        </label>
-        <label>
-          종료일
-          <input type="date" id="end-date" />
-        </label>
-        <button type="button" id="reset-range">최근 1개월</button>
-        <button type="button" id="all-range">전체 기간</button>
+        <small>ETF를 바꾸면 해당 ETF의 저장된 최신 결과와 히스토리를 표시합니다.</small>
       </div>
 
-      <div class="dashboard-grid">
-        <article class="panel panel-wide" aria-labelledby="chart-title">
-          <div class="panel-header">
-            <div>
-              <p class="eyebrow">Weight Trend</p>
-              <h3 id="chart-title">TOP10 비중 변화 그래프</h3>
-            </div>
-            <span class="status-pill" id="coverage-pill">커버리지 확인 중</span>
-          </div>
-          <div class="chart-card" id="weight-chart" aria-label="선택 ETF의 TOP10 비중 추이"></div>
-          <p class="chart-help">라인에 마우스를 올리거나 키보드 포커스를 두면, 선택 기간 내 해당 종목의 <span class="marker-help marker-entry">＋ 편입</span> <span class="marker-help marker-exit">－ 편출</span> <span class="marker-help marker-buy">↑ 매수 관찰</span> <span class="marker-help marker-sell">↓ 매도 관찰</span> 신호가 함께 표시됩니다.</p>
-        </article>
+      <details class="control-card control-disclosure">
+        <summary class="control-summary">
+          <span><small>View controls</small><strong>기간 표시 설정</strong></span>
+          <small id="control-summary-text">조회 기간을 바꿉니다.</small>
+        </summary>
+        <div class="control-grid">
+          <label>
+            시작일
+            <input type="date" id="start-date" />
+          </label>
+          <label>
+            종료일
+            <input type="date" id="end-date" />
+          </label>
+          <button type="button" id="reset-range">최근 1개월</button>
+          <button type="button" id="all-range">전체 기간</button>
+        </div>
+      </details>
 
-        <article class="panel" aria-labelledby="source-title">
-          <div class="panel-header compact">
-            <div>
-              <p class="eyebrow">Source</p>
-              <h3 id="source-title">소스 상태</h3>
-            </div>
+      <article class="panel panel-wide primary-chart-panel" id="primary-chart" aria-labelledby="chart-title">
+        <div class="panel-header chart-panel-header">
+          <div>
+            <p class="eyebrow">Weight Trend</p>
+            <h3 id="chart-title">TOP10 비중 변화 그래프</h3>
+            <p class="panel-subtitle">종목을 눌러 강조를 고정하고, 관찰일을 바꾸면 해당 날짜의 정확한 비중을 확인할 수 있습니다.</p>
           </div>
-          <div class="source-list" id="source-list"></div>
-        </article>
-      </div>
+          <span class="status-pill" id="coverage-pill">커버리지 확인 중</span>
+        </div>
+        <div class="chart-observation-bar">
+          <div id="chart-selection-summary" class="chart-selection-summary" aria-live="polite">
+            <span>강조 종목</span><strong>불러오는 중</strong><small>관찰일을 준비하고 있습니다.</small>
+          </div>
+          <div class="chart-date-controls">
+            <label>
+              차트 관찰일
+              <input type="date" id="chart-date" />
+            </label>
+            <button type="button" id="chart-latest-date">최신일</button>
+          </div>
+        </div>
+        <div class="chart-card interactive-chart" id="weight-chart" tabindex="0" aria-label="선택 ETF의 TOP10 비중 추이"></div>
+        <p class="chart-help"><span class="marker-help marker-entry">＋ 편입</span> <span class="marker-help marker-exit">－ 편출</span> <span class="marker-help marker-buy">↑ 매수 관찰</span> <span class="marker-help marker-sell">↓ 매도 관찰</span>은 기존 분석 신호입니다. 키보드에서는 좌우 화살표·Home·End로 날짜를 이동합니다.</p>
+      </article>
 
-      <article class="panel panel-wide" aria-labelledby="top10-title">
+      <article class="panel panel-wide top10-panel" aria-labelledby="top10-title">
         <div class="panel-header">
           <div>
             <p class="eyebrow">Latest TOP10</p>
@@ -125,136 +165,94 @@
           </div>
           <a class="panel-link" id="provider-link" href="#" target="_blank" rel="noreferrer">공급자 페이지</a>
         </div>
-        <div class="table-wrap">
+        <div class="table-wrap current-table-wrap">
           <table class="data-table top10-table">
             <caption>최근 ETF TOP10 편입 종목과 비중</caption>
             <thead>
               <tr>
-                <th scope="col">순위</th>
-                <th scope="col">종목</th>
-                <th scope="col">티커/가격소스</th>
-                <th scope="col">현재 비중</th>
-                <th scope="col">전일 비중</th>
-                <th scope="col">가격 기여</th>
-                <th scope="col">잔차</th>
-                <th scope="col">분류</th>
+                <th scope="col">순위</th><th scope="col">종목</th><th scope="col">티커/가격소스</th><th scope="col">현재 비중</th>
+                <th scope="col">전일 비중</th><th scope="col">가격 기여</th><th scope="col">잔차</th><th scope="col">분류</th>
               </tr>
             </thead>
-            <tbody id="top10-rows">
-              <tr><td colspan="8">데이터를 불러오는 중...</td></tr>
-            </tbody>
+            <tbody id="top10-rows"><tr><td colspan="8">데이터를 불러오는 중...</td></tr></tbody>
           </table>
         </div>
       </article>
 
-      <article class="panel panel-wide" aria-labelledby="decomp-title">
-        <div class="panel-header">
-          <div>
-            <p class="eyebrow">Price vs Flow</p>
-            <h3 id="decomp-title">가격 효과와 ETF 매수·매도 가능성</h3>
+      <details class="detail-disclosure" id="decomposition-detail">
+        <summary><span><strong>가격 효과·잔차 분해표</strong><small>전일 대비 비중 변화의 전체 분석 행</small></span></summary>
+        <article class="panel panel-wide" aria-labelledby="decomp-title">
+          <div class="panel-header"><div><p class="eyebrow">Price vs Flow</p><h3 id="decomp-title">가격 효과와 ETF 매수·매도 가능성</h3></div></div>
+          <div class="table-wrap">
+            <table class="data-table decomposition-table">
+              <caption>전일 대비 비중 변화 분해</caption>
+              <thead><tr><th scope="col">구분</th><th scope="col">종목</th><th scope="col">전일→현재 비중</th><th scope="col">종목 수익률</th><th scope="col">가격 기여</th><th scope="col">잔차</th><th scope="col">종가 기준/소스</th><th scope="col">분류</th></tr></thead>
+              <tbody id="decomposition-rows"><tr><td colspan="8">데이터를 불러오는 중...</td></tr></tbody>
+            </table>
           </div>
-        </div>
-        <div class="table-wrap">
-          <table class="data-table decomposition-table">
-            <caption>전일 대비 비중 변화 분해</caption>
-            <thead>
-              <tr>
-                <th scope="col">구분</th>
-                <th scope="col">종목</th>
-                <th scope="col">전일→현재 비중</th>
-                <th scope="col">종목 수익률</th>
-                <th scope="col">가격 기여</th>
-                <th scope="col">잔차</th>
-                <th scope="col">종가 기준/소스</th>
-                <th scope="col">분류</th>
-              </tr>
-            </thead>
-            <tbody id="decomposition-rows">
-              <tr><td colspan="8">데이터를 불러오는 중...</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </article>
+        </article>
+      </details>
+
+      <details class="detail-disclosure" id="signal-tables">
+        <summary><span><strong>ETF 3종 전체 신호·비중 변화표</strong><small>필요할 때만 상세 히스토리를 불러옵니다.</small></span></summary>
+        <section class="panel panel-wide signal-table-block" aria-labelledby="signal-tables-title">
+          <div class="section-heading compact">
+            <p class="eyebrow">ETF Signal Tables</p>
+            <h3 id="signal-tables-title">ETF별 TOP10 신호·비중 변화 표</h3>
+            <p>선택 기간의 편입·편출과 기존 잔차 판정값을 검색·정렬해 봅니다.</p>
+          </div>
+          <div class="etf-signal-table-grid" id="etf-signal-tables"><div class="skeleton-line">상세 영역을 열면 ETF별 신호 표를 준비합니다.</div></div>
+        </section>
+      </details>
+
+      <details class="detail-disclosure" id="source-detail">
+        <summary><span><strong>소스·커버리지 상세</strong><small>공급자 상태, 저장 범위와 해석 경계</small></span></summary>
+        <article class="panel panel-wide" aria-labelledby="source-title">
+          <div class="panel-header compact"><div><p class="eyebrow">Source</p><h3 id="source-title">소스 상태</h3></div></div>
+          <div class="source-list" id="source-list"></div>
+        </article>
+      </details>
     </section>
 
-    <section class="section" id="signals" aria-labelledby="signals-title">
-      <div class="section-heading centered">
-        <p class="eyebrow">Signals</p>
-        <h2 id="signals-title">특별 신호</h2>
-        <p>TOP10 신규 편입·편출과 가격으로 설명되지 않는 잔차 신호를 우선 표시합니다.</p>
-      </div>
-      <div class="signal-grid" id="signal-grid"></div>
-      <div class="signal-table-block" id="signal-tables" aria-labelledby="signal-tables-title">
-        <div class="section-heading compact">
-          <p class="eyebrow">ETF Signal Tables</p>
-          <h3 id="signal-tables-title">ETF별 TOP10 신호·비중 변화 표</h3>
-          <p>선택한 기간 안에서 각 ETF의 TOP10 편입·편출, 잔차 기반 매수·매도 관찰, 가격 우세 비중 변화를 표로 확인합니다. 이벤트, 종목/티커, 순위 조건, 변화 크기, 정렬 필터로 긴 표를 필요한 행만 좁혀 볼 수 있습니다.</p>
+    <details class="detail-disclosure section-detail" id="methodology">
+      <summary><span><strong>계산 방법과 한계</strong><small>가격 효과, 잔차 신호, 커버리지와 히스토리 범위</small></span></summary>
+      <section class="section methodology-section" aria-labelledby="method-title">
+        <div class="section-heading"><p class="eyebrow">Methodology</p><h2 id="method-title">계산 방법과 한계</h2></div>
+        <div class="feature-grid">
+          <article><h3>가격 효과</h3><p>전일 전체 보유종목 비중에 개별 종목의 KRW 평가단가 수익률을 적용하고, 전체 보유종목 가중 평균 수익률로 정규화한 no-trade 예측 비중을 계산합니다.</p></article>
+          <article><h3>잔차 신호</h3><p>실제 비중 변화와 예측 비중 변화의 차이를 기존 Python 분류값으로 표시합니다. 실제 주문 확정이 아닌 no-trade 기준 대비 가능성 신호입니다.</p></article>
+          <article><h3>커버리지</h3><p>수익률이 확보된 전일 전체 보유종목 비중 합계가 낮으면 가격·매매 요인을 단정하지 않고 낮은 신뢰도 상태를 유지합니다.</p></article>
+          <article><h3>히스토리 범위</h3><p>커밋된 상장일 백필과 missing-only 갱신 범위를 사용합니다. 더 과거 분석은 검토된 수동 백필로만 확장합니다.</p></article>
         </div>
-        <div class="etf-signal-table-grid" id="etf-signal-tables">
-          <div class="skeleton-line">ETF별 신호 표를 준비하는 중...</div>
+      </section>
+    </details>
+
+    <details class="detail-disclosure section-detail" id="manual-update">
+      <summary><span><strong>데이터 업데이트 상세</strong><small>GitHub Actions 수동 실행과 CLI 명령</small></span></summary>
+      <section class="section manual-update" aria-labelledby="manual-update-title">
+        <div>
+          <p class="eyebrow">Manual Update</p>
+          <h2 id="manual-update-title">없는 날짜만 채우는 수동 업데이트</h2>
+          <p>수동 워크플로는 저장된 usable 스냅샷을 다시 요청하지 않고, 최신 기준일과 선택한 백필 범위에서 아직 없는 날짜만 채웁니다.</p>
+          <ul class="schedule-list" aria-label="수동 업데이트 정책">
+            <li><strong>자동 스케줄</strong><span>공급자 공개 시차를 고려한 예약 실행 상태는 Actions에서 확인합니다.</span></li>
+            <li><strong>수동 실행</strong><span><code>backfill_start_date</code>로 누락 구간을 채우고, 필요할 때만 <code>refresh_existing</code>을 사용합니다.</span></li>
+          </ul>
         </div>
-      </div>
-    </section>
+        <div class="manual-update-actions">
+          <a id="manual-update-link" class="primary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer" role="button">GitHub Actions에서 수동 업데이트 열기</a>
+          <a id="workflow-status-link" class="secondary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer">워크플로 상태 보기</a>
+          <button id="copy-update-command" class="secondary-button" type="button">CLI 명령 복사</button>
+          <code id="manual-update-command" class="code-pill">gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true</code>
+          <small id="manual-update-status" role="status" aria-live="polite">기본값은 missing-only입니다.</small>
+        </div>
+      </section>
+    </details>
 
-    <section class="section methodology-section" id="methodology" aria-labelledby="method-title">
-      <div class="section-heading">
-        <p class="eyebrow">Methodology</p>
-        <h2 id="method-title">계산 방법과 한계</h2>
-      </div>
-      <div class="feature-grid">
-        <article>
-          <h3>가격 효과</h3>
-          <p>전일 전체 보유종목 비중에 개별 종목의 KRW 평가단가 수익률을 적용하고, 전체 보유종목 가중 평균 수익률로 정규화한 no-trade 예측 비중을 계산합니다.</p>
-        </article>
-        <article>
-          <h3>잔차 신호</h3>
-          <p>실제 비중 변화가 예측 비중 변화보다 작지만 방향성이 있으면 약한 매수/매도 관찰 설명을 붙이고, 허용오차 이상 크면 <code>likely_buy</code> 또는 <code>likely_sell</code>로 표시합니다. 모두 실제 주문 확정이 아닌 no-trade 기준 대비 잔차입니다.</p>
-        </article>
-        <article>
-          <h3>커버리지</h3>
-          <p>수익률이 확보된 전일 전체 보유종목 비중 합계가 60% 미만이면 가격/매매 요인을 단정하지 않고 <code>mixed</code> 또는 낮은 신뢰도로 표시합니다.</p>
-        </article>
-        <article>
-          <h3>히스토리 범위</h3>
-          <p>검토된 수동 실행은 최신 데이터를 먼저 가져온 뒤 최근 구간을 갱신합니다. 더 과거 분석은 수동 백필로 확장할 수 있으며, 정적 JSON 용량과 공급자 throttling을 함께 고려합니다.</p>
-        </article>
-      </div>
-    </section>
-    <section class="section manual-update" id="manual-update" aria-labelledby="manual-update-title">
-      <div>
-        <p class="eyebrow">Manual Update</p>
-        <h2 id="manual-update-title">없는 날짜만 채우는 수동 업데이트</h2>
-        <p>
-          수동 워크플로는 이미 저장된 usable 스냅샷을 다시 요청하지 않고, 최신 기준일과 선택한 백필 범위 안에서
-          아직 없는 날짜만 채웁니다. 공급자 throttling을 줄이면서 기존 히스토리는 보존합니다.
-        </p>
-        <p class="manual-update-note">
-          보안상 공개 정적 페이지에는 GitHub 토큰을 저장하지 않습니다. 버튼은 인증된 GitHub Actions
-          실행 화면으로 연결하며, 저장소 쓰기 권한이 있는 계정으로 로그인한 뒤 <strong>Run workflow</strong>를 누르면 됩니다.
-        </p>
-        <ul class="schedule-list" aria-label="수동 업데이트 정책">
-          <li><strong>자동 스케줄 중지</strong><span>멀티 repo 롤백 이후 예약 실행은 비활성화되어 있습니다.</span></li>
-          <li><strong>검토 후 수동 실행</strong><span>공급자/전일 종가 지연을 확인한 뒤 <code>workflow_dispatch</code>로 실행합니다.</span></li>
-          <li><strong>수동 실행</strong><span><code>backfill_start_date</code>로 과거 누락 구간을 채우고, 필요할 때만 <code>refresh_existing</code>을 사용합니다.</span></li>
-        </ul>
-      </div>
-      <div class="manual-update-actions">
-        <a id="manual-update-link" class="primary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer" role="button">GitHub Actions에서 수동 업데이트 열기</a>
-        <a id="workflow-status-link" class="secondary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer">워크플로 상태 보기</a>
-        <button id="copy-update-command" class="secondary-button" type="button">CLI 명령 복사</button>
-        <code id="manual-update-command" class="code-pill">gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=false</code>
-        <small id="manual-update-status" role="status" aria-live="polite">기본값은 missing-only입니다. 실행 후 Actions 상태와 대시보드 생성 시각을 확인하세요.</small>
-      </div>
-    </section>
-
+    <section class="compact-notice" aria-label="research notice"><strong>연구용 정적 스냅샷</strong> · 잔차 신호는 실제 운용사 주문 확정이나 투자·매매 조언이 아닙니다.</section>
   </main>
 
-  <footer class="site-footer">
-    <p>
-      <a href="https://sonchanggi.github.io/quant-dashboard/">Quant Dashboard로 돌아가기</a>
-      · 본 페이지는 개인 리서치 대시보드이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.
-    </p>
-  </footer>
+  <footer class="site-footer"><p><a href="https://sonchanggi.github.io/quant-dashboard/">Quant Dashboard로 돌아가기</a></p></footer>
   <nav class="page-jump-nav" aria-label="페이지 빠른 이동">
     <a href="#top" aria-label="맨 위로 이동" title="맨 위로">↑</a>
     <a href="#page-bottom" aria-label="맨 아래로 이동" title="맨 아래로">↓</a>
