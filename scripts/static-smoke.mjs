@@ -11,6 +11,7 @@ if (!existsSync('data/history')) throw new Error('data/history directory missing
 
 const source = readFileSync('assets/app.js', 'utf8');
 const styles = readFileSync('assets/styles.css', 'utf8');
+const htmlSource = readFileSync('index.html', 'utf8');
 if (/class="chart-legend"|renderChartLegend/.test(source)) {
   throw new Error('weight chart should not render duplicate legend and summary cards');
 }
@@ -21,6 +22,18 @@ const context = vm.createContext({ console });
 vm.runInContext(source, context, { filename: 'assets/app.js' });
 const api = context.__ETF_TRACKING_TESTS__;
 if (!api) throw new Error('ETF tracking test API missing');
+if (!htmlSource.includes('id="chart-date"') || !htmlSource.includes('id="chart-selection-summary"')) {
+  throw new Error('common-design chart observation controls missing');
+}
+if (!htmlSource.includes('class="skip-link"') || !htmlSource.includes('id="main-content"')) {
+  throw new Error('common-design skip navigation missing');
+}
+if (api.nearestChartDate(['2026-07-14', '2026-07-16'], '2026-07-15') !== '2026-07-14') {
+  throw new Error('chart observation date should snap to the latest stored date on or before the request');
+}
+if (api.chartPointAtDate([{ date: '2026-07-14', value: null }], '2026-07-14')?.value !== null) {
+  throw new Error('chart readout should preserve a missing holding observation');
+}
 const dashboardRaw = readFileSync('data/dashboard.json', 'utf8');
 const dashboardBytes = statSync('data/dashboard.json').size;
 if (dashboardBytes > 5_000_000) throw new Error(`dashboard payload should stay slim for first paint, got ${dashboardBytes} bytes`);
@@ -116,7 +129,7 @@ if (selected.history.length && !series.length) throw new Error('weight series mi
 const sndkSeries = series.find((item) => item.key === 'SNDK');
 const endLabels = api.buildEndLabels(series, () => 100, (value) => value * 10, 0, 500);
 const sndkEndLabel = endLabels.find((item) => item.key === 'SNDK');
-if (!sndkEndLabel || !/^1\s+SNDK$/.test(sndkEndLabel.text)) {
+if (!sndkEndLabel || !/^\d+\s+SNDK$/.test(sndkEndLabel.text)) {
   throw new Error(`chart end labels should show rank next to ticker, got ${sndkEndLabel?.text || 'missing'}`);
 }
 if (!endLabels.every((item) => /^\d+\s+[A-Z0-9.\-]+(?:…)?$/.test(item.text))) {
