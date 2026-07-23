@@ -38,6 +38,7 @@ test('chart values stay in the normal-flow summary instead of covering the plot'
   assert.doesNotMatch(app, /<title id="weight-chart-svg-title"/);
   assert.doesNotMatch(app, /renderSeriesValueLabels/);
   assert.match(app, /aria-labelledby="chart-title weight-chart-svg-desc"/);
+  assert.match(app, /const padding = Math\.max\(56, margin\.right\)/);
 });
 
 test('end labels reserve non-overlapping vertical slots', () => {
