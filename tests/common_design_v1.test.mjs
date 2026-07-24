@@ -6,9 +6,22 @@ import vm from 'node:vm';
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../assets/app.js', import.meta.url), 'utf8');
 const styles = readFileSync(new URL('../assets/styles.css', import.meta.url), 'utf8');
+const platformSource = readFileSync(
+  new URL('../shared-platform/dist/index.js', import.meta.url),
+  'utf8',
+);
 
 function dashboardHelpers() {
-  const context = vm.createContext({ console });
+  const context = vm.createContext({
+    AbortController,
+    URL,
+    clearTimeout,
+    console,
+    setTimeout,
+  });
+  vm.runInContext(platformSource, context, {
+    filename: 'shared-platform/dist/index.js',
+  });
   vm.runInContext(app, context, { filename: 'assets/app.js' });
   return context.__ETF_TRACKING_TESTS__;
 }
@@ -60,13 +73,35 @@ test('implementation notes live in one closed operations disclosure', () => {
   assert.doesNotMatch(html, /<details[^>]*\bopen\b[^>]*id="operations-detail"/);
   const operationsStart = html.indexOf('id="operations-detail"');
   const operationsEnd = html.indexOf('</details>', operationsStart);
-  for (const id of ['source-detail', 'methodology', 'manual-update']) {
+  for (const id of ['source-detail', 'methodology', 'research-notice', 'manual-update']) {
     const index = html.indexOf(`id="${id}"`);
     assert.ok(index > operationsStart && index < operationsEnd);
   }
   assert.doesNotMatch(html, /Common Design v1/);
   assert.doesNotMatch(html, /기존 Python 분류값/);
   assert.doesNotMatch(html, /필요할 때만 상세 히스토리를 불러옵니다/);
+});
+
+test('visible copy stays result-specific while chart mechanics remain accessible', () => {
+  for (const text of [
+    '선택 ETF의 최신 구성, 비중 변화와 가격으로 설명되지 않는 관찰 신호를 먼저 보여줍니다.',
+    '종목과 날짜를 선택해 정확한 비중을 확인합니다.',
+    '← → 날짜 이동',
+    '조회 기간을 바꿉니다.',
+  ]) {
+    assert.doesNotMatch(html, new RegExp(text));
+  }
+  assert.match(
+    html,
+    /id="weight-chart"[^>]*tabindex="0"[^>]*aria-describedby="weight-chart-help"[^>]*aria-keyshortcuts="ArrowLeft ArrowRight Home End"/,
+  );
+  assert.match(html, /id="weight-chart-help" class="sr-only"/);
+  assert.match(app, /svg\.addEventListener\('pointermove'/);
+  assert.match(app, /svg\.addEventListener\('click'/);
+  assert.match(app, /target\.onkeydown = \(event\) =>/);
+  for (const key of ['ArrowLeft', 'ArrowRight', 'Home', 'End']) {
+    assert.match(app, new RegExp(`event\\.key === '${key}'`));
+  }
 });
 
 test('chart values stay in the normal-flow summary instead of covering the plot', () => {
@@ -120,6 +155,88 @@ test('chart date navigation snaps only to stored observation dates', () => {
   assert.equal(helpers.nearestChartDate(dates, '2026-07-01'), '2026-07-14');
 });
 
+test('pointer hit-testing uses the same elapsed-time scale as irregular date rendering', () => {
+  const helpers = dashboardHelpers();
+  const dates = ['2026-01-01', '2026-01-02', '2026-01-30'];
+  const minDate = Date.parse(dates[0]);
+  const maxDate = Date.parse(dates.at(-1));
+  assert.equal(helpers.chartDateForSvgX(dates, 100, minDate, maxDate, 100, 800), dates[0]);
+  assert.equal(helpers.chartDateForSvgX(dates, 900, minDate, maxDate, 100, 800), dates.at(-1));
+  assert.equal(
+    helpers.chartDateForSvgX(dates, 100 + 800 * 0.52, minDate, maxDate, 100, 800),
+    '2026-01-30',
+  );
+  assert.match(app, /svgPointFromClient\(svg,\s*event\.clientX,\s*event\.clientY/);
+  assert.match(app, /svg\.addEventListener\('click',\s*\(event\)\s*=>/);
+  assert.doesNotMatch(app, /const preview = state\.chartSelection\.previewDate/);
+});
+
+test('SVG client coordinates stay correct through responsive scale and horizontal scroll transforms', () => {
+  const helpers = dashboardHelpers();
+  const svg = {
+    createSVGPoint() {
+      return {
+        x: 0,
+        y: 0,
+        matrixTransform(matrix) {
+          return matrix.transformPoint(this);
+        },
+      };
+    },
+    getScreenCTM() {
+      return {
+        inverse() {
+          return {
+            transformPoint(point) {
+              return {
+                x: (point.x + 200) / 0.5,
+                y: (point.y - 20) / 0.5,
+              };
+            },
+          };
+        },
+      };
+    },
+  };
+  assert.deepEqual(
+    { ...helpers.svgPointFromClient(svg, 250, 120, 1080, 470) },
+    { x: 900, y: 200 },
+  );
+  assert.match(app, /screenPoint\.x - scrollRect\.left \+ scrollRoot\.scrollLeft/);
+});
+
+test('date range validation fails closed and binds the cutoff to one stored snapshot', () => {
+  const helpers = dashboardHelpers();
+  const history = [
+    { date: '2026-07-01', top10: [{ ticker: 'A' }] },
+    { date: '2026-07-10', top10: [{ ticker: 'B' }] },
+    { date: '2026-07-24', top10: [{ ticker: 'C' }] },
+  ];
+  const etf = {
+    historyLoaded: true,
+    historyError: '',
+    availableStartDate: '2026-07-01',
+    availableEndDate: '2026-07-24',
+    history,
+    latest: history.at(-1),
+  };
+  const ready = helpers.selectedRangeContext(etf, '2026-07-01', '2026-07-20');
+  assert.equal(ready.status, 'ready');
+  assert.equal(ready.snapshot.date, '2026-07-10');
+  assert.equal(ready.appliedEnd, '2026-07-10');
+
+  for (const [start, end] of [
+    ['2026-07-20', '2026-07-01'],
+    ['2026-07-11', '2026-07-19'],
+    ['', '2026-07-20'],
+    ['2026-06-30', '2026-07-20'],
+  ]) {
+    const invalid = helpers.selectedRangeContext(etf, start, end);
+    assert.equal(invalid.status, 'invalid');
+    assert.equal(invalid.snapshot, null);
+  }
+});
+
 test('chart readout does not carry a holding value across a missing observation', () => {
   const helpers = dashboardHelpers();
   const points = [
@@ -137,7 +254,126 @@ test('chart readout does not carry a holding value across a missing observation'
   assert.equal(helpers.chartPointAtDate(points, '2026-07-15'), null);
 });
 
+test('control registry distinguishes display dates from the result cutoff selector', () => {
+  const context = vm.createContext({
+    AbortController,
+    URL,
+    clearTimeout,
+    console,
+    setTimeout,
+  });
+  vm.runInContext(platformSource, context, {
+    filename: 'shared-platform/dist/index.js',
+  });
+  const controls = new Map(
+    context.__ETF_SHARED_PLATFORM__.etfControlManifest.controls.map(
+      (control) => [control.id, control.controlKind],
+    ),
+  );
+  assert.equal(controls.get('chart_observation_date'), 'display');
+  assert.equal(controls.get('range_start'), 'display');
+  assert.equal(controls.get('range_preset'), 'display');
+  assert.equal(controls.get('range_end'), 'result_selector');
+});
+
 test('theme storage uses the shared key while retaining ETF migration', () => {
   assert.match(app, /const THEME_STORAGE_KEY = 'quant-research-theme'/);
   assert.match(app, /'etf-tracking-theme'/);
+});
+
+test('pinned platform seam loads before the app and exposes canonical token aliases', () => {
+  const platformScript = html.indexOf('shared-platform/dist/index.js?v=0.1.0');
+  const appScript = html.indexOf('assets/app.js?v=20260724-platform-compat');
+  assert.ok(platformScript > 0);
+  assert.ok(appScript > platformScript);
+  assert.match(
+    html,
+    /data-platform-version="quant-platform-frontend\/0\.1\.0"/,
+  );
+  for (const token of [
+    '--qr-bg',
+    '--qr-surface',
+    '--qr-text',
+    '--qr-primary',
+    '--qr-positive',
+    '--qr-warning',
+    '--qr-negative',
+    '--qr-chart-grid',
+  ]) {
+    assert.match(styles, new RegExp(token.replaceAll('-', '\\-')));
+  }
+});
+
+test('visible ETF controls cannot submit analysis or config runs', () => {
+  const context = vm.createContext({
+    AbortController,
+    URL,
+    clearTimeout,
+    console,
+    setTimeout,
+  });
+  vm.runInContext(platformSource, context, {
+    filename: 'shared-platform/dist/index.js',
+  });
+  const manifest = context.__ETF_SHARED_PLATFORM__.etfControlManifest;
+  assert.equal(
+    manifest.controls.filter((control) => control.controlKind === 'analysis')
+      .length,
+    0,
+  );
+  assert.deepEqual(
+    Array.from(
+      manifest.controls
+        .filter((control) => control.controlKind === 'operation')
+        .map((control) => control.id),
+    ),
+    ['owner_refresh_backfill'],
+  );
+  assert.doesNotMatch(app, /fetch\s*\(/);
+  assert.doesNotMatch(
+    `${app}\n${platformSource}`,
+    /\/v1\/projects\/[^/]+\/runs|\/v1\/runs\/|method:\s*['"]POST['"]/,
+  );
+});
+
+test('every static and generated interactive element is bound to the control registry', () => {
+  const context = vm.createContext({
+    AbortController,
+    URL,
+    clearTimeout,
+    console,
+    setTimeout,
+  });
+  vm.runInContext(platformSource, context, {
+    filename: 'shared-platform/dist/index.js',
+  });
+  const registered = new Set(
+    context.__ETF_SHARED_PLATFORM__.etfControlManifest.controls.map(
+      (control) => control.id,
+    ),
+  );
+  const interactivePattern = /<(?:a|button|input|select|summary)\b[^>]*>/g;
+  for (const [sourceName, markup] of [
+    ['index.html', html],
+    ['assets/app.js templates', app],
+  ]) {
+    const elements = [...markup.matchAll(interactivePattern)].map(
+      (match) => match[0],
+    );
+    assert.ok(elements.length > 0, `${sourceName} interactive elements missing`);
+    for (const element of elements) {
+      const controlId = /data-control-id="([^"]+)"/.exec(element)?.[1];
+      assert.ok(controlId, `${sourceName} control annotation missing: ${element}`);
+      assert.ok(
+        registered.has(controlId),
+        `${sourceName} uses unknown control id: ${controlId}`,
+      );
+    }
+  }
+  for (const id of ['manual-update-link', 'copy-update-command']) {
+    assert.match(
+      html,
+      new RegExp(`id="${id}"[^>]*data-control-id="owner_refresh_backfill"`),
+    );
+  }
 });

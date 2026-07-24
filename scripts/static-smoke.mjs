@@ -4,12 +4,13 @@ import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import vm from 'node:vm';
 
-for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'data/dashboard.json', 'data/summary.json', 'data/history.json', 'data/status.json', 'data/automation-status.json']) {
+for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'shared-platform/dist/index.js', 'data/dashboard.json', 'data/summary.json', 'data/history.json', 'data/status.json', 'data/automation-status.json']) {
   if (!existsSync(file)) throw new Error(`${file} missing`);
 }
 if (!existsSync('data/history')) throw new Error('data/history directory missing');
 
 const source = readFileSync('assets/app.js', 'utf8');
+const platformSource = readFileSync('shared-platform/dist/index.js', 'utf8');
 const styles = readFileSync('assets/styles.css', 'utf8');
 const htmlSource = readFileSync('index.html', 'utf8');
 if (/class="chart-legend"|renderChartLegend/.test(source)) {
@@ -18,18 +19,53 @@ if (/class="chart-legend"|renderChartLegend/.test(source)) {
 if (!/\.chart-summary-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax\(0,\s*1fr\)\)/s.test(styles)) {
   throw new Error('weight chart summary should use a five-column desktop grid for 1-5 / 6-10 rows');
 }
-const context = vm.createContext({ console });
+const context = vm.createContext({
+  AbortController,
+  URL,
+  clearTimeout,
+  console,
+  setTimeout,
+});
+vm.runInContext(platformSource, context, {
+  filename: 'shared-platform/dist/index.js',
+});
 vm.runInContext(source, context, { filename: 'assets/app.js' });
 const api = context.__ETF_TRACKING_TESTS__;
+const platformApi = context.__ETF_SHARED_PLATFORM__;
 if (!api) throw new Error('ETF tracking test API missing');
+if (!platformApi) throw new Error('ETF shared-platform API missing');
+platformApi.assertControlManifest();
+if (platformApi.etfControlManifest.controls.some((control) => control.controlKind === 'analysis')) {
+  throw new Error('ETF display controls must not expose an analysis run');
+}
+if (/fetch\s*\(/.test(source) || /\/v1\/projects\/[^/]+\/runs|\/v1\/runs\//.test(`${source}\n${platformSource}`)) {
+  throw new Error('ETF app must not contain analysis/config run transport');
+}
 if (!htmlSource.includes('id="chart-date"') || !htmlSource.includes('id="chart-selection-summary"')) {
   throw new Error('common-design chart observation controls missing');
 }
 for (const text of [
   'Python이 생성한 편입·편출 및 잔차 신호를 그대로 표시합니다.',
   '표시 설정은 저장된 분석 결과를 다시 계산하지 않습니다.',
+  '선택 ETF의 최신 구성, 비중 변화와 가격으로 설명되지 않는 관찰 신호를 먼저 보여줍니다.',
+  '종목과 날짜를 선택해 정확한 비중을 확인합니다.',
+  '← → 날짜 이동',
+  '조회 기간을 바꿉니다.',
 ]) {
   if (htmlSource.includes(text)) throw new Error(`redundant implementation copy should not be public: ${text}`);
+}
+if (!/id="weight-chart"[^>]*aria-describedby="weight-chart-help"[^>]*aria-keyshortcuts="ArrowLeft ArrowRight Home End"/.test(htmlSource)) {
+  throw new Error('weight chart keyboard contract should be exposed without visible mechanics copy');
+}
+if (!/id="weight-chart-help" class="sr-only"/.test(htmlSource)) {
+  throw new Error('weight chart interaction help should remain available to assistive technology');
+}
+for (const behavior of [
+  /svg\.addEventListener\('pointermove'/,
+  /svg\.addEventListener\('click'/,
+  /target\.onkeydown = \(event\) =>/,
+]) {
+  if (!behavior.test(source)) throw new Error(`weight chart interaction contract missing: ${behavior}`);
 }
 if (source.includes('chart-active-readout') || source.includes('renderSeriesValueLabels')) {
   throw new Error('chart values should stay outside the plot instead of using overlay or all-point labels');
@@ -77,6 +113,15 @@ for (const internalKey of ['priceDiagnostics', 'priceMeta', 'sourceFields']) {
 const historyManifest = JSON.parse(historyRaw);
 if (Object.hasOwn(historyManifest, 'diagnostics')) throw new Error('public history manifest should not include run diagnostics');
 if (!Array.isArray(historyManifest.etfs)) throw new Error('history.json should be a manifest, not the full monolithic history map');
+const adaptedStatic = platformApi.adaptEtfStaticResultV1({
+  dashboard: JSON.parse(dashboardRaw),
+  status: JSON.parse(readFileSync('data/status.json', 'utf8')),
+  historyManifest,
+  automation: JSON.parse(readFileSync('data/automation-status.json', 'utf8')),
+});
+if (adaptedStatic.data.dashboard.generatedAt !== adaptedStatic.identity.generatedAt) {
+  throw new Error('static adapter identity should bind the dashboard snapshot');
+}
 const parsed = api.parseDashboard(JSON.parse(dashboardRaw));
 for (const etf of parsed.etfs) {
   if (!etf.historyUrl?.startsWith('data/history/')) throw new Error(`${etf.id} missing per-ETF historyUrl`);
@@ -316,6 +361,9 @@ try {
     fetch(`http://127.0.0.1:${port}/assets/app.js`).then((response) => response.text()),
     fetch(`http://127.0.0.1:${port}/data/dashboard.json`).then((response) => response.json()),
   ]);
+  const platform = await fetch(
+    `http://127.0.0.1:${port}/shared-platform/dist/index.js`,
+  ).then((response) => response.text());
   const firstHistoryUrl = data.etfs?.[0]?.historyUrl;
   const firstHistory = firstHistoryUrl ? await fetch(`http://127.0.0.1:${port}/${firstHistoryUrl}`).then((response) => response.json()) : null;
   if (!html.includes('ETF TOP10 투자 비중 추적')) throw new Error('index hero missing');
@@ -324,6 +372,8 @@ try {
   if (!html.includes('업데이트 실행')) throw new Error('manual update section missing');
   if (!html.includes('수동 업데이트 열기')) throw new Error('manual update CTA missing');
   if (!html.includes('https://sonchanggi.github.io/quant-dashboard/')) throw new Error('quant dashboard return link missing');
+  if (html.indexOf('shared-platform/dist/index.js') > html.indexOf('assets/app.js')) throw new Error('shared platform must load before app');
+  if (!platform.includes('etf-static-result/v1')) throw new Error('shared platform contract missing');
   if (!app.includes('buildWeightSeries')) throw new Error('chart series builder missing');
   if (!app.includes('buildSeriesColorMap')) throw new Error('chart color collision guard missing');
   if (!app.includes('buildNiceTicks')) throw new Error('nice axis tick builder missing');

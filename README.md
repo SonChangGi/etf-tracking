@@ -22,6 +22,8 @@
 - 이미 저장된 usable 스냅샷은 재요청하지 않고 없는 날짜만 채우는 missing-only 업데이트
 - 공개 페이지의 수동 업데이트 버튼으로 GitHub Actions `workflow_dispatch` 실행 화면 연결
 - GitHub Pages는 `main` 브랜치 루트의 정적 파일을 배포
+- 공통 플랫폼 `0.1.0` 호환 경계에서 11개 메뉴·디자인 토큰·표시 제어 계약을 검증
+- 공개 화면은 같은 출처의 검증된 정적 JSON만 `GET`하며 분석 실행 API를 호출하지 않음
 
 ## 로컬 실행
 
@@ -55,7 +57,21 @@ python3 scripts/update_data.py --output-dir data --backfill-all
 npm test
 ```
 
-검증은 Python/Node 내장 기능만 사용합니다. 새 런타임 의존성을 추가하지 않습니다.
+검증은 Python/Node 내장 기능만 사용합니다. 새 런타임 의존성을 추가하지
+않습니다. Python 47개 테스트, UI/계약 테스트, 공통 플랫폼 snapshot
+fingerprint, 독립 정적 빌드, 모든 JSON의 source/dist SHA-256 byte parity를
+한 번에 확인합니다.
+
+독립 배포 산출물만 만들려면 다음 명령을 사용합니다.
+
+```bash
+npm run build
+# dist/
+```
+
+공통 프런트엔드 경계와 동기화 절차는
+[`docs/shared-frontend-integration.md`](docs/shared-frontend-integration.md)에
+정리되어 있습니다.
 
 ## 데이터/해석 주의
 
@@ -83,3 +99,10 @@ npm test
 ## 프로젝트 경계
 
 이 저장소는 ETF Tracking 전용입니다. 통합 허브 연결을 위해서만 별도 `quant-dashboard` 작업트리의 허용된 파일을 수정하며, 다른 프로젝트의 코드나 산출물은 수정하지 않습니다.
+
+화면의 ETF·날짜·기간 선택은 저장 결과 선택기이고, 차트 강조·표 필터·
+정렬·테마는 표시 설정입니다. 소유자 refresh/backfill만 인증이 필요한
+GitHub Actions operation이며 공개 화면에는 Python 분석 input이나
+FastAPI run submission이 없습니다. 대용량 ETF 히스토리는 계속
+`data/history/*.json` 정적 파일로 유지하고 DB나 JavaScript bundle에
+복제하지 않습니다.

@@ -53,66 +53,24 @@
     chartRuntime: null,
   };
 
-  const FALLBACK_DASHBOARD = {
-    schemaVersion: 'fallback',
+  const UNAVAILABLE_DASHBOARD = Object.freeze({
+    schemaVersion: 'unavailable',
     generatedAt: '',
-    disclaimer: 'Fallback snapshot; public JSON could not be loaded.',
-    historyPolicy: {
-      scheduledLookbackDays: 10,
-      startDateExplanation: '공개 JSON을 불러오지 못해 fallback 화면을 표시 중입니다.',
-    },
+    disclaimer: '',
+    historyPolicy: {},
     manualUpdatePolicy: {
       workflowUrl: WORKFLOW_URL,
       cliCommand: MANUAL_UPDATE_COMMAND,
       defaultMode: 'missing_only',
     },
-    etfs: [
-      {
-        id: 'time-nasdaq100-active',
-        name: 'TIME 미국나스닥100액티브',
-        shortName: 'TIME 나스닥100',
-        code: '426030',
-        provider: 'TIME ETF',
-        sourceUrl: 'https://timeetf.co.kr/m11_view.php?idx=2&cate=001',
-        latest: null,
-        history: [],
-        historyUrl: 'data/history/time-nasdaq100-active.json',
-        signals: [],
-        metrics: { top10Count: 0, signalCount: 0, returnCoverageStatus: 'fallback' },
-      },
-      {
-        id: 'time-global-ai-active',
-        name: 'TIME 글로벌AI인공지능액티브',
-        shortName: 'TIME 글로벌AI',
-        code: '456600',
-        provider: 'TIME ETF',
-        sourceUrl: 'https://timeetf.co.kr/m11_view.php?idx=6&cate=001',
-        latest: null,
-        history: [],
-        historyUrl: 'data/history/time-global-ai-active.json',
-        signals: [],
-        metrics: { top10Count: 0, signalCount: 0, returnCoverageStatus: 'fallback' },
-      },
-      {
-        id: 'koact-nasdaq-growth-active',
-        name: 'KoAct 미국나스닥성장기업액티브',
-        shortName: 'KoAct 나스닥성장',
-        code: '2ETFQ1',
-        provider: '삼성액티브자산운용',
-        sourceUrl: 'https://www.samsungactive.co.kr/etf/view.do?id=2ETFQ1',
-        latest: null,
-        history: [],
-        historyUrl: 'data/history/koact-nasdaq-growth-active.json',
-        signals: [],
-        metrics: { top10Count: 0, signalCount: 0, returnCoverageStatus: 'fallback' },
-      },
-    ],
+    etfs: [],
     signals: [],
-  };
+  });
 
   if (typeof document !== 'undefined') {
     document.addEventListener('DOMContentLoaded', () => {
       bindThemeToggle();
+      verifySharedNavigation();
       wireControls();
       loadAndRender();
     });
@@ -200,46 +158,73 @@
   async function loadAndRender() {
     const target = $('#data-status');
     try {
-      const [dashboardResult, statusResult, automationResult] = await Promise.all([
-        getJsonBestEffort(DATA_URL),
-        getJsonBestEffort(STATUS_URL),
-        getJsonBestEffort(AUTOMATION_STATUS_URL),
-      ]);
-      const dashboard = parseDashboard(dashboardResult.ok ? dashboardResult.data : FALLBACK_DASHBOARD);
-      dashboard.statusPayload = statusResult.ok ? statusResult.data : null;
-      dashboard.automationStatusPayload = automationResult.ok ? normalizeAutomationStatus(automationResult.data) : null;
-      dashboard.loadMode = dashboardResult.ok ? 'live' : 'fallback';
-      dashboard.loadError = dashboardResult.ok ? '' : dashboardResult.error;
+      const platform = sharedPlatform();
+      const snapshot = await platform.loadEtfStaticSnapshotV1({
+        baseUrl: document.baseURI,
+      });
+      const dashboard = parseDashboard(snapshot.data.dashboard);
+      dashboard.statusPayload = snapshot.data.status;
+      dashboard.automationStatusPayload = normalizeAutomationStatus(snapshot.data.automation);
+      dashboard.platformIdentity = snapshot.identity;
+      dashboard.loadMode = 'verified_static';
+      dashboard.loadError = '';
       state.dashboard = dashboard;
       initializeSelection(dashboard);
       renderAll();
       ensureSelectedEtfHistory({ forceDateSync: true, rerender: true });
       setupSignalTableLazyLoad();
     } catch (error) {
-      state.dashboard = parseDashboard(FALLBACK_DASHBOARD);
-      state.dashboard.loadMode = 'fallback';
+      state.dashboard = parseDashboard(UNAVAILABLE_DASHBOARD);
+      state.dashboard.loadMode = 'unavailable';
       state.dashboard.loadError = error instanceof Error ? error.message : String(error);
       initializeSelection(state.dashboard);
       renderAll();
-      ensureSelectedEtfHistory({ forceDateSync: true, rerender: true });
+      renderUnavailableState(state.dashboard.loadError);
     }
     if (target && state.dashboard?.loadError) {
-      target.innerHTML = `<span class="error-text">공개 JSON fallback 표시 중: ${escapeHtml(state.dashboard.loadError)}</span>`;
+      target.innerHTML = `<span class="error-text">검증된 정적 결과를 불러오지 못했습니다: ${escapeHtml(state.dashboard.loadError)}</span>`;
     }
   }
 
-  async function getJsonBestEffort(url, timeoutMs = 8500) {
-    const controller = new AbortController();
-    const timeout = window.setTimeout(() => controller.abort(), timeoutMs);
-    try {
-      const response = await fetch(url, { signal: controller.signal, cache: 'no-store' });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return { ok: true, data: await response.json(), url };
-    } catch (error) {
-      return { ok: false, error: error instanceof Error ? error.message : String(error), url };
-    } finally {
-      window.clearTimeout(timeout);
+  function sharedPlatform() {
+    const platform = globalThis.__ETF_SHARED_PLATFORM__;
+    if (
+      !platform ||
+      platform.SHARED_VERSION !== 'quant-platform-frontend/0.1.0' ||
+      platform.STATIC_RESULT_CONTRACT !== 'etf-static-result/v1'
+    ) {
+      throw new Error('ETF shared-platform compatibility seam을 확인할 수 없습니다.');
     }
+    platform.assertControlManifest();
+    return platform;
+  }
+
+  function verifySharedNavigation() {
+    try {
+      const platform = sharedPlatform();
+      platform.assertCanonicalNavigation($('.site-nav-links'), 'etf');
+      platform.assertControlAnnotations(document);
+    } catch (error) {
+      const target = $('#data-status');
+      if (target) {
+        target.textContent = error instanceof Error ? error.message : String(error);
+        target.classList.add('error-text');
+      }
+    }
+  }
+
+  function renderUnavailableState(message) {
+    const copy = `검증된 ETF 결과를 표시할 수 없습니다. ${stringOr(message, '')}`;
+    const chart = $('#weight-chart');
+    const signals = $('#signal-grid');
+    const signalTables = $('#etf-signal-tables');
+    const top10 = $('#top10-rows');
+    const decomposition = $('#decomposition-rows');
+    if (chart) chart.innerHTML = `<div class="skeleton-line error-text">${escapeHtml(copy)}</div>`;
+    if (signals) signals.innerHTML = '<div class="skeleton-line">검증된 관찰 신호 없음</div>';
+    if (signalTables) signalTables.innerHTML = '<div class="skeleton-line">검증된 신호 표 없음</div>';
+    if (top10) top10.innerHTML = '<tr><td colspan="8">검증된 TOP10 결과 없음</td></tr>';
+    if (decomposition) decomposition.innerHTML = '<tr><td colspan="8">검증된 분해 결과 없음</td></tr>';
   }
 
   async function ensureSelectedEtfHistory(options = {}) {
@@ -252,20 +237,26 @@
     const etf = state.dashboard?.etfs.find((item) => item.id === etfId);
     if (!etf || etf.historyLoaded || etf.historyLoading) return etf || null;
     const url = safeDataPath(etf.historyUrl);
-    if (!url) {
+    if (!url || !state.dashboard?.platformIdentity) {
       etf.historyError = '히스토리 파일 경로가 없습니다.';
       return etf;
     }
     etf.historyLoading = true;
     if (options.rerender) renderSelectionDependentViews();
-    const result = await getJsonBestEffort(url, 20000);
-    etf.historyLoading = false;
-    if (result.ok) {
+    try {
+      const result = await sharedPlatform().loadEtfHistoryV1(
+        state.dashboard.platformIdentity,
+        etf.id,
+        { baseUrl: document.baseURI, timeoutMs: 30_000 },
+      );
       applyHistoryPayload(etf, result.data);
       etf.historyError = '';
       if (options.forceDateSync) syncDateInputsForSelected(true);
-    } else {
-      etf.historyError = result.error || '히스토리 파일 로드 실패';
+    } catch (error) {
+      etf.historyError =
+        error instanceof Error ? error.message : '히스토리 파일 로드 실패';
+    } finally {
+      etf.historyLoading = false;
     }
     if (options.rerender) renderAll();
     return etf;
@@ -575,6 +566,110 @@
     return prior || available[0];
   }
 
+  function nearestChartDateByTime(dates, targetTime) {
+    const available = asArray(dates)
+      .filter((date) => Number.isFinite(Date.parse(date)))
+      .slice()
+      .sort();
+    if (!available.length) return '';
+    if (!Number.isFinite(targetTime)) return available.at(-1);
+    let nearest = available[0];
+    let nearestDistance = Math.abs(Date.parse(nearest) - targetTime);
+    available.slice(1).forEach((date) => {
+      const distance = Math.abs(Date.parse(date) - targetTime);
+      if (distance < nearestDistance) {
+        nearest = date;
+        nearestDistance = distance;
+      }
+    });
+    return nearest;
+  }
+
+  function chartDateForSvgX(dates, svgX, minDate, maxDate, plotLeft, plotWidth) {
+    const ratio = Math.max(0, Math.min(1, (svgX - plotLeft) / Math.max(plotWidth, 1)));
+    const targetTime = minDate + ratio * Math.max(maxDate - minDate, 0);
+    return nearestChartDateByTime(dates, targetTime);
+  }
+
+  function svgPointFromClient(svg, clientX, clientY, fallbackWidth, fallbackHeight) {
+    if (svg?.createSVGPoint && svg?.getScreenCTM) {
+      const matrix = svg.getScreenCTM();
+      if (matrix?.inverse) {
+        const point = svg.createSVGPoint();
+        point.x = clientX;
+        point.y = clientY;
+        return point.matrixTransform(matrix.inverse());
+      }
+    }
+    const rect = svg?.getBoundingClientRect?.() || { left: 0, top: 0, width: fallbackWidth, height: fallbackHeight };
+    const viewBox = svg?.viewBox?.baseVal;
+    const viewWidth = numberOr(viewBox?.width, fallbackWidth);
+    const viewHeight = numberOr(viewBox?.height, fallbackHeight);
+    const viewX = numberOr(viewBox?.x, 0);
+    const viewY = numberOr(viewBox?.y, 0);
+    const scale = Math.min(
+      rect.width > 0 ? rect.width / Math.max(viewWidth, 1) : 1,
+      rect.height > 0 ? rect.height / Math.max(viewHeight, 1) : 1,
+    );
+    const renderedWidth = viewWidth * scale;
+    const renderedHeight = viewHeight * scale;
+    return {
+      x: viewX + (clientX - rect.left - (rect.width - renderedWidth) / 2) / Math.max(scale, Number.EPSILON),
+      y: viewY + (clientY - rect.top - (rect.height - renderedHeight) / 2) / Math.max(scale, Number.EPSILON),
+    };
+  }
+
+  function isIsoDate(value) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(stringOr(value, ''))) return false;
+    const time = Date.parse(`${value}T00:00:00Z`);
+    return Number.isFinite(time) && new Date(time).toISOString().slice(0, 10) === value;
+  }
+
+  function selectedRangeContext(etf, startDate = state.startDate, endDate = state.endDate) {
+    if (!etf) return { status: 'invalid', error: '선택한 ETF를 확인할 수 없습니다.', history: [], snapshot: null };
+    if (etf.historyError) {
+      return { status: 'error', error: `히스토리 로드 실패: ${etf.historyError}`, history: [], snapshot: null };
+    }
+    if (!etf.historyLoaded) {
+      return { status: 'loading', error: '', history: [], snapshot: null };
+    }
+    if (!isIsoDate(startDate) || !isIsoDate(endDate)) {
+      return { status: 'invalid', error: '시작일과 종료일을 모두 선택해 주세요.', history: [], snapshot: null };
+    }
+    if (startDate > endDate) {
+      return { status: 'invalid', error: '시작일은 종료일보다 늦을 수 없습니다.', history: [], snapshot: null };
+    }
+    const availableStart = etf.availableStartDate || etf.history[0]?.date || '';
+    const availableEnd = etf.availableEndDate || etf.history.at(-1)?.date || '';
+    if ((availableStart && startDate < availableStart) || (availableEnd && endDate > availableEnd)) {
+      return {
+        status: 'invalid',
+        error: `저장 범위 ${availableStart || '-'} → ${availableEnd || '-'} 안에서 선택해 주세요.`,
+        history: [],
+        snapshot: null,
+      };
+    }
+    const history = filterHistory(etf.history, startDate, endDate);
+    if (!history.length) {
+      return {
+        status: 'invalid',
+        error: '선택한 기간에 저장된 스냅샷이 없습니다.',
+        history: [],
+        snapshot: null,
+      };
+    }
+    return {
+      status: 'ready',
+      error: '',
+      history,
+      snapshot: history.at(-1),
+      requestedStart: startDate,
+      requestedEnd: endDate,
+      appliedStart: history[0]?.date || '',
+      appliedEnd: history.at(-1)?.date || '',
+    };
+  }
+
   function chartPointAtDate(points, date) {
     return asArray(points).find((point) => point.date === date) || null;
   }
@@ -721,34 +816,52 @@
   }
 
   function renderSelectionDependentViews() {
-    renderOverview();
-    renderSelectedEtf();
-    renderSignals();
+    const etf = selectedEtf();
+    const range = selectedRangeContext(etf);
+    syncRangeValidationUi(range);
+    renderOverview(range);
+    renderSelectedEtf(range);
+    renderSignals(range);
     renderSignalTables();
   }
 
-  function renderOverview() {
+  function syncRangeValidationUi(range) {
+    const start = $('#start-date');
+    const end = $('#end-date');
+    const message = range.status === 'invalid' ? range.error : '';
+    [start, end].forEach((input) => {
+      if (!input) return;
+      input.setCustomValidity?.(message);
+      if (message) input.setAttribute('aria-invalid', 'true');
+      else input.removeAttribute('aria-invalid');
+    });
+    const controlSummary = $('#control-summary-text');
+    controlSummary?.classList.toggle('error-text', Boolean(message));
+  }
+
+  function renderOverview(range = selectedRangeContext(selectedEtf())) {
     const dashboard = state.dashboard;
     if (!dashboard) return;
     const etf = selectedEtf();
-    const latest = etf?.latest || {};
-    const top10 = asArray(latest.top10).slice(0, 10);
+    const snapshot = range.snapshot || {};
+    const top10 = asArray(snapshot.top10).slice(0, 10);
     const leader = top10[0] || {};
     const top10Weight = top10.reduce((sum, row) => sum + numberOr(row.weightPercent, 0), 0);
-    const signals = asArray(latest.signals);
-    const analysis = latest.analysisSummary || {};
-    const sourceWarning = latest.sourceStatus && latest.sourceStatus !== 'live';
+    const signals = asArray(snapshot.signals);
+    const analysis = snapshot.analysisSummary || {};
+    const sourceWarning = snapshot.sourceStatus && snapshot.sourceStatus !== 'live';
+    const unavailableDetail = range.status === 'loading' ? '히스토리 불러오는 중' : range.error;
     renderMetricCards('#overview-metrics', [
       ['선택 ETF', `${etf?.shortName || etf?.name || '-'}${etf?.code ? ` · ${etf.code}` : ''}`, '', true],
-      ['최근 기준일', formatMaybeDate(latest.date), ''],
-      ['1위 종목', `${leader.ticker || leader.name || '-'}${leader.weightPercent === null || leader.weightPercent === undefined ? '' : ` · ${formatWeight(leader.weightPercent)}`}`, ''],
-      ['TOP10 합계', formatWeight(top10Weight), ''],
-      ['가격 커버리지', formatCoverage(analysis.returnCoverage), sourceWarning ? '소스 확인 필요' : ''],
+      ['적용 기준일', range.status === 'ready' ? formatMaybeDate(snapshot.date) : '-', unavailableDetail],
+      ['1위 종목', range.status === 'ready' ? `${leader.ticker || leader.name || '-'}${leader.weightPercent === null || leader.weightPercent === undefined ? '' : ` · ${formatWeight(leader.weightPercent)}`}` : '-', ''],
+      ['TOP10 합계', range.status === 'ready' ? formatWeight(top10Weight) : '-', ''],
+      ['가격 커버리지', range.status === 'ready' ? formatCoverage(analysis.returnCoverage) : '-', range.status === 'ready' && sourceWarning ? '소스 확인 필요' : ''],
     ]);
     const status = $('#data-status');
     if (status) {
       const warnings = [];
-      if (dashboard.loadMode === 'fallback') warnings.push('일부 데이터를 불러오지 못했습니다');
+      if (dashboard.loadMode !== 'verified_static') warnings.push('검증된 결과 없음');
       if (dashboard.schemaWarning) warnings.push(dashboard.schemaWarning);
       const automation = formatAutomationStatus(dashboard.automationStatusPayload);
       if (automation !== '정상') warnings.push(`자동화 ${automation}`);
@@ -760,10 +873,17 @@
     const heroGenerated = $('#hero-generated-at');
     const controlSummary = $('#control-summary-text');
     if (heroEtf) heroEtf.textContent = etf?.shortName || etf?.name || '—';
-    if (heroDate) heroDate.textContent = formatMaybeDate(latest.date);
-    if (heroSignals) heroSignals.textContent = `${signals.length.toLocaleString('ko-KR')}건`;
+    if (heroDate) heroDate.textContent = range.status === 'ready' ? formatMaybeDate(snapshot.date) : '—';
+    if (heroSignals) heroSignals.textContent = range.status === 'ready' ? `${signals.length.toLocaleString('ko-KR')}건` : '—';
     if (heroGenerated) heroGenerated.textContent = formatFreshness(dashboard.generatedAt);
-    if (controlSummary) controlSummary.textContent = `${etf?.shortName || etf?.name || 'ETF'} · ${formatMaybeDate(state.startDate)} → ${formatMaybeDate(state.endDate)}`;
+    if (controlSummary) {
+      if (range.status === 'ready') {
+        const applied = range.appliedEnd !== range.requestedEnd ? ` · 적용 기준 ${formatMaybeDate(range.appliedEnd)}` : '';
+        controlSummary.textContent = `${etf?.shortName || etf?.name || 'ETF'} · ${formatMaybeDate(range.requestedStart)} → ${formatMaybeDate(range.requestedEnd)}${applied}`;
+      } else {
+        controlSummary.textContent = range.status === 'loading' ? '히스토리를 불러오는 중입니다.' : range.error;
+      }
+    }
   }
 
   function renderManualUpdate() {
@@ -799,23 +919,28 @@
     return state.dashboard?.etfs.find((etf) => etf.id === state.selectedEtfId) || state.dashboard?.etfs[0] || null;
   }
 
-  function renderSelectedEtf() {
+  function renderSelectedEtf(range = selectedRangeContext(selectedEtf())) {
     const etf = selectedEtf();
     if (!etf) return;
-    const filtered = filterHistory(etf.history, state.startDate, state.endDate);
-    const latest = filtered.at(-1) || etf.latest;
-    if (etf.historyLoading && !filtered.length) {
+    if (range.status === 'loading') {
       const target = $('#weight-chart');
       if (target) target.innerHTML = '<div class="skeleton-line">선택 ETF 상세 히스토리를 불러오는 중입니다…</div>';
-    } else if (etf.historyError && !filtered.length) {
+      renderTop10(etf, null);
+      renderDecomposition(null);
+      renderSource(etf, null, [], range);
+    } else if (range.status !== 'ready') {
       const target = $('#weight-chart');
-      if (target) target.innerHTML = `<div class="skeleton-line error-text">상세 히스토리 로드 실패: ${escapeHtml(etf.historyError)}</div>`;
+      state.chartRuntime = null;
+      if (target) target.innerHTML = `<div class="skeleton-line error-text">${escapeHtml(range.error)}</div>`;
+      renderTop10(etf, null);
+      renderDecomposition(null);
+      renderSource(etf, null, [], range);
     } else {
-      renderWeightChart('#weight-chart', filtered, latest?.top10 || []);
+      renderWeightChart('#weight-chart', range.history, range.snapshot?.top10 || []);
+      renderTop10(etf, range.snapshot);
+      renderDecomposition(range.snapshot);
+      renderSource(etf, range.snapshot, range.history, range);
     }
-    renderTop10(etf, latest);
-    renderDecomposition(latest);
-    renderSource(etf, latest, filtered);
     const provider = $('#provider-link');
     if (provider) provider.href = safeHttpUrl(etf.sourceUrl, '#');
   }
@@ -888,7 +1013,7 @@
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
     const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
-    const summaryText = `${firstDate}부터 ${lastDate}까지 최신 TOP10 ${series.length}개 종목 비중 추이. ${axisNote}. 차트 끝 라벨은 최신 순위와 티커이며, 아래 종목 버튼에서 계열을 선택하면 날짜별 비중과 기간 내 신호를 확인할 수 있습니다.`;
+    const summaryText = `${firstDate} → ${lastDate} · TOP10 ${series.length}종목 · ${axisNote}`;
     const seriesKeys = series.map((item) => item.key);
     if (!seriesKeys.includes(state.chartSelection.pinnedSeriesKey)) state.chartSelection.pinnedSeriesKey = seriesKeys[0];
     state.chartSelection.previewSeriesKey = seriesKeys.includes(state.chartSelection.previewSeriesKey) ? state.chartSelection.previewSeriesKey : '';
@@ -1007,8 +1132,19 @@
 
     function ensureVisible(date) {
       if (!scrollRoot || !svg || scrollRoot.scrollWidth <= scrollRoot.clientWidth) return;
-      const renderedWidth = svg.getBoundingClientRect().width || width;
-      const targetX = (x(date) / width) * renderedWidth;
+      let targetX;
+      const matrix = svg.getScreenCTM?.();
+      if (svg.createSVGPoint && matrix) {
+        const point = svg.createSVGPoint();
+        point.x = x(date);
+        point.y = margin.top;
+        const screenPoint = point.matrixTransform(matrix);
+        const scrollRect = scrollRoot.getBoundingClientRect();
+        targetX = screenPoint.x - scrollRect.left + scrollRoot.scrollLeft;
+      } else {
+        const renderedWidth = svg.getBoundingClientRect().width || width;
+        targetX = (x(date) / width) * renderedWidth;
+      }
       const padding = Math.max(56, margin.right);
       if (targetX >= scrollRoot.scrollLeft + padding && targetX <= scrollRoot.scrollLeft + scrollRoot.clientWidth - padding) return;
       scrollRoot.scrollLeft = Math.max(0, targetX - scrollRoot.clientWidth + padding);
@@ -1036,21 +1172,21 @@
       button.addEventListener('click', () => pinSeries(key));
     });
     if (svg) {
+      const dateFromPointerEvent = (event) => {
+        const point = svgPointFromClient(svg, event.clientX, event.clientY, width, height);
+        return chartDateForSvgX(observationDates, point.x, minDate, maxDate, margin.left, innerWidth);
+      };
       svg.addEventListener('pointermove', (event) => {
-        const rect = svg.getBoundingClientRect();
-        const svgX = rect.width > 0 ? (event.clientX - rect.left) * (width / rect.width) : margin.left;
-        const ratio = Math.max(0, Math.min(1, (svgX - margin.left) / innerWidth));
-        const dateIndex = Math.round(ratio * Math.max(0, observationDates.length - 1));
-        state.chartSelection.previewDate = observationDates[dateIndex] || '';
+        state.chartSelection.previewDate = dateFromPointerEvent(event);
         updateInteraction();
       });
       svg.addEventListener('pointerleave', () => {
         state.chartSelection.previewDate = '';
         updateInteraction();
       });
-      svg.addEventListener('click', () => {
-        const preview = state.chartSelection.previewDate;
-        if (preview) commitChartDate(preview);
+      svg.addEventListener('click', (event) => {
+        const clickedDate = dateFromPointerEvent(event);
+        if (clickedDate) commitChartDate(clickedDate);
       });
     }
     target.onkeydown = (event) => {
@@ -1110,7 +1246,7 @@
       const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
       const label = item.rank ? `${item.rank}. ${item.label}` : item.label;
       const delta = item.periodDelta === null ? '-' : formatPercentPoint(item.periodDelta);
-      return `<button type="button" class="chart-summary-item" data-series-key="${escapeAttribute(item.key)}" aria-pressed="false"><span class="legend-key" style="--legend-color:${color}"></span><strong>${escapeHtml(label)}</strong><em>${escapeHtml(formatWeight(item.latestWeight))}</em><small>기간 Δ ${escapeHtml(delta)} · 데이터 ${item.validPoints.length}/${item.points.length}일</small></button>`;
+      return `<button type="button" class="chart-summary-item" data-series-key="${escapeAttribute(item.key)}" data-control-id="chart_series_focus" aria-pressed="false"><span class="legend-key" style="--legend-color:${color}"></span><strong>${escapeHtml(label)}</strong><em>${escapeHtml(formatWeight(item.latestWeight))}</em><small>기간 Δ ${escapeHtml(delta)} · 데이터 ${item.validPoints.length}/${item.points.length}일</small></button>`;
     }).join('');
   }
 
@@ -1353,9 +1489,19 @@
     ], 8);
   }
 
-  function renderSource(etf, latest, filteredHistory) {
+  function renderSource(etf, latest, filteredHistory, range = selectedRangeContext(etf)) {
     const target = $('#source-list');
     if (!target) return;
+    if (range.status !== 'ready') {
+      const message = range.status === 'loading' ? '히스토리를 불러오는 중입니다.' : range.error;
+      target.innerHTML = `<div class="source-item"><strong>선택 기간</strong><span class="${range.status === 'loading' ? '' : 'warning'}">${escapeHtml(message)}</span></div>`;
+      const pill = $('#coverage-pill');
+      if (pill) {
+        pill.classList.toggle('warning', range.status !== 'loading');
+        pill.textContent = range.status === 'loading' ? '커버리지 확인 중' : '기간 확인 필요';
+      }
+      return;
+    }
     const summary = latest?.analysisSummary || {};
     const priceBasis = summary.priceBasis || {};
     const dateBasis = summary.dateBasis || {};
@@ -1381,11 +1527,16 @@
     }
   }
 
-  function renderSignals() {
+  function renderSignals(range = selectedRangeContext(selectedEtf())) {
     const target = $('#signal-grid');
     if (!target || !state.dashboard) return;
     const selected = selectedEtf();
-    const selectedSignals = asArray(selected?.latest?.signals).map((signal) => ({ ...signal, etfName: selected?.shortName || selected?.name || '' }));
+    if (range.status !== 'ready') {
+      const message = range.status === 'loading' ? '신호 스냅샷을 불러오는 중입니다.' : range.error;
+      target.innerHTML = `<div class="skeleton-line${range.status === 'loading' ? '' : ' error-text'}">${escapeHtml(message)}</div>`;
+      return;
+    }
+    const selectedSignals = asArray(range.snapshot?.signals).map((signal) => ({ ...signal, etfName: selected?.shortName || selected?.name || '' }));
     const signals = selectedSignals.slice(0, 3);
     if (!signals.length) {
       target.innerHTML = '<div class="skeleton-line">관찰 신호 없음</div>';
@@ -1407,6 +1558,11 @@
   function renderSignalTables() {
     const target = $('#etf-signal-tables');
     if (!target || !state.dashboard) return;
+    const range = selectedRangeContext(selectedEtf());
+    if (range.status === 'invalid' || range.status === 'error') {
+      target.innerHTML = `<div class="skeleton-line error-text">${escapeHtml(range.error)}</div>`;
+      return;
+    }
     const tableGroups = buildSignalTableGroups();
     if (!tableGroups.some((group) => group.rows.length)) {
       target.innerHTML = '<div class="skeleton-line">선택 기간에 표시할 TOP10 신호·비중 변화가 없습니다.</div>';
@@ -1464,11 +1620,11 @@
         <div class="signal-filter-grid">
           <label>
             <span>종목/티커</span>
-            <input type="search" value="${escapeAttribute(filter.query)}" placeholder="MU, SpaceX…" data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="query" autocomplete="off">
+            <input type="search" value="${escapeAttribute(filter.query)}" placeholder="MU, SpaceX…" data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="query" data-control-id="signal_query" autocomplete="off">
           </label>
           <label>
             <span>순위 조건</span>
-            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="rankScope">
+            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="rankScope" data-control-id="signal_rank_scope">
               ${selectOption('all', filter.rankScope, '전체')}
               ${selectOption('current_top10', filter.rankScope, '현재 TOP10')}
               ${selectOption('previous_top10', filter.rankScope, '전일 TOP10')}
@@ -1477,7 +1633,7 @@
           </label>
           <label>
             <span>변화 크기</span>
-            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="magnitude">
+            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="magnitude" data-control-id="signal_magnitude">
               ${selectOption('all', filter.magnitude, '전체')}
               ${selectOption('weight_025', filter.magnitude, `비중 |Δ| ≥ ${SIGNAL_TABLE_WEIGHT_THRESHOLD}pp`)}
               ${selectOption('residual_010', filter.magnitude, `잔차 |Δ| ≥ ${SIGNAL_TABLE_RESIDUAL_THRESHOLD}pp`)}
@@ -1485,7 +1641,7 @@
           </label>
           <label>
             <span>정렬</span>
-            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="sort">
+            <select data-etf-id="${escapeAttribute(etf.id)}" data-signal-filter="sort" data-control-id="signal_sort">
               ${selectOption('recent', filter.sort, '최신순')}
               ${selectOption('oldest', filter.sort, '오래된순')}
               ${selectOption('event', filter.sort, '이벤트 우선')}
@@ -1494,7 +1650,7 @@
               ${selectOption('name', filter.sort, '종목명순')}
             </select>
           </label>
-          <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-reset>필터 초기화</button>
+          <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-reset data-control-id="signal_filter_reset">필터 초기화</button>
         </div>
         <div class="signal-table-status">
           <span>필터 결과 <strong>${filteredRows.length.toLocaleString('ko-KR')}</strong> / 전체 <strong>${rows.length.toLocaleString('ko-KR')}</strong>건</span>
@@ -1518,8 +1674,8 @@
         </table>
       </div>
       <div class="signal-table-actions">
-        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-load-more ${hiddenRows ? '' : 'disabled'}>30개 더 보기</button>
-        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-show-all ${hiddenRows ? '' : 'disabled'}>필터 결과 전체 보기</button>
+        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-load-more data-control-id="signal_row_limit" ${hiddenRows ? '' : 'disabled'}>30개 더 보기</button>
+        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-signal-show-all data-control-id="signal_row_limit" ${hiddenRows ? '' : 'disabled'}>필터 결과 전체 보기</button>
         <span>${hiddenRows ? `${hiddenRows.toLocaleString('ko-KR')}건 더 있음` : '모든 필터 결과 표시 중'}</span>
       </div>
     `;
@@ -1567,7 +1723,7 @@
       </div>
       <div class="signal-table-toolbar">
         <div class="skeleton-line ${etf.historyError ? 'error-text' : ''}">${escapeHtml(message)}</div>
-        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-load-etf-history ${etf.historyLoading ? 'disabled' : ''}>상세 히스토리 불러오기</button>
+        <button type="button" class="ghost-button compact" data-etf-id="${escapeAttribute(etf.id)}" data-load-etf-history data-control-id="history_load" ${etf.historyLoading ? 'disabled' : ''}>상세 히스토리 불러오기</button>
       </div>
     `;
     return article;
@@ -1576,7 +1732,7 @@
   function signalBucketButton(etfId, filter, bucket, label, count) {
     const active = filter.bucket === bucket;
     return `
-      <button type="button" class="signal-filter-chip ${active ? 'active' : ''}" aria-pressed="${active ? 'true' : 'false'}" data-etf-id="${escapeAttribute(etfId)}" data-signal-bucket="${escapeAttribute(bucket)}">
+      <button type="button" class="signal-filter-chip ${active ? 'active' : ''}" aria-pressed="${active ? 'true' : 'false'}" data-etf-id="${escapeAttribute(etfId)}" data-signal-bucket="${escapeAttribute(bucket)}" data-control-id="signal_bucket">
         <span>${escapeHtml(label)}</span><strong>${numberOr(count, 0).toLocaleString('ko-KR')}</strong>
       </button>
     `;
@@ -2287,7 +2443,12 @@
       buildNiceTicks,
       buildDateTicks,
       nearestChartDate,
+      nearestChartDateByTime,
+      chartDateForSvgX,
+      svgPointFromClient,
       chartPointAtDate,
+      selectedRangeContext,
+      isIsoDate,
       formatAxisWeight,
       formatAxisDate,
       sortAttributionRows,
@@ -2318,7 +2479,8 @@
       formatAutomationStatus,
       formatSourceAvailability,
       historyLoadLabel,
-      FALLBACK_DASHBOARD,
+      UNAVAILABLE_DASHBOARD,
+      sharedPlatform,
       AUTOMATION_STATUS_URL,
       QUANT_DASHBOARD_URL,
       WORKFLOW_URL,

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "projectId": "etf-tracking",
+  "rootDir": ".",
+  "targets": [
+    {
+      "id": "rendered-shell",
+      "path": "index.html",
+      "mode": "rendered-html",
+      "extensions": [".html"]
+    },
+    {
+      "id": "dynamic-copy",
+      "path": "assets/app.js",
+      "mode": "source",
+      "extensions": [".js"]
+    }
+  ],
+  "excludePaths": ["node_modules", "dist", "coverage"],
+  "roleGates": [],
+  "minDuplicateLength": 28,
+  "retainedVisibleCopy": [],
+  "additionalBannedPatterns": [
+    {
+      "id": "etf-page-tour",
+      "description": "ETF 결과 구성을 예고하는 문구",
+      "pattern": "선택 ETF의 최신 구성|종목과 날짜를 선택해 정확한 비중을 확인합니다"
+    }
+  ]
+}
