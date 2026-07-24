@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ko" data-theme="light">
+<html lang="ko" data-theme="light" data-platform-version="quant-platform-frontend/0.1.0">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -25,28 +25,29 @@
       document.documentElement.dataset.theme = 'light';
     }
   </script>
-  <link rel="stylesheet" href="assets/styles.css?v=20260723-common-v1-2-preview" />
-  <script src="assets/app.js?v=20260723-common-v1-2-preview" defer></script>
+  <link rel="stylesheet" href="assets/styles.css?v=20260724-platform-compat" />
+  <script src="shared-platform/dist/index.js?v=0.1.0" defer></script>
+  <script src="assets/app.js?v=20260724-platform-compat" defer></script>
 </head>
 <body id="top">
-  <a class="skip-link" href="#main-content">본문으로 건너뛰기</a>
+  <a class="skip-link" href="#main-content" data-control-id="in_page_navigation">본문으로 건너뛰기</a>
 
   <nav class="site-nav" aria-label="연결 프로젝트 바로가기">
-    <a class="site-nav-brand" href="https://sonchanggi.github.io/quant-dashboard/" aria-label="Quant Research Hub로 이동">Quant Research Hub</a>
+    <a class="site-nav-brand" href="https://sonchanggi.github.io/quant-dashboard/" aria-label="Quant Research Hub로 이동" data-control-id="project_navigation">Quant Research Hub</a>
     <div class="site-nav-links" aria-label="프로젝트 목록">
-      <a href="https://sonchanggi.github.io/quant-dashboard/">Hub</a>
-      <a href="https://sonchanggi.github.io/fearNgreed/">Fear &amp; Greed</a>
-      <a href="https://sonchanggi.github.io/momentum-factor-lab/">Momentum</a>
-      <a href="https://sonchanggi.github.io/dram-price/">DRAM</a>
-      <a href="https://sonchanggi.github.io/best-factor/">Best Factor</a>
-      <a class="is-active" href="https://sonchanggi.github.io/etf-tracking/" aria-current="page">ETF</a>
-      <a href="https://sonchanggi.github.io/sox/">SOX</a>
-      <a href="https://sonchanggi.github.io/quant-dashboard/risk-score/">Risk Score</a>
-      <a href="https://sonchanggi.github.io/port/">Port</a>
-      <a href="https://sonchanggi.github.io/valuation/">Valuation</a>
-      <a href="https://sonchanggi.github.io/kelly/">Kelly</a>
+      <a href="https://sonchanggi.github.io/quant-dashboard/" data-control-id="project_navigation">Hub</a>
+      <a href="https://sonchanggi.github.io/fearNgreed/" data-control-id="project_navigation">Fear &amp; Greed</a>
+      <a href="https://sonchanggi.github.io/momentum-factor-lab/" data-control-id="project_navigation">Momentum</a>
+      <a href="https://sonchanggi.github.io/dram-price/" data-control-id="project_navigation">DRAM</a>
+      <a href="https://sonchanggi.github.io/best-factor/" data-control-id="project_navigation">Best Factor</a>
+      <a class="is-active" href="https://sonchanggi.github.io/etf-tracking/" aria-current="page" data-control-id="project_navigation">ETF</a>
+      <a href="https://sonchanggi.github.io/sox/" data-control-id="project_navigation">SOX</a>
+      <a href="https://sonchanggi.github.io/quant-dashboard/risk-score/" data-control-id="project_navigation">Risk Score</a>
+      <a href="https://sonchanggi.github.io/port/" data-control-id="project_navigation">Port</a>
+      <a href="https://sonchanggi.github.io/valuation/" data-control-id="project_navigation">Valuation</a>
+      <a href="https://sonchanggi.github.io/kelly/" data-control-id="project_navigation">Kelly</a>
     </div>
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드로 전환">
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드로 전환" data-control-id="theme">
       <span class="theme-toggle-icon" aria-hidden="true"></span>
       <span class="theme-toggle-text">다크 모드</span>
     </button>
@@ -56,10 +57,9 @@
     <div class="hero-main">
       <p class="eyebrow">ACTIVE ETF HOLDINGS</p>
       <h1 id="page-title">ETF TOP10 투자 비중 추적</h1>
-      <p class="hero-copy">선택 ETF의 최신 구성, 비중 변화와 가격으로 설명되지 않는 관찰 신호를 먼저 보여줍니다.</p>
       <div class="hero-actions">
-        <a class="primary-button" href="#primary-chart">비중 추이 보기</a>
-        <a class="secondary-button" href="#top10-title">최근 TOP10 보기</a>
+        <a class="primary-button" href="#primary-chart" data-control-id="in_page_navigation">비중 추이 보기</a>
+        <a class="secondary-button" href="#top10-title" data-control-id="in_page_navigation">최근 TOP10 보기</a>
       </div>
     </div>
     <aside class="hero-status" aria-label="현재 ETF 상태">
@@ -67,7 +67,7 @@
       <div class="hero-status-line hero-status-primary"><span>선택 ETF</span><strong id="hero-etf-name">불러오는 중</strong></div>
       <div class="hero-status-line"><span>데이터 기준</span><strong id="hero-data-date">—</strong></div>
       <div class="hero-status-line"><span>관찰 신호</span><strong id="hero-signal-count">—</strong></div>
-      <a class="status-details-link" href="#operations-detail">데이터 · 출처 · 운영 상세</a>
+      <a class="status-details-link" href="#operations-detail" data-control-id="in_page_navigation">데이터 · 출처 · 운영 상세</a>
     </aside>
   </header>
 
@@ -106,7 +106,7 @@
       <div class="etf-switcher">
         <label>
           ETF 선택
-          <select id="etf-select"></select>
+          <select id="etf-select" data-control-id="etf_selection"></select>
         </label>
       </div>
 
@@ -115,7 +115,6 @@
           <div>
             <p class="eyebrow">Weight Trend</p>
             <h3 id="chart-title">TOP10 비중 변화 그래프</h3>
-            <p class="panel-subtitle">종목과 날짜를 선택해 정확한 비중을 확인합니다.</p>
           </div>
           <span class="status-pill" id="coverage-pill">커버리지 확인 중</span>
         </div>
@@ -126,31 +125,32 @@
           <div class="chart-date-controls">
             <label>
               차트 관찰일
-              <input type="date" id="chart-date" />
+              <input type="date" id="chart-date" data-control-id="chart_observation_date" />
             </label>
-            <button type="button" id="chart-latest-date">최신일</button>
+            <button type="button" id="chart-latest-date" data-control-id="chart_observation_date">최신일</button>
           </div>
         </div>
-        <div class="chart-card interactive-chart" id="weight-chart" tabindex="0" aria-label="선택 ETF의 TOP10 비중 추이"></div>
-        <p class="chart-help"><span class="marker-help marker-entry">＋ 편입</span> <span class="marker-help marker-exit">－ 편출</span> <span class="marker-help marker-buy">↑ 매수 관찰</span> <span class="marker-help marker-sell">↓ 매도 관찰</span><span>← → 날짜 이동</span></p>
+        <div class="chart-card interactive-chart" id="weight-chart" tabindex="0" aria-label="선택 ETF의 TOP10 비중 추이" aria-describedby="weight-chart-help" aria-keyshortcuts="ArrowLeft ArrowRight Home End"></div>
+        <p class="chart-help"><span class="marker-help marker-entry">＋ 편입</span> <span class="marker-help marker-exit">－ 편출</span> <span class="marker-help marker-buy">↑ 매수 관찰</span> <span class="marker-help marker-sell">↓ 매도 관찰</span></p>
+        <p id="weight-chart-help" class="sr-only">포인터로 날짜를 미리 보고 클릭으로 고정합니다. 키보드는 좌우 화살표·Home·End로 저장된 관찰일을 이동합니다.</p>
       </article>
 
       <details class="control-card control-disclosure">
-        <summary class="control-summary">
+        <summary class="control-summary" data-control-id="detail_disclosures">
           <span><small>VIEW CONTROLS</small><strong>기간 표시 설정</strong></span>
-          <small id="control-summary-text">조회 기간을 바꿉니다.</small>
+          <small id="control-summary-text" aria-live="polite">—</small>
         </summary>
         <div class="control-grid">
           <label>
             시작일
-            <input type="date" id="start-date" />
+            <input type="date" id="start-date" data-control-id="range_start" />
           </label>
           <label>
             종료일
-            <input type="date" id="end-date" />
+            <input type="date" id="end-date" data-control-id="range_end" />
           </label>
-          <button type="button" id="reset-range">최근 1개월</button>
-          <button type="button" id="all-range">전체 기간</button>
+          <button type="button" id="reset-range" data-control-id="range_preset">최근 1개월</button>
+          <button type="button" id="all-range" data-control-id="range_preset">전체 기간</button>
         </div>
       </details>
 
@@ -158,13 +158,13 @@
         <div class="panel-header">
           <div>
             <p class="eyebrow">Latest TOP10</p>
-            <h3 id="top10-title">최근 TOP10 구성 종목</h3>
+            <h3 id="top10-title">선택 기준일 TOP10 구성 종목</h3>
           </div>
-          <a class="panel-link" id="provider-link" href="#" target="_blank" rel="noreferrer">공급자 페이지</a>
+          <a class="panel-link" id="provider-link" href="#" target="_blank" rel="noreferrer" data-control-id="provider_source_link">공급자 페이지</a>
         </div>
         <div class="table-wrap current-table-wrap">
           <table class="data-table top10-table">
-            <caption>최근 ETF TOP10 편입 종목과 비중</caption>
+            <caption>선택 기준일 ETF TOP10 편입 종목과 비중</caption>
             <thead>
               <tr>
                 <th scope="col">순위</th><th scope="col">종목</th><th scope="col">티커/가격소스</th><th scope="col">현재 비중</th>
@@ -177,7 +177,7 @@
       </article>
 
       <details class="detail-disclosure" id="decomposition-detail">
-        <summary><span><strong>가격 효과·잔차 분해표</strong><small>전일 대비 비중 변화의 전체 분석 행</small></span></summary>
+        <summary data-control-id="detail_disclosures"><span><strong>가격 효과·잔차 분해표</strong><small>전일 대비 비중 변화의 전체 분석 행</small></span></summary>
         <article class="panel panel-wide" aria-labelledby="decomp-title">
           <div class="panel-header"><div><p class="eyebrow">Price vs Flow</p><h3 id="decomp-title">가격 효과와 ETF 매수·매도 가능성</h3></div></div>
           <div class="table-wrap">
@@ -191,7 +191,7 @@
       </details>
 
       <details class="detail-disclosure" id="signal-tables">
-        <summary><span><strong>ETF 3종 전체 신호·비중 변화표</strong></span></summary>
+        <summary data-control-id="detail_disclosures"><span><strong>ETF 3종 전체 신호·비중 변화표</strong></span></summary>
         <section class="panel panel-wide signal-table-block" aria-labelledby="signal-tables-title">
           <div class="section-heading compact">
             <p class="eyebrow">ETF Signal Tables</p>
@@ -204,7 +204,7 @@
     </section>
 
     <details class="detail-disclosure section-detail operations-detail" id="operations-detail">
-      <summary><span><strong>데이터 · 출처 · 운영 상세</strong></span></summary>
+      <summary data-control-id="detail_disclosures"><span><strong>데이터 · 출처 · 운영 상세</strong></span></summary>
       <section class="operations-content" aria-labelledby="operations-title">
         <div class="operations-heading">
           <div><p class="eyebrow">DETAILS</p><h2 id="operations-title">데이터 · 출처 · 운영 상세</h2></div>
@@ -226,6 +226,8 @@
           </div>
         </article>
 
+        <section class="compact-notice" id="research-notice" aria-label="research notice"><strong>연구용 정적 스냅샷</strong> · 잔차 신호는 실제 운용사 주문 확정이나 투자·매매 조언이 아닙니다.</section>
+
         <article class="panel operations-panel manual-update" id="manual-update" aria-labelledby="manual-update-title">
           <div>
             <p class="eyebrow">UPDATE</p>
@@ -236,23 +238,21 @@
             </ul>
           </div>
           <div class="manual-update-actions">
-            <a id="manual-update-link" class="primary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer" role="button">수동 업데이트 열기</a>
-            <a id="workflow-status-link" class="secondary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer">워크플로 상태</a>
-            <button id="copy-update-command" class="secondary-button" type="button">CLI 명령 복사</button>
+            <a id="manual-update-link" class="primary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer" role="button" data-control-id="owner_refresh_backfill">수동 업데이트 열기</a>
+            <a id="workflow-status-link" class="secondary-button" href="https://github.com/SonChangGi/etf-tracking/actions/workflows/update-data.yml" target="_blank" rel="noopener noreferrer" data-control-id="workflow_status">워크플로 상태</a>
+            <button id="copy-update-command" class="secondary-button" type="button" data-control-id="owner_refresh_backfill">CLI 명령 복사</button>
             <code id="manual-update-command" class="code-pill">gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true</code>
             <small id="manual-update-status" role="status" aria-live="polite">누락 날짜만 업데이트합니다.</small>
           </div>
         </article>
       </section>
     </details>
-
-    <section class="compact-notice" aria-label="research notice"><strong>연구용 정적 스냅샷</strong> · 잔차 신호는 실제 운용사 주문 확정이나 투자·매매 조언이 아닙니다.</section>
   </main>
 
-  <footer class="site-footer"><p><a href="https://sonchanggi.github.io/quant-dashboard/">Quant Dashboard로 돌아가기</a></p></footer>
+  <footer class="site-footer"><p><a href="https://sonchanggi.github.io/quant-dashboard/" data-control-id="project_navigation">Quant Dashboard로 돌아가기</a></p></footer>
   <nav class="page-jump-nav" aria-label="페이지 빠른 이동">
-    <a href="#top" aria-label="맨 위로 이동" title="맨 위로">↑</a>
-    <a href="#page-bottom" aria-label="맨 아래로 이동" title="맨 아래로">↓</a>
+    <a href="#top" aria-label="맨 위로 이동" title="맨 위로" data-control-id="in_page_navigation">↑</a>
+    <a href="#page-bottom" aria-label="맨 아래로 이동" title="맨 아래로" data-control-id="in_page_navigation">↓</a>
   </nav>
   <div id="page-bottom" tabindex="-1" aria-hidden="true"></div>
 </body>

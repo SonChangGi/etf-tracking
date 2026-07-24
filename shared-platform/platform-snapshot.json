@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "sharedVersion": "quant-platform-frontend/0.1.0",
+  "snapshotDate": "2026-07-24",
+  "source": {
+    "repository": "SonChangGi/quant-dashboard",
+    "foundationBaseRevision": "20a5604a5e9386253fc983ab10d6f018cdb108cd",
+    "note": "The shared packages are not published; ETF Tracking vendors only a small browser compatibility seam and keeps all result JSON as same-origin static files.",
+    "compatibilitySourceHashes": {
+      "platform/packages/contracts/src/schemas.ts": "4d0e53ec03173461710debd24204abf97b1345d5031e31a349d87c83d80767a0",
+      "platform/packages/project-registry/src/index.ts": "890fdf1117c296a79e58ff23837dccfb6740fc5be136cb392c3c5b0ee352c99f",
+      "platform/packages/ui/src/styles.css": "e277f29caa54841d3442a366718618b364b688ccd5cd38460dece5e31a57cbbf"
+    }
+  },
+  "aggregateFingerprint": "ad47ed00f2c0f774bfc71b0fd64995f953b7fbf77c4627a2f71ab17fe91fcd3f",
+  "files": {
+    "src/index.js": "50c49728864a8fdfdc683cf2980c2b9f1dc3d177037491dedcbaf290eebd04dc"
+  }
+}

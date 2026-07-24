@@ -5,6 +5,14 @@
   "description": "Static ETF TOP10 holdings tracking dashboard with daily data updater.",
   "scripts": {
     "update:data": "python3 scripts/update_data.py --output-dir data --backfill-days 10",
-    "test": "python3 -m unittest discover -s tests -p 'test_*.py' && node --check assets/app.js && node --check scripts/static-smoke.mjs && node scripts/static-smoke.mjs"
+    "build:platform": "npm --prefix shared-platform run build",
+    "build:site": "node scripts/build-static.mjs",
+    "build": "npm run build:platform && npm run build:site",
+    "test:python": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "test:node": "node --check assets/app.js && node --check shared-platform/src/index.js && node --check scripts/static-smoke.mjs && node --test tests/*.test.mjs && node scripts/static-smoke.mjs",
+    "verify:platform": "npm --prefix shared-platform run verify",
+    "verify:build": "node scripts/verify-build.mjs",
+    "verify": "npm run test:python && npm run verify:platform && npm run test:node && npm run build:site && npm run verify:build",
+    "test": "npm run verify"
   }
 }

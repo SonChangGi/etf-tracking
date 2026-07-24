@@ -1,0 +1,11 @@
+{
+  "name": "@quant-research/etf-platform-compat",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/shared-platform.test.mjs",
+    "verify": "npm run build && node scripts/verify-snapshot.mjs && npm test"
+  }
+}
