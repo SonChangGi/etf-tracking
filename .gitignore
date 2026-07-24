@@ -6,3 +6,5 @@ node_modules/
 tmp-provider/
 _site/
 dist/
+!shared-platform/dist/
+!shared-platform/dist/index.js
