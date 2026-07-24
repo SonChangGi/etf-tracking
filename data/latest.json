@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-07-24T00:11:20+00:00",
+  "generatedAt": "2026-07-24T04:34:39+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -439,7 +439,6 @@
           {
             "rank": 7,
             "codeRaw": "NQU6 INDEX",
-            "ticker": null,
             "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
             "shares": 0.0,
             "marketValueKrw": 34242446.0,
@@ -447,7 +446,6 @@
             "weight": 0.0346,
             "hasExternalTicker": false,
             "hasProviderValuation": false,
-            "priceTrackingMethod": null,
             "isPriceTracked": false
           },
           {
@@ -1451,7 +1449,6 @@
           {
             "rank": 7,
             "codeRaw": "NQU6 INDEX",
-            "ticker": null,
             "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
             "shares": 0.0,
             "marketValueKrw": 51363669.0,
@@ -1459,7 +1456,6 @@
             "weight": 0.0417,
             "hasExternalTicker": false,
             "hasProviderValuation": false,
-            "priceTrackingMethod": null,
             "isPriceTracked": false
           },
           {
