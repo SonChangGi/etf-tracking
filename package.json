@@ -10,9 +10,10 @@
     "build": "npm run build:platform && npm run build:site",
     "test:python": "python3 -m unittest discover -s tests -p 'test_*.py'",
     "test:node": "node --check assets/app.js && node --check shared-platform/src/index.js && node --check scripts/static-smoke.mjs && node --test tests/*.test.mjs && node scripts/static-smoke.mjs",
+    "verify:pages-source": "node scripts/verify-pages-source.mjs",
     "verify:platform": "npm --prefix shared-platform run verify",
     "verify:build": "node scripts/verify-build.mjs",
-    "verify": "npm run test:python && npm run verify:platform && npm run test:node && npm run build:site && npm run verify:build",
+    "verify": "npm run test:python && npm run verify:pages-source && npm run verify:platform && npm run test:node && npm run build:site && npm run verify:build",
     "test": "npm run verify"
   }
 }
