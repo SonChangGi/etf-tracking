@@ -50,7 +50,7 @@ test('result-first shell keeps signals and the primary chart ahead of detailed t
   assert.doesNotMatch(html, /표시 설정은 저장된 분석 결과를 다시 계산하지 않습니다/);
 });
 
-test('common design v1.2 keeps the compact type hierarchy and eleven-project navigation', () => {
+test('common design v1.2 keeps the compact type hierarchy and nine-project navigation', () => {
   assert.match(styles, /body\s*\{[^}]*font-size:\s*15px;[^}]*line-height:\s*1\.55;/s);
   assert.match(styles, /h1\s*\{[^}]*font-size:\s*clamp\(2rem,\s*4vw,\s*3\.25rem\)/s);
   assert.match(styles, /h2\s*\{[^}]*font-size:\s*clamp\(1\.35rem,\s*2\.3vw,\s*1\.8rem\)/s);
@@ -58,14 +58,14 @@ test('common design v1.2 keeps the compact type hierarchy and eleven-project nav
 
   const nav = html.match(/<div class="site-nav-links"[\s\S]*?<\/div>/)?.[0] || '';
   const links = [...nav.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
-  assert.equal(links.length, 11);
+  assert.equal(links.length, 9);
   assert.deepEqual(
     links.map((match) => match[2].replace(/&amp;/g, '&').trim()),
-    ['Hub', 'Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Risk Score', 'Port', 'Valuation', 'Kelly'],
+    ['Hub', 'Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Port', 'Kelly'],
   );
   assert.equal(links.filter((match) => /aria-current="page"/.test(match[0])).length, 1);
   assert.match(links[5][0], /aria-current="page"/);
-  assert.equal(links[10][1], 'https://sonchanggi.github.io/kelly/');
+  assert.equal(links[8][1], 'https://sonchanggi.github.io/kelly/');
 });
 
 test('implementation notes live in one closed operations disclosure', () => {
