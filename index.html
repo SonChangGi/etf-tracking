@@ -26,29 +26,31 @@
     }
   </script>
   <link rel="stylesheet" href="assets/styles.css?v=20260724-platform-compat" />
+  <link rel="stylesheet" href="assets/shared-nav.css?v=20260728-shared-nav" />
   <script src="shared-platform/dist/index.js?v=0.1.0" defer></script>
   <script src="assets/app.js?v=20260724-platform-compat" defer></script>
 </head>
-<body id="top">
+<body id="top" class="has-quant-shared-nav">
   <a class="skip-link" href="#main-content" data-control-id="in_page_navigation">본문으로 건너뛰기</a>
 
-  <nav class="site-nav" aria-label="연결 프로젝트 바로가기">
-    <a class="site-nav-brand" href="https://sonchanggi.github.io/quant-dashboard/" aria-label="Quant Research Hub로 이동" data-control-id="project_navigation">Quant Research Hub</a>
-    <div class="site-nav-links" aria-label="프로젝트 목록">
-      <a href="https://sonchanggi.github.io/quant-dashboard/" data-control-id="project_navigation">Hub</a>
-      <a href="https://sonchanggi.github.io/fearNgreed/" data-control-id="project_navigation">Fear &amp; Greed</a>
-      <a href="https://sonchanggi.github.io/momentum-factor-lab/" data-control-id="project_navigation">Momentum</a>
-      <a href="https://sonchanggi.github.io/dram-price/" data-control-id="project_navigation">DRAM</a>
-      <a href="https://sonchanggi.github.io/best-factor/" data-control-id="project_navigation">Best Factor</a>
-      <a class="is-active" href="https://sonchanggi.github.io/etf-tracking/" aria-current="page" data-control-id="project_navigation">ETF</a>
-      <a href="https://sonchanggi.github.io/sox/" data-control-id="project_navigation">SOX</a>
-      <a href="https://sonchanggi.github.io/port/" data-control-id="project_navigation">Port</a>
-      <a href="https://sonchanggi.github.io/kelly/" data-control-id="project_navigation">Kelly</a>
+  <nav class="quant-shared-nav" aria-label="연결 프로젝트 바로가기">
+    <div class="quant-shared-nav__inner">
+      <a class="quant-shared-nav__brand" href="https://sonchanggi.github.io/quant-dashboard/" aria-label="Quant Research Hub로 이동" data-control-id="project_navigation">Quant Research Hub</a>
+      <div class="quant-shared-nav__links" aria-label="프로젝트 목록">
+        <a class="quant-shared-nav__link" href="https://sonchanggi.github.io/fearNgreed/" data-control-id="project_navigation">Fear &amp; Greed</a>
+        <a class="quant-shared-nav__link" href="https://sonchanggi.github.io/momentum-factor-lab/" data-control-id="project_navigation">Momentum</a>
+        <a class="quant-shared-nav__link" href="https://sonchanggi.github.io/dram-price/" data-control-id="project_navigation">DRAM</a>
+        <a class="quant-shared-nav__link" href="https://sonchanggi.github.io/best-factor/" data-control-id="project_navigation">Best Factor</a>
+        <a class="quant-shared-nav__link is-active" href="https://sonchanggi.github.io/etf-tracking/" aria-current="page" data-control-id="project_navigation">ETF</a>
+        <a class="quant-shared-nav__link" href="https://sonchanggi.github.io/sox/" data-control-id="project_navigation">SOX</a>
+        <a class="quant-shared-nav__link" href="https://sonchanggi.github.io/port/" data-control-id="project_navigation">Port</a>
+        <a class="quant-shared-nav__link" href="https://sonchanggi.github.io/kelly/" data-control-id="project_navigation">Kelly</a>
+      </div>
+      <button id="theme-toggle" class="quant-shared-nav__theme" type="button" aria-pressed="false" aria-label="다크 모드로 전환" data-control-id="theme">
+        <span class="quant-shared-nav__theme-icon" aria-hidden="true"></span>
+        <span class="quant-shared-nav__theme-text">다크 모드</span>
+      </button>
     </div>
-    <button id="theme-toggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="다크 모드로 전환" data-control-id="theme">
-      <span class="theme-toggle-icon" aria-hidden="true"></span>
-      <span class="theme-toggle-text">다크 모드</span>
-    </button>
   </nav>
 
   <header class="hero" aria-labelledby="page-title">

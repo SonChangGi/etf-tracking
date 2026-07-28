@@ -71,6 +71,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       bindThemeToggle();
       verifySharedNavigation();
+      ensureActiveProjectVisible();
       wireControls();
       loadAndRender();
     });
@@ -140,7 +141,7 @@
     const isDark = normalized === 'dark';
     button.setAttribute('aria-pressed', String(isDark));
     button.setAttribute('aria-label', isDark ? '라이트 모드로 전환' : '다크 모드로 전환');
-    const label = typeof button.querySelector === 'function' ? button.querySelector('.theme-toggle-text') : null;
+    const label = typeof button.querySelector === 'function' ? button.querySelector('.quant-shared-nav__theme-text') : null;
     if (label) label.textContent = isDark ? '라이트 모드' : '다크 모드';
   }
 
@@ -202,7 +203,7 @@
   function verifySharedNavigation() {
     try {
       const platform = sharedPlatform();
-      platform.assertCanonicalNavigation($('.site-nav-links'), 'etf');
+      platform.assertCanonicalNavigation($('.quant-shared-nav__links'), 'etf');
       platform.assertControlAnnotations(document);
     } catch (error) {
       const target = $('#data-status');
@@ -211,6 +212,23 @@
         target.classList.add('error-text');
       }
     }
+  }
+
+  function ensureActiveProjectVisible() {
+    let mobile = false;
+    try {
+      mobile = window.matchMedia?.('(max-width: 760px)').matches === true;
+    } catch {
+      // A visible link rail is an enhancement; navigation still works without matchMedia.
+    }
+    if (!mobile) return;
+    window.requestAnimationFrame?.(() => {
+      $('.quant-shared-nav__links [aria-current="page"]')?.scrollIntoView?.({
+        behavior: 'auto',
+        block: 'nearest',
+        inline: 'center',
+      });
+    });
   }
 
   function renderUnavailableState(message) {

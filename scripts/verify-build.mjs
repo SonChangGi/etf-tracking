@@ -7,6 +7,7 @@ const required = [
   'dist/index.html',
   'dist/assets/app.js',
   'dist/assets/styles.css',
+  'dist/assets/shared-nav.css',
   'dist/shared-platform/dist/index.js',
   'dist/data/dashboard.json',
   'dist/data/status.json',

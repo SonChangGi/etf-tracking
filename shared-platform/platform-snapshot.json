@@ -12,8 +12,8 @@
       "platform/packages/ui/src/styles.css": "e277f29caa54841d3442a366718618b364b688ccd5cd38460dece5e31a57cbbf"
     }
   },
-  "aggregateFingerprint": "ebee9f16c68b96a4140462e81d43b4617061c6744c17e29ae8719a95201f4f51",
+  "aggregateFingerprint": "2fae8d3154da67e7ebd3c0d0ee5fdc0473ce2f286592cb3639becddf86092d73",
   "files": {
-    "src/index.js": "4146fc135b8816f488f4ee11bbdcaeec0c394112c16c54bd2d26265999c731ab"
+    "src/index.js": "e896a39f9cdbe7a64c1b62f5edbe6b6825abfd8698a3949de572581725911bff"
   }
 }

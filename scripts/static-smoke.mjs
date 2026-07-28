@@ -4,7 +4,7 @@ import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import vm from 'node:vm';
 
-for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'shared-platform/dist/index.js', 'data/dashboard.json', 'data/summary.json', 'data/history.json', 'data/status.json', 'data/automation-status.json']) {
+for (const file of ['index.html', 'assets/app.js', 'assets/styles.css', 'assets/shared-nav.css', 'shared-platform/dist/index.js', 'data/dashboard.json', 'data/summary.json', 'data/history.json', 'data/status.json', 'data/automation-status.json']) {
   if (!existsSync(file)) throw new Error(`${file} missing`);
 }
 if (!existsSync('data/history')) throw new Error('data/history directory missing');

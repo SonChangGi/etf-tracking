@@ -321,7 +321,7 @@
     if (!container || typeof container.querySelectorAll !== 'function') {
       throw new TypeError('공통 프로젝트 메뉴 컨테이너가 없습니다.');
     }
-    const expected = getCanonicalNavigation(currentId);
+    const expected = getCanonicalNavigation(currentId).filter((project) => project.id !== 'hub');
     const links = [...container.querySelectorAll('a')];
     if (links.length !== expected.length) {
       throw new Error(`공통 프로젝트 메뉴 수가 다릅니다: ${links.length}/${expected.length}`);

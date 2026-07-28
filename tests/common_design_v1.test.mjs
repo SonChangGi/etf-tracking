@@ -6,6 +6,7 @@ import vm from 'node:vm';
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../assets/app.js', import.meta.url), 'utf8');
 const styles = readFileSync(new URL('../assets/styles.css', import.meta.url), 'utf8');
+const sharedNav = readFileSync(new URL('../assets/shared-nav.css', import.meta.url), 'utf8');
 const platformSource = readFileSync(
   new URL('../shared-platform/dist/index.js', import.meta.url),
   'utf8',
@@ -50,22 +51,31 @@ test('result-first shell keeps signals and the primary chart ahead of detailed t
   assert.doesNotMatch(html, /표시 설정은 저장된 분석 결과를 다시 계산하지 않습니다/);
 });
 
-test('common design v1.2 keeps the compact type hierarchy and nine-project navigation', () => {
+test('common design v1.2 keeps the compact type hierarchy and nine unique project destinations', () => {
   assert.match(styles, /body\s*\{[^}]*font-size:\s*15px;[^}]*line-height:\s*1\.55;/s);
   assert.match(styles, /h1\s*\{[^}]*font-size:\s*clamp\(2rem,\s*4vw,\s*3\.25rem\)/s);
   assert.match(styles, /h2\s*\{[^}]*font-size:\s*clamp\(1\.35rem,\s*2\.3vw,\s*1\.8rem\)/s);
   assert.doesNotMatch(styles, /font-weight:\s*(?:8\d\d|9\d\d)/);
 
-  const nav = html.match(/<div class="site-nav-links"[\s\S]*?<\/div>/)?.[0] || '';
+  const nav = html.match(/<div class="quant-shared-nav__links"[\s\S]*?<\/div>/)?.[0] || '';
   const links = [...nav.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
-  assert.equal(links.length, 9);
+  assert.equal(links.length, 8);
   assert.deepEqual(
     links.map((match) => match[2].replace(/&amp;/g, '&').trim()),
-    ['Hub', 'Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Port', 'Kelly'],
+    ['Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Port', 'Kelly'],
   );
   assert.equal(links.filter((match) => /aria-current="page"/.test(match[0])).length, 1);
-  assert.match(links[5][0], /aria-current="page"/);
-  assert.equal(links[8][1], 'https://sonchanggi.github.io/kelly/');
+  assert.match(links[4][0], /aria-current="page"/);
+  assert.equal(links[7][1], 'https://sonchanggi.github.io/kelly/');
+  assert.match(
+    html,
+    /class="quant-shared-nav__brand"[^>]+href="https:\/\/sonchanggi\.github\.io\/quant-dashboard\/"/,
+  );
+  assert.match(sharedNav, /\.quant-shared-nav\s*\{[\s\S]*?position:\s*fixed\s*!important;/);
+  assert.match(sharedNav, /body\.has-quant-shared-nav\s*\{[^}]*padding-top:\s*var\(--quant-shared-nav-height\)/);
+  assert.match(sharedNav, /@media \(max-width:\s*760px\)[\s\S]*?--quant-shared-nav-height:\s*101px/);
+  assert.match(app, /ensureActiveProjectVisible\(\)/);
+  assert.match(app, /scrollIntoView\?\.\(\{[\s\S]*?inline:\s*'center'/);
 });
 
 test('implementation notes live in one closed operations disclosure', () => {
