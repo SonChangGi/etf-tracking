@@ -123,12 +123,13 @@ test('static adapter fails closed for mixed snapshot files and embedded history'
 test('static adapter preserves a published degraded status without pretending it is fresh', async () => {
   const api = createRuntime();
   const payloads = await rawSnapshot();
-  payloads.status.targetDate = '2026-07-25';
+  const dataAsOf = payloads.historyManifest.availableEndDate;
+  const targetDate = payloads.status.targetDate;
   payloads.status.overallStatus = 'degraded';
-  payloads.automation.targetDate = '2026-07-25';
+  payloads.automation.targetDate = targetDate;
   payloads.automation.runStatus = 'waiting_for_data';
   const adapted = api.adaptEtfStaticResultV1(payloads);
-  assert.equal(adapted.identity.dataAsOf, '2026-07-24');
+  assert.equal(adapted.identity.dataAsOf, dataAsOf);
   assert.equal(adapted.data.status.overallStatus, 'degraded');
   assert.equal(adapted.data.automation.runStatus, 'waiting_for_data');
 });
