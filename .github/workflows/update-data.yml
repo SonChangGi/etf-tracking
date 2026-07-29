@@ -37,6 +37,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 env:
   # GitHub warned that Node 20 JavaScript actions are being deprecated. Opt in now
@@ -50,21 +52,29 @@ concurrency:
 jobs:
   update-data:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 55
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Require the production branch
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if [[ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]]; then
+            echo "ETF production refreshes must run from ${DEFAULT_BRANCH}; received ${GITHUB_REF_NAME}." >&2
+            exit 1
+          fi
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         id: checkout
-        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         with:
           fetch-depth: 0
       - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         id: setup-python
-        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         with:
           python-version: '3.12'
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         id: setup-node
-        continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         with:
           node-version: '22'
       - name: Update data with soft-fail status
@@ -94,6 +104,8 @@ jobs:
         env:
           UPDATE_OUTCOME: ${{ steps.update.outcome }}
           VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
         run: |
           python3 - <<'PY'
           import json, os
@@ -103,6 +115,9 @@ jobs:
           summary = Path(os.environ["GITHUB_STEP_SUMMARY"])
           update = os.environ.get("UPDATE_OUTCOME", "missing")
           verify = os.environ.get("VERIFY_OUTCOME", "missing")
+          event_name = os.environ.get("EVENT_NAME", "")
+          event_schedule = os.environ.get("EVENT_SCHEDULE", "")
+          final_retry = event_name == "schedule" and event_schedule == "15 3 * * 2-6"
           status_path = Path("data/automation-status.json")
           status = {}
           if status_path.exists():
@@ -114,19 +129,52 @@ jobs:
               status = {"runStatus": "missing_status", "error": "data/automation-status.json was not written"}
           run_status = str(status.get("runStatus") or "unknown")
           safe = update == "success" and verify == "success" and run_status == "ok"
-          output.write_text(f"safe_to_commit={'true' if safe else 'false'}\nrun_status={run_status}\n", encoding="utf-8")
+          expected_wait = (
+              update == "success"
+              and verify == "success"
+              and run_status == "waiting_for_data"
+              and not final_retry
+          )
+          hard_failure = not safe and not expected_wait
+          reasons = []
+          if update != "success":
+              reasons.append(f"updater step {update}")
+          if verify != "success":
+              reasons.append(f"verification step {verify}")
+          if run_status not in {"ok", "waiting_for_data"}:
+              reasons.append(f"automation status {run_status}")
+          if run_status == "waiting_for_data" and final_retry:
+              reasons.append("provider data remained unavailable at the final scheduled retry")
+          failure_reason = "; ".join(reasons) or ("provider data is not available yet" if expected_wait else "unknown automation failure")
+          output.write_text(
+              "\n".join([
+                  f"safe_to_commit={'true' if safe else 'false'}",
+                  f"expected_wait={'true' if expected_wait else 'false'}",
+                  f"final_retry={'true' if final_retry else 'false'}",
+                  f"hard_failure={'true' if hard_failure else 'false'}",
+                  f"run_status={run_status}",
+                  f"failure_reason={failure_reason}",
+              ]) + "\n",
+              encoding="utf-8",
+          )
           lines = [
               "## ETF tracking automation assessment",
               f"- update step: `{update}`",
               f"- verify step: `{verify}`",
               f"- automation status: `{run_status}`",
               f"- safe to commit data: `{str(safe).lower()}`",
+              f"- expected provider wait: `{str(expected_wait).lower()}`",
+              f"- final scheduled retry: `{str(final_retry).lower()}`",
+              f"- hard automation failure: `{str(hard_failure).lower()}`",
+              f"- reason: {failure_reason}",
           ]
           for warning in status.get("warnings", [])[:10]:
               lines.append(f"- warning: {warning}")
           summary.write_text("\n".join(lines) + "\n", encoding="utf-8")
-          if not safe:
-              print("::warning::Generated ETF data was not committed; see automation assessment summary.")
+          if hard_failure:
+              print(f"::error::ETF automation failed: {failure_reason}. Last-good public data was preserved.")
+          elif expected_wait:
+              print("::notice::ETF provider data is not available yet; last-good public data was preserved for the scheduled retry.")
           PY
       - name: Commit refreshed data
         id: commit-data
@@ -152,6 +200,55 @@ jobs:
           MSG
           git commit -F /tmp/etf-tracking-data-commit-message
           git push
+      - name: Configure GitHub Pages
+        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - name: Upload exact static site
+        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: dist
+      - name: Deploy exact static site
+        id: deployment
+        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+      - name: Verify live public JSON bytes
+        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          mapfile -d '' public_json < <(find dist/data -type f -name '*.json' -print0 | sort -z)
+          if (( ${#public_json[@]} == 0 )); then
+            echo "No built public JSON files were found." >&2
+            exit 1
+          fi
+          readback_dir="$(mktemp -d)"
+          trap 'rm -rf "$readback_dir"' EXIT
+          for attempt in {1..12}; do
+            all_match=true
+            for local_path in "${public_json[@]}"; do
+              relative="${local_path#dist/}"
+              remote_path="${readback_dir}/$(printf '%s' "$relative" | tr '/' '_')"
+              url="${PAGE_URL%/}/${relative}?__etf_readback=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}"
+              if ! curl --fail --silent --show-error --location "$url" --output "$remote_path"; then
+                all_match=false
+                break
+              fi
+              if ! cmp --silent "$local_path" "$remote_path"; then
+                all_match=false
+                break
+              fi
+            done
+            if [[ "$all_match" == "true" ]]; then
+              echo "Verified ${#public_json[@]} public JSON files byte-for-byte."
+              exit 0
+            fi
+            if (( attempt < 12 )); then
+              sleep $((attempt * 5))
+            fi
+          done
+          echo "Public ETF Pages readback did not converge to the deployed artifact." >&2
+          exit 1
       - name: Upload automation diagnostics
         if: always() && hashFiles('data/automation-status.json') != ''
         continue-on-error: true
@@ -166,4 +263,12 @@ jobs:
         if: always() && github.event_name == 'workflow_dispatch' && inputs.strict_validation == 'true' && (steps.update.outcome != 'success' || steps.verify.outcome != 'success' || steps.assess.outputs.safe_to_commit != 'true' || steps.commit-data.outcome == 'failure')
         run: |
           echo "Strict validation requested and one or more gates failed." >&2
+          exit 1
+      - name: Scheduled automation failure gate
+        if: always() && github.event_name == 'schedule' && (steps.assess.outputs.hard_failure == 'true' || steps.commit-data.outcome == 'failure')
+        env:
+          FAILURE_REASON: ${{ steps.assess.outputs.failure_reason }}
+        run: |
+          echo "Scheduled ETF automation failed: ${FAILURE_REASON:-commit step failed}" >&2
+          echo "The last-good public dataset was preserved and this failed run is the notification signal." >&2
           exit 1

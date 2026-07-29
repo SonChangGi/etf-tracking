@@ -976,6 +976,8 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("08:15 KST Tue-Sat", workflow)
         self.assertIn("--soft-fail", workflow)
         self.assertIn("strict_validation", workflow)
+        self.assertIn("Require the production branch", workflow)
+        self.assertIn('if [[ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]]', workflow)
         self.assertIn("backfill_start_date", workflow)
         self.assertIn("--backfill-start-date", workflow)
         self.assertIn("refresh_existing", workflow)
@@ -983,8 +985,26 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("continue-on-error", workflow)
         self.assertIn("safe_to_commit", workflow)
         self.assertIn('run_status == "ok"', workflow)
+        self.assertIn('run_status == "waiting_for_data"', workflow)
+        self.assertIn("hard_failure", workflow)
+        self.assertIn("final_retry = event_name == \"schedule\"", workflow)
+        self.assertIn('event_schedule == "15 3 * * 2-6"', workflow)
+        self.assertIn("and not final_retry", workflow)
+        self.assertIn("provider data remained unavailable at the final scheduled retry", workflow)
+        self.assertIn("hard_failure = not safe and not expected_wait", workflow)
+        self.assertIn("Scheduled automation failure gate", workflow)
+        self.assertIn("github.event_name == 'schedule'", workflow)
+        self.assertIn("steps.assess.outputs.hard_failure == 'true'", workflow)
+        self.assertIn("Last-good public data was preserved", workflow)
         self.assertIn("scheduled and reviewed manual provider refreshes", workflow)
-        self.assertFalse((ROOT / ".github" / "workflows" / "deploy-pages.yml").exists())
+        self.assertIn("pages: write", workflow)
+        self.assertIn("id-token: write", workflow)
+        self.assertIn("actions/configure-pages@", workflow)
+        self.assertIn("actions/upload-pages-artifact@", workflow)
+        self.assertIn("actions/deploy-pages@", workflow)
+        self.assertIn("Verify live public JSON bytes", workflow)
+        self.assertIn("find dist/data -type f -name '*.json'", workflow)
+        self.assertIn("cmp --silent", workflow)
 
 
 
@@ -1004,6 +1024,15 @@ class WorkflowStrictValidationTests(unittest.TestCase):
         self.assertIn("strict_validation=true", command)
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn(command, readme)
+
+    def test_readme_matches_scheduled_failure_classification(self):
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        self.assertIn("08:15/10:15 실행만 last-good 공개 데이터를 보존하고 정상 종료", readme)
+        self.assertIn("마지막 12:15 실행까지 미게시 상태이면 실패 신호", readme)
+        self.assertIn("같은 실행에서 검증된 `dist`를 Pages에 배포", readme)
+        self.assertIn("uncached byte-for-byte", readme)
+        self.assertIn("마지막 시각의 미게시·`degraded`·코드·검증·커밋·배포·공개 readback 오류", readme)
+        self.assertNotIn("`waiting_for_data`나 `degraded`는 실패 메일을 만들지는 않지만", readme)
 
     def test_strict_manual_gate_covers_update_verify_assess_and_commit(self):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
