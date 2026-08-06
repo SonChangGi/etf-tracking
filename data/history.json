@@ -1,10 +1,10 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-08-05T05:58:03+00:00",
+  "generatedAt": "2026-08-06T00:10:51+00:00",
   "timezone": "Asia/Seoul",
   "description": "Manifest only. Full replay-safe histories are split into per-ETF files under data/history/ to keep GitHub Pages payloads below large-file limits.",
   "availableStartDate": "2022-05-11",
-  "availableEndDate": "2026-08-05",
+  "availableEndDate": "2026-08-06",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -14,18 +14,18 @@
       "provider": "TIME ETF",
       "listingDate": "2022-05-11",
       "historyUrl": "data/history/time-nasdaq100-active.json",
-      "historyCount": 1036,
+      "historyCount": 1037,
       "availableStartDate": "2022-05-11",
-      "availableEndDate": "2026-08-05",
+      "availableEndDate": "2026-08-06",
       "sourceAvailability": {
         "listingDate": "2022-05-11",
         "oldestStoredDate": "2022-05-11",
-        "latestStoredDate": "2026-08-05",
+        "latestStoredDate": "2026-08-06",
         "storedFromListingDate": true,
         "continuityLabel": "listing_date_near_continuous",
-        "storedWeekdayCount": 1036,
-        "possibleWeekdayCountThroughLatest": 1106,
-        "coverageRatioThroughLatest": 0.9367088607594937,
+        "storedWeekdayCount": 1037,
+        "possibleWeekdayCountThroughLatest": 1107,
+        "coverageRatioThroughLatest": 0.9367660343270099,
         "note": "공급자 public holdings endpoint가 반환한 live 스냅샷만 저장합니다. 휴장일, 공급자 공백, rate limit 날짜는 다음 missing-only 백필에서 이어서 채웁니다."
       }
     },
@@ -37,18 +37,18 @@
       "provider": "TIME ETF",
       "listingDate": "2023-05-16",
       "historyUrl": "data/history/time-global-ai-active.json",
-      "historyCount": 785,
+      "historyCount": 786,
       "availableStartDate": "2023-05-16",
-      "availableEndDate": "2026-08-05",
+      "availableEndDate": "2026-08-06",
       "sourceAvailability": {
         "listingDate": "2023-05-16",
         "oldestStoredDate": "2023-05-16",
-        "latestStoredDate": "2026-08-05",
+        "latestStoredDate": "2026-08-06",
         "storedFromListingDate": true,
         "continuityLabel": "listing_date_near_continuous",
-        "storedWeekdayCount": 785,
-        "possibleWeekdayCountThroughLatest": 842,
-        "coverageRatioThroughLatest": 0.9323040380047506,
+        "storedWeekdayCount": 786,
+        "possibleWeekdayCountThroughLatest": 843,
+        "coverageRatioThroughLatest": 0.9323843416370107,
         "note": "공급자 public holdings endpoint가 반환한 live 스냅샷만 저장합니다. 휴장일, 공급자 공백, rate limit 날짜는 다음 missing-only 백필에서 이어서 채웁니다."
       }
     },
@@ -60,18 +60,18 @@
       "provider": "삼성액티브자산운용",
       "listingDate": "2025-02-25",
       "historyUrl": "data/history/koact-nasdaq-growth-active.json",
-      "historyCount": 65,
+      "historyCount": 66,
       "availableStartDate": "2025-02-25",
-      "availableEndDate": "2026-08-05",
+      "availableEndDate": "2026-08-06",
       "sourceAvailability": {
         "listingDate": "2025-02-25",
         "oldestStoredDate": "2025-02-25",
-        "latestStoredDate": "2026-08-05",
+        "latestStoredDate": "2026-08-06",
         "storedFromListingDate": true,
         "continuityLabel": "listing_date_sparse",
-        "storedWeekdayCount": 65,
-        "possibleWeekdayCountThroughLatest": 377,
-        "coverageRatioThroughLatest": 0.1724137931034483,
+        "storedWeekdayCount": 66,
+        "possibleWeekdayCountThroughLatest": 378,
+        "coverageRatioThroughLatest": 0.1746031746031746,
         "note": "공급자 public holdings endpoint가 반환한 live 스냅샷만 저장합니다. 휴장일, 공급자 공백, rate limit 날짜는 다음 missing-only 백필에서 이어서 채웁니다."
       }
     }
