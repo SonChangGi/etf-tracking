@@ -22,7 +22,6 @@
     { id: 'risk-score', label: 'Risk Score', url: 'https://sonchanggi.github.io/quant-dashboard/risk-score/' },
     { id: 'port', label: 'Port', url: 'https://sonchanggi.github.io/port/' },
     { id: 'valuation', label: 'Valuation', url: 'https://sonchanggi.github.io/valuation/' },
-    { id: 'kelly', label: 'Kelly', url: 'https://sonchanggi.github.io/kelly/' },
   ].map(Object.freeze));
 
   const etfControlManifest = deepFreeze({

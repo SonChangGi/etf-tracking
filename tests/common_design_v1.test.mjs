@@ -58,14 +58,13 @@ test('common design v1.2 keeps the compact type hierarchy and eleven-project nav
 
   const nav = html.match(/<div class="site-nav-links"[\s\S]*?<\/div>/)?.[0] || '';
   const links = [...nav.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
-  assert.equal(links.length, 11);
+  assert.equal(links.length, 10);
   assert.deepEqual(
     links.map((match) => match[2].replace(/&amp;/g, '&').trim()),
-    ['Hub', 'Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Risk Score', 'Port', 'Valuation', 'Kelly'],
+    ['Hub', 'Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Risk Score', 'Port', 'Valuation'],
   );
   assert.equal(links.filter((match) => /aria-current="page"/.test(match[0])).length, 1);
   assert.match(links[5][0], /aria-current="page"/);
-  assert.equal(links[10][1], 'https://sonchanggi.github.io/kelly/');
 });
 
 test('implementation notes live in one closed operations disclosure', () => {
