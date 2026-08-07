@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "sharedVersion": "quant-platform-frontend/0.1.0",
-  "snapshotDate": "2026-07-28",
+  "snapshotDate": "2026-08-07",
   "source": {
     "repository": "SonChangGi/quant-dashboard",
     "foundationBaseRevision": "20a5604a5e9386253fc983ab10d6f018cdb108cd",
@@ -12,8 +12,8 @@
       "platform/packages/ui/src/styles.css": "e277f29caa54841d3442a366718618b364b688ccd5cd38460dece5e31a57cbbf"
     }
   },
-  "aggregateFingerprint": "2fae8d3154da67e7ebd3c0d0ee5fdc0473ce2f286592cb3639becddf86092d73",
+  "aggregateFingerprint": "5bfb21e8601b79a2fce9194253169c3836370b3cf8d5f17ebcb3df8355267fd8",
   "files": {
-    "src/index.js": "e896a39f9cdbe7a64c1b62f5edbe6b6825abfd8698a3949de572581725911bff"
+    "src/index.js": "78451c248e7ab31f79051707c6d454deedd9dd7c1d888aa20e0e3e4b45179850"
   }
 }
