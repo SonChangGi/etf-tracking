@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-08-12T00:00:21+00:00",
+  "generatedAt": "2026-08-12T03:31:07+00:00",
   "etfs": [
     {
       "id": "time-nasdaq100-active",
@@ -453,7 +453,6 @@
           {
             "rank": 8,
             "codeRaw": "NQU6 INDEX",
-            "ticker": null,
             "name": "NASDAQ 100 E-MINI INDEX SEPT 2026",
             "shares": 0.0,
             "marketValueKrw": 33683694.0,
@@ -461,7 +460,6 @@
             "weight": 0.0364,
             "hasExternalTicker": false,
             "hasProviderValuation": false,
-            "priceTrackingMethod": null,
             "isPriceTracked": false
           },
           {
@@ -1311,7 +1309,6 @@
           {
             "rank": 1,
             "codeRaw": "",
-            "ticker": null,
             "name": "현금",
             "shares": 70637982.0,
             "marketValueKrw": 70637982.0,
