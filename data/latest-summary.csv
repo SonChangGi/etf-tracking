@@ -1,31 +1,31 @@
 etf_id,date,rank,ticker,name,weight_percent,classification,residual_pp
-time-nasdaq100-active,2026-08-12,1,NVDA,NVIDIA Corp,6.8,price_aligned,-0.0003258882643795147
-time-nasdaq100-active,2026-08-12,2,MSFT,Microsoft Corp,6.2,price_aligned,-0.002540900844746119
-time-nasdaq100-active,2026-08-12,3,AMZN,Amazon.com Inc,5.11,price_aligned,0.0011510470899649405
-time-nasdaq100-active,2026-08-12,4,AAOI,Applied Optoelectronics Inc,4.62,price_aligned,0.00023402468142297295
-time-nasdaq100-active,2026-08-12,5,GOOGL,Alphabet Inc,3.89,price_aligned,-0.0004943948146780563
-time-nasdaq100-active,2026-08-12,6,INTC,Intel Corp,3.75,price_aligned,0.002522431096404709
-time-nasdaq100-active,2026-08-12,7,AMD,Advanced Micro Devices Inc,3.74,price_aligned,-0.005380939457332978
-time-nasdaq100-active,2026-08-12,8,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.64,insufficient_data,
-time-nasdaq100-active,2026-08-12,9,MU,Micron Technology Inc,3.56,price_aligned,-0.0036613055535745787
-time-nasdaq100-active,2026-08-12,10,SNDK,Sandisk Corp,3.41,price_aligned,-0.009169779854038218
-time-global-ai-active,2026-08-12,1,,현금,6.08,price_aligned,-0.01932872224807536
-time-global-ai-active,2026-08-12,2,285A.T,Kioxia Holdings Corp,5.51,price_aligned,0.000431370775298312
-time-global-ai-active,2026-08-12,3,AMD,Advanced Micro Devices Inc,4.98,price_aligned,0.0022413041181286175
-time-global-ai-active,2026-08-12,4,STX,Seagate Technology Holdings PLC,4.69,price_aligned,0.006514404336514623
-time-global-ai-active,2026-08-12,5,AMZN,Amazon.com Inc,4.61,price_aligned,-0.001223196384453118
-time-global-ai-active,2026-08-12,6,SNDK,Sandisk Corp,4.38,price_aligned,-0.0011271932089895742
-time-global-ai-active,2026-08-12,7,WDC,Western Digital Corp,4.01,price_aligned,0.004454765529527727
-time-global-ai-active,2026-08-12,8,GOOG,Alphabet Inc,3.9,price_aligned,-0.004206572711448864
-time-global-ai-active,2026-08-12,9,INTC,Intel Corp,3.88,price_aligned,0.005143357268174498
-time-global-ai-active,2026-08-12,10,BABA,Alibaba Group Holding Ltd,3.82,price_aligned,-0.0002896022561578171
-koact-nasdaq-growth-active,2026-08-12,1,PLTR,Palantir Technologies Inc -A,8.61,likely_buy,5.049049653966122
-koact-nasdaq-growth-active,2026-08-12,2,SNOW,Snowflake Inc - CL A,5.58,price_aligned,-0.0004135619324090456
-koact-nasdaq-growth-active,2026-08-12,3,MSFT,MICROSOFT,5.49,likely_buy,2.8390855489156324
-koact-nasdaq-growth-active,2026-08-12,4,AMZN,Amazon.com Inc,5.2,likely_buy,0.9951205335445614
-koact-nasdaq-growth-active,2026-08-12,5,NVDA,NVIDIA Corp,4.93,likely_buy,3.8536264928663573
-koact-nasdaq-growth-active,2026-08-12,6,AAOI,Applied Optoelectronics Inc,3.65,price_aligned,0.0002895114968737289
-koact-nasdaq-growth-active,2026-08-12,7,AMD,ADVANCED MICRO DEVICES,3.11,likely_sell,-3.38785678254652
-koact-nasdaq-growth-active,2026-08-12,8,MDB,MONGODB INC,3.08,new_entry,
-koact-nasdaq-growth-active,2026-08-12,9,GOOGL,ALPHABET INC-CL A,3.06,price_aligned,0.0003104847875108341
-koact-nasdaq-growth-active,2026-08-12,10,ARM,ARM Holdings PLC,2.93,price_aligned,0.00807749291525095
+time-nasdaq100-active,2026-08-13,1,NVDA,NVIDIA Corp,6.71,price_aligned,-0.06538124326306516
+time-nasdaq100-active,2026-08-13,2,MSFT,Microsoft Corp,6.15,price_aligned,-0.001501225516593152
+time-nasdaq100-active,2026-08-13,3,AMZN,Amazon.com Inc,4.95,price_aligned,-0.036088457615607084
+time-nasdaq100-active,2026-08-13,4,AAOI,Applied Optoelectronics Inc,4.61,price_aligned,-0.047028127476023585
+time-nasdaq100-active,2026-08-13,5,GOOGL,Alphabet Inc,3.73,price_aligned,0.0019667376992336116
+time-nasdaq100-active,2026-08-13,6,INTC,Intel Corp,3.71,price_aligned,-0.03456384770680776
+time-nasdaq100-active,2026-08-13,7,AMD,Advanced Micro Devices Inc,3.69,price_aligned,-0.07510074431417557
+time-nasdaq100-active,2026-08-13,8,MU,Micron Technology Inc,3.58,price_aligned,0.001085532223022323
+time-nasdaq100-active,2026-08-13,9,SNDK,Sandisk Corp,3.49,price_aligned,0.000613409716748059
+time-nasdaq100-active,2026-08-13,10,CRDO,Credo Technology Group Holding Ltd,3.25,price_aligned,-0.0010721369392103774
+time-global-ai-active,2026-08-13,1,,현금,6.05,price_aligned,-0.00950065199240857
+time-global-ai-active,2026-08-13,2,285A.T,Kioxia Holdings Corp,5.49,price_aligned,0.004814686424189141
+time-global-ai-active,2026-08-13,3,AMD,Advanced Micro Devices Inc,5.01,price_aligned,-0.0028140088175838684
+time-global-ai-active,2026-08-13,4,STX,Seagate Technology Holdings PLC,4.79,price_aligned,0.0025216254698436913
+time-global-ai-active,2026-08-13,5,AMZN,Amazon.com Inc,4.5,price_aligned,0.0023334814004476456
+time-global-ai-active,2026-08-13,6,SNDK,Sandisk Corp,4.48,price_aligned,-0.0014244655964912312
+time-global-ai-active,2026-08-13,7,WDC,Western Digital Corp,3.99,price_aligned,-0.002177778201140068
+time-global-ai-active,2026-08-13,8,INTC,Intel Corp,3.87,price_aligned,-0.003904875801253649
+time-global-ai-active,2026-08-13,9,GOOG,Alphabet Inc,3.75,price_aligned,0.003930163810418552
+time-global-ai-active,2026-08-13,10,BABA,Alibaba Group Holding Ltd,3.68,price_aligned,0.002010251274807473
+koact-nasdaq-growth-active,2026-08-13,1,PLTR,Palantir Technologies Inc -A,8.61,price_aligned,0.0002055598637795697
+koact-nasdaq-growth-active,2026-08-13,2,SNOW,Snowflake Inc - CL A,5.58,price_aligned,0.00023478022079093108
+koact-nasdaq-growth-active,2026-08-13,3,MSFT,MICROSOFT,5.48,price_aligned,0.005479483344551284
+koact-nasdaq-growth-active,2026-08-13,4,AMZN,Amazon.com Inc,5.1,price_aligned,0.0005100365535861684
+koact-nasdaq-growth-active,2026-08-13,5,NVDA,NVIDIA Corp,4.94,price_aligned,0.0030802821881987796
+koact-nasdaq-growth-active,2026-08-13,6,AAOI,Applied Optoelectronics Inc,3.7,price_aligned,0.0021944453055180446
+koact-nasdaq-growth-active,2026-08-13,7,MDB,MONGODB INC,3.25,price_aligned,-0.0015484600412030147
+koact-nasdaq-growth-active,2026-08-13,8,AMD,ADVANCED MICRO DEVICES,3.15,price_aligned,0.0033408839349267083
+koact-nasdaq-growth-active,2026-08-13,9,GOOGL,ALPHABET INC-CL A,2.95,price_aligned,0.00262141139421157
+koact-nasdaq-growth-active,2026-08-13,10,ARM,ARM Holdings PLC,2.95,price_aligned,0.0033795850185334153
