@@ -21,7 +21,7 @@
 - 수동 자동화는 일시적 공급자/종가 지연을 실패 종료하지 않고 `data/automation-status.json`에 기록
 - 이미 저장된 usable 스냅샷은 재요청하지 않고 없는 날짜만 채우는 missing-only 업데이트
 - 공개 페이지의 수동 업데이트 버튼으로 GitHub Actions `workflow_dispatch` 실행 화면 연결
-- GitHub Pages는 `main` 브랜치 루트의 정적 파일을 배포
+- GitHub Pages는 `Update ETF tracking data` workflow가 검증한 `dist` artifact만 배포하며 legacy branch publisher는 사용하지 않음
 - 공통 플랫폼 `0.1.0` 호환 경계에서 9개 메뉴·디자인 토큰·표시 제어 계약을 검증
 - 공개 화면은 같은 출처의 검증된 정적 JSON만 `GET`하며 분석 실행 API를 호출하지 않음
 
@@ -94,7 +94,8 @@ npm run build
 - CLI로 수동 실행하려면 `gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true`를 사용합니다.
 - production 데이터 갱신과 Pages 배포는 저장소 기본 브랜치에서만 허용되며, 다른 ref의 수동 실행은 공개 상태를 바꾸기 전에 실패합니다.
 - 업데이트 결과는 `data/status.json`과 `data/automation-status.json`에 남깁니다.
-- `npm test`까지 통과하고 `automation-status.json`의 `runStatus`가 정확히 `ok`일 때만 새 데이터를 커밋합니다. 같은 실행에서 검증된 `dist`를 Pages에 배포하고 모든 공개 JSON을 uncached byte-for-byte로 다시 읽어 확인합니다. `waiting_for_data`는 마지막 예약 시각 전까지만 정상 재시도 상태이며, 마지막 시각의 미게시·`degraded`·코드·검증·커밋·배포·공개 readback 오류는 last-good 데이터를 보존하면서 실패 알림을 만듭니다.
+- `npm test`까지 통과하고 `automation-status.json`의 `runStatus`가 정확히 `ok`일 때만 새 데이터를 bot identity로 커밋합니다. workflow는 Pages 설정의 `build_type=workflow`를 확인하고, 검증한 SHA가 현재 원격 `main`과 일치할 때만 같은 실행의 `dist`를 배포합니다. 업로드 뒤 `main`이 바뀌어도 stale artifact를 거부하며, 앱 셸·런타임·모든 공개 JSON을 uncached byte-for-byte로 다시 읽어 확인합니다. `waiting_for_data`는 마지막 예약 시각 전까지만 정상 재시도 상태이며, 마지막 시각의 미게시·`degraded`·코드·검증·커밋·배포·공개 readback 오류는 last-good 데이터를 보존하면서 실패 알림을 만듭니다.
+- 저장소 Pages 설정은 배포 전 한 번 `gh api --method PUT repos/SonChangGi/etf-tracking/pages -f build_type=workflow`로 전환하고 `gh api repos/SonChangGi/etf-tracking/pages --jq .build_type`이 `workflow`인지 확인합니다. 이 설정 변경 전에는 workflow가 이중 publisher를 허용하지 않고 배포 단계에서 fail-closed합니다.
 - 디버깅이 필요할 때는 수동 workflow 실행에서 `strict_validation=true`를 선택하면 일반 CI처럼 실패 종료합니다.
 
 ## 프로젝트 경계
