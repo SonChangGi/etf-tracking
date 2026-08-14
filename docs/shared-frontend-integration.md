@@ -22,7 +22,7 @@ Python collector. `scripts/update_data.py`, the generated JSON contracts, and
 worktree import, CDN, or cross-origin runtime:
 
 - `src/index.js` contains the four control kinds, ETF control manifest,
-  canonical 9-project registry, semantic token names, and static adapters.
+  canonical 8-destination registry, semantic token names, and static adapters.
 - `dist/index.js` is a byte-identical, same-origin browser build.
 - `platform-snapshot.json` records upstream source hashes, the vendored file
   hash, and one aggregate fingerprint.
