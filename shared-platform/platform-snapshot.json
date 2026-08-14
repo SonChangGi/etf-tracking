@@ -4,16 +4,16 @@
   "snapshotDate": "2026-08-14",
   "source": {
     "repository": "SonChangGi/quant-dashboard",
-    "foundationBaseRevision": "20a5604a5e9386253fc983ab10d6f018cdb108cd",
+    "foundationBaseRevision": "c1867cd30645a45dccde383b50bf5bb808f1b47d",
     "note": "The shared packages are not published; ETF Tracking vendors only a small browser compatibility seam and keeps all result JSON as same-origin static files.",
     "compatibilitySourceHashes": {
       "platform/packages/contracts/src/schemas.ts": "4d0e53ec03173461710debd24204abf97b1345d5031e31a349d87c83d80767a0",
-      "platform/packages/project-registry/src/index.ts": "890fdf1117c296a79e58ff23837dccfb6740fc5be136cb392c3c5b0ee352c99f",
+      "platform/packages/project-registry/src/index.ts": "1f2df47d08436155d4710a1d1b0838a063a20e4c1720cb3c87b9129ad00601ec",
       "platform/packages/ui/src/styles.css": "e277f29caa54841d3442a366718618b364b688ccd5cd38460dece5e31a57cbbf"
     }
   },
-  "aggregateFingerprint": "92a21d8c49b705bf959ee3f0bda04dee9960e07a8d11cfc6303fca8fc86576c2",
+  "aggregateFingerprint": "8a5d9cbff4007dda1fe147ad570804c241c30d4b078c5c9813263697818de508",
   "files": {
-    "src/index.js": "34ff11a25583ca9d31ed4925cd2d6873dc631b9c2be1bf89c6d1e0eae91a80b3"
+    "src/index.js": "a5f89a5f7f237a9d7f12c93c4821acb6ee2ccdff3dce1690714dfae8db6db025"
   }
 }
