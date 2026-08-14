@@ -44,6 +44,8 @@ env:
   # GitHub warned that Node 20 JavaScript actions are being deprecated. Opt in now
   # so manual validation does not warn/fail only because the runner default changes.
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  AUTOMATION_COMMITTER_NAME: github-actions[bot]
+  AUTOMATION_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
 
 concurrency:
   group: etf-tracking-update
@@ -180,12 +182,17 @@ jobs:
         id: commit-data
         if: steps.assess.outputs.safe_to_commit == 'true'
         continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          set -euo pipefail
+          git config user.name "${AUTOMATION_COMMITTER_NAME}"
+          git config user.email "${AUTOMATION_COMMITTER_EMAIL}"
           git add data
           if git diff --cached --quiet; then
             echo "No safe data changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "source_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           cat > /tmp/etf-tracking-data-commit-message <<'MSG'
@@ -199,38 +206,117 @@ jobs:
           Not-tested: Manual investment interpretation.
           MSG
           git commit -F /tmp/etf-tracking-data-commit-message
-          git push
-      - name: Configure GitHub Pages
+          if [[ "$(git show -s --format=%an HEAD)" != "${AUTOMATION_COMMITTER_NAME}" ]] \
+            || [[ "$(git show -s --format=%ae HEAD)" != "${AUTOMATION_COMMITTER_EMAIL}" ]]; then
+            echo "Refusing to publish a generated commit with an unexpected identity." >&2
+            exit 1
+          fi
+          git push origin "HEAD:${DEFAULT_BRANCH}"
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+          echo "source_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Confirm workflow owns Pages publication
+        id: pages-owner
         if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          build_type="$(timeout 30s gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '.build_type')"
+          if [[ "${build_type}" != "workflow" ]]; then
+            echo "GitHub Pages build_type must be workflow; received ${build_type}." >&2
+            echo "Disable the legacy branch publisher before this workflow becomes the sole deployment owner." >&2
+            exit 1
+          fi
+          echo "Confirmed this Actions workflow is the sole configured Pages publisher."
+      - name: Verify current main matches the tested candidate
+        id: current-main
+        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          EXPECTED_SOURCE_SHA: ${{ steps.commit-data.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          if [[ ! "${EXPECTED_SOURCE_SHA}" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "Commit step did not expose a valid source SHA." >&2
+            exit 1
+          fi
+          timeout 60s git fetch origin "${DEFAULT_BRANCH}" --depth=1
+          local_sha="$(git rev-parse HEAD)"
+          remote_sha="$(git rev-parse "origin/${DEFAULT_BRANCH}")"
+          if [[ "${local_sha}" != "${EXPECTED_SOURCE_SHA}" ]] \
+            || [[ "${remote_sha}" != "${EXPECTED_SOURCE_SHA}" ]]; then
+            echo "Refusing stale Pages artifact: local=${local_sha} remote=${remote_sha} expected=${EXPECTED_SOURCE_SHA}." >&2
+            exit 1
+          fi
+          {
+            echo "## ETF Pages deployment identity"
+            echo "- owner: workflow"
+            echo "- source SHA: \`${EXPECTED_SOURCE_SHA}\`"
+            echo "- generated commit: \`${{ steps.commit-data.outputs.changed || 'false' }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Configure GitHub Pages
+        if: steps.current-main.outcome == 'success'
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
       - name: Upload exact static site
-        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        if: steps.current-main.outcome == 'success'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
         with:
           path: dist
+      - name: Reject a stale main after artifact upload
+        id: pre-deploy-main
+        if: steps.current-main.outcome == 'success'
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          EXPECTED_SOURCE_SHA: ${{ steps.commit-data.outputs.source_sha }}
+        run: |
+          set -euo pipefail
+          timeout 60s git fetch origin "${DEFAULT_BRANCH}" --depth=1
+          remote_sha="$(git rev-parse "origin/${DEFAULT_BRANCH}")"
+          if [[ "${remote_sha}" != "${EXPECTED_SOURCE_SHA}" ]]; then
+            echo "Main advanced to ${remote_sha} after upload; refusing stale artifact ${EXPECTED_SOURCE_SHA}." >&2
+            exit 1
+          fi
       - name: Deploy exact static site
         id: deployment
-        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+        if: steps.pre-deploy-main.outcome == 'success'
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
-      - name: Verify live public JSON bytes
-        if: steps.assess.outputs.safe_to_commit == 'true' && steps.commit-data.outcome == 'success'
+      - name: Verify live public site bytes
+        if: steps.deployment.outcome == 'success'
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
         run: |
+          set -euo pipefail
+          expected_page_url="https://sonchanggi.github.io/etf-tracking/"
+          if [[ "${PAGE_URL%/}/" != "${expected_page_url}" ]]; then
+            echo "Unexpected Pages deployment URL: ${PAGE_URL}" >&2
+            exit 1
+          fi
           mapfile -d '' public_json < <(find dist/data -type f -name '*.json' -print0 | sort -z)
           if (( ${#public_json[@]} == 0 )); then
             echo "No built public JSON files were found." >&2
             exit 1
           fi
+          public_files=(
+            dist/index.html
+            dist/assets/app.js
+            dist/assets/styles.css
+            dist/assets/shared-nav.css
+            dist/shared-platform/dist/index.js
+          )
+          public_files+=("${public_json[@]}")
           readback_dir="$(mktemp -d)"
           trap 'rm -rf "$readback_dir"' EXIT
           for attempt in {1..12}; do
             all_match=true
-            for local_path in "${public_json[@]}"; do
+            for local_path in "${public_files[@]}"; do
               relative="${local_path#dist/}"
               remote_path="${readback_dir}/$(printf '%s' "$relative" | tr '/' '_')"
               url="${PAGE_URL%/}/${relative}?__etf_readback=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}"
-              if ! curl --fail --silent --show-error --location "$url" --output "$remote_path"; then
+              if ! curl --fail --silent --show-error --location \
+                --header "Cache-Control: no-cache" \
+                --connect-timeout 10 \
+                --max-time 120 \
+                "$url" --output "$remote_path"; then
                 all_match=false
                 break
               fi
@@ -240,7 +326,7 @@ jobs:
               fi
             done
             if [[ "$all_match" == "true" ]]; then
-              echo "Verified ${#public_json[@]} public JSON files byte-for-byte."
+              echo "Verified ${#public_files[@]} public site files byte-for-byte."
               exit 0
             fi
             if (( attempt < 12 )); then
