@@ -1,0 +1,96 @@
+name: Deploy ETF UI to Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: etf-tracking-update
+  cancel-in-progress: false
+
+jobs:
+  deploy-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Require the production branch
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if [[ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]]; then
+            echo "ETF UI releases must run from ${DEFAULT_BRANCH}; received ${GITHUB_REF_NAME}." >&2
+            exit 1
+          fi
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+      - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Verify and build the static site
+        run: npm test
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6
+      - name: Upload exact static site
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5
+        with:
+          path: dist
+      - name: Deploy exact static site
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+      - name: Verify live UI bytes
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        run: |
+          set -euo pipefail
+          expected_page_url="https://sonchanggi.github.io/etf-tracking/"
+          if [[ "${PAGE_URL%/}/" != "${expected_page_url}" ]]; then
+            echo "Unexpected Pages deployment URL: ${PAGE_URL}" >&2
+            exit 1
+          fi
+          public_files=(
+            dist/index.html
+            dist/assets/app.js
+            dist/assets/styles.css
+            dist/assets/shared-nav.css
+            dist/shared-platform/dist/index.js
+          )
+          readback_dir="$(mktemp -d)"
+          trap 'rm -rf "$readback_dir"' EXIT
+          for attempt in {1..12}; do
+            all_match=true
+            for local_path in "${public_files[@]}"; do
+              relative="${local_path#dist/}"
+              remote_path="${readback_dir}/$(printf '%s' "$relative" | tr '/' '_')"
+              url="${PAGE_URL%/}/${relative}?__etf_ui_readback=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}"
+              if ! curl --fail --silent --show-error --location \
+                --header "Cache-Control: no-cache" \
+                --connect-timeout 10 \
+                --max-time 120 \
+                "$url" --output "$remote_path"; then
+                all_match=false
+                break
+              fi
+              if ! cmp --silent "$local_path" "$remote_path"; then
+                all_match=false
+                break
+              fi
+            done
+            if [[ "$all_match" == "true" ]]; then
+              echo "Verified ${#public_files[@]} public UI files byte-for-byte."
+              exit 0
+            fi
+            if (( attempt < 12 )); then
+              sleep $((attempt * 5))
+            fi
+          done
+          echo "Public ETF UI readback did not converge to the deployed artifact." >&2
+          exit 1
