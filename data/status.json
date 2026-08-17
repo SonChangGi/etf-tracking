@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-08-14T10:39:18+00:00",
-  "targetDate": "2026-08-14",
+  "generatedAt": "2026-08-17T23:37:04+00:00",
+  "targetDate": "2026-08-18",
   "overallStatus": "ok",
   "message": "Scheduled refresh runs Tue-Sat in KST; if prior closes or provider rows are missing, use a reviewed workflow_dispatch run to refresh this file.",
   "priceErrorCount": 0,
@@ -10,24 +10,24 @@
     {
       "id": "time-nasdaq100-active",
       "name": "TIME 미국나스닥100액티브",
-      "targetDate": "2026-08-14",
-      "latestDate": "2026-08-14",
-      "targetFetchStatus": "cached_live",
-      "targetFetchWarning": "Existing usable snapshot reused; pass --refresh-existing to refetch this date.",
+      "targetDate": "2026-08-18",
+      "latestDate": "2026-08-18",
+      "targetFetchStatus": "live",
+      "targetFetchWarning": "",
       "targetFetchHasTop10": true,
-      "reusedExistingTargetSnapshot": true,
+      "reusedExistingTargetSnapshot": false,
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
-      "returnCoverage": 0.9729054189162168,
+      "returnCoverage": 0.9649140343862455,
       "priceBasis": {
-        "previous": "2026-08-12",
-        "current": "2026-08-13"
+        "previous": "2026-08-13",
+        "current": "2026-08-17"
       },
       "fetchStats": {
-        "requestedDates": 8,
-        "skippedExisting": 8,
-        "fetchedLive": 0,
+        "requestedDates": 7,
+        "skippedExisting": 5,
+        "fetchedLive": 1,
         "targetErrors": 0,
         "targetRateLimited": 0,
         "targetStale": 0,
@@ -41,24 +41,24 @@
     {
       "id": "time-global-ai-active",
       "name": "TIME 글로벌AI인공지능액티브",
-      "targetDate": "2026-08-14",
-      "latestDate": "2026-08-14",
-      "targetFetchStatus": "cached_live",
-      "targetFetchWarning": "Existing usable snapshot reused; pass --refresh-existing to refetch this date.",
+      "targetDate": "2026-08-18",
+      "latestDate": "2026-08-18",
+      "targetFetchStatus": "live",
+      "targetFetchWarning": "",
       "targetFetchHasTop10": true,
-      "reusedExistingTargetSnapshot": true,
+      "reusedExistingTargetSnapshot": false,
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
       "returnCoverage": 1.0,
       "priceBasis": {
-        "previous": "2026-08-12",
-        "current": "2026-08-13"
+        "previous": "2026-08-13",
+        "current": "2026-08-17"
       },
       "fetchStats": {
-        "requestedDates": 8,
-        "skippedExisting": 8,
-        "fetchedLive": 0,
+        "requestedDates": 7,
+        "skippedExisting": 5,
+        "fetchedLive": 1,
         "targetErrors": 0,
         "targetRateLimited": 0,
         "targetStale": 0,
@@ -72,32 +72,32 @@
     {
       "id": "koact-nasdaq-growth-active",
       "name": "KoAct 미국나스닥성장기업액티브",
-      "targetDate": "2026-08-14",
-      "latestDate": "2026-08-14",
-      "targetFetchStatus": "cached_live",
-      "targetFetchWarning": "Existing usable snapshot reused; pass --refresh-existing to refetch this date.",
+      "targetDate": "2026-08-18",
+      "latestDate": "2026-08-18",
+      "targetFetchStatus": "live",
+      "targetFetchWarning": "",
       "targetFetchHasTop10": true,
-      "reusedExistingTargetSnapshot": true,
+      "reusedExistingTargetSnapshot": false,
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
       "returnCoverage": 1.0,
       "priceBasis": {
-        "previous": "2026-08-12",
-        "current": "2026-08-13"
+        "previous": "2026-08-13",
+        "current": "2026-08-17"
       },
       "fetchStats": {
-        "requestedDates": 8,
-        "skippedExisting": 8,
-        "fetchedLive": 0,
+        "requestedDates": 7,
+        "skippedExisting": 5,
+        "fetchedLive": 1,
         "targetErrors": 0,
         "targetRateLimited": 0,
         "targetStale": 0,
         "targetDateMismatches": 0,
         "historicalErrors": 0,
         "historicalRateLimited": 0,
-        "historicalStale": 0,
-        "historicalDateMismatches": 0
+        "historicalStale": 1,
+        "historicalDateMismatches": 1
       }
     }
   ]
