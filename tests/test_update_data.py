@@ -992,10 +992,18 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn("and not final_retry", workflow)
         self.assertIn("provider data remained unavailable at the final scheduled retry", workflow)
         self.assertIn("hard_failure = not safe and not expected_wait", workflow)
-        self.assertIn("Scheduled automation failure gate", workflow)
+        self.assertIn("Record scheduled automation degradation", workflow)
         self.assertIn("github.event_name == 'schedule'", workflow)
         self.assertIn("steps.assess.outputs.hard_failure == 'true'", workflow)
-        self.assertIn("Last-good public data was preserved", workflow)
+        self.assertIn("last-good public dataset was preserved", workflow)
+        degradation_block = workflow.split("Record scheduled automation degradation", 1)[1].split(
+            "public-site-health:", 1
+        )[0]
+        self.assertIn("exit 1", degradation_block)
+        self.assertIn("continue-on-error: ${{ github.event_name == 'schedule' }}", workflow)
+        self.assertIn("public-site-health:", workflow)
+        self.assertIn("Fail only when the existing ETF page is unusable", workflow)
+        self.assertIn("required_paths=(index.html data/summary.json data/dashboard.json)", workflow)
         self.assertIn("scheduled and reviewed manual provider refreshes", workflow)
         self.assertIn("pages: write", workflow)
         self.assertIn("id-token: write", workflow)
@@ -1040,14 +1048,13 @@ class WorkflowStrictValidationTests(unittest.TestCase):
 
     def test_readme_matches_scheduled_failure_classification(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("08:15/10:15 실행만 last-good 공개 데이터를 보존하고 정상 종료", readme)
-        self.assertIn("마지막 12:15 실행까지 미게시 상태이면 실패 신호", readme)
+        self.assertIn("08:15/10:15/12:15 실행 모두 last-good 공개 데이터를 보존", readme)
+        self.assertIn("공개 페이지 usability 확인 실패만 자동 실패 신호", readme)
         self.assertIn("현재 원격 `main`과 일치할 때만 같은 실행의 `dist`를 배포", readme)
         self.assertIn("uncached byte-for-byte", readme)
         self.assertIn("`build_type=workflow`", readme)
         self.assertIn("stale artifact를 거부", readme)
-        self.assertIn("마지막 시각의 미게시·`degraded`·코드·검증·커밋·배포·공개 readback 오류", readme)
-        self.assertNotIn("`waiting_for_data`나 `degraded`는 실패 메일을 만들지는 않지만", readme)
+        self.assertIn("`waiting_for_data`나 `degraded`는 실패 메일을 만들지 않지만", readme)
 
     def test_strict_manual_gate_covers_update_verify_assess_and_commit(self):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")

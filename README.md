@@ -88,13 +88,13 @@ npm run build
 
 ## 자동화 운영 정책
 
-- 자동 예약 workflow는 08:15 KST Tue-Sat 1차 갱신과 10:15/12:15 KST Tue-Sat 재시도를 실행합니다. 공급자 선행 종가가 아직 게시되지 않아 `waiting_for_data`인 경우 08:15/10:15 실행만 last-good 공개 데이터를 보존하고 정상 종료해 다음 재시도를 기다립니다. 마지막 12:15 실행까지 미게시 상태이면 실패 신호를 남겨 장기 stale 상태가 정상으로 숨지 않습니다. `degraded`, updater 코드 오류, `npm test` 검증 오류, 데이터 커밋 오류도 예약 실행을 실패 종료합니다.
+- 자동 예약 workflow는 08:15 KST Tue-Sat 1차 갱신과 10:15/12:15 KST Tue-Sat 재시도를 실행합니다. 공급자 선행 종가가 아직 게시되지 않거나 `degraded`, updater·검증·커밋 오류가 발생하면 08:15/10:15/12:15 실행 모두 last-good 공개 데이터를 보존하고 상세 원인을 status·summary·artifact에 남깁니다. `waiting_for_data`나 `degraded`는 실패 메일을 만들지 않지만 재시도와 freshness 판정에는 계속 반영됩니다. 별도 health job이 실제 Pages의 `index.html`, `summary.json`, `dashboard.json`을 반복 확인하며, 공개 페이지 usability 확인 실패만 자동 실패 신호가 됩니다.
 - 수동 workflow 기본값은 최신 기준일을 먼저 확인한 뒤 최근 10일 구간에서 저장되지 않은 날짜만 보강합니다. 더 오래된 분석은 `backfill_start_date` 또는 `backfill_all`로 확장합니다.
 - 웹페이지의 수동 업데이트 버튼은 공개 정적 페이지에 토큰을 저장하지 않고 GitHub의 인증된 Actions 실행 화면으로 이동합니다.
 - CLI로 수동 실행하려면 `gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true`를 사용합니다.
 - production 데이터 갱신과 Pages 배포는 저장소 기본 브랜치에서만 허용되며, 다른 ref의 수동 실행은 공개 상태를 바꾸기 전에 실패합니다.
 - 업데이트 결과는 `data/status.json`과 `data/automation-status.json`에 남깁니다.
-- `npm test`까지 통과하고 `automation-status.json`의 `runStatus`가 정확히 `ok`일 때만 새 데이터를 bot identity로 커밋합니다. workflow는 Pages 설정의 `build_type=workflow`를 확인하고, 검증한 SHA가 현재 원격 `main`과 일치할 때만 같은 실행의 `dist`를 배포합니다. 업로드 뒤 `main`이 바뀌어도 stale artifact를 거부하며, 앱 셸·런타임·모든 공개 JSON을 uncached byte-for-byte로 다시 읽어 확인합니다. `waiting_for_data`는 마지막 예약 시각 전까지만 정상 재시도 상태이며, 마지막 시각의 미게시·`degraded`·코드·검증·커밋·배포·공개 readback 오류는 last-good 데이터를 보존하면서 실패 알림을 만듭니다.
+- `npm test`까지 통과하고 `automation-status.json`의 `runStatus`가 정확히 `ok`일 때만 새 데이터를 bot identity로 커밋합니다. workflow는 Pages 설정의 `build_type=workflow`를 확인하고, 검증한 SHA가 현재 원격 `main`과 일치할 때만 같은 실행의 `dist`를 배포합니다. 업로드 뒤 `main`이 바뀌어도 stale artifact를 거부하며, 앱 셸·런타임·모든 공개 JSON을 uncached byte-for-byte로 다시 읽어 확인합니다. 이 게시 안전장치는 그대로 엄격하지만, 정기 갱신 실패와 사용자에게 보내는 실패 메일은 분리됩니다.
 - 저장소 Pages 설정은 배포 전 한 번 `gh api --method PUT repos/SonChangGi/etf-tracking/pages -f build_type=workflow`로 전환하고 `gh api repos/SonChangGi/etf-tracking/pages --jq .build_type`이 `workflow`인지 확인합니다. 이 설정 변경 전에는 workflow가 이중 publisher를 허용하지 않고 배포 단계에서 fail-closed합니다.
 - 디버깅이 필요할 때는 수동 workflow 실행에서 `strict_validation=true`를 선택하면 일반 CI처럼 실패 종료합니다.
 

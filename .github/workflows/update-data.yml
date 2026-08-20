@@ -54,6 +54,7 @@ concurrency:
 jobs:
   update-data:
     runs-on: ubuntu-latest
+    continue-on-error: ${{ github.event_name == 'schedule' }}
     timeout-minutes: 55
     environment:
       name: github-pages
@@ -350,11 +351,61 @@ jobs:
         run: |
           echo "Strict validation requested and one or more gates failed." >&2
           exit 1
-      - name: Scheduled automation failure gate
+      - name: Record scheduled automation degradation
         if: always() && github.event_name == 'schedule' && (steps.assess.outputs.hard_failure == 'true' || steps.commit-data.outcome == 'failure')
         env:
           FAILURE_REASON: ${{ steps.assess.outputs.failure_reason }}
         run: |
-          echo "Scheduled ETF automation failed: ${FAILURE_REASON:-commit step failed}" >&2
-          echo "The last-good public dataset was preserved and this failed run is the notification signal." >&2
+          echo "::warning::Scheduled ETF automation degraded: ${FAILURE_REASON:-commit step failed}"
+          echo "The last-good public dataset was preserved; a separate public-site health job is the failure-mail gate."
+          exit 1
+
+  public-site-health:
+    needs: update-data
+    if: ${{ always() && github.event_name == 'schedule' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    permissions:
+      contents: read
+    steps:
+      - name: Fail only when the existing ETF page is unusable
+        env:
+          PAGE_URL: https://sonchanggi.github.io/etf-tracking/
+        shell: bash
+        run: |
+          set -u
+          required_paths=(index.html data/summary.json data/dashboard.json)
+          for attempt in {1..12}; do
+            usable=true
+            for relative_path in "${required_paths[@]}"; do
+              readback="$RUNNER_TEMP/etf-health-${relative_path//\//-}"
+              if ! curl --fail --silent --show-error --location \
+                --header "Cache-Control: no-cache" \
+                --connect-timeout 10 \
+                --max-time 120 \
+                --output "$readback" \
+                "${PAGE_URL%/}/${relative_path}?health=${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}-${attempt}"; then
+                usable=false
+                break
+              fi
+              if [[ ! -s "$readback" ]]; then
+                usable=false
+                break
+              fi
+              if [[ "$relative_path" == "index.html" ]] && ! grep -Eiq '<!doctype html|<html' "$readback"; then
+                usable=false
+                break
+              fi
+              if [[ "$relative_path" == *.json ]] && ! jq -e 'type == "object" and length > 0' "$readback" >/dev/null; then
+                usable=false
+                break
+              fi
+            done
+            if [[ "$usable" == "true" ]]; then
+              echo "The existing ETF page remains usable; scheduled refresh errors stay in run logs without failure mail."
+              exit 0
+            fi
+            [[ $attempt -lt 12 ]] && sleep 10
+          done
+          echo "::error::The public ETF page or its required JSON is unavailable or invalid."
           exit 1
