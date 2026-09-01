@@ -1,14 +1,14 @@
 etf_id,date,rank,ticker,name,weight_percent,classification,residual_pp
-time-nasdaq100-active,2026-09-01,1,NVDA,NVIDIA Corp,7.69,price_aligned,-0.03331679818917088
-time-nasdaq100-active,2026-09-01,2,SNDK,Sandisk Corp,4.59,price_aligned,0.0045621950186891524
-time-nasdaq100-active,2026-09-01,3,AMZN,Amazon.com Inc,4.32,price_aligned,0.0006157858539275196
-time-nasdaq100-active,2026-09-01,4,MSFT,Microsoft Corp,4.04,price_aligned,-0.07987892955750198
-time-nasdaq100-active,2026-09-01,5,MU,Micron Technology Inc,3.89,price_aligned,0.0024869118480261854
+time-nasdaq100-active,2026-09-01,1,NVDA,NVIDIA Corp,7.69,price_aligned,-0.036441305593685414
+time-nasdaq100-active,2026-09-01,2,SNDK,Sandisk Corp,4.59,price_aligned,0.002707132647304711
+time-nasdaq100-active,2026-09-01,3,AMZN,Amazon.com Inc,4.32,price_aligned,-0.0011316431733536803
+time-nasdaq100-active,2026-09-01,4,MSFT,Microsoft Corp,4.04,price_aligned,-0.08154564769913275
+time-nasdaq100-active,2026-09-01,5,MU,Micron Technology Inc,3.89,price_aligned,0.0009141984987661722
 time-nasdaq100-active,2026-09-01,6,,NASDAQ 100 E-MINI INDEX SEPT 2026,3.64,insufficient_data,
-time-nasdaq100-active,2026-09-01,7,SKHY,SK hynix Inc,3.58,price_aligned,0.0023480762476446593
-time-nasdaq100-active,2026-09-01,8,BE,Bloom Energy Corp,3.16,likely_buy,1.016076094525682
-time-nasdaq100-active,2026-09-01,9,HOOD,Robinhood Markets Inc,3.11,price_aligned,0.0016578364469834739
-time-nasdaq100-active,2026-09-01,10,LITE,Lumentum Holdings Inc,3.04,price_aligned,0.005737525202580862
+time-nasdaq100-active,2026-09-01,7,SKHY,SK hynix Inc,3.58,price_aligned,0.0009007188209548822
+time-nasdaq100-active,2026-09-01,8,BE,Bloom Energy Corp,3.16,likely_buy,1.0152087591188343
+time-nasdaq100-active,2026-09-01,9,HOOD,Robinhood Markets Inc,3.11,price_aligned,0.00040034068971239734
+time-nasdaq100-active,2026-09-01,10,LITE,Lumentum Holdings Inc,3.04,price_aligned,0.004509998763167378
 time-global-ai-active,2026-09-01,1,SNDK,Sandisk Corp,4.84,residual_watch,-0.35917782068891313
 time-global-ai-active,2026-09-01,2,,NASDAQ 100 E-MINI INDEX SEPT 2026,4.27,insufficient_data,
 time-global-ai-active,2026-09-01,3,SKHY,SK hynix Inc,4.04,likely_sell,-0.4918764291518771
