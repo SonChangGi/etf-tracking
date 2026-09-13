@@ -20,6 +20,7 @@
     { id: 'etf', label: 'ETF', url: 'https://sonchanggi.github.io/etf-tracking/' },
     { id: 'sox', label: 'SOX', url: 'https://sonchanggi.github.io/sox/' },
     { id: 'regime', label: 'Regime', url: 'https://sonchanggi.github.io/regime/' },
+    { id: 'news', label: 'News', url: 'https://sonchanggi.github.io/news/' },
   ].map(Object.freeze));
 
   const etfControlManifest = deepFreeze({
