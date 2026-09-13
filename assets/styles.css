@@ -1579,3 +1579,14 @@ input[type="search"],
   .operations-panel.manual-update { padding: 14px; }
   .page-jump-nav { display: none; }
 }
+
+/* Navigation inheritance matches the Quant Research Hub across project styles. */
+.quant-shared-nav {
+  font: 15px/1.55 Inter, Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  letter-spacing: 0;
+  font-variant-numeric: normal;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+.quant-shared-nav__link { border: 1px solid transparent; }
+.quant-shared-nav__theme { margin: 0; gap: 0; font-size: .88rem; font-weight: 650; }
