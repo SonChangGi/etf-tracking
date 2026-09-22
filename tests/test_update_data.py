@@ -15,6 +15,17 @@ SPEC.loader.exec_module(update_data)
 
 
 class UpdateDataTests(unittest.TestCase):
+    def test_us_holiday_uses_actual_close_on_or_before_disclosure_price_basis(self):
+        provider = update_data.PriceProvider(no_live=True)
+        series = {"closes": {"2026-09-03": 100.0, "2026-09-04": 110.0, "2026-09-08": 120.0}, "sources": {"2026-09-04": "fixture"}}
+        # Korean disclosure D=Sep 8 has nominal upper bound Sep 7 (US Labor Day).
+        self.assertEqual(update_data.previous_weekday("2026-09-08"), "2026-09-07")
+        with mock.patch.object(provider, "close_series", return_value=series):
+            value, metadata = provider.return_between("NVDA", "2026-09-03", "2026-09-07")
+        self.assertAlmostEqual(value, 0.1)
+        self.assertEqual(metadata["end"]["date"], "2026-09-04")
+        self.assertEqual(metadata["start"]["date"], "2026-09-03")
+
     def test_ticker_normalization(self):
         self.assertEqual(update_data.normalize_ticker("MU US EQUITY", "Micron"), "MU")
         self.assertEqual(update_data.normalize_ticker("285A JP EQUITY", "Kioxia"), "285A.T")
@@ -971,10 +982,14 @@ class UpdateDataTests(unittest.TestCase):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
         self.assertIn("workflow_dispatch:", workflow)
         self.assertIn("schedule:", workflow)
-        for cron in ['cron: "15 23 * * 1-5"', 'cron: "15 1 * * 2-6"', 'cron: "15 3 * * 2-6"']:
+        for cron in ['cron: "47 0 * * 1-5"', 'cron: "17 4 * * 1-5"', 'cron: "47 7 * * 1-5"']:
             self.assertIn(cron, workflow)
-        self.assertIn("08:15 KST Tue-Sat", workflow)
-        self.assertIn("--soft-fail", workflow)
+        self.assertIn("Mon-Fri KST", workflow)
+        generated = update_data.build_dashboard({config.id: [] for config in update_data.ETFS}, {}, "2026-09-22T01:00:00Z")
+        for cron in generated["updatePolicy"]["cronUtc"]:
+            self.assertIn(f'cron: "{cron}"', workflow)
+        self.assertIn("09:47/13:17/16:47 KST Mon-Fri", update_data.build_public_summary(generated)["status"]["cadence"])
+        self.assertIn("refresh_etf_pipeline.py", workflow)
         self.assertIn("strict_validation", workflow)
         self.assertIn("Require the production branch", workflow)
         self.assertIn('if [[ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]]', workflow)
@@ -988,7 +1003,7 @@ class UpdateDataTests(unittest.TestCase):
         self.assertIn('run_status == "waiting_for_data"', workflow)
         self.assertIn("hard_failure", workflow)
         self.assertIn("final_retry = event_name == \"schedule\"", workflow)
-        self.assertIn('event_schedule == "15 3 * * 2-6"', workflow)
+        self.assertIn('event_schedule == "47 7 * * 1-5"', workflow)
         self.assertIn("and not final_retry", workflow)
         self.assertIn("provider data remained unavailable at the final scheduled retry", workflow)
         self.assertIn("hard_failure = not safe and not expected_wait", workflow)
@@ -1000,9 +1015,9 @@ class UpdateDataTests(unittest.TestCase):
             "public-site-health:", 1
         )[0]
         self.assertIn("exit 1", degradation_block)
-        self.assertIn("continue-on-error: ${{ github.event_name == 'schedule' }}", workflow)
+        self.assertNotIn("continue-on-error: ${{ github.event_name == 'schedule' }}", workflow)
         self.assertIn("public-site-health:", workflow)
-        self.assertIn("Fail only when the existing ETF page is unusable", workflow)
+        self.assertIn("Check existing ETF page availability separately", workflow)
         self.assertIn("required_paths=(index.html data/summary.json data/dashboard.json)", workflow)
         self.assertIn("scheduled and reviewed manual provider refreshes", workflow)
         self.assertIn("pages: write", workflow)
@@ -1048,13 +1063,13 @@ class WorkflowStrictValidationTests(unittest.TestCase):
 
     def test_readme_matches_scheduled_failure_classification(self):
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("08:15/10:15/12:15 실행 모두 last-good 공개 데이터를 보존", readme)
-        self.assertIn("공개 페이지 usability 확인 실패만 자동 실패 신호", readme)
+        self.assertIn("last-good 공개 데이터를 보존", readme)
+        self.assertIn("마지막 예약에도 대기하면 workflow가 실패", readme)
         self.assertIn("현재 원격 `main`과 일치할 때만 같은 실행의 `dist`를 배포", readme)
         self.assertIn("uncached byte-for-byte", readme)
         self.assertIn("`build_type=workflow`", readme)
         self.assertIn("stale artifact를 거부", readme)
-        self.assertIn("`waiting_for_data`나 `degraded`는 실패 메일을 만들지 않지만", readme)
+        self.assertIn("성공으로 숨기지 않습니다", readme)
 
     def test_strict_manual_gate_covers_update_verify_assess_and_commit(self):
         workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")

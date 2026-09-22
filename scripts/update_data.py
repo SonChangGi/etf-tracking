@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build static ETF TOP10 tracking data.
 
-The updater is intentionally dependency-free so GitHub Actions can run it on a
-plain Python image.  It reads provider public pages/APIs, keeps an idempotent
+The updater uses the XKRX calendar to resolve Korean disclosure days.
+It reads provider public pages/APIs, keeps an idempotent
 history file, and emits JSON optimized for a static dashboard.
 """
 from __future__ import annotations
@@ -1859,9 +1859,9 @@ def build_dashboard(history: dict[str, list[dict[str, Any]]], summaries: dict[st
         },
         "updatePolicy": {
             "timezone": "Asia/Seoul",
-            "primary": "08:15 KST Tue-Sat scheduled refresh plus reviewed workflow_dispatch",
-            "retries": ["10:15 KST Tue-Sat", "12:15 KST Tue-Sat"],
-            "cronUtc": ["15 23 * * 1-5", "15 1 * * 2-6", "15 3 * * 2-6"],
+            "primary": "09:47 KST Mon-Fri scheduled refresh plus reviewed workflow_dispatch",
+            "retries": ["13:17 KST Mon-Fri", "16:47 KST Mon-Fri"],
+            "cronUtc": ["47 0 * * 1-5", "17 4 * * 1-5", "47 7 * * 1-5"],
         },
         "historyPolicy": {
             "availableStartDate": min(all_dates) if all_dates else None,
@@ -1962,7 +1962,7 @@ def build_public_summary(dashboard: dict[str, Any]) -> dict[str, Any]:
         "status": {
             "state": "degraded" if low_coverage else ("ok" if etfs else "degraded"),
             "label": f"{len(etfs)}개 ETF · {len(signals)}개 최근 신호",
-            "cadence": "scheduled 08:15/10:15/12:15 KST Tue-Sat plus reviewed workflow_dispatch",
+            "cadence": "scheduled 09:47/13:17/16:47 KST Mon-Fri plus reviewed workflow_dispatch",
             "expectedFreshnessDays": 3,
             "degradedReasons": [f"low return coverage: {name}" for name in low_coverage],
         },
@@ -2103,7 +2103,7 @@ def build_status(
         "generatedAt": generated_at,
         "targetDate": target_date,
         "overallStatus": "waiting_for_prior_close" if waiting_for_target else ("degraded" if degraded else "ok"),
-        "message": "Scheduled refresh runs Tue-Sat in KST; if prior closes or provider rows are missing, use a reviewed workflow_dispatch run to refresh this file.",
+        "message": "Scheduled refresh runs Mon-Fri in KST; if prior closes or provider rows are missing, use a reviewed workflow_dispatch run to refresh this file.",
         "priceErrorCount": len(latest_price_errors),
         "priceErrors": latest_price_errors,
         "etfs": etf_status,
@@ -2315,7 +2315,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output-dir", type=Path, default=Path("data"))
     parser.add_argument("--fixture-dir", type=Path)
-    parser.add_argument("--target-date", default=today_kst())
+    parser.add_argument("--target-date", default=None)
     parser.add_argument("--backfill-days", type=int, default=1, help="Weekday lookback window including target date.")
     parser.add_argument("--backfill-start-date", help="Fetch weekdays from this YYYY-MM-DD date through target date, bounded by each ETF listing date.")
     parser.add_argument("--backfill-all", action="store_true", help="Fetch all weekdays from each listing date to target date.")
@@ -2328,7 +2328,11 @@ def parse_args() -> argparse.Namespace:
 
 
 def run_update(args: argparse.Namespace) -> dict[str, Any]:
-    args.target_date = iso_date(args.target_date)
+    if args.target_date:
+        args.target_date = iso_date(args.target_date)
+    else:
+        from etf_automation import disclosure_date
+        args.target_date = disclosure_date()
     output_dir: Path = args.output_dir
     output_dir.mkdir(parents=True, exist_ok=True)
 

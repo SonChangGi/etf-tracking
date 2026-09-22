@@ -29,13 +29,14 @@ on:
         type: choice
         options: ['false', 'true']
   schedule:
-    # 08:15 KST Tue-Sat: earlier staggered primary provider refresh after the U.S. close; later retries handle Korean ETF/provider publication lag.
-    - cron: "15 23 * * 1-5"
-    # 10:15/12:15 KST Tue-Sat: 2-hour retries if provider files arrive late.
-    - cron: "15 1 * * 2-6"
-    - cron: "15 3 * * 2-6"
+    # Korean holdings disclosure day D; priceBasisDate remains separate.
+    # Staggered primary and bounded recovery slots, all Mon-Fri KST.
+    - cron: "47 0 * * 1-5"
+    - cron: "17 4 * * 1-5"
+    - cron: "47 7 * * 1-5"
 
 permissions:
+  actions: read
   contents: write
   pages: write
   id-token: write
@@ -52,9 +53,24 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  update-data:
+  admission:
     runs-on: ubuntu-latest
-    continue-on-error: ${{ github.event_name == 'schedule' }}
+    timeout-minutes: 50
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Wait for earlier cross-project refreshes
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/automation_admission.py
+
+  update-data:
+    needs: admission
+    runs-on: ubuntu-latest
     timeout-minutes: 55
     environment:
       name: github-pages
@@ -72,6 +88,12 @@ jobs:
         id: checkout
         with:
           fetch-depth: 0
+          ref: ${{ github.event.repository.default_branch }}
+      - name: Recheck admission when failed jobs are rerun
+        if: github.run_attempt != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/automation_admission.py --max-wait-seconds 300
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         id: setup-python
         with:
@@ -80,12 +102,23 @@ jobs:
         id: setup-node
         with:
           node-version: '22'
+      - name: Install the pinned Korean exchange calendar
+        run: python3 -m pip install -r requirements.txt
+      - name: Resolve disclosure day and skip a fully published current result
+        id: freshness
+        env:
+          FORCE_REFRESH: ${{ github.event_name == 'workflow_dispatch' && (inputs.backfill_all == 'true' || inputs.backfill_start_date != '' || inputs.refresh_existing == 'true') }}
+        run: |
+          args=(--output "$GITHUB_OUTPUT")
+          if [[ "$FORCE_REFRESH" == "true" ]]; then args+=(--force); fi
+          python3 scripts/etf_automation.py "${args[@]}"
       - name: Update data with soft-fail status
         id: update
+        if: steps.freshness.outputs.should_collect == 'true'
         continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         run: |
           set -uo pipefail
-          update_args=(--output-dir data --soft-fail)
+          update_args=(--target-date "${{ steps.freshness.outputs.target_date }}" --attempts 3 --retry-delay 30 --diagnostics-dir "$RUNNER_TEMP/etf-diagnostics")
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.backfill_all }}" = "true" ]; then
             update_args+=(--backfill-all)
           elif [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ inputs.backfill_start_date }}" ]; then
@@ -96,11 +129,15 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.refresh_existing }}" = "true" ]; then
             update_args+=(--refresh-existing)
           fi
-          python3 scripts/update_data.py "${update_args[@]}"
+          python3 scripts/refresh_etf_pipeline.py "${update_args[@]}"
       - name: Verify static site and data
         id: verify
         continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
-        run: npm test
+        run: |
+          npm test
+          if [[ "${{ steps.update.outcome }}" == "skipped" ]]; then
+            python3 scripts/etf_automation.py --target-date "${{ steps.freshness.outputs.target_date }}" --require-current
+          fi
       - name: Assess whether generated data is safe to commit
         id: assess
         if: always()
@@ -109,6 +146,9 @@ jobs:
           VERIFY_OUTCOME: ${{ steps.verify.outcome }}
           EVENT_NAME: ${{ github.event_name }}
           EVENT_SCHEDULE: ${{ github.event.schedule }}
+          SHOULD_COLLECT: ${{ steps.freshness.outputs.should_collect }}
+          TARGET_DATE: ${{ steps.freshness.outputs.target_date }}
+          DIAGNOSTICS_DIR: ${{ runner.temp }}/etf-diagnostics
         run: |
           python3 - <<'PY'
           import json, os
@@ -120,8 +160,10 @@ jobs:
           verify = os.environ.get("VERIFY_OUTCOME", "missing")
           event_name = os.environ.get("EVENT_NAME", "")
           event_schedule = os.environ.get("EVENT_SCHEDULE", "")
-          final_retry = event_name == "schedule" and event_schedule == "15 3 * * 2-6"
-          status_path = Path("data/automation-status.json")
+          final_retry = event_name == "schedule" and event_schedule == "47 7 * * 1-5"
+          if update == "skipped" and os.environ.get("SHOULD_COLLECT") == "false":
+              update = "success"
+          status_path = Path(os.environ["DIAGNOSTICS_DIR"]) / "automation-status.json" if os.environ.get("SHOULD_COLLECT") == "true" else Path("data/automation-status.json")
           status = {}
           if status_path.exists():
               try:
@@ -131,7 +173,7 @@ jobs:
           else:
               status = {"runStatus": "missing_status", "error": "data/automation-status.json was not written"}
           run_status = str(status.get("runStatus") or "unknown")
-          safe = update == "success" and verify == "success" and run_status == "ok"
+          safe = update == "success" and verify == "success" and run_status == "ok" and status.get("targetDate") == os.environ.get("TARGET_DATE")
           expected_wait = (
               update == "success"
               and verify == "success"
@@ -181,7 +223,7 @@ jobs:
           PY
       - name: Commit refreshed data
         id: commit-data
-        if: steps.assess.outputs.safe_to_commit == 'true'
+        if: steps.assess.outputs.safe_to_commit == 'true' && steps.freshness.outputs.should_deploy == 'true'
         continue-on-error: ${{ github.event_name != 'workflow_dispatch' || inputs.strict_validation != 'true' }}
         env:
           DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
@@ -189,6 +231,13 @@ jobs:
           set -euo pipefail
           git config user.name "${AUTOMATION_COMMITTER_NAME}"
           git config user.email "${AUTOMATION_COMMITTER_EMAIL}"
+          base_sha="$(git rev-parse HEAD)"
+          git fetch origin "$DEFAULT_BRANCH"
+          if [[ "$(git rev-parse "origin/$DEFAULT_BRANCH")" != "$base_sha" ]]; then
+            echo "Main changed after collection; refusing to publish stale-code output." >&2
+            exit 1
+          fi
+          python3 scripts/etf_automation.py --target-date "${{ steps.freshness.outputs.target_date }}" --require-current
           git add data
           if git diff --cached --quiet; then
             echo "No safe data changes to commit."
@@ -337,17 +386,17 @@ jobs:
           echo "Public ETF Pages readback did not converge to the deployed artifact." >&2
           exit 1
       - name: Upload automation diagnostics
-        if: always() && hashFiles('data/automation-status.json') != ''
+        if: always()
         continue-on-error: true
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: etf-tracking-automation-status
           path: |
-            data/automation-status.json
-            data/status.json
+            ${{ runner.temp }}/etf-diagnostics/automation-status.json
+            ${{ runner.temp }}/etf-diagnostics/status.json
           retention-days: 14
       - name: Strict manual failure gate
-        if: always() && github.event_name == 'workflow_dispatch' && inputs.strict_validation == 'true' && (steps.update.outcome != 'success' || steps.verify.outcome != 'success' || steps.assess.outputs.safe_to_commit != 'true' || steps.commit-data.outcome == 'failure')
+        if: always() && github.event_name == 'workflow_dispatch' && inputs.strict_validation == 'true' && ((steps.update.outcome != 'success' && steps.update.outcome != 'skipped') || steps.verify.outcome != 'success' || steps.assess.outputs.safe_to_commit != 'true' || steps.commit-data.outcome == 'failure')
         run: |
           echo "Strict validation requested and one or more gates failed." >&2
           exit 1
@@ -357,7 +406,7 @@ jobs:
           FAILURE_REASON: ${{ steps.assess.outputs.failure_reason }}
         run: |
           echo "::warning::Scheduled ETF automation degraded: ${FAILURE_REASON:-commit step failed}"
-          echo "The last-good public dataset was preserved; a separate public-site health job is the failure-mail gate."
+          echo "The last-good public dataset was preserved; the failed refresh remains visible in the workflow result."
           exit 1
 
   public-site-health:
@@ -368,7 +417,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Fail only when the existing ETF page is unusable
+      - name: Check existing ETF page availability separately
         env:
           PAGE_URL: https://sonchanggi.github.io/etf-tracking/
         shell: bash
@@ -402,7 +451,7 @@ jobs:
               fi
             done
             if [[ "$usable" == "true" ]]; then
-              echo "The existing ETF page remains usable; scheduled refresh errors stay in run logs without failure mail."
+              echo "The existing ETF page remains usable; this does not override the collection result."
               exit 0
             fi
             [[ $attempt -lt 12 ]] && sleep 10

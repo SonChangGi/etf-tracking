@@ -35,6 +35,8 @@ jobs:
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
+      - name: Install the pinned Korean exchange calendar
+        run: python3 -m pip install -r requirements.txt
       - name: Verify and build the static site
         run: npm test
       - name: Configure GitHub Pages

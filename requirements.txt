@@ -1,0 +1,2 @@
+# XKRX disclosure-day calendar, including Korean exchange closures.
+exchange-calendars==4.13.2
