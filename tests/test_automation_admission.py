@@ -57,8 +57,9 @@ class AdmissionTests(unittest.TestCase):
         self.assertEqual(gate.blockers(late, [active]), [active])
 
     def test_start_evidence_uses_only_current_attempt_jobs(self):
-        with patch.object(gate, "api", return_value={"total_count": 2, "jobs": [
-            {"started_at": "2026-09-22T03:00:00Z"}, {"started_at": None}
+        with patch.object(gate, "api", return_value={"total_count": 3, "jobs": [
+            {"started_at": "2026-09-22T03:00:00Z"}, {"started_at": None},
+            {"started_at": "2026-09-22T00:00:00Z", "conclusion": "skipped"}
         ]}) as api:
             current = gate.started_attempt("SonChangGi/sox", run(1, run_attempt=2))
         self.assertEqual(current["admission_started_at"], "2026-09-22T03:00:00Z")
