@@ -1,31 +1,31 @@
 etf_id,date,rank,ticker,name,weight_percent,classification,residual_pp
-time-nasdaq100-active,2026-10-01,1,NVDA,NVIDIA Corp,7.32,price_aligned,0.0035743254775928435
-time-nasdaq100-active,2026-10-01,2,BE,Bloom Energy Corp,5.56,price_aligned,-0.00021026215708452867
-time-nasdaq100-active,2026-10-01,3,DELL,Dell Technologies Inc,5.31,price_aligned,0.00335379231354338
-time-nasdaq100-active,2026-10-01,4,SNDK,Sandisk Corp,4.44,price_aligned,0.0006542470652357579
-time-nasdaq100-active,2026-10-01,5,MU,Micron Technology Inc,4.4,price_aligned,-0.002415560544325679
-time-nasdaq100-active,2026-10-01,6,INTC,Intel Corp,3.97,price_aligned,0.0021597745308676863
-time-nasdaq100-active,2026-10-01,7,SKHY,SK hynix Inc,3.78,price_aligned,-0.0011922669079051929
-time-nasdaq100-active,2026-10-01,8,AMD,Advanced Micro Devices Inc,3.55,price_aligned,-0.004599681396566524
-time-nasdaq100-active,2026-10-01,9,,Space Exploration Technologies Corp,3.32,price_aligned,0.0059264335743165475
-time-nasdaq100-active,2026-10-01,10,LITE,Lumentum Holdings Inc,3.05,price_aligned,0.0020598913580389677
-time-global-ai-active,2026-10-01,1,INTC,Intel Corp,5.64,price_aligned,0.004735242706117582
-time-global-ai-active,2026-10-01,2,AMD,Advanced Micro Devices Inc,4.68,price_aligned,0.007070996806235463
-time-global-ai-active,2026-10-01,3,SNDK,Sandisk Corp,4.44,price_aligned,-1.4333723954429445e-05
-time-global-ai-active,2026-10-01,4,,NASDAQ 100 E-MINI INDEX DEC 2026,4.29,insufficient_data,
-time-global-ai-active,2026-10-01,5,SKHY,SK hynix Inc,4.12,price_aligned,0.006342655415373599
-time-global-ai-active,2026-10-01,6,DELL,Dell Technologies Inc,3.71,price_aligned,-0.003760080803556054
-time-global-ai-active,2026-10-01,7,META,Meta Platforms Inc,3.36,price_aligned,0.001912460522505377
-time-global-ai-active,2026-10-01,8,,삼성전기,3.26,price_aligned,0.00024121631429263601
-time-global-ai-active,2026-10-01,9,,TIME 차이나AI테크액티브,3.14,price_aligned,-0.008046947090358358
-time-global-ai-active,2026-10-01,10,NVDA,NVIDIA Corp,3.13,price_aligned,-0.0005636396231625262
-koact-nasdaq-growth-active,2026-10-01,1,PLTR,Palantir Technologies Inc -A,8.02,price_aligned,-0.004482978041792762
-koact-nasdaq-growth-active,2026-10-01,2,SNDK,Sandisk Corp/DE,5.78,price_aligned,0.00022923857099765854
-koact-nasdaq-growth-active,2026-10-01,3,BE,BLOOM ENERGY CORPORATION,5.28,price_aligned,0.0010492360322942318
-koact-nasdaq-growth-active,2026-10-01,4,DELL,Dell Technologies Inc,4.97,price_aligned,-0.006269700269817768
-koact-nasdaq-growth-active,2026-10-01,5,SNOW,Snowflake Inc - CL A,4.87,price_aligned,-0.005967163782599094
-koact-nasdaq-growth-active,2026-10-01,6,MU,MICRON TECH,4.2,price_aligned,0.004585957356238346
-koact-nasdaq-growth-active,2026-10-01,7,INTC,INTEL Corp,3.98,price_aligned,-0.0002125103102845749
-koact-nasdaq-growth-active,2026-10-01,8,LITE,Lumentum Holdings Inc,3.86,price_aligned,0.005899512302271148
-koact-nasdaq-growth-active,2026-10-01,9,AMD,ADVANCED MICRO DEVICES,3.69,price_aligned,0.004723194308392742
-koact-nasdaq-growth-active,2026-10-01,10,NVDA,NVIDIA Corp,3.22,price_aligned,0.0011031613729941547
+time-nasdaq100-active,2026-10-02,1,NVDA,NVIDIA Corp,7.37,price_aligned,-0.0032130043501901184
+time-nasdaq100-active,2026-10-02,2,DELL,Dell Technologies Inc,5.3,price_aligned,-0.0050271785865065866
+time-nasdaq100-active,2026-10-02,3,BE,Bloom Energy Corp,5.3,price_aligned,0.0012633476848540326
+time-nasdaq100-active,2026-10-02,4,SNDK,Sandisk Corp,4.47,price_aligned,-0.00542198245526837
+time-nasdaq100-active,2026-10-02,5,MU,Micron Technology Inc,4.41,price_aligned,0.000595061618383852
+time-nasdaq100-active,2026-10-02,6,INTC,Intel Corp,4.12,price_aligned,-0.005937021285906674
+time-nasdaq100-active,2026-10-02,7,SKHY,SK hynix Inc,3.73,price_aligned,-0.006636176133821614
+time-nasdaq100-active,2026-10-02,8,AMD,Advanced Micro Devices Inc,3.58,price_aligned,-0.002021487963591806
+time-nasdaq100-active,2026-10-02,9,,Space Exploration Technologies Corp,3.36,price_aligned,-0.0031172403777852686
+time-nasdaq100-active,2026-10-02,10,LITE,Lumentum Holdings Inc,3.05,price_aligned,0.0005682128581363521
+time-global-ai-active,2026-10-02,1,INTC,Intel Corp,5.83,price_aligned,0.001270026195855145
+time-global-ai-active,2026-10-02,2,AMD,Advanced Micro Devices Inc,4.69,price_aligned,-0.005787440186525217
+time-global-ai-active,2026-10-02,3,SNDK,Sandisk Corp,4.45,price_aligned,-0.00037623607368963974
+time-global-ai-active,2026-10-02,4,,NASDAQ 100 E-MINI INDEX DEC 2026,4.28,insufficient_data,
+time-global-ai-active,2026-10-02,5,SKHY,SK hynix Inc,4.05,price_aligned,5.6479183639268626e-05
+time-global-ai-active,2026-10-02,6,DELL,Dell Technologies Inc,3.69,price_aligned,0.004217097852533769
+time-global-ai-active,2026-10-02,7,,삼성전기,3.34,price_aligned,0.002161525453382218
+time-global-ai-active,2026-10-02,8,META,Meta Platforms Inc,3.29,price_aligned,0.0034374682376872023
+time-global-ai-active,2026-10-02,9,NVDA,NVIDIA Corp,3.13,price_aligned,-0.005109999371947893
+time-global-ai-active,2026-10-02,10,,TIME 차이나AI테크액티브,3.12,price_aligned,0.0038856282850066037
+koact-nasdaq-growth-active,2026-10-02,1,PLTR,Palantir Technologies Inc -A,7.98,price_aligned,-0.030416524112112597
+koact-nasdaq-growth-active,2026-10-02,2,SNDK,Sandisk Corp/DE,5.78,price_aligned,-0.02441856499399986
+koact-nasdaq-growth-active,2026-10-02,3,BE,BLOOM ENERGY CORPORATION,4.99,price_aligned,-0.023157433331461696
+koact-nasdaq-growth-active,2026-10-02,4,SNOW,Snowflake Inc - CL A,4.98,price_aligned,-0.01825846051198088
+koact-nasdaq-growth-active,2026-10-02,5,DELL,Dell Technologies Inc,4.93,price_aligned,-0.01685699030934984
+koact-nasdaq-growth-active,2026-10-02,6,MU,MICRON TECH,4.62,likely_buy,0.42669483964472477
+koact-nasdaq-growth-active,2026-10-02,7,INTC,INTEL Corp,4.1,price_aligned,-0.020928050152431155
+koact-nasdaq-growth-active,2026-10-02,8,LITE,Lumentum Holdings Inc,3.96,price_aligned,0.11508935575248991
+koact-nasdaq-growth-active,2026-10-02,9,AMD,ADVANCED MICRO DEVICES,3.69,price_aligned,-0.019420452860625215
+koact-nasdaq-growth-active,2026-10-02,10,NVDA,NVIDIA Corp,3.22,price_aligned,-0.01133102556296306
