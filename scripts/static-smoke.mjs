@@ -186,23 +186,42 @@ if (fullRangeSnapshot.startDate !== selected.availableStartDate || fullRangeSnap
 }
 const series = api.buildWeightSeries(selected.history, selected.latest?.top10 || []);
 if (selected.history.length && !series.length) throw new Error('weight series missing for tracked history');
-const sndkSeries = series.find((item) => item.key === 'SNDK');
-const endLabels = api.buildEndLabels(series, () => 100, (value) => value * 10, 0, 500);
-const sndkEndLabel = endLabels.find((item) => item.key === 'SNDK');
-if (!sndkEndLabel || !/^\d+\s+SNDK$/.test(sndkEndLabel.text)) {
-  throw new Error(`chart end labels should show rank next to ticker, got ${sndkEndLabel?.text || 'missing'}`);
-}
-if (!endLabels.every((item) => /^\d+\s+[A-Z0-9.\-]+(?:…)?$/.test(item.text))) {
-  throw new Error('chart end labels should use compact rank + ticker pills');
-}
-if (!sndkSeries?.signalPoints.some((point) => point.actionEstimate === 'weak_sell_watch' && point.direction === 'sell')) {
-  throw new Error('hover chart should carry selected-period residual sell-watch markers for SNDK');
-}
-if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_buy' && point.direction === 'buy')) {
-  throw new Error('hover chart should include selected-period buy markers, not just residual watches');
-}
-if (!sndkSeries.signalPoints.some((point) => point.actionEstimate === 'likely_sell' && point.direction === 'sell')) {
-  throw new Error('hover chart should include selected-period sell markers, not just residual watches');
+// Holdings rotate: validate the current TOP10 contract for every ETF. Specific
+// signal types belong to deterministic fixtures in common_design_v1.test.mjs.
+for (const etf of parsed.etfs) {
+  const top10 = (etf.latest?.top10 || []).slice(0, 10);
+  const chartSeries = api.buildWeightSeries(etf.history, top10);
+  const expectedKeys = top10.map((row) => api.holdingKey(row));
+  if (chartSeries.length !== expectedKeys.length || chartSeries.some((item, index) => item.key !== expectedKeys[index])) {
+    throw new Error(`${etf.id} chart series should match the current TOP10`);
+  }
+  const x = (date) => Date.parse(date) / 86_400_000;
+  const y = (value) => value * 10;
+  const endLabels = api.buildEndLabels(chartSeries, x, y, 0, 500);
+  const labelsByKey = new Map(endLabels.map((label) => [label.key, label]));
+  if (endLabels.length !== chartSeries.length || labelsByKey.size !== chartSeries.length) {
+    throw new Error(`${etf.id} chart should have exactly one end label per visible series`);
+  }
+  chartSeries.forEach((item, index) => {
+    const holding = top10[index];
+    const rank = Number(holding.rank) || index + 1;
+    const ticker = String(holding.ticker || holding.codeRaw || expectedKeys[index]).replace(/\s+/g, '').toUpperCase();
+    const expectedText = `${rank} ${ticker.length > 7 ? `${ticker.slice(0, 6)}…` : ticker}`;
+    const label = labelsByKey.get(item.key);
+    const point = item.validPoints.at(-1);
+    if (!label || label.text !== expectedText) {
+      throw new Error(`${etf.id} chart end label for ${item.key} should be ${expectedText}, got ${label?.text || 'missing'}`);
+    }
+    if (!point || label.x1 !== x(point.date) || label.y1 !== y(point.value) || label.x2 !== label.x1 + 18) {
+      throw new Error(`${etf.id} chart end label for ${item.key} should anchor to its last valid observation`);
+    }
+    if (!Number.isFinite(label.y2) || label.y2 < 13 || label.y2 > 487) {
+      throw new Error(`${etf.id} chart end label for ${item.key} should stay inside the plot`);
+    }
+  });
+  if (endLabels.slice(1).some((label, index) => label.y2 - endLabels[index].y2 < 24)) {
+    throw new Error(`${etf.id} chart end labels should not overlap`);
+  }
 }
 const koact = parsed.etfs.find((etf) => etf.id === 'koact-nasdaq-growth-active');
 const allSeries = parsed.etfs.flatMap((etf) => api.buildWeightSeries(etf.history, etf.latest?.top10 || []));

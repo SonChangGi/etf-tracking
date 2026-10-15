@@ -145,6 +145,107 @@ test('end labels reserve non-overlapping vertical slots', () => {
   });
 });
 
+test('chart series and end labels follow the latest TOP10 after a holding drops to rank eleven', () => {
+  const helpers = dashboardHelpers();
+  const retained = Array.from({ length: 7 }, (_, index) => ({
+    ticker: `KEEP${index + 1}`, rank: index + 2, weightPercent: 7 - index * 0.5,
+  }));
+  const top10 = [
+    { ticker: 'NEW', rank: 1, weightPercent: 8 },
+    ...retained,
+    { ticker: 'LONGTICKER', rank: 9, weightPercent: null },
+    { codeRaw: '원화 현금', name: '현금', rank: 10, weightPercent: 1 },
+  ];
+  const observedTop10 = top10.map((row) => row.ticker === 'LONGTICKER'
+    ? { ...row, weightPercent: 2.4 } : row);
+  const previousTop10 = observedTop10.map((row) => row.ticker === 'NEW'
+    ? { ticker: 'SNDK', rank: 1, weightPercent: 8 } : row);
+  const history = [
+    { date: '2026-10-12', top10: previousTop10, holdings: previousTop10 },
+    { date: '2026-10-13', top10: observedTop10, holdings: observedTop10 },
+    {
+      date: '2026-10-14', top10,
+      holdings: [...top10, { ticker: 'SNDK', rank: 11, weightPercent: 0.9 }],
+    },
+  ];
+  const previousSeries = helpers.buildWeightSeries(history.slice(0, 1), previousTop10);
+  assert.ok(previousSeries.some((item) => item.key === 'SNDK'));
+  assert.ok(!previousSeries.some((item) => item.key === 'NEW'));
+
+  const series = helpers.buildWeightSeries(history, top10);
+  assert.deepEqual(Array.from(series, (item) => item.key), [
+    'NEW', 'KEEP1', 'KEEP2', 'KEEP3', 'KEEP4', 'KEEP5', 'KEEP6', 'KEEP7',
+    'LONGTICKER', '원화 현금',
+  ]);
+  assert.deepEqual(
+    Array.from(series.find((item) => item.key === 'LONGTICKER').points, (point) => point.value),
+    [2.4, 2.4, null],
+  );
+  const x = (date) => ({ '2026-10-12': 100, '2026-10-13': 200, '2026-10-14': 300 })[date];
+  const y = (value) => 400 - value * 20;
+  const labels = helpers.buildEndLabels(series, x, y, 48, 392);
+  const expected = new Map([
+    ['NEW', { text: '1 NEW', date: '2026-10-14', value: 8 }],
+    ...retained.map((row) => [row.ticker, {
+      text: `${row.rank} ${row.ticker}`, date: '2026-10-14', value: row.weightPercent,
+    }]),
+    ['LONGTICKER', { text: '9 LONGTI…', date: '2026-10-13', value: 2.4 }],
+    ['원화 현금', { text: '10 원화현금', date: '2026-10-14', value: 1 }],
+  ]);
+  assert.equal(labels.length, expected.size);
+  assert.equal(new Set(Array.from(labels, (label) => label.key)).size, expected.size);
+  for (const label of labels) {
+    const observation = expected.get(label.key);
+    assert.ok(observation, `unexpected end label ${label.key}`);
+    assert.equal(label.text, observation.text);
+    assert.equal(label.x1, x(observation.date));
+    assert.equal(label.y1, y(observation.value));
+  }
+});
+
+test('weight series preserve deterministic residual directions and lifecycle glyphs', () => {
+  const helpers = dashboardHelpers();
+  const history = [
+    {
+      date: '2026-10-12', top10: [{ ticker: 'SNDK', rank: 1, weightPercent: 4 }],
+      decomposition: [{
+        ticker: 'SNDK', actionEstimate: 'weak_sell_watch', membershipChange: 'top10_entry',
+        actualWeightPercent: 4.1, deltaResidualPercentPoint: -0.2,
+      }],
+    },
+    {
+      date: '2026-10-13', top10: [{ ticker: 'SNDK', rank: 1, weightPercent: 5 }],
+      decomposition: [{ ticker: 'SNDK', actionEstimate: 'likely_buy', deltaResidualPercentPoint: 0.7 }],
+    },
+    {
+      date: '2026-10-14', top10: [{ ticker: 'SNDK', rank: 1, weightPercent: 3.5 }],
+      decomposition: [{
+        ticker: 'SNDK', actionEstimate: 'likely_sell',
+        actualWeightPercent: 3.5, deltaResidualPercentPoint: -0.9,
+      }],
+    },
+  ];
+  const series = helpers.buildWeightSeries(history, history.at(-1).top10);
+  assert.equal(series.length, 1);
+  const points = series[0].signalPoints;
+  assert.equal(points.length, 4);
+  assert.deepEqual(Array.from(points.filter((point) => ['buy', 'sell'].includes(point.direction)),
+    ({ actionEstimate, direction, strength, date, value, residual }) => ({
+      actionEstimate, direction, strength, date, value, residual,
+    })), [
+    { actionEstimate: 'weak_sell_watch', direction: 'sell', strength: 'watch', date: '2026-10-12', value: 4.1, residual: -0.2 },
+    { actionEstimate: 'likely_buy', direction: 'buy', strength: 'strong', date: '2026-10-13', value: 5, residual: 0.7 },
+    { actionEstimate: 'likely_sell', direction: 'sell', strength: 'strong', date: '2026-10-14', value: 3.5, residual: -0.9 },
+  ]);
+  const entry = points.find((point) => point.kind === 'entry');
+  assert.equal(entry.actionEstimate, 'top10_entry');
+  assert.equal(entry.glyph, '＋');
+  assert.equal(entry.direction, 'entry');
+  assert.equal(entry.strength, 'watch');
+  assert.equal(entry.date, '2026-10-12');
+  assert.equal(entry.value, 4.1);
+});
+
 test('verbose per-row explanations are not rendered into visible cards or tables', () => {
   assert.doesNotMatch(app, /className = 'action-explanation'/);
   assert.doesNotMatch(app, /signal\.actionExplanation \|\| signal\.message/);
