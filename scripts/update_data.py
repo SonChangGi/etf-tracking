@@ -1263,6 +1263,7 @@ def classify_residual_signal(
     price_source = price_meta.get("source") if isinstance(price_meta, dict) else None
     price_source_type = price_meta.get("sourceType") if isinstance(price_meta, dict) else None
     confidence = "medium"
+    quality_warnings = []
     if price_source == "provider_valuation_krw":
         message = "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."
     elif price_source_type == "external_close_fx_adjusted_krw":
@@ -1271,10 +1272,14 @@ def classify_residual_signal(
         message = "가격 효과가 우세하지만 외부 가격·환율·반올림 오차를 함께 봐야 합니다."
     if isinstance(price_meta, dict) and price_meta.get("fxRequired") and not price_meta.get("fxApplied"):
         message = "외부 종가 환율 보정이 부족해 잔차 신뢰도를 낮춰 해석해야 합니다."
+        quality_warnings.append(message)
         confidence = "low"
     if not prev_full_holdings_available or not curr_full_holdings_available:
         confidence = "low"
-        message = f"전체 보유종목 대신 {return_coverage_universe} 기준의 부분 추정입니다. {message}"
+        warning = f"전체 보유종목 대신 {return_coverage_universe} 기준의 부분 추정입니다."
+        quality_warnings.append(warning)
+        message = f"{warning} {message}"
+    warning_suffix = f" {' '.join(quality_warnings)}" if quality_warnings else ""
     if coverage < RETURN_COVERAGE_MIN:
         return {
             **thresholds,
@@ -1285,7 +1290,7 @@ def classify_residual_signal(
             "actionExplanation": "종가 커버리지가 낮아 방향성 잔차를 매수·매도 가능성으로 해석하지 않습니다.",
             "confidence": "low",
             "residualBand": "low_coverage",
-            "message": "종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다.",
+            "message": f"종가 커버리지가 낮아 가격/매매 요인을 혼합 신호로 표시합니다.{warning_suffix}",
         }
     if abs_residual <= aligned_tolerance:
         return {
@@ -1307,9 +1312,9 @@ def classify_residual_signal(
             "actionEstimate": "likely_buy",
             "actionLabel": "매수 가능성",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 충분히 높아 추가 매수 또는 편입 확대 가능성이 있습니다.",
-            "confidence": "medium",
+            "confidence": confidence,
             "residualBand": "directional_action",
-            "message": "가격 효과 대비 비중 증가 잔차가 매수 가능성 임계치 이상입니다.",
+            "message": f"가격 효과 대비 비중 증가 잔차가 매수 가능성 임계치 이상입니다.{warning_suffix}",
         }
     if residual_percent_point <= -action_tolerance:
         return {
@@ -1319,9 +1324,9 @@ def classify_residual_signal(
             "actionEstimate": "likely_sell",
             "actionLabel": "매도·축소 가능성",
             "actionExplanation": "실제 비중이 no-trade 예상비중보다 충분히 낮아 매도 또는 편입 축소 가능성이 있습니다.",
-            "confidence": "medium",
+            "confidence": confidence,
             "residualBand": "directional_action",
-            "message": "가격 효과 대비 비중 감소 잔차가 매도/축소 가능성 임계치 이상입니다.",
+            "message": f"가격 효과 대비 비중 감소 잔차가 매도/축소 가능성 임계치 이상입니다.{warning_suffix}",
         }
     action_estimate = "weak_sell_watch" if residual_percent_point < 0 else "weak_buy_watch"
     action_label = "약한 매도·축소 관찰" if residual_percent_point < 0 else "약한 매수 관찰"
@@ -1339,7 +1344,7 @@ def classify_residual_signal(
         "actionExplanation": action_explanation,
         "confidence": "medium" if confidence != "low" else "low",
         "residualBand": "watch",
-        "message": f"{action_label}: 매수·매도 추정 임계치에는 미달해 관찰 신호로 표시합니다.",
+        "message": f"{action_label}: 매수·매도 추정 임계치에는 미달해 관찰 신호로 표시합니다.{warning_suffix}",
     }
 
 

@@ -15,6 +15,66 @@ SPEC.loader.exec_module(update_data)
 
 
 class UpdateDataTests(unittest.TestCase):
+    def test_residual_quality_warnings_survive_every_signal_band(self):
+        quality_cases = [
+            ("missing_fx", True, True, {"fxRequired": True, "fxApplied": False}, ["환율 보정이 부족"]),
+            ("missing_previous_holdings", False, True, {}, ["부분 추정"]),
+            ("missing_current_holdings", True, False, {}, ["부분 추정"]),
+            ("both", False, False, {"fxRequired": True, "fxApplied": False}, ["환율 보정이 부족", "부분 추정"]),
+        ]
+        signal_cases = [
+            (0.01, 1.0, "price_aligned", "price_aligned"),
+            (-0.01, 1.0, "price_aligned", "price_aligned"),
+            (0.2, 1.0, "residual_watch", "weak_buy_watch"),
+            (-0.2, 1.0, "residual_watch", "weak_sell_watch"),
+            (1.0, 1.0, "likely_buy", "likely_buy"),
+            (-1.0, 1.0, "likely_sell", "likely_sell"),
+            (1.0, 0.5, "mixed", "undetermined"),
+            (-1.0, 0.5, "mixed", "undetermined"),
+        ]
+        for reason, previous_full, current_full, price_meta, warnings in quality_cases:
+            for residual, coverage, classification, action in signal_cases:
+                with self.subTest(reason=reason, residual=residual, coverage=coverage):
+                    result = update_data.classify_residual_signal(
+                        residual, 5.0, coverage=coverage,
+                        return_coverage_universe="full_holdings" if previous_full and current_full else "top10_fallback",
+                        prev_full_holdings_available=previous_full,
+                        curr_full_holdings_available=current_full,
+                        price_meta=price_meta,
+                    )
+                    self.assertEqual(result["classification"], classification)
+                    self.assertEqual(result["actionEstimate"], action)
+                    self.assertEqual(result["confidence"], "low")
+                    self.assertAlmostEqual(result["priceAlignedTolerancePercentPoint"], 0.15)
+                    self.assertAlmostEqual(result["residualActionTolerancePercentPoint"], 0.5)
+                    for warning in warnings:
+                        self.assertIn(warning, result["message"])
+
+
+    def test_complete_inputs_keep_existing_residual_classification_and_copy(self):
+        cases = [
+            (0.01, "price_aligned", "price_aligned", "ETF 평가단가(KRW) 기반 no-trade 가격 효과가 우세합니다."),
+            (0.2, "residual_watch", "weak_buy_watch", "약한 매수 관찰: 매수·매도 추정 임계치에는 미달해 관찰 신호로 표시합니다."),
+            (-0.2, "residual_watch", "weak_sell_watch", "약한 매도·축소 관찰: 매수·매도 추정 임계치에는 미달해 관찰 신호로 표시합니다."),
+            (1.0, "likely_buy", "likely_buy", "가격 효과 대비 비중 증가 잔차가 매수 가능성 임계치 이상입니다."),
+            (-1.0, "likely_sell", "likely_sell", "가격 효과 대비 비중 감소 잔차가 매도/축소 가능성 임계치 이상입니다."),
+        ]
+        for residual, classification, action, message in cases:
+            with self.subTest(residual=residual):
+                result = update_data.classify_residual_signal(
+                    residual, 5.0, coverage=1.0,
+                    return_coverage_universe="full_holdings",
+                    prev_full_holdings_available=True,
+                    curr_full_holdings_available=True,
+                    price_meta={"source": "provider_valuation_krw"},
+                )
+                self.assertEqual(result["classification"], classification)
+                self.assertEqual(result["actionEstimate"], action)
+                self.assertEqual(result["confidence"], "medium")
+                self.assertEqual(result["message"], message)
+
+
+
     def test_us_holiday_uses_actual_close_on_or_before_disclosure_price_basis(self):
         provider = update_data.PriceProvider(no_live=True)
         series = {"closes": {"2026-09-03": 100.0, "2026-09-04": 110.0, "2026-09-08": 120.0}, "sources": {"2026-09-04": "fixture"}}
