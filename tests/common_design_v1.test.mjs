@@ -62,7 +62,7 @@ test('common design v1.2 keeps the compact type hierarchy and eleven unique dest
   assert.equal(links.length, 10);
   assert.deepEqual(
     links.map((match) => match[2].replace(/&amp;/g, '&').trim()),
-    ['Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Regime', 'News', 'SPO', '연구 관측소'],
+    ['Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Regime', 'News', 'SPO', '알파 하우스'],
   );
   assert.equal(links.filter((match) => /aria-current="page"/.test(match[0])).length, 1);
   assert.match(links[4][0], /aria-current="page"/);
