@@ -6,9 +6,10 @@ import vm from 'node:vm';
 const source = await readFile(new URL('../src/index.js', import.meta.url), 'utf8');
 const repositoryRoot = new URL('../../', import.meta.url);
 
-function createRuntime() {
+function createRuntime(sharedNavigation) {
   const context = vm.createContext({
     AbortController,
+    QuantNavigationV1: sharedNavigation,
     URL,
     clearTimeout,
     console,
@@ -64,21 +65,22 @@ test('control registry exposes no analysis run and isolates owner operations', (
   );
 });
 
-test('canonical navigation keeps all nine destinations and ETF as current', () => {
+test('canonical navigation keeps all ten destinations and ETF as current', () => {
   const api = createRuntime();
-  assert.equal(api.canonicalProjectRegistry.length, 9);
+  assert.equal(api.canonicalProjectRegistry.length, 10);
   assert.deepEqual(
     Array.from(api.canonicalProjectRegistry, (project) => project.id),
     [
       'hub',
       'fear-greed',
-      'momentum',
+      'factor',
       'dram',
-      'best-factor',
       'etf',
       'sox',
       'regime',
       'news',
+      'spo',
+      'observatory',
     ],
   );
   const current = Array.from(api.getCanonicalNavigation('etf')).filter(
@@ -220,4 +222,20 @@ test('browser seam contains contracts only, not ETF result payloads or run trans
   assert.doesNotMatch(output, /Space Exploration Technologies/);
   assert.doesNotMatch(output, /\/v1\/projects\/[^/]+\/runs|\/v1\/runs\//);
   assert.doesNotMatch(output, /method:\s*['"](?:POST|PUT|PATCH|DELETE)['"]/);
+});
+
+
+test('navigation checks the active central menu instead of rejecting a future menu update', () => {
+  const definitions = [
+    { id: 'factor', label: 'Factor', url: 'https://sonchanggi.github.io/factor/', current: false },
+    { id: 'etf', label: 'ETF', url: 'https://sonchanggi.github.io/etf-tracking/', current: true },
+    { id: 'future-project', label: 'New research', url: 'https://sonchanggi.github.io/new-research/', current: false },
+  ];
+  const api = createRuntime({ getLinks(currentId) { assert.equal(currentId, 'etf'); return definitions; } });
+  const links = definitions.map((row) => ({ textContent: row.label, href: row.url,
+    getAttribute(name) { return name === 'aria-current' && row.current ? 'page' : null; } }));
+  const rail = { querySelectorAll(selector) { assert.equal(selector, 'a'); return links; } };
+  api.assertCanonicalNavigation(rail, 'etf');
+  links[0].href = 'https://attacker.example/';
+  assert.throws(() => api.assertCanonicalNavigation(rail, 'etf'), /레지스트리/);
 });

@@ -51,7 +51,7 @@ test('result-first shell keeps signals and the primary chart ahead of detailed t
   assert.doesNotMatch(html, /표시 설정은 저장된 분석 결과를 다시 계산하지 않습니다/);
 });
 
-test('common design v1.2 keeps the compact type hierarchy and eleven unique destinations', () => {
+test('common design v1.2 keeps the compact type hierarchy and ten unique destinations', () => {
   assert.match(styles, /body\s*\{[^}]*font-size:\s*15px;[^}]*line-height:\s*1\.55;/s);
   assert.match(styles, /h1\s*\{[^}]*font-size:\s*clamp\(2rem,\s*4vw,\s*3\.25rem\)/s);
   assert.match(styles, /h2\s*\{[^}]*font-size:\s*clamp\(1\.35rem,\s*2\.3vw,\s*1\.8rem\)/s);
@@ -59,13 +59,13 @@ test('common design v1.2 keeps the compact type hierarchy and eleven unique dest
 
   const nav = html.match(/<div class="quant-shared-nav__links"[\s\S]*?<\/div>/)?.[0] || '';
   const links = [...nav.matchAll(/<a\b[^>]*href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/g)];
-  assert.equal(links.length, 10);
+  assert.equal(links.length, 9);
   assert.deepEqual(
     links.map((match) => match[2].replace(/&amp;/g, '&').trim()),
-    ['Fear & Greed', 'Momentum', 'DRAM', 'Best Factor', 'ETF', 'SOX', 'Regime', 'News', 'SPO', '알파 하우스'],
+    ['Fear & Greed', 'Factor', 'DRAM', 'ETF', 'SOX', 'Regime', 'News', 'SPO', '알파 하우스'],
   );
   assert.equal(links.filter((match) => /aria-current="page"/.test(match[0])).length, 1);
-  assert.match(links[4][0], /aria-current="page"/);
+  assert.match(links[3][0], /aria-current="page"/);
   assert.match(
     html,
     /class="quant-shared-nav__brand"[^>]+href="https:\/\/sonchanggi\.github\.io\/quant-dashboard\/"/,

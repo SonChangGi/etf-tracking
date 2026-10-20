@@ -23,8 +23,12 @@ const appIndex = html.indexOf('assets/app.js');
 if (platformIndex < 0 || appIndex < 0 || platformIndex > appIndex) {
   throw new Error('Pinned shared-platform runtime must load before assets/app.js.');
 }
-if (/https?:\/\/[^"']+\.(?:js|css)(?:[?"'])/i.test(html)) {
-  throw new Error('Built ETF HTML unexpectedly depends on a remote JS/CSS asset.');
+const sharedNavigationBase = 'https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/';
+const remoteAssets = [...html.matchAll(/(?:src|href)=["'](https?:\/\/[^"']+\.(?:js|css)(?:\?[^"']*)?)["']/gi)]
+  .map((match) => match[1]).sort();
+const expectedRemoteAssets = [`${sharedNavigationBase}nav.css`, `${sharedNavigationBase}nav.js`].sort();
+if (JSON.stringify(remoteAssets) !== JSON.stringify(expectedRemoteAssets)) {
+  throw new Error('Built ETF HTML must use only the two shared navigation JS/CSS assets.');
 }
 
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
@@ -77,5 +81,5 @@ if (totalJsonBytes <= applicationBytes) {
 }
 
 console.log(
-  `Verified ${repositoryJson.length} byte-identical JSON files (${totalJsonBytes} bytes) and a ${applicationBytes}-byte local-only client runtime.`,
+  `Verified ${repositoryJson.length} byte-identical JSON files (${totalJsonBytes} bytes) and a ${applicationBytes}-byte local data client runtime plus shared navigation.`,
 );

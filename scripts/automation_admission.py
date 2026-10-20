@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Serialize the four public data pipelines when delayed cron runs overlap.
+"""Serialize the three active public data pipelines when delayed cron runs overlap.
 
 Read-only GitHub API coordination. Repository concurrency serializes runs of
 one project; a total order (first job start in this attempt, run id) orders
@@ -18,8 +18,7 @@ import urllib.request
 
 WORKFLOWS = {
     "SonChangGi/sox": "deploy-pages.yml",
-    "SonChangGi/momentum-factor-lab": "daily-dashboard.yml",
-    "SonChangGi/best-factor": "update-dashboard.yml",
+    "SonChangGi/factor": "daily-dashboard.yml",
     "SonChangGi/etf-tracking": "update-data.yml",
 }
 ACTIVE = ("in_progress", "queued", "waiting", "pending", "requested")
@@ -118,7 +117,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--max-wait-seconds", type=int, default=2700)
     # GITHUB_TOKEN has a 1,000 requests/hour/repository primary limit.
-    # Three peers x five states plus their running job evidence stay below
+    # Two peers x five states plus their running job evidence stay below
     # that budget at 90-second intervals, including bounded failed-job retries.
     parser.add_argument("--poll-seconds", type=int, default=90)
     args = parser.parse_args()

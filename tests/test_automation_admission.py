@@ -68,3 +68,11 @@ class AdmissionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_only_active_factor_sox_etf_peers_are_coordinated():
+    assert gate.WORKFLOWS == {
+        "SonChangGi/sox": "deploy-pages.yml",
+        "SonChangGi/factor": "daily-dashboard.yml",
+        "SonChangGi/etf-tracking": "update-data.yml",
+    }

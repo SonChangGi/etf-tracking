@@ -14,13 +14,14 @@
   const canonicalProjectRegistry = Object.freeze([
     { id: 'hub', label: 'Hub', url: 'https://sonchanggi.github.io/quant-dashboard/' },
     { id: 'fear-greed', label: 'Fear & Greed', url: 'https://sonchanggi.github.io/fearNgreed/' },
-    { id: 'momentum', label: 'Momentum', url: 'https://sonchanggi.github.io/momentum-factor-lab/' },
+    { id: 'factor', label: 'Factor', url: 'https://sonchanggi.github.io/factor/' },
     { id: 'dram', label: 'DRAM', url: 'https://sonchanggi.github.io/dram-price/' },
-    { id: 'best-factor', label: 'Best Factor', url: 'https://sonchanggi.github.io/best-factor/' },
     { id: 'etf', label: 'ETF', url: 'https://sonchanggi.github.io/etf-tracking/' },
     { id: 'sox', label: 'SOX', url: 'https://sonchanggi.github.io/sox/' },
     { id: 'regime', label: 'Regime', url: 'https://sonchanggi.github.io/regime/' },
     { id: 'news', label: 'News', url: 'https://sonchanggi.github.io/news/' },
+    { id: 'spo', label: 'SPO', url: 'https://sonchanggi.github.io/SPO/' },
+    { id: 'observatory', label: '알파 하우스', url: 'https://research-observatory-changgi.changgi-son.chatgpt.site/' },
   ].map(Object.freeze));
 
   const etfControlManifest = deepFreeze({
@@ -321,7 +322,9 @@
     if (!container || typeof container.querySelectorAll !== 'function') {
       throw new TypeError('공통 프로젝트 메뉴 컨테이너가 없습니다.');
     }
-    const expected = getCanonicalNavigation(currentId).filter((project) => project.id !== 'hub');
+    const expected = typeof root.QuantNavigationV1?.getLinks === 'function'
+      ? root.QuantNavigationV1.getLinks(currentId)
+      : getCanonicalNavigation(currentId).filter((project) => project.id !== 'hub');
     const links = [...container.querySelectorAll('a')];
     if (links.length !== expected.length) {
       throw new Error(`공통 프로젝트 메뉴 수가 다릅니다: ${links.length}/${expected.length}`);
