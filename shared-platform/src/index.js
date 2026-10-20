@@ -20,7 +20,6 @@
     { id: 'sox', label: 'SOX', url: 'https://sonchanggi.github.io/sox/' },
     { id: 'regime', label: 'Regime', url: 'https://sonchanggi.github.io/regime/' },
     { id: 'news', label: 'News', url: 'https://sonchanggi.github.io/news/' },
-    { id: 'spo', label: 'SPO', url: 'https://sonchanggi.github.io/SPO/' },
     { id: 'observatory', label: '알파 하우스', url: 'https://research-observatory-changgi.changgi-son.chatgpt.site/' },
   ].map(Object.freeze));
 

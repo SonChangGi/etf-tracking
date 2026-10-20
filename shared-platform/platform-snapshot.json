@@ -5,15 +5,15 @@
   "source": {
     "repository": "SonChangGi/quant-dashboard",
     "foundationBaseRevision": "c1867cd30645a45dccde383b50bf5bb808f1b47d",
-    "note": "The shared packages are not published; ETF Tracking vendors only a small browser compatibility seam and keeps all result JSON as same-origin static files.",
+    "note": "The shared packages are not published; ETF Tracking vendors only a small browser compatibility seam and keeps all result JSON as same-origin static files. Retired SPO navigation entry removed on 2026-10-20; calculation contracts unchanged.",
     "compatibilitySourceHashes": {
       "platform/packages/contracts/src/schemas.ts": "4d0e53ec03173461710debd24204abf97b1345d5031e31a349d87c83d80767a0",
       "platform/packages/project-registry/src/index.ts": "1f2df47d08436155d4710a1d1b0838a063a20e4c1720cb3c87b9129ad00601ec",
       "platform/packages/ui/src/styles.css": "e277f29caa54841d3442a366718618b364b688ccd5cd38460dece5e31a57cbbf"
     }
   },
-  "aggregateFingerprint": "17255289661c32edc50694e32593880f9bff32d083a10943fc7fa245888fcc22",
+  "aggregateFingerprint": "619b10d1491c8a9affc19b46fbe9cf1874a9150019563475ec32e3a18670cf01",
   "files": {
-    "src/index.js": "2c936e492919dd610d521206b9c40fe2046f5e40111b0dd70ce6eb2f779dcfc5"
+    "src/index.js": "7a810999659c2b1ffbe5c7346e25bd90ebce69e9920dea5c4db279246b9a45b1"
   }
 }

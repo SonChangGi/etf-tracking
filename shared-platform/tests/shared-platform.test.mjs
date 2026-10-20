@@ -65,9 +65,9 @@ test('control registry exposes no analysis run and isolates owner operations', (
   );
 });
 
-test('canonical navigation keeps all ten destinations and ETF as current', () => {
+test('canonical navigation keeps all nine destinations and ETF as current', () => {
   const api = createRuntime();
-  assert.equal(api.canonicalProjectRegistry.length, 10);
+  assert.equal(api.canonicalProjectRegistry.length, 9);
   assert.deepEqual(
     Array.from(api.canonicalProjectRegistry, (project) => project.id),
     [
@@ -79,7 +79,6 @@ test('canonical navigation keeps all ten destinations and ETF as current', () =>
       'sox',
       'regime',
       'news',
-      'spo',
       'observatory',
     ],
   );
