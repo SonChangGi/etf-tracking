@@ -22,6 +22,8 @@ WORKFLOWS = {
     "SonChangGi/etf-tracking": "update-data.yml",
 }
 ACTIVE = ("in_progress", "queued", "waiting", "pending", "requested")
+CURRENT_START_TIMEOUT = 30
+CURRENT_START_POLL = 5
 
 
 def order(run: dict) -> tuple[dt.datetime, int]:
@@ -56,14 +58,32 @@ def started_attempt(repository: str, run: dict) -> dict:
     page = 1
     while True:
         result = api(f"repos/{repository}/actions/runs/{run['id']}/attempts/{run.get('run_attempt', 1)}/jobs?per_page=100&page={page}")
-        starts.extend(job["started_at"] for job in result["jobs"]
-                      if job.get("started_at") and job.get("conclusion") != "skipped")
+        if (not isinstance(result, dict) or not isinstance(result.get("jobs"), list)
+                or type(result.get("total_count")) is not int or result["total_count"] < 0):
+            raise RuntimeError("Malformed current-attempt jobs response")
+        for job in result["jobs"]:
+            if (not isinstance(job, dict) or type(job.get("run_id")) is not int
+                    or job["run_id"] != run["id"] or type(job.get("run_attempt")) is not int
+                    or job["run_attempt"] != run.get("run_attempt", 1)):
+                raise RuntimeError("Job evidence does not match the requested run and attempt")
+            if job.get("conclusion") == "skipped" or job.get("status") not in ("in_progress", "completed"):
+                continue
+            start = job.get("started_at")
+            if start is not None:
+                try:
+                    parsed = dt.datetime.fromisoformat(start.replace("Z", "+00:00"))
+                    if parsed.tzinfo is None:
+                        raise ValueError("Missing timezone")
+                except (AttributeError, TypeError, ValueError) as exc:
+                    raise RuntimeError("Malformed job start timestamp") from exc
+                starts.append(start)
         if page * 100 >= result["total_count"]:
             break
         page += 1
         if page > 10:
             raise RuntimeError("Cannot inspect all jobs in the current attempt")
-    return {**run, "admission_started_at": min(starts) if starts else None}
+    return {**run, "admission_started_at": min(starts, key=lambda start: dt.datetime.fromisoformat(
+        start.replace("Z", "+00:00"))) if starts else None}
 
 
 def active_peers(repository: str) -> list[dict]:
@@ -86,15 +106,54 @@ def active_peers(repository: str) -> list[dict]:
     return [started_attempt(peer, run) for peer, run in found.values()]
 
 
-def wait_for_turn(repository: str, run_id: str, max_wait: int, poll: int) -> int:
+def current_attempt(repository: str, run_id: str, run_attempt: int) -> dict:
+    """Bind self-state evidence to this execution; pending states can only wait."""
+    current = api(f"repos/{repository}/actions/runs/{run_id}")
+    if not isinstance(current, dict):
+        raise RuntimeError("Malformed current workflow run response")
+    print("Admission observation: " + json.dumps({
+        "expected_run": int(run_id), "expected_attempt": run_attempt,
+        "observed_run": current.get("id"), "observed_attempt": current.get("run_attempt"),
+        "status": current.get("status"),
+    }), flush=True)
+    if (type(current.get("id")) is not int or current["id"] != int(run_id)
+            or type(current.get("run_attempt")) is not int or current["run_attempt"] != run_attempt
+            or not isinstance(current.get("repository"), dict)
+            or not isinstance(current["repository"].get("full_name"), str)
+            or current["repository"]["full_name"].lower() != repository.lower()):
+        raise RuntimeError("Current workflow run identity or attempt does not match this execution")
+    if current.get("status") not in ACTIVE:
+        raise RuntimeError("Current workflow run is terminal or has an unknown status")
+    if current["status"] == "in_progress":
+        current = started_attempt(repository, current)
+    else:
+        current = {**current, "admission_started_at": None}
+    print("Admission job-start evidence: " + json.dumps({
+        "run": current["id"], "attempt": run_attempt,
+        "started_at": current.get("admission_started_at"),
+    }), flush=True)
+    return current
+
+
+def wait_for_turn(repository: str, run_id: str, max_wait: int, poll: int, run_attempt: int = 1) -> int:
     if repository.lower() not in {repo.lower() for repo in WORKFLOWS}:
         raise ValueError("Repository is not part of the coordinated production schedule")
+    if int(run_id) <= 0 or type(run_attempt) is not int or run_attempt <= 0:
+        raise ValueError("A positive workflow run and attempt are required")
     deadline = time.monotonic() + max_wait
-    current = started_attempt(repository, api(f"repos/{repository}/actions/runs/{run_id}"))
-    if current["status"] != "in_progress":
-        raise RuntimeError("Admission requires an active workflow run")
-    if not current.get("admission_started_at"):
-        raise RuntimeError("The current attempt has no observable job start")
+    # Confirm observable startup within a small budget before inspecting peers.
+    # API failures and terminal/unknown states remain immediate failures.
+    start_deadline = min(deadline, time.monotonic() + CURRENT_START_TIMEOUT)
+    while True:
+        current = current_attempt(repository, run_id, run_attempt)
+        if time.monotonic() > start_deadline:
+            raise RuntimeError("Current workflow start could not be confirmed within the bounded wait")
+        if current["status"] == "in_progress" and current.get("admission_started_at"):
+            break
+        remaining = start_deadline - time.monotonic()
+        if remaining <= 0:
+            raise RuntimeError("Current workflow start could not be confirmed within the bounded wait")
+        time.sleep(min(CURRENT_START_POLL, remaining))
     clear_checks = 0
     while True:
         peers = active_peers(repository)
@@ -102,6 +161,12 @@ def wait_for_turn(repository: str, run_id: str, max_wait: int, poll: int) -> int
         if not waiting:
             clear_checks += 1
             if clear_checks >= 2:
+                confirmed = current_attempt(repository, run_id, run_attempt)
+                if (confirmed["status"] != "in_progress" or not confirmed.get("admission_started_at")
+                        or order(confirmed) != order(current)):
+                    raise RuntimeError("Current workflow start evidence changed before admission")
+                if time.monotonic() > deadline:
+                    raise RuntimeError("Admission deadline expired before release")
                 print("Admission granted: no earlier peer data pipeline is active.", flush=True)
                 return 0
         else:
@@ -125,7 +190,7 @@ def main() -> int:
         parser.error("wait must be 0..7200 seconds; poll must be 60..120 seconds")
     try:
         return wait_for_turn(os.environ["GITHUB_REPOSITORY"], os.environ["GITHUB_RUN_ID"],
-                             args.max_wait_seconds, args.poll_seconds)
+                             args.max_wait_seconds, args.poll_seconds, int(os.environ["GITHUB_RUN_ATTEMPT"]))
     except (KeyError, OSError, ValueError, RuntimeError) as exc:
         print(f"Admission could not be verified; collection blocked: {type(exc).__name__}: {exc}", flush=True)
         return 1
