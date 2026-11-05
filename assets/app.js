@@ -1024,13 +1024,13 @@
       const delta = item.periodDelta === null ? '계산 불가' : formatPercentPoint(item.periodDelta);
       const signalCount = item.signalPoints.length ? `, 기간 내 이벤트/방향 신호 ${item.signalPoints.length}개` : '';
       const ariaLabel = `${item.rank ? `${item.rank}위 ` : ''}${item.fullLabel}: 최신 ${formatWeight(item.latestWeight)}, 기간 변화 ${delta}${signalCount}`;
-      return `<g class="chart-series ${tierClass}" data-series-key="${escapeAttribute(item.key)}" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}">${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
+      return `<g data-qr-series-id="${escapeAttribute(item.key)}" class="chart-series ${tierClass}" data-series-key="${escapeAttribute(item.key)}" aria-label="${escapeAttribute(ariaLabel)}" style="--series-stroke:${widthByRank}px; --series-color:${color}">${hitPaths}${segmentPaths}${circles}${signalMarkers}</g>`;
     }).join('');
     const endLabels = renderEndLabels(buildEndLabels(series, x, y, margin.top, height - margin.bottom), colorByKey);
     const summaryCards = renderChartSummaryCards(series, colorByKey);
     const firstDate = new Date(minDate).toISOString().slice(0, 10);
     const lastDate = new Date(maxDate).toISOString().slice(0, 10);
-    const axisNote = useZoomedAxis ? `가독성을 위해 Y축을 ${formatAxisWeight(yMin)}부터 표시` : 'Y축은 0% 기준';
+    const axisNote = useZoomedAxis ? `Y축 ${formatAxisWeight(yMin)}부터` : 'Y축은 0% 기준';
     const summaryText = `${firstDate} → ${lastDate} · TOP10 ${series.length}종목 · ${axisNote}`;
     const seriesKeys = series.map((item) => item.key);
     if (!seriesKeys.includes(state.chartSelection.pinnedSeriesKey)) state.chartSelection.pinnedSeriesKey = seriesKeys[0];
@@ -1061,6 +1061,8 @@
     `;
 
     const svg = target.querySelector('svg');
+    const nearestRenderedSeries=(event)=>{const matrix=svg.getScreenCTM();if(!matrix)return null;let best=null,distance=10;for(const item of series){for(const segment of splitPointSegments(item.points)){const points=segment.map(p=>new DOMPoint(x(p.date),y(p.value)).matrixTransform(matrix));for(let i=0;i<points.length;i++){const a=points[Math.max(0,i-1)],b=points[i],dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((event.clientX-a.x)*dx+(event.clientY-a.y)*dy)/(dx*dx+dy*dy||1))),d=Math.hypot(event.clientX-a.x-t*dx,event.clientY-a.y-t*dy);if(d<distance){distance=d;best=item.key}}}}return best};
+    window.QuantRange?.svg({id:'etf-weights',element:svg,host:target,nativeHit:true,hitSeries:nearestRenderedSeries,onReset:()=>{state.chartSelection.pinnedDate=observationDates.at(-1);state.chartSelection.pinnedSeriesKey=seriesKeys[0];state.chartSelection.previewDate='';state.chartSelection.previewSeriesKey='';updateInteraction()},currentIndex:()=>observationDates.indexOf(activeChartDate()),onSeriesRequest:(id,ctx)=>{if(ctx.mode==='point'&&Number.isInteger(ctx.index)){state.chartSelection.pinnedDate=observationDates[ctx.index];state.chartSelection.previewDate=''}pinSeries(id)},domain:observationDates.map(key=>({key,label:key})),series:series.map((s,i)=>({id:s.key,color:colorByKey.get(s.key),label:s.label||s.name||s.key,measure:'pp',unit:'%',points:s.points.map(p=>({key:p.date,value:p.value}))})),x:i=>x(observationDates[i]),plotTop:margin.top,plotBottom:height-margin.bottom});
     const scrollRoot = target.querySelector('[data-chart-scroll]');
     const groups = [...target.querySelectorAll('.chart-series')];
     const endLabelGroups = [...target.querySelectorAll('.line-end-label')];
@@ -1170,11 +1172,11 @@
 
     groups.forEach((group) => {
       const key = group.dataset.seriesKey;
-      group.addEventListener('pointerenter', () => setSeriesPreview(key));
+      group.addEventListener('pointerenter', event => setSeriesPreview(nearestRenderedSeries(event)||''));
       group.addEventListener('pointerleave', () => setSeriesPreview(''));
       group.addEventListener('focus', () => setSeriesPreview(key));
       group.addEventListener('blur', () => setSeriesPreview(''));
-      group.addEventListener('click', () => pinSeries(key));
+      group.addEventListener('click', event => {const clicked=nearestRenderedSeries(event);if(clicked)pinSeries(clicked)});
       group.addEventListener('keydown', (event) => {
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
@@ -1203,6 +1205,7 @@
         updateInteraction();
       });
       svg.addEventListener('click', (event) => {
+        if(!nearestRenderedSeries(event))return;
         const clickedDate = dateFromPointerEvent(event);
         if (clickedDate) commitChartDate(clickedDate);
       });
@@ -1264,7 +1267,7 @@
       const color = colorByKey.get(item.key) || CHART_COLORS[index % CHART_COLORS.length];
       const label = item.rank ? `${item.rank}. ${item.label}` : item.label;
       const delta = item.periodDelta === null ? '-' : formatPercentPoint(item.periodDelta);
-      return `<button type="button" class="chart-summary-item" data-series-key="${escapeAttribute(item.key)}" data-control-id="chart_series_focus" aria-pressed="false"><span class="legend-key" style="--legend-color:${color}"></span><strong>${escapeHtml(label)}</strong><em>${escapeHtml(formatWeight(item.latestWeight))}</em><small>기간 Δ ${escapeHtml(delta)} · 데이터 ${item.validPoints.length}/${item.points.length}일</small></button>`;
+      return `<button type="button" class="chart-summary-item" data-qr-chart-id="etf-weights" data-qr-series-id="${escapeAttribute(item.key)}" data-series-key="${escapeAttribute(item.key)}" data-control-id="chart_series_focus" aria-pressed="false"><span class="legend-key" style="--legend-color:${color}"></span><strong>${escapeHtml(label)}</strong><em>${escapeHtml(formatWeight(item.latestWeight))}</em><small>기간 Δ ${escapeHtml(delta)} · 데이터 ${item.validPoints.length}/${item.points.length}일</small></button>`;
     }).join('');
   }
 
