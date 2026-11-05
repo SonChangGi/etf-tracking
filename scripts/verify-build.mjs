@@ -24,11 +24,22 @@ if (platformIndex < 0 || appIndex < 0 || platformIndex > appIndex) {
   throw new Error('Pinned shared-platform runtime must load before assets/app.js.');
 }
 const sharedNavigationBase = 'https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/';
+const firstPaintBase = 'https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.0.0/';
 const remoteAssets = [...html.matchAll(/(?:src|href)=["'](https?:\/\/[^"']+\.(?:js|css)(?:\?[^"']*)?)["']/gi)]
   .map((match) => match[1]).sort();
-const expectedRemoteAssets = [`${sharedNavigationBase}nav.css`, `${sharedNavigationBase}nav.js`].sort();
+const expectedRemoteAssets = [
+  `${sharedNavigationBase}nav.css`,
+  `${sharedNavigationBase}nav.js`,
+  `${firstPaintBase}etf-tracking.css`,
+  `${firstPaintBase}start.js`,
+].sort();
 if (JSON.stringify(remoteAssets) !== JSON.stringify(expectedRemoteAssets)) {
-  throw new Error('Built ETF HTML must use only the two shared navigation JS/CSS assets.');
+  throw new Error('Built ETF HTML must use only the pinned shared navigation and first-paint assets.');
+}
+const firstPaintEntry = `<link rel="stylesheet" href="${firstPaintBase}etf-tracking.css" data-quant-first-paint-css>\n<script src="${firstPaintBase}start.js" data-quant-design-project="etf-tracking"></script>`;
+const head = html.split('</head>')[0];
+if (!head.trimEnd().endsWith(firstPaintEntry)) {
+  throw new Error('The blocking first-paint entry must follow native styles at the end of head.');
 }
 
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
