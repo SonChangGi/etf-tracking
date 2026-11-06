@@ -122,7 +122,8 @@ jobs:
         run: |
           args=(--output "$GITHUB_OUTPUT")
           if [[ "$FORCE_REFRESH" == "true" ]]; then args+=(--force); fi
-          python3 scripts/etf_automation.py "${args[@]}"
+          python3 scripts/etf_automation.py "${args[@]}" \
+            --scheduled-run-created-at "${ETF_SCHEDULED_RUN_CREATED_AT:-}" --schedule "$ETF_EVENT_SCHEDULE"
       - name: Update data with soft-fail status
         id: update
         if: steps.freshness.outputs.should_collect == 'true'
@@ -147,7 +148,8 @@ jobs:
         run: |
           npm test
           if [[ "${{ steps.update.outcome }}" == "skipped" ]]; then
-            python3 scripts/etf_automation.py --target-date "${{ steps.freshness.outputs.target_date }}" --require-current
+            python3 scripts/etf_automation.py --target-date "${{ steps.freshness.outputs.target_date }}" --require-current \
+            --scheduled-run-created-at "${ETF_SCHEDULED_RUN_CREATED_AT:-}" --schedule "$ETF_EVENT_SCHEDULE"
           fi
       - name: Assess whether generated data is safe to commit
         id: assess
@@ -248,7 +250,8 @@ jobs:
             echo "Main changed after collection; refusing to publish stale-code output." >&2
             exit 1
           fi
-          python3 scripts/etf_automation.py --target-date "${{ steps.freshness.outputs.target_date }}" --require-current
+          python3 scripts/etf_automation.py --target-date "${{ steps.freshness.outputs.target_date }}" --require-current \
+            --scheduled-run-created-at "${ETF_SCHEDULED_RUN_CREATED_AT:-}" --schedule "$ETF_EVENT_SCHEDULE"
           git add data
           if git diff --cached --quiet; then
             echo "No safe data changes to commit."

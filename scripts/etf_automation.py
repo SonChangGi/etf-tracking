@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
-import os
 from pathlib import Path
 import sys
 import urllib.request
@@ -76,13 +75,19 @@ def public_matches(root: Path = ROOT) -> bool:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--target-date")
+    parser.add_argument("--scheduled-run-created-at", default="")
+    parser.add_argument("--schedule", default="")
     parser.add_argument("--require-current", action="store_true")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    created_at = os.environ.get("ETF_SCHEDULED_RUN_CREATED_AT")
-    expected = disclosure_date(scheduled_slot(created_at, os.environ["ETF_EVENT_SCHEDULE"])) if created_at else disclosure_date()
-    if created_at:
+    if bool(args.scheduled_run_created_at) != bool(args.schedule):
+        parser.error("scheduled run creation time and cron must be supplied together")
+    if args.scheduled_run_created_at:
+        expected = disclosure_date(scheduled_slot(args.scheduled_run_created_at, args.schedule))
+    else:
+        expected = disclosure_date()
+    if args.scheduled_run_created_at:
         # A delayed retry must never replace a newer verified publication.
         summary = json.loads((ROOT / "data/summary.json").read_text())
         published = dt.date.fromisoformat(summary["dataAsOf"]).isoformat()

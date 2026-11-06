@@ -21,27 +21,25 @@ def write_current(data, target="2026-09-22"):
 
 class CalendarTests(unittest.TestCase):
     def test_delayed_final_slot_keeps_its_disclosure_day_through_verification(self):
-        env = {"ETF_SCHEDULED_RUN_CREATED_AT": "2026-11-05T15:47:56Z",
-               "ETF_EVENT_SCHEDULE": "47 7 * * 1-5"}
-        with tempfile.TemporaryDirectory() as temporary, mock.patch.dict("os.environ", env):
+        schedule = ["--scheduled-run-created-at", "2026-11-05T15:47:56Z", "--schedule", "47 7 * * 1-5"]
+        with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             write_current(root / "data", "2026-11-05")
             with mock.patch.object(automation, "ROOT", root), mock.patch.object(sys, "argv", [
-                "etf_automation.py", "--target-date", "2026-11-05", "--require-current",
+                "etf_automation.py", *schedule, "--target-date", "2026-11-05", "--require-current",
             ]):
                 self.assertEqual(automation.main(), 0)
 
     def test_delayed_final_slot_does_not_replace_newer_verified_data(self):
-        env = {"ETF_SCHEDULED_RUN_CREATED_AT": "2026-11-05T15:47:56Z",
-               "ETF_EVENT_SCHEDULE": "47 7 * * 1-5"}
-        with tempfile.TemporaryDirectory() as temporary, mock.patch.dict("os.environ", env):
+        schedule = ["--scheduled-run-created-at", "2026-11-05T15:47:56Z", "--schedule", "47 7 * * 1-5"]
+        with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             write_current(root / "data", "2026-11-06")
             output = root / "output"
             with mock.patch.object(automation, "ROOT", root), mock.patch.object(
                 automation, "disclosure_date", side_effect=lambda slot=None: "2026-11-05" if slot else "2026-11-06",
             ), mock.patch.object(automation, "public_matches", return_value=True), mock.patch.object(sys, "argv", [
-                "etf_automation.py", "--output", str(output),
+                "etf_automation.py", *schedule, "--output", str(output),
             ]):
                 self.assertEqual(automation.main(), 0)
             self.assertIn("target_date=2026-11-06\nshould_collect=false\nshould_deploy=false", output.read_text())
@@ -71,6 +69,8 @@ class CalendarTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 automation.validate_current(data, "2026-09-22")
 
+    @mock.patch.dict("os.environ", {"ETF_SCHEDULED_RUN_CREATED_AT": "2026-11-06T15:22:45Z",
+                                    "ETF_EVENT_SCHEDULE": "47 7 * * 1-5"})
     def test_deployment_rejects_a_target_that_became_stale_during_run(self):
         with mock.patch.object(automation, "disclosure_date", return_value="2026-09-23"), mock.patch.object(sys, "argv", ["etf_automation.py", "--target-date", "2026-09-22", "--require-current"]):
             with self.assertRaisesRegex(ValueError, "changed during"):
