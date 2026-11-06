@@ -20,6 +20,32 @@ def write_current(data, target="2026-09-22"):
 
 
 class CalendarTests(unittest.TestCase):
+    def test_delayed_final_slot_keeps_its_disclosure_day_through_verification(self):
+        env = {"ETF_SCHEDULED_RUN_CREATED_AT": "2026-11-05T15:47:56Z",
+               "ETF_EVENT_SCHEDULE": "47 7 * * 1-5"}
+        with tempfile.TemporaryDirectory() as temporary, mock.patch.dict("os.environ", env):
+            root = Path(temporary)
+            write_current(root / "data", "2026-11-05")
+            with mock.patch.object(automation, "ROOT", root), mock.patch.object(sys, "argv", [
+                "etf_automation.py", "--target-date", "2026-11-05", "--require-current",
+            ]):
+                self.assertEqual(automation.main(), 0)
+
+    def test_delayed_final_slot_does_not_replace_newer_verified_data(self):
+        env = {"ETF_SCHEDULED_RUN_CREATED_AT": "2026-11-05T15:47:56Z",
+               "ETF_EVENT_SCHEDULE": "47 7 * * 1-5"}
+        with tempfile.TemporaryDirectory() as temporary, mock.patch.dict("os.environ", env):
+            root = Path(temporary)
+            write_current(root / "data", "2026-11-06")
+            output = root / "output"
+            with mock.patch.object(automation, "ROOT", root), mock.patch.object(
+                automation, "disclosure_date", side_effect=lambda slot=None: "2026-11-05" if slot else "2026-11-06",
+            ), mock.patch.object(automation, "public_matches", return_value=True), mock.patch.object(sys, "argv", [
+                "etf_automation.py", "--output", str(output),
+            ]):
+                self.assertEqual(automation.main(), 0)
+            self.assertIn("target_date=2026-11-06\nshould_collect=false\nshould_deploy=false", output.read_text())
+
     def test_disclosure_day_uses_korean_exchange_sessions_including_closures(self):
         cases = {"2026-09-22": "2026-09-22", "2026-09-19": "2026-09-18", "2026-09-20": "2026-09-18",
             "2026-09-24": "2026-09-23", "2026-12-31": "2026-12-30", "2027-01-01": "2026-12-30",

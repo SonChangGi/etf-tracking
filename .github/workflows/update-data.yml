@@ -70,6 +70,8 @@ jobs:
 
   update-data:
     needs: admission
+    env:
+      ETF_EVENT_SCHEDULE: ${{ github.event.schedule }}
     runs-on: ubuntu-latest
     timeout-minutes: 55
     environment:
@@ -104,6 +106,15 @@ jobs:
           node-version: '22'
       - name: Install the pinned Korean exchange calendar
         run: python3 -m pip install -r requirements.txt
+      - name: Freeze scheduled run creation time
+        if: github.event_name == 'schedule'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          created_at="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" --jq '.created_at')"
+          [[ -n "$created_at" && "$created_at" != null ]]
+          printf 'ETF_SCHEDULED_RUN_CREATED_AT=%s\n' "$created_at" >> "$GITHUB_ENV"
       - name: Resolve disclosure day and skip a fully published current result
         id: freshness
         env:

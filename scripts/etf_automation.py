@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import os
 from pathlib import Path
 import sys
 import urllib.request
@@ -13,6 +14,21 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 BASE_URL = "https://sonchanggi.github.io/etf-tracking/"
 KST = ZoneInfo("Asia/Seoul")
+
+def scheduled_slot(created_at: str, schedule: str) -> dt.datetime:
+    minute, hour, day, month, weekdays = schedule.split()
+    if (day, month, weekdays) != ("*", "*", "1-5"):
+        raise ValueError("Unsupported ETF schedule")
+    created = dt.datetime.fromisoformat(created_at.replace("Z", "+00:00"))
+    if created.tzinfo is None:
+        raise ValueError("Scheduled run creation time requires a time zone")
+    created = created.astimezone(dt.timezone.utc)
+    slot = created.replace(hour=int(hour), minute=int(minute), second=0, microsecond=0)
+    if slot > created:
+        slot -= dt.timedelta(days=1)
+    if slot.weekday() >= 5:
+        raise ValueError("Cannot identify an ETF weekday slot within 24 hours")
+    return slot
 
 
 def disclosure_date(now: dt.datetime | None = None) -> str:
@@ -64,9 +80,20 @@ def main() -> int:
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    target = args.target_date or disclosure_date()
+    created_at = os.environ.get("ETF_SCHEDULED_RUN_CREATED_AT")
+    expected = disclosure_date(scheduled_slot(created_at, os.environ["ETF_EVENT_SCHEDULE"])) if created_at else disclosure_date()
+    if created_at:
+        # A delayed retry must never replace a newer verified publication.
+        summary = json.loads((ROOT / "data/summary.json").read_text())
+        published = dt.date.fromisoformat(summary["dataAsOf"]).isoformat()
+        if published > expected:
+            if published > disclosure_date():
+                raise ValueError("Stored ETF disclosure day is in the future")
+            validate_current(ROOT / "data", published)
+            expected = published
+    target = args.target_date or expected
     if args.require_current:
-        if target != disclosure_date():
+        if target != expected:
             raise ValueError("Korean disclosure day changed during this run; restart with a new frozen identity")
         validate_current(ROOT / "data", target)
         print(f"Verified all three ETF disclosures for {target}")
