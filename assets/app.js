@@ -2226,8 +2226,7 @@
   function formatAxisWeight(value) {
     const num = finiteOrNull(value);
     if (num === null) return '-';
-    const isInteger = Math.abs(num - Math.round(num)) < 0.000001;
-    return `${num.toLocaleString('ko-KR', { maximumFractionDigits: isInteger ? 0 : 1, minimumFractionDigits: 0 })}%`;
+    return `${window.QuantFormat.number(num)}%`;
   }
 
   function formatAxisDate(value, showYear = false) {
@@ -2241,21 +2240,21 @@
   function formatWeight(value) {
     const num = finiteOrNull(value);
     if (num === null) return '-';
-    return `${num.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 0 })}%`;
+    return `${window.QuantFormat.number(num)}%`;
   }
 
   function formatPercentPoint(value) {
     const num = finiteOrNull(value);
     if (num === null) return '-';
     const sign = num > 0 ? '+' : '';
-    return `${sign}${num.toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}pp`;
+    return `${sign}${window.QuantFormat.number(num)}pp`;
   }
 
   function formatReturn(value) {
     const num = finiteOrNull(value);
     if (num === null) return '-';
     const sign = num > 0 ? '+' : '';
-    return `${sign}${(num * 100).toLocaleString('ko-KR', { maximumFractionDigits: 2, minimumFractionDigits: 2 })}%`;
+    return `${sign}${window.QuantFormat.number(num * 100)}%`;
   }
 
   function formatPriceSource(value) {
@@ -2281,7 +2280,7 @@
   function formatCoverage(value) {
     const num = finiteOrNull(value);
     if (num === null) return '-';
-    return `${(num * 100).toLocaleString('ko-KR', { maximumFractionDigits: 0 })}%`;
+    return `${window.QuantFormat.number(num * 100)}%`;
   }
 
   function formatCoverageUniverse(value) {
@@ -2334,7 +2333,7 @@
     } else if (label === 'listing_date_sparse' || value.storedFromListingDate) {
       status = '상장일 스냅샷 포함 · 희소 백필';
     }
-    const coverageText = coverage === null ? '커버리지 계산 불가' : `거래일 커버리지 ${(coverage * 100).toLocaleString('ko-KR', { maximumFractionDigits: 1 })}%`;
+    const coverageText = coverage === null ? '커버리지 계산 불가' : `거래일 커버리지 ${window.QuantFormat.number(coverage * 100)}%`;
     return {
       summary: `${status} · ${oldest} → ${latest}`,
       detail: `상장일 ${listing} · 저장 ${stored}/${possible}개 weekday · ${coverageText}. 상장일 값이 있어도 커버리지가 낮으면 연속 시계열로 해석하지 않습니다.`,

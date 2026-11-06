@@ -24,7 +24,7 @@ if (platformIndex < 0 || appIndex < 0 || platformIndex > appIndex) {
   throw new Error('Pinned shared-platform runtime must load before assets/app.js.');
 }
 const sharedNavigationBase = 'https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/';
-const firstPaintBase = 'https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.1.0/';
+const firstPaintBase = 'https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.2.0/';
 const remoteAssets = [...html.matchAll(/(?:src|href)=["'](https?:\/\/[^"']+\.(?:js|css)(?:\?[^"']*)?)["']/gi)]
   .map((match) => match[1]).sort();
 const expectedRemoteAssets = [

@@ -1,3 +1,4 @@
+import QuantFormat from '../tests/fixtures/quant-number.cjs';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { existsSync, readFileSync, statSync, readdirSync } from 'node:fs';
@@ -20,6 +21,7 @@ if (!/\.chart-summary-grid\s*\{[^}]*grid-template-columns:\s*repeat\(5,\s*minmax
   throw new Error('weight chart summary should use a five-column desktop grid for 1-5 / 6-10 rows');
 }
 const context = vm.createContext({
+  window: { QuantFormat, requestAnimationFrame() {} },
   AbortController,
   URL,
   clearTimeout,

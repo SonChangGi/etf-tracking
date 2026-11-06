@@ -1,3 +1,4 @@
+import QuantFormat from './fixtures/quant-number.cjs';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
@@ -14,6 +15,7 @@ const platformSource = readFileSync(
 
 function dashboardHelpers() {
   const context = vm.createContext({
+    window: { QuantFormat, requestAnimationFrame() {} },
     AbortController,
     URL,
     clearTimeout,
@@ -366,6 +368,7 @@ test('chart readout does not carry a holding value across a missing observation'
 
 test('control registry distinguishes display dates from the result cutoff selector', () => {
   const context = vm.createContext({
+    window: { QuantFormat, requestAnimationFrame() {} },
     AbortController,
     URL,
     clearTimeout,
@@ -416,6 +419,7 @@ test('pinned platform seam loads before the app and exposes canonical token alia
 
 test('visible ETF controls cannot submit analysis or config runs', () => {
   const context = vm.createContext({
+    window: { QuantFormat, requestAnimationFrame() {} },
     AbortController,
     URL,
     clearTimeout,
@@ -448,6 +452,7 @@ test('visible ETF controls cannot submit analysis or config runs', () => {
 
 test('every static and generated interactive element is bound to the control registry', () => {
   const context = vm.createContext({
+    window: { QuantFormat, requestAnimationFrame() {} },
     AbortController,
     URL,
     clearTimeout,
