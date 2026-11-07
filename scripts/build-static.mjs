@@ -1,4 +1,5 @@
-import { cp, copyFile, mkdir, rm } from 'node:fs/promises';
+import designContract from './design-contract/verify-design.cjs';
+import { cp, copyFile, mkdir, rm, readFile } from 'node:fs/promises';
 
 const output = new URL('../dist/', import.meta.url);
 await rm(output, { force: true, recursive: true });
@@ -21,5 +22,7 @@ await Promise.all([
     recursive: true,
   }),
 ]);
+
+designContract.verifyHtml(await readFile(new URL('../dist/index.html', import.meta.url), 'utf8'), { project: 'etf-tracking' });
 
 console.log('Built the independently deployable ETF static site in dist/.');

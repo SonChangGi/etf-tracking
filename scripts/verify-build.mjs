@@ -1,3 +1,4 @@
+import designContract from './design-contract/verify-design.cjs';
 import { createHash } from 'node:crypto';
 import { access, readFile, readdir, stat } from 'node:fs/promises';
 import { relative, resolve } from 'node:path';
@@ -36,11 +37,7 @@ const expectedRemoteAssets = [
 if (JSON.stringify(remoteAssets) !== JSON.stringify(expectedRemoteAssets)) {
   throw new Error('Built ETF HTML must use only the pinned shared navigation and first-paint assets.');
 }
-const firstPaintEntry = `<link rel="stylesheet" href="${firstPaintBase}etf-tracking.css" data-quant-first-paint-css>\n<script src="${firstPaintBase}start.js" data-quant-design-project="etf-tracking"></script>`;
-const head = html.split('</head>')[0];
-if (!head.trimEnd().endsWith(firstPaintEntry)) {
-  throw new Error('The blocking first-paint entry must follow native styles at the end of head.');
-}
+designContract.verifyHtml(html, { project: 'etf-tracking' });
 
 const digest = (bytes) => createHash('sha256').update(bytes).digest('hex');
 const repositoryPlatform = await readFile(resolve(root, 'shared-platform/dist/index.js'));

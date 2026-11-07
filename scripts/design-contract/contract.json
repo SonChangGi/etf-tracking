@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "uiVersion": "0.7.0",
+  "startupVersion": "1.2.0",
+  "chartVersion": "1.3.0",
+  "formatterVersion": "1.0.0",
+  "startupBase": "https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.2.0/",
+  "navigationUrl": "https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/nav.js",
+  "projects": ["quant-dashboard", "factor", "regime", "dram-price", "sox", "etf-tracking", "fearNgreed", "investment-journal", "alpha-house"],
+  "earlyThemeBasenames": ["theme.js"],
+  "earlyFrameworkPattern": "^(?:rolldown-runtime|framework)-[A-Za-z0-9_-]+\\.js$"
+}
