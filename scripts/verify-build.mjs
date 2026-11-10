@@ -30,13 +30,14 @@ const remoteAssets = [...html.matchAll(/(?:src|href)=["'](https?:\/\/[^"']+\.(?:
   .map((match) => match[1]).sort();
 const expectedRemoteAssets = [
   'https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.1/preferences.js',
+  'https://sonchanggi.github.io/quant-dashboard/shared/design/tokens/0.4.2/shell.css',
   `${sharedNavigationBase}nav.css`,
   `${sharedNavigationBase}nav.js`,
   `${firstPaintBase}etf-tracking.css`,
   `${firstPaintBase}start.js`,
 ].sort();
 if (JSON.stringify(remoteAssets) !== JSON.stringify(expectedRemoteAssets)) {
-  throw new Error('Built ETF HTML must use only the pinned shared navigation and first-paint assets.');
+  throw new Error('Built ETF HTML must use only the pinned shared navigation, design and first-paint assets.');
 }
 designContract.verifyHtml(html, { project: 'etf-tracking' });
 
