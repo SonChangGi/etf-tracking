@@ -40,3 +40,10 @@ html[data-qe-theme] body.qd-v04 details.chart-date-controls{display:block;flex:0
 html[data-qe-theme] body.qd-v04 details.chart-date-controls summary{min-height:44px;cursor:pointer;display:flex;align-items:center;}
 html[data-qe-theme] body.qd-v04 details.chart-date-controls:not([open])>:not(summary){display:none;}
 @media(max-width:640px){html[data-qe-theme] body.qd-v04 .chart-observation-bar{display:flex;flex-wrap:wrap;gap:8px;}html[data-qe-theme] body.qd-v04 .chart-selection-summary{padding:10px;min-width:0;flex:1;}}
+
+/* Pinned shared shell 0.4.2 SHA256 5c9cf965555b796dbf2ed864d00c3bc9ef4bd0c09fe8a3fb5543c082a61cf417 */
+/* Quant 0.4.2: shell roles only. Load explicitly after project styles. */
+html[data-theme="dark"]{--qs-bg:#101416;--qs-surface:#171d20;--qs-raised:#20282c;--qs-text:#edf3f2;--qs-muted:#a6b4b6;--qs-border:#364247;--qs-accent:#69d3cf}
+html[data-theme="light"]{--qs-bg:#f2f5f4;--qs-surface:#ffffff;--qs-raised:#e9efed;--qs-text:#172725;--qs-muted:#536762;--qs-border:#c6d3ce;--qs-accent:#007e79}
+html[data-theme] body.qd-v04{background:var(--qs-bg)!important;color:var(--qs-text)!important}
+html[data-theme] body.qd-v04 :is(.qd-sidebar,.qd-shell){--qd-bg:var(--qs-bg)!important;--qd-surface:var(--qs-surface)!important;--qd-raised:var(--qs-raised)!important;--qd-text:var(--qs-text)!important;--qd-muted:var(--qs-muted)!important;--qd-border:var(--qs-border)!important;--qd-accent:var(--qs-accent)!important;--qd-soft:var(--qs-raised)!important;background:var(--qs-bg)!important;color:var(--qs-text)!important;border-color:var(--qs-border)!important}
