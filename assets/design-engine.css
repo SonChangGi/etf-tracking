@@ -70,3 +70,14 @@ html[data-qe-theme] body.qd-v04 :is(#overview-metrics .metric-card,#signal-grid 
 html[data-qe-theme] body.qd-v04 .primary-chart-panel>.chart-card {padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;}
 html[data-qe-theme] body.qd-v04 .trend-clear {width:auto!important;min-height:44px;padding:8px 12px;border:1px solid var(--qs-line,var(--qe-border));border-radius:8px;background:transparent;color:var(--qe-muted);font:inherit;cursor:pointer;}
 html[data-theme] body.qd-v04 #primary-chart[data-quant-card]::before {content:none!important;display:none!important;}
+
+/* Plot gestures own zoom and range selection. */
+html[data-theme] body :is(.qd-focus-button,.qd-focus-tools) {display:none!important}
+[data-quant-touch-chart]:focus-visible {outline:2px solid var(--qs-focus);outline-offset:3px}
+[data-quant-touch-chart][data-quant-gesture=compare] .qe-point-tooltip {visibility:hidden!important}
+
+.qe-point-tooltip b {float:right;margin-inline-start:10px;font-variant-numeric:tabular-nums}
+@media(max-width:480px) {
+  .qe-point-tooltip {max-width:calc(100% - 8px);font-size:11px!important}
+  .qe-point-tooltip div {white-space:normal}
+}
