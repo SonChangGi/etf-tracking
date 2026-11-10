@@ -20,3 +20,4 @@ html[data-qe-theme] body.qd-v04 .qe-holdings-tools {display:flex;gap:12px;align-
 html[data-qe-theme] body.qd-v04 .qe-holdings-tools input {min-width:150px;flex:1;}
 html[data-qe-theme] body.qd-v04 .qe-holdings-tools :is(button,summary,input) {min-height:44px;}
 html[data-qe-theme] body.qd-v04 #top10-rows tr[hidden] {display:none!important;}
+html[data-qe-theme] body.qd-v04 .qe-holdings-tools button {background:var(--qe-surface)!important;color:var(--qe-text)!important;border:1px solid var(--qe-border)!important;border-radius:8px;padding:8px 14px;}
