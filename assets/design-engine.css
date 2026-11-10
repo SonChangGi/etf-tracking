@@ -81,3 +81,14 @@ html[data-theme] body :is(.qd-focus-button,.qd-focus-tools) {display:none!import
   .qe-point-tooltip {max-width:calc(100% - 8px);font-size:11px!important}
   .qe-point-tooltip div {white-space:normal}
 }
+
+html[data-theme] body .trend-range[data-quant-chart-readout]:not([hidden]) {
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;
+}
+.trend-range > strong {grid-column:1/-1}
+.trend-range > span {display:flex;justify-content:space-between;gap:4px 8px;align-items:baseline}
+.trend-range > span > span {color:var(--qs-muted);overflow-wrap:anywhere}
+.trend-range b {flex-shrink:0;font-variant-numeric:tabular-nums}
+@media(max-width:380px) {
+  html[data-theme] body .trend-range[data-quant-chart-readout]:not([hidden]) {column-gap:10px}
+}

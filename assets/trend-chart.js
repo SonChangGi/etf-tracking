@@ -19,7 +19,7 @@ scope.QuantETFTrend={mount(host,config){
   const chart=scope.echarts.init(host,null,{renderer:'svg'});
   let selected=dates.length-1, selectedKey=series[0].key, zoom=[0,100],selectedRange=null;
   const reset=document.createElement('button');reset.type='button';reset.className='trend-reset';reset.textContent='전체 기간';reset.dataset.quantResetView='';reset.hidden=true;
-  const range=document.createElement('output');range.className='trend-range';range.dataset.quantChartReadout='';range.hidden=true;
+  const range=document.createElement('output');range.className='trend-range';range.dataset.quantChartReadout='';range.setAttribute('aria-live','polite');range.hidden=true;
   const clear=document.createElement('button');clear.type='button';clear.textContent='구간 해제';clear.hidden=true;clear.className='trend-clear';
   host.after(range,clear,reset);
   clear.onclick=()=>{if(selectedRange)chart.setOption({tooltip:{showContent:true}});selectedRange=null;range.hidden=true;clear.hidden=true;chart.dispatchAction({type:"brush",areas:[]});};
@@ -51,7 +51,21 @@ scope.QuantETFTrend={mount(host,config){
     if(!selectedRange){chart.setOption({tooltip:{showContent:false}});chart.dispatchAction({type:'hideTip'});}
     selectedRange=[a,b];
     [a,b]=[a,b].map(v=>Math.max(0,Math.min(dates.length-1,Math.round(v)))).sort((a,b)=>a-b);
-    range.hidden=false;clear.hidden=false;range.textContent=`${dates[a]} → ${dates[b]} · `+series.map(s=>{const v=entries.get(s.key),start=v.get(dates[a]),end=v.get(dates[b]);return `${s.label||s.fullLabel} ${Number.isFinite(start)&&Number.isFinite(end)?(end-start).toFixed(2)+'%p':'미제공'}`;}).join(' · ');
+    const period=document.createElement('strong');
+    period.textContent=dates[a]+' → '+dates[b];
+    const changes=series.map(item=>{
+      const values=entries.get(item.key),start=values.get(dates[a]),end=values.get(dates[b]);
+      const row=document.createElement('span'),label=document.createElement('span'),delta=document.createElement('b');
+      label.textContent=item.fullLabel||item.label;
+      if(Number.isFinite(start)&&Number.isFinite(end)){
+        const change=end-start;
+        delta.textContent=(change>0?'+':'')+change.toFixed(2)+'%p';
+      }else delta.textContent='미제공';
+      row.append(label,delta);
+      return row;
+    });
+    range.replaceChildren(period,...changes);
+    range.hidden=false;clear.hidden=false;
     chart.dispatchAction({type:'brush',areas:[{brushType:'lineX',xAxisIndex:0,coordRange:[a,b]}]});
   }
   const coordinate=e=>{const rect=host.getBoundingClientRect();const value=chart.convertFromPixel({xAxisIndex:0},e.clientX-rect.left);return Math.max(0,Math.min(dates.length-1,Math.round(value)));};

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 test('responsive trend preserves gaps, original weights, events and selected date',()=>{
  const handlers={},actions=[];let option;
- const el=()=>({className:'',hidden:false,style:{},dataset:{},removeEventListener(){},setAttribute(){},addEventListener(){},before(){},after(){},append(){},remove(){},focus(){},querySelector:()=>el()});
+ const el=()=>({className:'',hidden:false,style:{},dataset:{},removeEventListener(){},setAttribute(){},addEventListener(){},before(){},after(){},append(){},replaceChildren(){},remove(){},focus(){},querySelector:()=>el()});
  const chart={setOption(o){option=o;},on(k,f){handlers[k]=f;},dispatchAction(a){actions.push(a);},getOption(){return option;},resize(){},dispose(){}};
  const context={window:{echarts:{init:()=>chart}},document:{documentElement:{dataset:{theme:'dark'}},createElement:el},getComputedStyle:()=>({getPropertyValue:()=>''}),ResizeObserver:class{observe(){}disconnect(){}},MutationObserver:class{observe(){}disconnect(){}}};
  vm.runInNewContext(fs.readFileSync(new URL('../assets/trend-chart.js',import.meta.url),'utf8'),context);
@@ -16,12 +16,13 @@ test('responsive trend preserves gaps, original weights, events and selected dat
 });
 test('default drag reports chronological percentage points with zero and missing endpoints',()=>{
  const events={},outputs=[],actions=[];let option;
- const el=tag=>{const e={style:{},dataset:{},hidden:false,clientWidth:300,setAttribute(){},addEventListener(k,f){(events[k]??=[]).push(f);},removeEventListener(){},getBoundingClientRect:()=>({left:0,top:0}),before(){},after(){},append(){},remove(){},focus(){}};if(tag==='output')outputs.push(e);return e;};
+ const el=tag=>{const e={style:{},dataset:{},hidden:false,clientWidth:300,setAttribute(){},addEventListener(k,f){(events[k]??=[]).push(f);},removeEventListener(){},getBoundingClientRect:()=>({left:0,top:0}),before(){},after(){},append(...nodes){this.children=nodes;},replaceChildren(...nodes){this.children=nodes;},remove(){},focus(){}};if(tag==='output')outputs.push(e);return e;};
  const chart={setOption(o){option=o;},on(){},dispatchAction(a){actions.push(a);},convertFromPixel:(_,v)=>v/100,getOption:()=>option,resize(){},dispose(){}};
  const ctx={window:{echarts:{init:()=>chart}},document:{documentElement:{dataset:{theme:'dark'}},createElement:el},getComputedStyle:()=>({getPropertyValue:()=>''}),ResizeObserver:class{observe(){}disconnect(){}},MutationObserver:class{observe(){}disconnect(){}}};vm.runInNewContext(fs.readFileSync(new URL('../assets/trend-chart.js',import.meta.url),'utf8'),ctx);
  const dates=['2026-01-01','2026-01-02','2026-01-03'];const series=[{key:'A',fullLabel:'A',points:dates.map((date,i)=>({date,value:i})),signalPoints:[]},{key:'B',fullLabel:'B',points:[{date:dates[2],value:3}],signalPoints:[]}];ctx.window.QuantETFTrend.mount(el(),{dates,series,colors:new Map([['A','#3182f6'],['B','#ff0000']]),onObserve(){},onPin(){}});
+ const outputRows=()=>Array.from(outputs[0].children,row=>row.children?Array.from(row.children,n=>n.textContent).join(' '):row.textContent);
  const fire=(k,x,y=0,extra={})=>(events[k]||[]).forEach(f=>f({clientX:x,clientY:y,pointerId:1,button:0,preventDefault(){},stopImmediatePropagation(){},...extra}));
- fire('pointerdown',0);fire('pointermove',200);assert.equal(outputs[0].textContent,'2026-01-01 → 2026-01-03 · A 2.00%p · B 미제공');fire('pointerup',200);fire('pointerdown',200);fire('pointermove',0);assert.equal(outputs[0].textContent,'2026-01-01 → 2026-01-03 · A 2.00%p · B 미제공');fire('pointerup',0);fire('keydown',0,0,{key:'Escape'});assert(outputs[0].hidden);
+ fire('pointerdown',0);fire('pointermove',200);assert.deepEqual(outputRows(),['2026-01-01 → 2026-01-03','A +2.00%p','B 미제공']);fire('pointerup',200);fire('pointerdown',200);fire('pointermove',0);assert.deepEqual(outputRows(),['2026-01-01 → 2026-01-03','A +2.00%p','B 미제공']);fire('pointerup',0);fire('keydown',0,0,{key:'Escape'});assert(outputs[0].hidden);
  fire('pointerdown',0,0,{pointerType:'touch'});fire('pointermove',4,50,{pointerType:'touch'});assert(outputs[0].hidden,'vertical touch remains page scroll');
  assert(!actions.some(a=>a.type==='dataZoom'),'vertical gesture leaves the time window alone');
 });
