@@ -29,7 +29,7 @@ function verifyHtml(html, {project, navigation = 'static'} = {}) {
   check((start.attrs.src || '').split('?')[0] === base + 'start.js' && start.attrs['data-quant-design-project'] === project, 'wrong startup pin or project');
   check(!own(start.attrs, 'async') && !own(start.attrs, 'defer') && ['', 'text/javascript', 'application/javascript'].includes(start.attrs.type || ''), 'startup must be blocking');
   check(sheet.inHead && start.inHead && start.i === sheet.i + 1, 'stylesheet must immediately precede startup in head');
-  const preferencesUrl = 'https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.0/preferences.js';
+  const preferencesUrl = 'https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.1/preferences.js';
   const preferences = tags.map((t, i) => ({...t, i})).filter(t => t.tag === 'script' && (t.attrs.src || '').split('?')[0] === preferencesUrl);
   check(preferences.length <= 1, 'duplicate preferences loader');
   for (const pref of preferences) {

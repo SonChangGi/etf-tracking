@@ -5,7 +5,7 @@ import test from 'node:test';
 const require = createRequire(import.meta.url);
 const {verifyHtml} = require('../scripts/design-contract/verify-design.cjs');
 const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-const loader = '<script src="https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.0/preferences.js"></script>';
+const loader = '<script src="https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.1/preferences.js"></script>';
 test('shared preferences restore once before theme and startup', () => {
   assert.equal(html.split(loader).length - 1, 1);
   assert.ok(html.indexOf(loader) < html.indexOf('quant-research-theme'));
