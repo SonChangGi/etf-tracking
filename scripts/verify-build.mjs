@@ -29,6 +29,7 @@ const firstPaintBase = 'https://sonchanggi.github.io/quant-dashboard/shared/desi
 const remoteAssets = [...html.matchAll(/(?:src|href)=["'](https?:\/\/[^"']+\.(?:js|css)(?:\?[^"']*)?)["']/gi)]
   .map((match) => match[1]).sort();
 const expectedRemoteAssets = [
+  'https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.0/preferences.js',
   `${sharedNavigationBase}nav.css`,
   `${sharedNavigationBase}nav.js`,
   `${firstPaintBase}etf-tracking.css`,

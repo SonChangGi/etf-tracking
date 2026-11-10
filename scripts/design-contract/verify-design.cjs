@@ -29,6 +29,13 @@ function verifyHtml(html, {project, navigation = 'static'} = {}) {
   check((start.attrs.src || '').split('?')[0] === base + 'start.js' && start.attrs['data-quant-design-project'] === project, 'wrong startup pin or project');
   check(!own(start.attrs, 'async') && !own(start.attrs, 'defer') && ['', 'text/javascript', 'application/javascript'].includes(start.attrs.type || ''), 'startup must be blocking');
   check(sheet.inHead && start.inHead && start.i === sheet.i + 1, 'stylesheet must immediately precede startup in head');
+  const preferencesUrl = 'https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.0/preferences.js';
+  const preferences = tags.map((t, i) => ({...t, i})).filter(t => t.tag === 'script' && (t.attrs.src || '').split('?')[0] === preferencesUrl);
+  check(preferences.length <= 1, 'duplicate preferences loader');
+  for (const pref of preferences) {
+    check(pref.inHead && pref.i < start.i, 'preferences must precede startup in head');
+    check(!own(pref.attrs, 'async') && !own(pref.attrs, 'defer') && ['', 'text/javascript', 'application/javascript'].includes(pref.attrs.type || ''), 'preferences must be blocking');
+  }
   const navs = [];
   for (const [i, {tag, attrs, inHead}] of tags.entries()) {
     const src = (tag === 'script' ? attrs.src : attrs.href) || '', plain = src.split('?')[0];
@@ -37,7 +44,7 @@ function verifyHtml(html, {project, navigation = 'static'} = {}) {
     check(!plain.includes('/shared/design/releases/') && !/(?:^|\/)(?:quant-range|number|runtime)\.js$/.test(plain), 'direct or legacy design loader');
     if (tag !== 'script') continue;
     if (plain === CONTRACT.navigationUrl) { navs.push(i); check(i > start.i && own(attrs, 'defer') && !own(attrs, 'async'), 'navigation must defer after startup'); continue; }
-    if (i === start.i) continue;
+    if (i === start.i || plain === preferencesUrl) continue;
     const name = plain.split('/').pop(), theme = CONTRACT.earlyThemeBasenames.includes(name);
     const framework = navigation === 'react' && attrs.type === 'module' && new RegExp(CONTRACT.earlyFrameworkPattern).test(name);
     check(i > start.i || theme || framework, 'application script precedes startup');
