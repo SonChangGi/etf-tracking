@@ -30,7 +30,7 @@ const remoteAssets = [...html.matchAll(/(?:src|href)=["'](https?:\/\/[^"']+\.(?:
   .map((match) => match[1]).sort();
 const expectedRemoteAssets = [
   'https://sonchanggi.github.io/quant-dashboard/shared/preferences/1.0.1/preferences.js',
-  'https://sonchanggi.github.io/quant-dashboard/shared/design/tokens/0.4.2/shell.css',
+  'https://sonchanggi.github.io/quant-dashboard/shared/design/tokens/0.4.2/shell.css?v=d3ef280dc5d3',
   `${sharedNavigationBase}nav.css`,
   `${sharedNavigationBase}nav.js`,
   `${firstPaintBase}etf-tracking.css`,
