@@ -976,6 +976,11 @@
       target.innerHTML = '<div class="skeleton-line">아직 표시할 히스토리가 없습니다. 다음 업데이트 후 누적됩니다.</div>';
       return;
     }
+    state.chartRuntime?.destroy?.();
+    if (window.echarts && window.QuantETFTrend) {
+      renderResponsiveWeightChart(target, history, series);
+      return;
+    }
     const points = series.flatMap((item) => item.points);
     const observationDates = [...new Set(asArray(history).map((row) => row.date).filter(Boolean))].sort();
     const dates = points.map((point) => Date.parse(point.date)).filter(Number.isFinite);
@@ -1230,6 +1235,31 @@
     state.chartRuntime = { dates: observationDates, update: updateInteraction, ensureVisible };
     updateInteraction();
     if (typeof window !== 'undefined') window.requestAnimationFrame(() => ensureVisible(state.chartSelection.pinnedDate));
+  }
+
+  function renderResponsiveWeightChart(target, history, series) {
+    window.QuantRange?.entries.get('etf-weights')?.destroy();
+    const dates=[...new Set(asArray(history).map(row=>row.date).filter(Boolean))].sort();
+    const colors=buildSeriesColorMap(series), keys=series.map(s=>s.key);
+    if(!keys.includes(state.chartSelection.pinnedSeriesKey))state.chartSelection.pinnedSeriesKey=keys[0];
+    state.chartSelection.pinnedDate=nearestChartDate(dates,state.chartSelection.pinnedDate||dates.at(-1));
+    state.chartSelection.previewDate=''; state.chartSelection.previewSeriesKey='';
+    target.innerHTML='<div class="responsive-trend"></div><div class="chart-summary-grid">'+renderChartSummaryCards(series,colors)+'</div>';
+    const host=target.querySelector('.responsive-trend');
+    const runtime=window.QuantETFTrend.mount(host,{dates,series,colors,onObserve(date){state.chartSelection.previewDate=date;update();},onPin(date,key){state.chartSelection.pinnedSeriesKey=key;commitChartDate(date);}});
+    const buttons=[...target.querySelectorAll('.chart-summary-item')];
+    function update(){
+      const date=nearestChartDate(dates,state.chartSelection.previewDate||state.chartSelection.pinnedDate),key=state.chartSelection.pinnedSeriesKey;
+      const active=series.find(s=>s.key===key)||series[0],point=chartPointAtDate(active.points,date);
+      buttons.forEach(button=>{const s=series.find(s=>s.key===button.dataset.seriesKey),p=chartPointAtDate(s.points,date);button.setAttribute('aria-pressed',String(s.key===key));button.classList.toggle('is-active',s.key===key);button.querySelector('em').textContent=p&&Number.isFinite(p.value)?formatWeight(p.value):'미편입';button.querySelector('small').textContent=`기간 Δ ${s.periodDelta===null?'-':formatPercentPoint(s.periodDelta)}`;});
+      const summary=$('#chart-selection-summary');if(summary){summary.querySelector('strong').textContent=`${active.fullLabel} · ${point&&Number.isFinite(point.value)?formatWeight(point.value):'미편입'}`;summary.querySelector('small').textContent=`${date} · ${active.rank?active.rank+'위 · ':''}기간 변화 ${active.periodDelta===null?'-':formatPercentPoint(active.periodDelta)}`;}
+      runtime.select(date,key);
+    }
+    buttons.forEach(button=>button.onclick=()=>{state.chartSelection.pinnedSeriesKey=button.dataset.seriesKey;state.chartSelection.previewDate='';update();});
+    host.addEventListener('pointerleave',()=>{state.chartSelection.previewDate='';update();});
+    target.onkeydown=event=>{if(!['ArrowLeft','ArrowRight','Home','End','Escape'].includes(event.key))return;event.preventDefault();const i=dates.indexOf(state.chartSelection.pinnedDate);if(event.key==='Escape'){state.chartSelection.previewDate='';update();return;}commitChartDate(dates[event.key==='Home'?0:event.key==='End'?dates.length-1:Math.max(0,Math.min(dates.length-1,i+(event.key==='ArrowRight'?1:-1)))]);};
+    const input=$('#chart-date');if(input){input.min=dates[0];input.max=dates.at(-1);input.value=state.chartSelection.pinnedDate;}
+    state.chartRuntime={dates,update,ensureVisible:runtime.ensureVisible,destroy:runtime.destroy};update();
   }
 
   function renderEndLabels(labels, colorByKey) {

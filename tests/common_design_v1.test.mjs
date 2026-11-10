@@ -396,7 +396,7 @@ test('theme storage uses the shared key while retaining ETF migration', () => {
 
 test('pinned platform seam loads before the app and exposes canonical token aliases', () => {
   const platformScript = html.indexOf('shared-platform/dist/index.js?v=0.1.0');
-  const appScript = html.indexOf('assets/app.js?v=20260724-platform-compat');
+  const appScript = html.indexOf('assets/app.js?v=');
   assert.ok(platformScript > 0);
   assert.ok(appScript > platformScript);
   assert.match(

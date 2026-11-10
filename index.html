@@ -32,11 +32,13 @@
 
   <link rel="stylesheet" href="https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/nav.css">
 
-<link rel="stylesheet" href="assets/design-engine.css?v=9ed70f14ee89">
+<link rel="stylesheet" href="assets/design-engine.css?v=704a163a6f8f">
 <link rel="stylesheet" href="https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.2.0/etf-tracking.css" data-quant-first-paint-css>
 <script src="https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.2.0/start.js" data-quant-design-project="etf-tracking"></script>
   <script src="shared-platform/dist/index.js?v=0.1.0-5807958c9215" defer></script>
-  <script src="assets/app.js?v=20260724-platform-compat" defer></script>
+  <script src="assets/vendor/echarts.min.js?v=b66b25aeb4df" defer></script>
+  <script src="assets/trend-chart.js?v=c0a45d356ad8" defer></script>
+  <script src="assets/app.js?v=d4350905fc6f" defer></script>
   <script type="module" src="assets/design-engine.js?v=0.4.0"></script>
 <script defer src="https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/nav.js" data-quant-project="etf"></script>
 </head>
@@ -132,13 +134,13 @@
           <div id="chart-selection-summary" class="chart-selection-summary" aria-live="polite">
             <span>강조 종목</span><strong>불러오는 중</strong><small>관찰일을 준비하고 있습니다.</small>
           </div>
-          <div class="chart-date-controls">
+          <details class="chart-date-controls"><summary data-control-id="chart_observation_date">날짜 선택</summary>
             <label>
               차트 관찰일
               <input type="date" id="chart-date" data-control-id="chart_observation_date" />
             </label>
             <button type="button" id="chart-latest-date" data-control-id="chart_observation_date">최신일</button>
-          </div>
+          </details>
         </div>
         <div class="chart-card interactive-chart" id="weight-chart" tabindex="0" aria-label="선택 ETF의 TOP10 비중 추이" aria-describedby="weight-chart-help" aria-keyshortcuts="ArrowLeft ArrowRight Home End"></div>
         <p class="chart-help"><span class="marker-help marker-entry">＋ 편입</span> <span class="marker-help marker-exit">－ 편출</span> <span class="marker-help marker-buy">↑ 매수 관찰</span> <span class="marker-help marker-sell">↓ 매도 관찰</span></p>

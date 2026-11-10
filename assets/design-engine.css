@@ -21,3 +21,22 @@ html[data-qe-theme] body.qd-v04 .qe-holdings-tools input {min-width:150px;flex:1
 html[data-qe-theme] body.qd-v04 .qe-holdings-tools :is(button,summary,input) {min-height:44px;}
 html[data-qe-theme] body.qd-v04 #top10-rows tr[hidden] {display:none!important;}
 html[data-qe-theme] body.qd-v04 .qe-holdings-tools button {background:var(--qe-surface)!important;color:var(--qe-text)!important;border:1px solid var(--qe-border)!important;border-radius:8px;padding:8px 14px;}
+/* 0.4.1: fixed axes, full initial domain and intrinsic cards at every width. */
+.responsive-trend {width:100%;height:380px;min-width:0;touch-action:pan-y;}
+.trend-options {display:inline-block;position:relative;float:right;z-index:2;}
+.trend-options summary,.trend-reset {min-width:44px;min-height:44px;cursor:pointer;}
+.trend-options button {display:block;min-height:44px;}
+.trend-range {display:block;padding:12px;line-height:1.6;font-variant-numeric:tabular-nums;}
+.trend-range[hidden],.trend-reset[hidden] {display:none!important;}
+html[data-qe-theme] body.qd-v04 .chart-summary-grid {display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;}
+html[data-qe-theme] body.qd-v04 .chart-summary-item {min-width:0;padding:12px;white-space:normal;}
+html[data-qe-theme] body.qd-v04 .chart-summary-item :is(strong,span,small) {overflow-wrap:anywhere;}
+@media(max-width:640px){.responsive-trend{height:320px;}html[data-qe-theme] body.qd-v04 .chart-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.chart-summary-item small{line-height:1.5;}}
+html[data-qe-theme] body.qd-v04 .responsive-trend svg {min-width:0!important;width:100%!important;max-width:100%!important;}
+.trend-clear[hidden]{display:none!important;}
+html[data-qe-theme] body.qd-v04 .chart-date-controls {display:flex;flex-wrap:wrap;gap:8px;}
+html[data-qe-theme] body.qd-v04 .chart-date-controls input {min-width:0;max-width:100%;}
+html[data-qe-theme] body.qd-v04 details.chart-date-controls{display:block;flex:0 0 auto;}
+html[data-qe-theme] body.qd-v04 details.chart-date-controls summary{min-height:44px;cursor:pointer;display:flex;align-items:center;}
+html[data-qe-theme] body.qd-v04 details.chart-date-controls:not([open])>:not(summary){display:none;}
+@media(max-width:640px){html[data-qe-theme] body.qd-v04 .chart-observation-bar{display:flex;flex-wrap:wrap;gap:8px;}html[data-qe-theme] body.qd-v04 .chart-selection-summary{padding:10px;min-width:0;flex:1;}}
