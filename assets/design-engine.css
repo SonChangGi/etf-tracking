@@ -82,7 +82,7 @@ html[data-theme] body :is(.qd-focus-button,.qd-focus-tools) {display:none!import
   .qe-point-tooltip div {white-space:normal}
 }
 
-html[data-theme] body .trend-range[data-quant-chart-readout]:not([hidden]) {
+html[data-theme] body .trend-range[data-quant-chart-readout]:not([hidden],[data-quant-range-output]) {
   display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 16px;
 }
 .trend-range > strong {grid-column:1/-1}
@@ -90,5 +90,5 @@ html[data-theme] body .trend-range[data-quant-chart-readout]:not([hidden]) {
 .trend-range > span > span {color:var(--qs-muted);overflow-wrap:anywhere}
 .trend-range b {flex-shrink:0;font-variant-numeric:tabular-nums}
 @media(max-width:380px) {
-  html[data-theme] body .trend-range[data-quant-chart-readout]:not([hidden]) {column-gap:10px}
+  html[data-theme] body .trend-range[data-quant-chart-readout]:not([hidden],[data-quant-range-output]) {column-gap:10px}
 }
