@@ -15,7 +15,7 @@ concurrency:
 jobs:
   deploy-ui:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -52,6 +52,8 @@ jobs:
       - name: Deploy exact static site
         id: deployment
         uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5
+        with:
+          timeout: 1200000
       - name: Verify live UI bytes
         env:
           PAGE_URL: ${{ steps.deployment.outputs.page_url }}
