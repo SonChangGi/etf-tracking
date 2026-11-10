@@ -177,6 +177,9 @@
         defaultValue: 'lazy',
         defaultSource: 'html-constant',
       },
+      { id: 'holdings_search', label: '보유 종목 검색', controlKind: 'display', valueType: 'string', defaultValue: '', defaultSource: 'html-constant' },
+      { id: 'holdings_filter_reset', label: '보유 종목 필터 초기화', controlKind: 'display', valueType: 'boolean', defaultValue: false, defaultSource: 'html-constant' },
+      { id: 'holdings_export', label: '현재 보유 종목 CSV 저장', controlKind: 'display', valueType: 'boolean', defaultValue: false, defaultSource: 'html-constant' },
       {
         id: 'detail_disclosures',
         label: '상세 영역 열기',

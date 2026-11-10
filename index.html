@@ -31,11 +31,13 @@
 
   <link rel="stylesheet" href="https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/nav.css">
 
+<link rel="stylesheet" href="assets/design-engine.css?v=0.4.0">
 <link rel="stylesheet" href="https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.2.0/etf-tracking.css" data-quant-first-paint-css>
 <script src="https://sonchanggi.github.io/quant-dashboard/shared/design/startup/1.2.0/start.js" data-quant-design-project="etf-tracking"></script>
   <script src="shared-platform/dist/index.js?v=0.1.0-news-navigation" defer></script>
   <script src="assets/app.js?v=20260724-platform-compat" defer></script>
-  <script defer src="https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/nav.js" data-quant-project="etf"></script>
+  <script type="module" src="assets/design-engine.js?v=0.4.0"></script>
+<script defer src="https://sonchanggi.github.io/quant-dashboard/shared/navigation/v1/nav.js" data-quant-project="etf"></script>
 </head>
 <body id="top" class="has-quant-shared-nav">
   <a class="skip-link" href="#main-content" data-control-id="in_page_navigation">본문으로 건너뛰기</a>
@@ -169,6 +171,7 @@
           </div>
           <a class="panel-link" id="provider-link" href="#" target="_blank" rel="noreferrer" data-control-id="provider_source_link">공급자 페이지</a>
         </div>
+        <div class="qe-holdings-tools"><label for="holdings-search">종목 검색</label><input id="holdings-search" data-control-id="holdings_search" type="search" placeholder="이름·티커" autocomplete="off"><button id="holdings-reset" data-control-id="holdings_filter_reset" type="button" hidden>필터 해제</button><output id="holdings-count" aria-live="polite"></output><details><summary data-control-id="detail_disclosures">표 도구</summary><button id="holdings-csv" data-control-id="holdings_export" type="button">CSV 다운로드</button></details></div>
         <div class="table-wrap current-table-wrap">
           <table class="data-table top10-table">
             <caption>선택 기준일 ETF TOP10 편입 종목과 비중</caption>

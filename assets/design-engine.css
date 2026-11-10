@@ -1,0 +1,22 @@
+/* Quant design engine 0.4.0 — existing renderer adapter. */
+:root[data-qe-theme] { --bg:var(--qe-bg); --panel:var(--qe-surface); --page:var(--qe-surface); --surface:var(--qe-raised); --surface-soft:var(--qe-raised); --ink:var(--qe-text); --text:var(--qe-text); --muted:var(--qe-muted); --line:var(--qe-border); --border:var(--qe-border); --accent:var(--qe-accent); --accent-strong:var(--qe-accent); --good:var(--qe-positive); --bad:var(--qe-negative); --qr-bg:var(--qe-bg); --qr-page:var(--qe-surface); --qr-surface:var(--qe-surface); --qr-surface-soft:var(--qe-raised); --qr-text:var(--qe-text); --qr-text-strong:var(--qe-text); --qr-text-muted:var(--qe-muted); --qr-border:var(--qe-border); --qr-primary:var(--qe-accent); --qr-primary-strong:var(--qe-accent); --qr-chart-text:var(--qe-muted); --qr-chart-grid:var(--qe-border); }
+html[data-qe-theme] body { background:var(--qe-bg); color:var(--qe-text); font-variant-numeric:tabular-nums; }
+html[data-qe-theme] :is(.panel,.metric-card,.lab-panel,.lab-stat,.signal-card) { padding:var(--qe-card-inset); border-radius:var(--qe-card-radius); border-color:var(--qe-border); background:var(--qe-surface); min-width:0; }
+html[data-qe-theme] :is(button,input,select,summary) { min-height:36px; }
+html[data-qe-theme] :is(button,input,select,textarea):focus-visible { outline:2px solid var(--qe-accent); outline-offset:3px; }
+html[data-qe-theme] :is(td,th) { padding:12px 14px; line-height:1.5; }
+html[data-qe-theme] :is(.table-wrap,.lab-table-wrap) { overflow:auto; overscroll-behavior-x:contain; scrollbar-color:var(--qe-border) transparent; }
+html[data-qe-theme] .leader-item { padding:16px 18px; gap:14px; min-height:72px; border-radius:var(--qe-card-radius); }
+html[data-qe-theme] .leader-item :is(strong,span,small) { min-width:0; }
+html[data-qe-theme] .lab-chart-controls { gap:12px; align-items:center; }
+html[data-qe-theme] .lab-scale-control { margin-left:auto; }
+@media(max-width:640px) { html[data-qe-theme] :is(.panel,.metric-card,.lab-panel,.lab-stat,.signal-card) { padding:var(--qe-card-inset-mobile); } html[data-qe-theme] :is(button,select,summary) { min-height:40px; } html[data-qe-theme] .leader-item { grid-template-columns:48px minmax(0,1fr) auto; gap:10px; padding:16px 18px; } html[data-qe-theme] :is(td,th) { padding:11px 12px; } }
+
+html[data-qe-theme] body.qd-v04 .leader-item { padding:16px 18px!important; gap:14px!important; min-height:72px; }
+html[data-qe-theme] body.qd-v04 :is(.panel,.metric-card,.signal-card) { padding:var(--qe-card-inset)!important; border-radius:var(--qe-card-radius)!important; }
+@media(max-width:640px){html[data-qe-theme] body.qd-v04 :is(.panel,.metric-card,.signal-card){padding:var(--qe-card-inset-mobile)!important;}}
+
+html[data-qe-theme] body.qd-v04 .qe-holdings-tools {display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px;}
+html[data-qe-theme] body.qd-v04 .qe-holdings-tools input {min-width:150px;flex:1;}
+html[data-qe-theme] body.qd-v04 .qe-holdings-tools :is(button,summary,input) {min-height:44px;}
+html[data-qe-theme] body.qd-v04 #top10-rows tr[hidden] {display:none!important;}
