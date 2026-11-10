@@ -941,12 +941,14 @@
     const etf = selectedEtf();
     if (!etf) return;
     if (range.status === 'loading') {
+      state.chartRuntime?.destroy?.();state.chartRuntime=null;
       const target = $('#weight-chart');
       if (target) target.innerHTML = '<div class="skeleton-line">선택 ETF 상세 히스토리를 불러오는 중입니다…</div>';
       renderTop10(etf, null);
       renderDecomposition(null);
       renderSource(etf, null, [], range);
     } else if (range.status !== 'ready') {
+      state.chartRuntime?.destroy?.();
       const target = $('#weight-chart');
       state.chartRuntime = null;
       if (target) target.innerHTML = `<div class="skeleton-line error-text">${escapeHtml(range.error)}</div>`;
@@ -972,6 +974,7 @@
     if (!target) return;
     const series = buildWeightSeries(history, latestTop10);
     if (!series.length) {
+      state.chartRuntime?.destroy?.();
       state.chartRuntime = null;
       target.innerHTML = '<div class="skeleton-line">아직 표시할 히스토리가 없습니다. 다음 업데이트 후 누적됩니다.</div>';
       return;
