@@ -1484,3 +1484,9 @@ input[type="search"],
 }
 .quant-shared-nav__link { border: 1px solid transparent; }
 .quant-shared-nav__theme { margin: 0; gap: 0; font-size: .88rem; font-weight: 650; }
+/* Observation details follow the plot; keep the chart's first view clear. */
+html[data-qe-theme] .chart-observation-bar {margin:10px 0;align-items:center;}
+html[data-qe-theme] .chart-selection-summary {padding:6px 0;background:transparent;border:0;gap:3px;}
+html[data-qe-theme] .chart-selection-summary>span {display:none;}
+html[data-qe-theme] .chart-date-controls:not([open]) {display:block;width:auto;}
+html[data-qe-theme] .chart-date-controls>summary {min-height:44px;line-height:44px;cursor:pointer;}
