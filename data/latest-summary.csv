@@ -1,31 +1,31 @@
 etf_id,date,rank,ticker,name,weight_percent,classification,residual_pp
-time-nasdaq100-active,2026-11-12,1,MSFT,Microsoft Corp,7.81,price_aligned,-0.003126269274543958
-time-nasdaq100-active,2026-11-12,2,AMZN,Amazon.com Inc,6.95,price_aligned,0.009748103162125155
-time-nasdaq100-active,2026-11-12,3,AAPL,Apple Inc,6.9,price_aligned,0.002966715054655289
-time-nasdaq100-active,2026-11-12,4,AMD,Advanced Micro Devices Inc,6.13,likely_buy,3.0132148056455095
-time-nasdaq100-active,2026-11-12,5,NVDA,NVIDIA Corp,5.41,likely_sell,-0.9881857179549876
-time-nasdaq100-active,2026-11-12,6,GOOGL,Alphabet Inc,5.05,residual_watch,-0.5235216321976717
-time-nasdaq100-active,2026-11-12,7,BE,Bloom Energy Corp,3.19,price_aligned,-0.003254756218941779
-time-nasdaq100-active,2026-11-12,8,META,Meta Platforms Inc,3.17,price_aligned,0.0024373682623060056
-time-nasdaq100-active,2026-11-12,9,,NASDAQ 100 E-MINI INDEX DEC 2026,3.06,insufficient_data,
-time-nasdaq100-active,2026-11-12,10,,Space Exploration Technologies Corp,2.91,price_aligned,0.004272037929542005
-time-global-ai-active,2026-11-12,1,AMD,Advanced Micro Devices Inc,6.19,likely_buy,2.0650349208718657
-time-global-ai-active,2026-11-12,2,AMZN,Amazon.com Inc,5.86,price_aligned,0.0021237553567168277
-time-global-ai-active,2026-11-12,3,MSFT,Microsoft Corp,5.38,price_aligned,0.00855864335796408
-time-global-ai-active,2026-11-12,4,ACN,Accenture PLC,4.45,likely_sell,-0.4913838130560517
-time-global-ai-active,2026-11-12,5,IBM,International Business Machines Corp,4.24,likely_buy,1.0093708653168174
-time-global-ai-active,2026-11-12,6,,NASDAQ 100 E-MINI INDEX DEC 2026,4.13,insufficient_data,
-time-global-ai-active,2026-11-12,7,SAP,SAP SE,3.43,likely_sell,-0.4901227182339025
-time-global-ai-active,2026-11-12,8,,TIME 차이나AI테크액티브,3.3,price_aligned,0.002157746480551559
-time-global-ai-active,2026-11-12,9,BABA,Alibaba Group Holding Ltd,3.21,likely_sell,-0.4860418309464727
-time-global-ai-active,2026-11-12,10,GOOG,Alphabet Inc,3.0,price_aligned,8.410073837206156e-05
-koact-nasdaq-growth-active,2026-11-12,1,AMZN,Amazon.com Inc,10.13,price_aligned,0.0036842852426968165
-koact-nasdaq-growth-active,2026-11-12,2,MSFT,MICROSOFT,8.76,price_aligned,0.006467312207664833
-koact-nasdaq-growth-active,2026-11-12,3,PLTR,Palantir Technologies Inc -A,6.19,price_aligned,-0.005223880382145829
-koact-nasdaq-growth-active,2026-11-12,4,AMD,ADVANCED MICRO DEVICES,5.82,price_aligned,-0.00039703097042753654
-koact-nasdaq-growth-active,2026-11-12,5,SNOW,Snowflake Inc - CL A,4.42,price_aligned,0.006658012784784617
-koact-nasdaq-growth-active,2026-11-12,6,BE,BLOOM ENERGY CORPORATION,3.32,price_aligned,0.003845434881163179
-koact-nasdaq-growth-active,2026-11-12,7,OKTA,OKTA INC,2.95,price_aligned,-0.006401864776306887
-koact-nasdaq-growth-active,2026-11-12,8,NXT,Nextpower Inc,2.88,price_aligned,0.0022207473170325898
-koact-nasdaq-growth-active,2026-11-12,9,FSLR,FIRST SOLAR INC,2.66,price_aligned,-0.005773268755068006
-koact-nasdaq-growth-active,2026-11-12,10,MSTR,Strategy Inc,2.6,price_aligned,-0.004168188861147115
+time-nasdaq100-active,2026-11-13,1,AMD,Advanced Micro Devices Inc,7.36,likely_buy,0.9813492216587019
+time-nasdaq100-active,2026-11-13,2,MSFT,Microsoft Corp,7.31,price_aligned,-0.09186937717926558
+time-nasdaq100-active,2026-11-13,3,AAPL,Apple Inc,6.82,price_aligned,-0.007131549045090502
+time-nasdaq100-active,2026-11-13,4,AMZN,Amazon.com Inc,6.57,price_aligned,-0.0519979878500747
+time-nasdaq100-active,2026-11-13,5,GOOGL,Alphabet Inc,5.0,price_aligned,-5.7443144972246785e-05
+time-nasdaq100-active,2026-11-13,6,NVDA,NVIDIA Corp,4.01,likely_sell,-1.386027894405311
+time-nasdaq100-active,2026-11-13,7,BE,Bloom Energy Corp,3.46,price_aligned,-0.03431438883947102
+time-nasdaq100-active,2026-11-13,8,,NASDAQ 100 E-MINI INDEX DEC 2026,3.03,insufficient_data,
+time-nasdaq100-active,2026-11-13,9,META,Meta Platforms Inc,3.01,price_aligned,-0.003248316192832057
+time-nasdaq100-active,2026-11-13,10,,Space Exploration Technologies Corp,2.75,price_aligned,-0.005761134361351061
+time-global-ai-active,2026-11-13,1,AMD,Advanced Micro Devices Inc,6.5,price_aligned,-0.007601963791563193
+time-global-ai-active,2026-11-13,2,AMZN,Amazon.com Inc,5.64,price_aligned,-0.0011005906913128527
+time-global-ai-active,2026-11-13,3,MSFT,Microsoft Corp,5.15,price_aligned,-0.001511261699124411
+time-global-ai-active,2026-11-13,4,ACN,Accenture PLC,4.27,price_aligned,-0.007624633994766761
+time-global-ai-active,2026-11-13,5,IBM,International Business Machines Corp,4.22,price_aligned,0.0036320391741586633
+time-global-ai-active,2026-11-13,6,,NASDAQ 100 E-MINI INDEX DEC 2026,4.14,insufficient_data,
+time-global-ai-active,2026-11-13,7,SAP,SAP SE,3.37,price_aligned,0.004647752838303099
+time-global-ai-active,2026-11-13,8,,TIME 차이나AI테크액티브,3.14,price_aligned,0.0020623245047355354
+time-global-ai-active,2026-11-13,9,BABA,Alibaba Group Holding Ltd,3.11,price_aligned,0.002081187387200867
+time-global-ai-active,2026-11-13,10,GOOG,Alphabet Inc,3.0,price_aligned,0.002171490205793436
+koact-nasdaq-growth-active,2026-11-13,1,AMZN,Amazon.com Inc,9.63,price_aligned,-0.0919305546982212
+koact-nasdaq-growth-active,2026-11-13,2,MSFT,MICROSOFT,7.46,likely_sell,-0.902446037720634
+koact-nasdaq-growth-active,2026-11-13,3,AMD,ADVANCED MICRO DEVICES,7.43,likely_buy,1.3299953974967957
+koact-nasdaq-growth-active,2026-11-13,4,BE,BLOOM ENERGY CORPORATION,6.88,likely_buy,3.2169047382236964
+koact-nasdaq-growth-active,2026-11-13,5,PLTR,Palantir Technologies Inc -A,5.51,likely_sell,-0.6637477115933006
+koact-nasdaq-growth-active,2026-11-13,6,NET,Cloudflare Inc,4.81,likely_buy,2.214400674181007
+koact-nasdaq-growth-active,2026-11-13,7,SNOW,Snowflake Inc - CL A,3.92,likely_sell,-0.47654487991060446
+koact-nasdaq-growth-active,2026-11-13,8,ANET,ARISTA NETWORKS,2.75,likely_buy,1.5664373623227499
+koact-nasdaq-growth-active,2026-11-13,9,OKTA,OKTA INC,2.63,residual_watch,-0.31399418678320545
+koact-nasdaq-growth-active,2026-11-13,10,NXT,Nextpower Inc,2.53,residual_watch,-0.30448785657296096
