@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.3.0",
-  "generatedAt": "2026-11-16T07:19:46+00:00",
-  "targetDate": "2026-11-16",
+  "generatedAt": "2026-11-17T08:32:17+00:00",
+  "targetDate": "2026-11-17",
   "overallStatus": "ok",
   "message": "Scheduled refresh runs Mon-Fri in KST; if prior closes or provider rows are missing, use a reviewed workflow_dispatch run to refresh this file.",
   "priceErrorCount": 0,
@@ -10,8 +10,8 @@
     {
       "id": "time-nasdaq100-active",
       "name": "TIME 미국나스닥100액티브",
-      "targetDate": "2026-11-16",
-      "latestDate": "2026-11-16",
+      "targetDate": "2026-11-17",
+      "latestDate": "2026-11-17",
       "targetFetchStatus": "live",
       "targetFetchWarning": "",
       "targetFetchHasTop10": true,
@@ -19,14 +19,14 @@
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
-      "returnCoverage": 0.9697151424287856,
+      "returnCoverage": 0.9696121551379449,
       "priceBasis": {
-        "previous": "2026-11-12",
-        "current": "2026-11-13"
+        "previous": "2026-11-13",
+        "current": "2026-11-16"
       },
       "fetchStats": {
-        "requestedDates": 6,
-        "skippedExisting": 5,
+        "requestedDates": 7,
+        "skippedExisting": 6,
         "fetchedLive": 1,
         "targetErrors": 0,
         "targetRateLimited": 0,
@@ -41,8 +41,8 @@
     {
       "id": "time-global-ai-active",
       "name": "TIME 글로벌AI인공지능액티브",
-      "targetDate": "2026-11-16",
-      "latestDate": "2026-11-16",
+      "targetDate": "2026-11-17",
+      "latestDate": "2026-11-17",
       "targetFetchStatus": "live",
       "targetFetchWarning": "",
       "targetFetchHasTop10": true,
@@ -50,14 +50,14 @@
       "sourceStatus": "live",
       "sourceWarning": "",
       "returnCoverageStatus": "ok",
-      "returnCoverage": 0.9586082783443312,
+      "returnCoverage": 0.9584124762571229,
       "priceBasis": {
-        "previous": "2026-11-12",
-        "current": "2026-11-13"
+        "previous": "2026-11-13",
+        "current": "2026-11-16"
       },
       "fetchStats": {
-        "requestedDates": 6,
-        "skippedExisting": 5,
+        "requestedDates": 7,
+        "skippedExisting": 6,
         "fetchedLive": 1,
         "targetErrors": 0,
         "targetRateLimited": 0,
@@ -72,8 +72,8 @@
     {
       "id": "koact-nasdaq-growth-active",
       "name": "KoAct 미국나스닥성장기업액티브",
-      "targetDate": "2026-11-16",
-      "latestDate": "2026-11-16",
+      "targetDate": "2026-11-17",
+      "latestDate": "2026-11-17",
       "targetFetchStatus": "live",
       "targetFetchWarning": "",
       "targetFetchHasTop10": true,
@@ -83,12 +83,12 @@
       "returnCoverageStatus": "ok",
       "returnCoverage": 1.0,
       "priceBasis": {
-        "previous": "2026-11-12",
-        "current": "2026-11-13"
+        "previous": "2026-11-13",
+        "current": "2026-11-16"
       },
       "fetchStats": {
-        "requestedDates": 6,
-        "skippedExisting": 5,
+        "requestedDates": 7,
+        "skippedExisting": 6,
         "fetchedLive": 1,
         "targetErrors": 0,
         "targetRateLimited": 0,
