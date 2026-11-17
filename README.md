@@ -17,11 +17,10 @@
 - 편입·편출, 비중 급변, 가격 수익률로 설명되지 않는 잔차 신호 표시
 - 전체 보유종목 기준의 전일 종가/평가단가·환율 기여분과 ETF 매수/매도 가능성 분해
 - 공급자 데이터 지연/누락과 종가 누락을 명시적으로 표시하는 상태 파일
-- GitHub Actions 자동 스케줄은 09:47/13:17/16:47 KST Mon-Fri에 실행되며, 검토 후 수동 `workflow_dispatch`도 지원
-- 수동 자동화는 날짜·품질·검증 조건을 모두 통과해야 성공하며, 실패 진단은 실행 artifact에 기록
+- 정기 수집·계산은 Quant2Alpha 소유 Windows 배치로 이관했으며 이 저장소의 중복 예약 수집은 퇴역
 - 이미 저장된 usable 스냅샷은 재요청하지 않고 없는 날짜만 채우는 missing-only 업데이트
-- 공개 페이지의 수동 업데이트 버튼으로 GitHub Actions `workflow_dispatch` 실행 화면 연결
-- GitHub Pages는 `Update ETF tracking data` workflow가 검증한 `dist` artifact만 배포하며 legacy branch publisher는 사용하지 않음
+- 원래 공개 페이지·자료와 과거 판본의 자동화 출처 메타데이터를 그대로 보존
+- GitHub Pages의 수동 UI 배포는 `deploy-ui.yml`의 검증된 `dist` artifact 사용
 - 공통 플랫폼 `0.1.0` 호환 경계에서 9개 메뉴·디자인 토큰·표시 제어 계약을 검증
 - 공개 화면은 같은 출처의 검증된 정적 JSON만 `GET`하며 분석 실행 API를 호출하지 않음
 
@@ -87,20 +86,13 @@ npm run build
 - `likely_buy`/`likely_sell`은 실제 운용사 주문 확정이 아니라 가격 변화로 설명되지 않는 비중 잔차 신호입니다.
 - 본 페이지는 개인 리서치 도구이며 투자, 세무, 법률 또는 매매 조언이 아닙니다.
 
-## 자동화 운영 정책
+## 자동화 이관
 
-- 자동 예약 workflow는 한국 공시일에 맞춰 월~금 09:47 KST에 갱신하고 13:17/16:47 KST에 재시도합니다. XKRX 거래소 캘린더(`exchange-calendars==4.13.2`)로 한국 공시일 D를 실행 시작에 한 번 결정합니다. 주말·공휴일·연말 휴장일은 직전 한국 거래일을 사용하며, D는 미국 종가 날짜가 아닙니다. 기존 `priceBasisDate`와 수익률 계산은 유지합니다.
-- 각 실행은 같은 D를 최대 3회 수집합니다(시도 간 30초). 현재 D의 3개 ETF가 모두 정상이고 공개 파일까지 일치하면 수집·배포를 생략합니다. 모든 예약 및 수동 배포는 같은 concurrency 그룹을 사용하고, 최신 main을 체크아웃하며 수집 이후 main이 바뀌면 게시를 중단합니다.
-- 후보 데이터는 별도 디렉터리에서 수집·분석하고, 날짜·품질 조건과 전체 `npm test`를 통과한 뒤에만 승격합니다. 실패하면 last-good 공개 데이터를 보존합니다. 첫 두 예약의 공급자 대기는 다음 예약으로 넘기지만 마지막 예약에도 대기하면 workflow가 실패합니다. 수집기·검증·커밋·배포 오류는 성공으로 숨기지 않습니다. 페이지 접근성 점검과 최신 수집 성공은 별도로 보고합니다.
-- 한국 거래소 캘린더의 임시 휴장일 변경은 의존성 업데이트와 날짜 회귀 검증이 필요합니다. 알려지지 않은 휴장 또는 아직 공개되지 않은 보유비중을 임의의 날짜로 대체하지 않습니다.
-- 수동 workflow 기본값은 최신 기준일을 먼저 확인한 뒤 최근 10일 구간에서 저장되지 않은 날짜만 보강합니다. 더 오래된 분석은 `backfill_start_date` 또는 `backfill_all`로 확장합니다.
-- 웹페이지의 수동 업데이트 버튼은 공개 정적 페이지에 토큰을 저장하지 않고 GitHub의 인증된 Actions 실행 화면으로 이동합니다.
-- CLI로 수동 실행하려면 `gh workflow run update-data.yml --repo SonChangGi/etf-tracking --ref main -f backfill_all=false -f backfill_start_date= -f refresh_existing=false -f strict_validation=true`를 사용합니다.
-- production 데이터 갱신과 Pages 배포는 저장소 기본 브랜치에서만 허용되며, 다른 ref의 수동 실행은 공개 상태를 바꾸기 전에 실패합니다.
-- 업데이트 결과는 `data/status.json`과 `data/automation-status.json`에 남깁니다.
-- `npm test`까지 통과하고 `automation-status.json`의 `runStatus`가 정확히 `ok`일 때만 새 데이터를 bot identity로 커밋합니다. workflow는 Pages 설정의 `build_type=workflow`를 확인하고, 검증한 SHA가 현재 원격 `main`과 일치할 때만 같은 실행의 `dist`를 배포합니다. 업로드 뒤 `main`이 바뀌어도 stale artifact를 거부하며, 앱 셸·런타임·모든 공개 JSON을 uncached byte-for-byte로 다시 읽어 확인합니다. 정기 갱신 실패는 전체 workflow 결과에 반영합니다.
-- 저장소 Pages 설정은 배포 전 한 번 `gh api --method PUT repos/SonChangGi/etf-tracking/pages -f build_type=workflow`로 전환하고 `gh api repos/SonChangGi/etf-tracking/pages --jq .build_type`이 `workflow`인지 확인합니다. 이 설정 변경 전에는 workflow가 이중 publisher를 허용하지 않고 배포 단계에서 fail-closed합니다.
-- 디버깅이 필요할 때는 수동 workflow 실행에서 `strict_validation=true`를 선택하면 일반 CI처럼 실패 종료합니다.
+정기 수집·계산과 새 판본 발행의 소유자는 Quant2Alpha이다. 기존 `update-data.yml` 예약 및 수동 수집 workflow와 그 전용 교차 프로젝트 대기 코드는 제거했다. 이 저장소에서는 자동 재수집이나 데이터 커밋을 수행하지 않는다.
+
+기존 사이트·원자료·계산 결과는 과거 판본으로 보존한다. JSON에 기록된 수집 시각·cadence·수동 workflow 주소는 당시의 출처이며 현재 실행 지시가 아니다. 과거 메타데이터나 결과를 새 시각으로 고쳐 쓰지 않는다. 정식 결과는 `https://quant2alpha.com/etf-tracking/`에서 확인한다.
+
+원래 Pages를 재게시해야 하는 명시적 요청에는 `deploy-ui.yml`만 수동 실행할 수 있다. 기본 브랜치 검사, `npm test`, 디자인 검증, 공개 UI bytes 비교를 유지하며 공급자 수집은 실행하지 않는다. 수집·계산 코드와 그 단위 검증은 보존된 연구의 재현에 사용하고 새 정기 실행은 Quant2Alpha에서만 관리한다.
 
 ## 프로젝트 경계
 

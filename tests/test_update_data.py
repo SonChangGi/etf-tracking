@@ -1038,106 +1038,31 @@ class UpdateDataTests(unittest.TestCase):
         self.assertTrue(status["etfs"][0]["reusedExistingTargetSnapshot"])
         self.assertEqual(update_data.automation_warnings(status), [])
 
-    def test_workflow_has_scheduled_refresh_with_safe_commit_gates(self):
-        workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
-        self.assertIn("workflow_dispatch:", workflow)
-        self.assertIn("schedule:", workflow)
-        for cron in ['cron: "47 0 * * 1-5"', 'cron: "17 4 * * 1-5"', 'cron: "47 7 * * 1-5"']:
-            self.assertIn(cron, workflow)
-        self.assertIn("Mon-Fri KST", workflow)
-        generated = update_data.build_dashboard({config.id: [] for config in update_data.ETFS}, {}, "2026-09-22T01:00:00Z")
-        for cron in generated["updatePolicy"]["cronUtc"]:
-            self.assertIn(f'cron: "{cron}"', workflow)
-        self.assertIn("09:47/13:17/16:47 KST Mon-Fri", update_data.build_public_summary(generated)["status"]["cadence"])
-        self.assertIn("refresh_etf_pipeline.py", workflow)
-        self.assertIn("strict_validation", workflow)
-        self.assertIn("Require the production branch", workflow)
-        self.assertIn('if [[ "$GITHUB_REF_NAME" != "$DEFAULT_BRANCH" ]]', workflow)
-        self.assertIn("backfill_start_date", workflow)
-        self.assertIn("--backfill-start-date", workflow)
-        self.assertIn("refresh_existing", workflow)
-        self.assertIn("--refresh-existing", workflow)
-        self.assertIn("continue-on-error", workflow)
-        self.assertIn("safe_to_commit", workflow)
-        self.assertIn('run_status == "ok"', workflow)
-        self.assertIn('run_status == "waiting_for_data"', workflow)
-        self.assertIn("hard_failure", workflow)
-        self.assertIn("final_retry = event_name == \"schedule\"", workflow)
-        self.assertIn('event_schedule == "47 7 * * 1-5"', workflow)
-        self.assertIn("and not final_retry", workflow)
-        self.assertIn("provider data remained unavailable at the final scheduled retry", workflow)
-        self.assertIn("hard_failure = not safe and not expected_wait", workflow)
-        self.assertIn("Record scheduled automation degradation", workflow)
-        self.assertIn("github.event_name == 'schedule'", workflow)
-        self.assertIn("steps.assess.outputs.hard_failure == 'true'", workflow)
-        self.assertIn("last-good public dataset was preserved", workflow)
-        degradation_block = workflow.split("Record scheduled automation degradation", 1)[1].split(
-            "public-site-health:", 1
-        )[0]
-        self.assertIn("exit 1", degradation_block)
-        self.assertNotIn("continue-on-error: ${{ github.event_name == 'schedule' }}", workflow)
-        self.assertIn("public-site-health:", workflow)
-        self.assertIn("Check existing ETF page availability separately", workflow)
-        self.assertIn("required_paths=(index.html data/summary.json data/dashboard.json)", workflow)
-        self.assertIn("scheduled and reviewed manual provider refreshes", workflow)
-        self.assertIn("pages: write", workflow)
-        self.assertIn("id-token: write", workflow)
-        self.assertIn("actions/configure-pages@", workflow)
-        self.assertIn("actions/upload-pages-artifact@", workflow)
-        self.assertIn("actions/deploy-pages@", workflow)
-        self.assertIn("Confirm workflow owns Pages publication", workflow)
-        self.assertIn("timeout 30s gh api \"repos/${GITHUB_REPOSITORY}/pages\" --jq '.build_type'", workflow)
-        self.assertIn('[[ "${build_type}" != "workflow" ]]', workflow)
-        self.assertIn("Verify current main matches the tested candidate", workflow)
-        self.assertIn("Reject a stale main after artifact upload", workflow)
-        self.assertIn('remote_sha="$(git rev-parse "origin/${DEFAULT_BRANCH}")"', workflow)
-        self.assertIn("AUTOMATION_COMMITTER_NAME: github-actions[bot]", workflow)
-        self.assertIn('git push origin "HEAD:${DEFAULT_BRANCH}"', workflow)
-        self.assertIn("Verify live public site bytes", workflow)
-        self.assertIn("find dist/data -type f -name '*.json'", workflow)
-        self.assertIn("dist/index.html", workflow)
-        self.assertIn("dist/assets/app.js", workflow)
-        self.assertIn('--header "Cache-Control: no-cache"', workflow)
-        self.assertIn("--connect-timeout 10", workflow)
-        self.assertIn("--max-time 120", workflow)
-        self.assertIn("cmp --silent", workflow)
 
 
 
-class WorkflowStrictValidationTests(unittest.TestCase):
-    def test_manual_strict_validation_defaults_to_true(self):
-        workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
-        strict_block = re.search(r"strict_validation:\n(?P<body>(?:        .+\n)+)", workflow)
-        self.assertIsNotNone(strict_block, "strict_validation input should exist")
-        self.assertIn("default: 'true'", strict_block.group("body"))
-        self.assertIn("set false only for diagnostics", strict_block.group("body"))
+class RetiredWorkflowContractTests(unittest.TestCase):
+    def test_original_collection_is_retired_and_manual_ui_publication_remains(self):
+        self.assertFalse((ROOT / '.github/workflows/update-data.yml').exists())
+        for path in (ROOT / '.github/workflows').glob('*.yml'):
+            workflow = path.read_text(encoding='utf-8')
+            self.assertNotRegex(workflow, r'(?m)^  schedule:')
+            self.assertNotIn('scripts/refresh_etf_pipeline.py', workflow)
+            self.assertNotIn('scripts/automation_admission.py', workflow)
+        workflow = (ROOT / '.github/workflows/deploy-ui.yml').read_text(encoding='utf-8')
+        for required in ('workflow_dispatch:', 'contents: read', 'Require the production branch',
+                         'run: npm test', 'Verify final design contract', 'Verify live UI bytes', 'cmp --silent'):
+            self.assertIn(required, workflow)
+        self.assertNotIn('git push', workflow)
 
-
-    def test_generated_manual_policy_matches_workflow_defaults(self):
-        dashboard = json.loads((ROOT / "data" / "dashboard.json").read_text(encoding="utf-8"))
-        command = dashboard["manualUpdatePolicy"]["cliCommand"]
-        self.assertIn("refresh_existing=false", command)
-        self.assertIn("strict_validation=true", command)
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn(command, readme)
-
-    def test_readme_matches_scheduled_failure_classification(self):
-        readme = (ROOT / "README.md").read_text(encoding="utf-8")
-        self.assertIn("last-good 공개 데이터를 보존", readme)
-        self.assertIn("마지막 예약에도 대기하면 workflow가 실패", readme)
-        self.assertIn("현재 원격 `main`과 일치할 때만 같은 실행의 `dist`를 배포", readme)
-        self.assertIn("uncached byte-for-byte", readme)
-        self.assertIn("`build_type=workflow`", readme)
-        self.assertIn("stale artifact를 거부", readme)
-        self.assertIn("성공으로 숨기지 않습니다", readme)
-
-    def test_strict_manual_gate_covers_update_verify_assess_and_commit(self):
-        workflow = (ROOT / ".github" / "workflows" / "update-data.yml").read_text(encoding="utf-8")
-        self.assertIn("inputs.strict_validation == 'true'", workflow)
-        self.assertIn("steps.update.outcome != 'success'", workflow)
-        self.assertIn("steps.verify.outcome != 'success'", workflow)
-        self.assertIn("steps.assess.outputs.safe_to_commit != 'true'", workflow)
-        self.assertIn("steps.commit-data.outcome == 'failure'", workflow)
+    def test_frozen_manual_policy_remains_historical_provenance(self):
+        dashboard = json.loads((ROOT / 'data/dashboard.json').read_text(encoding='utf-8'))
+        command = dashboard['manualUpdatePolicy']['cliCommand']
+        self.assertIn('refresh_existing=false', command)
+        self.assertIn('strict_validation=true', command)
+        readme = (ROOT / 'README.md').read_text(encoding='utf-8')
+        self.assertIn('Quant2Alpha', readme)
+        self.assertIn('과거 판본', readme)
 
 
 if __name__ == "__main__":
