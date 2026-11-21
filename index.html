@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Quant2Alpha</title><link rel="canonical" href="https://quant2alpha.com/etf-tracking/"><p><a id="destination" href="https://quant2alpha.com/etf-tracking/">Quant2Alpha에서 열기</a></p><script>
+const current = location.pathname;
+let path = current === '/index.html' ? '/' : current;
+if (/^\/momentum-factor-lab(?=\/|$)/.test(path)) {
+  path = '/factor' + path.slice('/momentum-factor-lab'.length);
+}
+if (/^\/regime(?=\/|$)/.test(path)) path = '/';
+const next = new URL('https://quant2alpha.com/');
+next.pathname = path;
+next.search = location.search;
+next.hash = location.hash;
+document.getElementById('destination').href = next.href;
+location.replace(next.href);
+</script>
+</html>
